@@ -1,4 +1,4 @@
-
+PRAGMA synchronous=OFF;
 
 DROP TABLE IF EXISTS `filenames`;
 		
@@ -21,9 +21,10 @@ CREATE TABLE `variants` (
   `pos` INTEGER,
   `ref` TEXT,
   `alt` TEXT,
-  UNIQUE(  `chrom` ,  `pos` , `ref` ,  `alt` ) ON CONFLICT REPLACE
+  UNIQUE(  `chrom` ,  `pos` , `ref` ,  `alt` ) ON CONFLICT IGNORE
 ); 
 
+CREATE INDEX idx_variant ON variants(`id`);
 -- ---
 -- Table 'sample_has_variant'
 -- 
@@ -33,7 +34,9 @@ DROP TABLE IF EXISTS `sample_has_variant`;
 		
 CREATE TABLE `sample_has_variant` (
   `sample_id` INTEGER,
-  `variant_id` INTEGER
+  `variant_id` INTEGER,
+  `genotype` INTEGER
+
 );
 
 -- ---
@@ -67,6 +70,7 @@ CREATE TABLE `annotations` (
   FOREIGN KEY(`field_id`) REFERENCES fields(`id`),
   FOREIGN KEY(`variant_id`) REFERENCES variant(`id`)
 );
+CREATE INDEX idx_annotations ON annotations(`field_id`,`variant_id`);
 
 -- ---
 -- Table 'projets'

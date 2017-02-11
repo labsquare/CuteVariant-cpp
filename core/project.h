@@ -4,6 +4,7 @@
 #include <QtCore>
 #include <QtSql>
 #include <QDebug>
+#include "vcfimporter.h"
 class Project : public QObject
 {
     Q_OBJECT
@@ -12,10 +13,14 @@ public:
 
     void setDatabasePath(const QString& filename);
     bool createSchema();
+    void importVCF(const QStringList& paths);
+    void importVCF(const QString& path);
 
 private:
     QString mName;
     QSqlDatabase mDb;
+
+    VcfImporter * mImporter;
 
 
 

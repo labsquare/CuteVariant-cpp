@@ -8,6 +8,8 @@ Project::Project(const QString &databasePath, QObject *parent): QObject(parent)
     if (!mDb.open())
         qDebug()<<"cannot open database";
 
+    mImporter = new VcfImporter(this);
+
 }
 
 void Project::setDatabasePath(const QString &filename)
@@ -76,3 +78,20 @@ bool Project::createSchema()
     return true;
 
 }
+
+void Project::importVCF(const QStringList &paths)
+{
+    // wget https://raw.githubusercontent.com/pcingola/SnpEff/master/examples/test.chr22.ann.vcf
+
+    mImporter->setFileNames(paths);
+    mImporter->start();
+
+}
+
+void Project::importVCF(const QString &path)
+{
+    QStringList paths;
+    paths.append(path);
+    importVCF(paths);
+}
+
