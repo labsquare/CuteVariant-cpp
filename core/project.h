@@ -5,6 +5,7 @@
 #include <QtSql>
 #include <QDebug>
 #include "field.h"
+#include "region.h"
 
 class Project : public QObject
 {
@@ -21,7 +22,13 @@ public:
     // Not yet implemented
     void importVCF(const QString& path);
 
-    QList<Field> fields() const;
+    static QList<Field> fields();
+
+    static QSqlQuery variantQuery(const QStringList& colnames  = QStringList(),
+                           const QString& condition     = QString(),
+                           const QList<Region>& regions = QList<Region>());
+
+
 
 private:
     QString mName;

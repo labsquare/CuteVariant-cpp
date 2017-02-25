@@ -22,3 +22,4 @@ RESOURCES += \
     resource.qrc
 
 include(core/core.pri)
+include(gui/gui.pri)

@@ -1,9 +1,8 @@
 #include "variantmodel.h"
 
-VariantModel::VariantModel(Project *prj, QObject *parent)
+VariantModel::VariantModel( QObject *parent)
     :QAbstractTableModel(parent)
 {
-    mProject = prj;
 }
 
 int VariantModel::rowCount(const QModelIndex &parent) const
@@ -55,6 +54,42 @@ QVariant VariantModel::data(const QModelIndex &index, int role) const
 
 }
 
+QVariant VariantModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole)
+    {
+        if (orientation == Qt::Horizontal)
+        {
+            if (mVariants.isEmpty())
+                return QVariant();
+
+            if (section == ChromCol)
+                return "Chromosom";
+
+            if (section == PosCol)
+                return "Position";
+
+            if (section == RefCol)
+                return "Ref";
+
+            if (section == AltCol)
+                return "Alt";
+
+            if (section >= AnnCol)
+            {
+                int annId = section- 4;
+                if (annId < mVariants.first().annotationCount())
+                {
+                    return mVariants.first().annotation(annId).first;
+                }
+            }
+        }
+    }
+
+    return QVariant();
+
+}
+
 void VariantModel::setAnnotationColumns(const QStringList &annotationColumns)
 {
     mAnnotationColumns = annotationColumns;
@@ -64,13 +99,15 @@ void VariantModel::update()
 {
     qDebug()<<"update";
 
-    QSqlQuery query = makeQuery();
+    QSqlQuery query = Project::variantQuery(mAnnotationColumns);
+
     if (!query.exec()){
         qDebug()<<query.lastError().text();
         return;
     }
 
     beginResetModel();
+    mVariants.clear();
 
     while (query.next())
     {
@@ -92,23 +129,4 @@ void VariantModel::update()
 
 }
 
-QSqlQuery VariantModel::makeQuery()
-{
-    QString req;
 
-    if (mAnnotationColumns.isEmpty())
-        req = QString("SELECT chrom,pos,ref,alt FROM variants");
-    else
-    {
-        req = QString("SELECT chrom,pos,ref,alt,%1 FROM variants "
-                      "LEFT JOIN annotations on annotations.variant_id = variants.id"
-                      ).arg(mAnnotationColumns.join(","));
-
-    }
-
-    qDebug()<<req;
-
-    return QSqlQuery(req);
-
-
-}

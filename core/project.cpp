@@ -22,7 +22,7 @@ void Project::importVCF(const QString &path)
     // Use the python version for now
 }
 
-QList<Field> Project::fields() const
+QList<Field> Project::fields()
 {
     QList<Field> fields;
     QSqlQuery query;
@@ -40,4 +40,27 @@ QList<Field> Project::fields() const
         QString desc = query.record().value("desc").toString();
         fields.append(Field(sqlId,name, desc));
     }
+
+    return fields;
+}
+
+QSqlQuery Project::variantQuery(const QStringList &colnames, const QString &condition, const QList<Region> &regions)
+{
+    Q_UNUSED(condition)
+    Q_UNUSED(regions)
+
+    QString req;
+
+    if (colnames.isEmpty())
+        req = QString("SELECT chrom,pos,ref,alt FROM variants");
+    else
+    {
+        req = QString("SELECT chrom,pos,ref,alt,%1 FROM variants "
+                      "LEFT JOIN annotations on annotations.variant_id = variants.id"
+                      ).arg(colnames.join(","));
+    }
+
+    qDebug()<<req;
+
+    return QSqlQuery(req);
 }

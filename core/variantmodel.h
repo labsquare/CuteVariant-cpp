@@ -16,19 +16,18 @@ public:
         AltCol   = 3,
         AnnCol   = 4
     };
-    VariantModel(Project * prj, QObject * parent = 0x0);
+    VariantModel(QObject * parent = 0x0);
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     void setAnnotationColumns(const QStringList& annotationColumns);
 
     void update();
 
 protected:
-    QSqlQuery makeQuery();
 
 private:
-    Project * mProject;
     QList<Variation> mVariants;
     QList<Region> mCurrentRegions;
     QStringList mAnnotationColumns;
