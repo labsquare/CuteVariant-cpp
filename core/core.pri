@@ -2,10 +2,14 @@
 
 HEADERS += \
     $$PWD/project.h \
-    $$PWD/vcfimporter.h \
-    $$PWD/field.h
+    $$PWD/region.h \
+    $$PWD/field.h \
+    $$PWD/variantmodel.h \
+    $$PWD/variant.h
 
 SOURCES += \
     $$PWD/project.cpp \
-    $$PWD/vcfimporter.cpp \
-    $$PWD/field.cpp
+    $$PWD/region.cpp \
+    $$PWD/field.cpp \
+    $$PWD/variantmodel.cpp \
+    $$PWD/variant.cpp

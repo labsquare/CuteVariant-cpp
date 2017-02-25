@@ -6,22 +6,17 @@ class Field
 {
 public:
     Field();
-    Field(const QString& name, const QString& description);
+    Field(int sqlId, const QString& name, const QString& description);
 
-    QString name() const;
-    void setName(const QString &name);
-
-    QString description() const;
-    void setDescription(const QString &description);
-
-    int id() const;
-    void setId(int id);
+    const QString &name() const;
+    const QString &description() const;
+    int sqlId() const;
 
 private:
-    int mId = -1;
     QString mName;
     QString mDescription;
-    QVariant::Type mType = QVariant::Invalid;
+    int msqlId = -1;
+
 };
 
 #endif // FIELD_H

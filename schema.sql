@@ -1,4 +1,3 @@
-PRAGMA synchronous=OFF;
 
 DROP TABLE IF EXISTS `filenames`;
 		
@@ -53,24 +52,11 @@ CREATE TABLE `samples` (
    FOREIGN KEY(`filename_id`) REFERENCES filenames(`id`)
 
 );
-
 -- ---
 -- Table 'annotations'
--- 
+--
 -- ---
-
 DROP TABLE IF EXISTS `annotations`;
-		
-CREATE TABLE `annotations` (
-  `id` INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-  `bin` INTEGER,
-  `field_id` INTEGER,
-  `variant_id` INTEGER,
-  `value` TEXT,
-  FOREIGN KEY(`field_id`) REFERENCES fields(`id`),
-  FOREIGN KEY(`variant_id`) REFERENCES variant(`id`)
-);
-CREATE INDEX idx_annotations ON annotations(`field_id`,`variant_id`);
 
 -- ---
 -- Table 'projets'
@@ -94,7 +80,7 @@ DROP TABLE IF EXISTS `fields`;
 		
 CREATE TABLE `fields` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-  `name` TEXT,
+  `name` TEXT UNIQUE,
   `description` TEXT,
   `type` INTEGER
 );

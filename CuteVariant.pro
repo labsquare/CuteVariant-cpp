@@ -17,7 +17,8 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h
 
-include(core/core.pri)
 
 RESOURCES += \
     resource.qrc
+
+include(core/core.pri)

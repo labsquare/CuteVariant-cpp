@@ -1,22 +1,28 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QtWidgets>
 #include "project.h"
-
+#include "variantmodel.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    Project prj("test.db");
-//    prj.createSchema();
 
-    QStringList list;
-    list<<"/home/sacha/Bioinfo/tmp/pere.vcf";
-//    list<<"/home/sacha/Bioinfo/tmp/mere.vcf";
-//    list<<"/home/sacha/Bioinfo/tmp/fils.vcf";
+    Project * prj = new Project("/home/sacha/Dev/CuteVariant/variant.db");
 
-   // list<<"/tmp/test.chr22.ann.vcf";
+    VariantModel * model = new VariantModel(prj);
 
-    prj.importVCF(list);
+    QStringList ann;
+    ann<<"ANN_1"<<"ANN_2";
+    model->setAnnotationColumns(ann);
+
+    QTableView view;
+    view.setModel(model);
+
+    model->update();
+
+    view.show();
+
 
 
 
