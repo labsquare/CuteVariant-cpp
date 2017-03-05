@@ -97,11 +97,17 @@ void VariantModel::setAnnotationColumns(const QStringList &annotationColumns)
     mAnnotationColumns = annotationColumns;
 }
 
+void VariantModel::setCondition(const QString &condition)
+{
+    mCondition = condition;
+}
+
 void VariantModel::update()
 {
     qDebug()<<"update";
 
-    QSqlQuery query = Project::variantQuery(mAnnotationColumns);
+    QSqlQuery query = Project::variantQuery(mAnnotationColumns, mCondition);
+    qDebug()<<query.lastQuery();
 
     if (!query.exec()){
         qDebug()<<query.lastError().text();

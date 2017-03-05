@@ -16,6 +16,11 @@ void VariantView::setAnnotationColumns(const QStringList &colnames)
     mModel->setAnnotationColumns(colnames);
 }
 
+void VariantView::setCondition(const QString &condition)
+{
+    mModel->setCondition(condition);
+}
+
 void VariantView::update()
 {
     mModel->update();

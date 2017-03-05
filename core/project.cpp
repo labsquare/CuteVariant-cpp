@@ -60,7 +60,12 @@ QSqlQuery Project::variantQuery(const QStringList &colnames, const QString &cond
                       ).arg(colnames.join(","));
     }
 
-    qDebug()<<req;
+    if (!condition.isEmpty())
+    {
+
+        req += QString(" WHERE %1").arg(condition);
+
+    }
 
     return QSqlQuery(req);
 }

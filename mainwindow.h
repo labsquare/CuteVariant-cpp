@@ -5,6 +5,7 @@
 #include "project.h"
 #include "variantview.h"
 #include "fieldview.h"
+#include "logicview.h"
 
 class MainWindow : public QMainWindow
 {
@@ -23,6 +24,7 @@ protected:
 private:
     VariantView * mVariantView;
     FieldView * mFieldView;
+    LogicView * mLogicView;
 };
 
 #endif // MAINWINDOW_H

@@ -10,6 +10,7 @@ public:
     VariantView(QWidget * parent = 0);
 
     void setAnnotationColumns(const QStringList& colnames);
+    void setCondition(const QString& condition);
     void update();
 
 private:

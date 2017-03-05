@@ -22,7 +22,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     void setAnnotationColumns(const QStringList& annotationColumns);
-
+    void setCondition(const QString& condition);
     void update();
 
 protected:
@@ -31,6 +31,7 @@ private:
     QList<Variation> mVariants;
     QList<Region> mCurrentRegions;
     QStringList mAnnotationColumns;
+    QString mCondition;
 
 
 };

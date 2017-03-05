@@ -8,13 +8,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     mVariantView = new VariantView;
     mFieldView   = new FieldView;
+    mLogicView   = new LogicView;
 
     setCentralWidget(mVariantView);
 
     QDockWidget * fieldDock = new QDockWidget;
     fieldDock->setWidget(mFieldView);
 
+    QDockWidget * logicDock = new QDockWidget;
+    logicDock->setWidget(mLogicView);
+
     addDockWidget(Qt::LeftDockWidgetArea, fieldDock);
+    addDockWidget(Qt::LeftDockWidgetArea, logicDock);
+
 
     mFieldView->update();
 
@@ -33,6 +39,7 @@ MainWindow::~MainWindow()
 void MainWindow::run()
 {
 
+    mVariantView->setCondition(mLogicView->query());
     mVariantView->setAnnotationColumns(mFieldView->selectedColNames());
     mVariantView->update();
 
