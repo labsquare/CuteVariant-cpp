@@ -41,9 +41,11 @@ QVariant VariantModel::data(const QModelIndex &index, int role) const
         if (index.column() >= AnnCol)
         {
             int annId = index.column() - 4;
-            if (annId < mVariants.at(index.column()).annotationCount())
+            if (annId < mVariants.at(index.row()).annotationCount())
             {
-                return mVariants.at(index.column()).annotation(annId).second;
+               // qDebug()<< mVariants.at(index.column()).annotation(0).second;
+
+                return mVariants.at(index.row()).annotation(annId).second;
             }
 
         }
@@ -116,11 +118,15 @@ void VariantModel::update()
         QString ref = query.record().value("ref").toString();
         QString alt = query.record().value("alt").toString();
         mVariants.append(Variation(chrom,pos,ref,alt));
-
         for (int i=4; i<query.record().count(); ++i)
         {
             mVariants.last().addAnnotation(query.record().field(i).name(), query.record().value(i));
+            //qDebug()<<query.record().value(i);
+
+
         }
+
+
     }
 
 
