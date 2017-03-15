@@ -39,7 +39,7 @@ QList<Field> Project::fields()
     {
         int sqlId    = query.record().value("id").toInt();
         QString name = query.record().value("colname").toString();
-        QString desc = query.record().value("desc").toString();
+        QString desc = query.record().value("description").toString();
         fields.append(Field(sqlId,name, desc));
     }
 
