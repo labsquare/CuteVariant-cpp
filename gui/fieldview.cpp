@@ -4,7 +4,6 @@ FieldView::FieldView(QWidget *parent)
     :QTreeWidget(parent)
 {
     setColumnCount(2);
-
 }
 
 QStringList FieldView::selectedColNames() const
@@ -23,9 +22,9 @@ QStringList FieldView::selectedColNames() const
 
 }
 
-void FieldView::update()
+void FieldView::refresh()
 {
-
+    clear();
     for (Field f : Project::fields())
     {
 

@@ -6,9 +6,6 @@ VariantView::VariantView(QWidget *parent)
     mModel = new VariantModel;
     setModel(mModel);
 
-
-
-
 }
 
 void VariantView::setAnnotationColumns(const QStringList &colnames)

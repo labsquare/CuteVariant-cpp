@@ -9,7 +9,7 @@ class FieldView : public QTreeWidget
 public:
     FieldView(QWidget * parent = 0);
     QStringList selectedColNames() const;
-    void update();
+    void refresh();
 };
 
 #endif // FIELDVIEW_H

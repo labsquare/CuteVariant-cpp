@@ -1,19 +1,20 @@
 #include "project.h"
 
-Project::Project(const QString &databasePath, QObject *parent): QObject(parent)
+Project::Project(QObject *parent)
+    :QObject(parent)
 {
-    mDb = QSqlDatabase::addDatabase("QSQLITE");
-    setDatabasePath(databasePath);
-
-    if (!mDb.open())
-        qDebug()<<"cannot open database";
-
 
 }
 
-void Project::setDatabasePath(const QString &filename)
+Project::Project(const QString &databasePath, QObject *parent): QObject(parent)
 {
-    mDb.setDatabaseName(filename);
+
+    setDatabasePath(databasePath);
+}
+
+void Project::setDatabasePath(const QString &databasePath)
+{
+    mDatabasePath = databasePath;
 }
 
 void Project::importVCF(const QString &path)
@@ -24,6 +25,7 @@ void Project::importVCF(const QString &path)
 
 QList<Field> Project::fields()
 {
+
     QList<Field> fields;
     QSqlQuery query;
 
@@ -69,3 +71,10 @@ QSqlQuery Project::variantQuery(const QStringList &colnames, const QString &cond
 
     return QSqlQuery(req);
 }
+
+bool Project::activate()
+{
+    QSqlDatabase::database().setDatabaseName(mDatabasePath);
+    return QSqlDatabase::database().open();
+}
+

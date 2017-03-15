@@ -4,7 +4,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
 
-    Project * prj = new Project("/home/sacha/Dev/CuteVariant/variant.db");
+
+    mProject     = new Project;
 
     mVariantView = new VariantView;
     mFieldView   = new FieldView;
@@ -21,8 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
     addDockWidget(Qt::LeftDockWidgetArea, fieldDock);
     addDockWidget(Qt::LeftDockWidgetArea, logicDock);
 
-
-    mFieldView->update();
 
     resize(800,600);
 
@@ -46,10 +45,29 @@ void MainWindow::run()
 
 }
 
+void MainWindow::open()
+{
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open database"),
+                                                    QDir::homePath(),
+                                                    tr("Variant db (*.db *.vdb)"));
+    if (!filename.isEmpty())
+        setDatabasePath(filename);
+}
+
+void MainWindow::setDatabasePath(const QString &filename)
+{
+    mProject->setDatabasePath(filename);
+    mProject->activate();
+
+    mFieldView->refresh();
+}
+
 void MainWindow::createActions()
 {
 
     QToolBar * bar = addToolBar("act");
+    bar->addAction("Open",this,SLOT(open()));
+
     bar->addAction("Run",this,SLOT(run()));
 
 

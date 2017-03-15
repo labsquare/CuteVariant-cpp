@@ -17,14 +17,20 @@ public:
 
 public Q_SLOTS:
     void run();
+    void open();
+
 
 protected:
+    void setDatabasePath(const QString& filename);
     void createActions();
+
+
 
 private:
     VariantView * mVariantView;
     FieldView * mFieldView;
     LogicView * mLogicView;
+    Project * mProject;
 };
 
 #endif // MAINWINDOW_H
