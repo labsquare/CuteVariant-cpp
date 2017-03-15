@@ -2,6 +2,7 @@ import sys
 import vcf 
 import re
 import os 
+import hashlib
 from peewee import * 
 
 filename = os.path.abspath(sys.argv[1])
@@ -19,10 +20,10 @@ db = SqliteDatabase(dbname)
 
 
 # ================= MODEL =============================
-class Projet(Model):
-	dbName   = CharField()
-	filename = CharField()
-	checksum = CharField()
+class Project(Model):
+	dbname        = CharField()
+	filename      = CharField()
+	md5sum        = CharField()
 
 
 class Variant(Model):
@@ -60,12 +61,19 @@ class Genotype(Model):
 
 
 db.connect()
-db.create_tables([Variant, Field,Sample], safe = True)
+db.create_tables([Variant, Field,Sample, Project], safe = True)
 
 # ================= IMPORT =============================
 
 def import_variant(filename):
 	print("Creating", dbname) 
+	# Create project 
+	prj = Project()
+	prj.dbname   = dbname
+	prj.filename = filename 
+	prj.md5sum   = hashlib.md5(open(filename, 'rb').read()).hexdigest()
+	prj.save()
+	# Start reading VCF file 
 	SPECIAL_FIELDS = ("ANN","LOF","NMD")
 	reader = vcf.Reader(open(filename,'r'))
 	#  PARSE HEADERS AND CREATE ANNOTATION TABLE ACCORDING FIELDS NUMBER
