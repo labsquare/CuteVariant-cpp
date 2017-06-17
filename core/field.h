@@ -2,6 +2,10 @@
 #define FIELD_H
 #include <QtCore>
 
+/*!
+ * \brief The Field class contains Annotation description
+ * @see sql field table
+ */
 class Field
 {
 public:

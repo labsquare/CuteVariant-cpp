@@ -2,6 +2,10 @@
 #define VARIANT_H
 #include <QtCore>
 
+/*!
+ * \brief The Variation class
+ * Contains variation parameter and annotations
+ */
 class Variation
 {
 public:

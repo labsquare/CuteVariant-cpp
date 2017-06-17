@@ -4,6 +4,9 @@
 #include <QInputDialog>
 
 
+/*!
+ * The following struct and class are used to manage the dynamic filter model
+ */
 struct Operator;
 class GroupItem;
 class ConditionItem;
