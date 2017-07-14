@@ -21,6 +21,8 @@ HEADERS  += mainwindow.h
 RESOURCES += \
     resource.qrc
 
+QMAKE_CXXFLAGS += -std=c++11
+
 include(core/core.pri)
 include(gui/gui.pri)
 include(QFontIcon/QFontIcon.pri)
