@@ -4,7 +4,6 @@ DEPENDPATH += . ../lib
 INCLUDEPATH += ../lib
 
 
-
 SOURCES += \
     main.cpp
 
@@ -18,7 +17,7 @@ win32
     INCLUDEPATH += $$PWD/../lib
     DEPENDPATH += $$PWD/../lib
 }
-linux
+unix
 {
     LIBS += -L../lib/ -lcutevariantcore
 }
