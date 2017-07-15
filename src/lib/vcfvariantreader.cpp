@@ -5,11 +5,14 @@ VCFVariantReader::VCFVariantReader(const QString &filename)
 {
 
 }
-
+//------------------------------------------------------------------
 QList<Field> VCFVariantReader::fields()
 {
 
+    return parseHeader("INFO");
+
 }
+//------------------------------------------------------------------
 
 QList<Sample> VCFVariantReader::samples()
 {
@@ -41,14 +44,50 @@ QList<Sample> VCFVariantReader::samples()
     }
     return samples;
 }
+//------------------------------------------------------------------
 
 bool VCFVariantReader::readVariant(Variant &variant)
 {
 
 }
+//------------------------------------------------------------------
 
 bool VCFVariantReader::readGenotype(Genotype &genotype)
 {
 
 }
+//------------------------------------------------------------------
+
+QList<Field> VCFVariantReader::parseHeader(const QString &id)
+{
+    QList<Field> fields;
+
+    if ( device()->open(QIODevice::ReadOnly))
+    {
+        QTextStream stream(device());
+        QString line;
+
+        do
+        {
+            line = stream.readLine();
+
+            if (line.startsWith(QString("##%1").arg(id)))
+            {
+                QRegularExpression ex(QString("^##%1=<ID=(.+),Number=(.+),Type=(.+),Description=\"(.+)\".+").arg(id));
+                QRegularExpressionMatch match = ex.match(line);
+
+                QString id   = match.captured(1);
+                QString desc = match.captured(4);
+
+                fields.append(Field(id, desc));
+            }
+
+        } while (line.startsWith("##"));
+    }
+    device()->close();
+
+    return fields;
+}
+//------------------------------------------------------------------
+
 }

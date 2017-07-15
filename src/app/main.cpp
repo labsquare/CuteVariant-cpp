@@ -12,9 +12,9 @@ int main(int argc, char **argv)
     VCFVariantReader reader("/tmp/exemples/freebayes.vcf");
 
 
-    for (Sample s : reader.samples())
+    for (Field s : reader.fields())
     {
-        qDebug()<<s.name();
+        qDebug()<<s.name()<<" "<<s.description();
     }
 
 

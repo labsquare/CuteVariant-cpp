@@ -18,6 +18,7 @@ public:
     const QString &name() const;
     const QString &description() const;
 
+
 private:
     QString mName;
     QString mDescription;

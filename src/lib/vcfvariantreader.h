@@ -37,6 +37,9 @@ public:
 
 
 
+protected:
+    QList<Field> parseHeader(const QString& id);
+
 };
 }
 
