@@ -21,4 +21,24 @@ void Variant::clearAnnotation()
 {
     mAnnotations.clear();
 }
+
+const QString &Variant::chromosom() const
+{
+    return mChr;
+}
+
+quint64 Variant::position() const
+{
+    return mPos;
+}
+
+const QByteArray &Variant::ref() const
+{
+    return mRef;
+}
+
+const QByteArray &Variant::alt() const
+{
+    return mAlt;
+}
 }

@@ -6,12 +6,14 @@ AbstractVariantReader::AbstractVariantReader(const QString &filename)
     mFilename = filename;
 }
 
+
+
 const QString &AbstractVariantReader::filename() const
 {
     return mFilename;
 }
 
-QIODevice * AbstractVariantReader::device()
+QIODevice * AbstractVariantReader::device() const
 {
     return mDevice;
 }

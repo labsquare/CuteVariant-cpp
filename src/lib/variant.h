@@ -11,6 +11,15 @@ public:
     void addAnnotation(const QString& key, const QVariant& value);
     void clearAnnotation();
 
+    const QString& chromosom() const;
+    quint64 position() const;
+
+    const QByteArray& ref() const;
+    const QByteArray& alt() const;
+
+
+
+
 
 private:
     QString mChr;

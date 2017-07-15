@@ -28,13 +28,13 @@ public:
      * \param use it in a while loop : while (readVariant)...
      * \return true if it reach the end of the line
      */
-    virtual bool readVariant(Variant& variant) override;
-    /*!
-     * \brief readGenotype
-     * \param use it in a while loop : while (readGenotype)...
-     * \return true if it reach the end of the line
-     */
-    virtual bool readGenotype(Genotype& genotype) override;
+    virtual Variant readVariant() override;
+//    /*!
+//     * \brief readGenotype
+//     * \param use it in a while loop : while (readGenotype)...
+//     * \return true if it reach the end of the line
+//     */
+//    virtual Genotype readGenotype() override;
 
 
 

@@ -12,9 +12,13 @@ int main(int argc, char **argv)
     VCFVariantReader reader("/tmp/exemples/test.chr22.ann.vcf");
 
 
-    for (Field s : reader.fields())
+    if (reader.device()->open(QIODevice::ReadOnly))
     {
-        qDebug()<<s.name()<<" "<<s.description();
+        while (!reader.device()->atEnd())
+        {
+            Variant var = reader.readVariant();
+            qDebug()<<var.chromosom()<<" "<<var.position()<<" "<<var.ref()<<" "<<var.alt();
+        }
     }
 
 

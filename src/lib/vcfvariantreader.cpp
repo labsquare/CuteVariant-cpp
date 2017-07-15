@@ -46,16 +46,37 @@ QList<Sample> VCFVariantReader::samples()
 }
 //------------------------------------------------------------------
 
-bool VCFVariantReader::readVariant(Variant &variant)
+Variant VCFVariantReader::readVariant()
 {
+    QString line;
+    do
+    {
+      line = device()->readLine();
+    } while (line.startsWith("#"));
+
+
+   QStringList rows = line.split(QChar::Tabulation);
+
+
+   QString chrom  = rows[0];
+   quint64 pos    = rows[1].toInt();
+   QByteArray ref = rows[3].toUtf8();
+   QByteArray alt = rows[4].toUtf8();
+
+
+   Variant variant(chrom,pos, ref,alt);
+
+
+   return variant;
 
 }
 //------------------------------------------------------------------
 
-bool VCFVariantReader::readGenotype(Genotype &genotype)
-{
+//Genotype VCFVariantReader::readGenotype()
+//{
 
-}
+//}
+
 //------------------------------------------------------------------
 
 QList<Field> VCFVariantReader::parseHeader(const QString &id)

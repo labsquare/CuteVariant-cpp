@@ -31,20 +31,20 @@ public:
      * \param use it in a while loop : while (readVariant)...
      * \return true if it reach the end of the line
      */
-    virtual bool readVariant(Variant& variant) = 0;
-    /*!
-     * \brief readGenotype
-     * \param use it in a while loop : while (readGenotype)...
-     * \return true if it reach the end of the line
-     */
-    virtual bool readGenotype(Genotype& genotype) = 0;
+    virtual Variant readVariant() = 0;
+//    /*!
+//     * \brief readGenotype
+//     * \param use it in a while loop : while (readGenotype)...
+//     * \return true if it reach the end of the line
+//     */
+//    virtual Genotype readGenotype() = 0;
+
 
 
 
     const QString& filename() const;
 
-protected:
-    QIODevice * device();
+    QIODevice * device() const;
 
 
 
