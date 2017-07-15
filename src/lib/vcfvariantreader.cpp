@@ -9,7 +9,7 @@ VCFVariantReader::VCFVariantReader(const QString &filename)
 QList<Field> VCFVariantReader::fields()
 {
 
-    return parseHeader("INFO");
+    return parseAnnotationFormat();
 
 }
 //------------------------------------------------------------------
@@ -79,7 +79,57 @@ QList<Field> VCFVariantReader::parseHeader(const QString &id)
                 QString id   = match.captured(1);
                 QString desc = match.captured(4);
 
-                fields.append(Field(id, desc));
+                // do not save specialID info fields like ANN, SnpEff, VEP...
+                // manage them separatly
+                if (!mSpecialId.contains(id))
+                    fields.append(Field(id, desc));
+            }
+
+        } while (line.startsWith("##"));
+    }
+    device()->close();
+
+    return fields;
+}
+
+QList<Field> VCFVariantReader::parseAnnotationFormat()
+{
+    QList<Field> fields;
+
+    if ( device()->open(QIODevice::ReadOnly))
+    {
+        QTextStream stream(device());
+        QString line;
+
+        do
+        {
+            line = stream.readLine();
+
+
+            if (line.startsWith("##INFO=<ID=ANN"))
+            {
+                QRegularExpression ex("^##INFO=<ID=ANN,Number=(.+),Type=(.+),Description=\"(.+)\".+");
+                QRegularExpressionMatch match = ex.match(line);
+
+                if (!match.hasMatch())
+                    qDebug()<<Q_FUNC_INFO<<"no match ANN";
+
+                QString desc = match.captured(3);
+
+                //"Functional annotations: 'Allele | Annotation | Annotation_Impact | Gene_Name | Gene_ID | Feature_Type | Feature_ID | Transcript_BioType | Rank | HGVS.c | HGVS.p | cDNA.pos / cDNA.length | CDS.pos / CDS.length | AA.pos / AA.length | Distance | ERRORS / WARNINGS / INFO' "
+                ex.setPattern("\'(.+)\'");
+                match = ex.match(desc);
+
+                if (!match.hasMatch())
+                    qDebug()<<Q_FUNC_INFO<<"no match ANN fields";
+
+                QStringList items = match.captured(1).split('|');
+
+                // Field name looks like : ANN_1, ANN_2 ....
+
+                for (int i=0; i<items.length(); ++i)
+                    fields.append(Field(QString("ANN_%1").arg(i), items.at(i)));
+                break;
             }
 
         } while (line.startsWith("##"));

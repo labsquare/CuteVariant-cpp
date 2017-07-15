@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 
     QApplication app(argc, argv);
 
-    VCFVariantReader reader("/tmp/exemples/freebayes.vcf");
+    VCFVariantReader reader("/tmp/exemples/test.chr22.ann.vcf");
 
 
     for (Field s : reader.fields())
