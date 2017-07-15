@@ -11,3 +11,13 @@ Variant::Variant(const QString &chr, quint64 pos, QByteArray &ref, QByteArray &a
 {
 
 }
+
+void Variant::addAnnotation(const QString &key, const QVariant &value)
+{
+    mAnnotations.insert(key,value);
+}
+
+void Variant::clearAnnotation()
+{
+    mAnnotations.clear();
+}
