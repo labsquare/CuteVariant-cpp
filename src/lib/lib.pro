@@ -9,7 +9,8 @@ SOURCES  += \
     region.cpp \
     genotype.cpp \
     variant.cpp \
-    abstractvariantreader.cpp
+    abstractvariantreader.cpp \
+    vcfvariantreader.cpp
 
 HEADERS  += \
     field.h \
@@ -18,6 +19,7 @@ HEADERS  += \
     region.h \
     genotype.h \
     variant.h \
-    abstractvariantreader.h
+    abstractvariantreader.h \
+    vcfvariantreader.h
 
 TARGET = cutevariantcore
