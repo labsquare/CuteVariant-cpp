@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/text">
+        <file>AUTHORS</file>
+        <file>CHANGELOG</file>
+        <file>CREDITS</file>
+        <file>LICENSE</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>cutevariant.png</file>
+    </qresource>
+</RCC>
