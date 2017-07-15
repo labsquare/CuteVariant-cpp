@@ -2,7 +2,7 @@ QT -= widgets
 
 TEMPLATE = lib 
 
-SOURCES  += \
+SOURCES += \
     field.cpp \
     resource.cpp \
     sample.cpp \
@@ -12,7 +12,7 @@ SOURCES  += \
     abstractvariantreader.cpp \
     vcfvariantreader.cpp
 
-HEADERS  += \
+HEADERS += \
     field.h \
     resource.h \
     sample.h \
