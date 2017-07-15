@@ -3,6 +3,8 @@
 #include <QtCore>
 #include "resource.h"
 
+namespace core {
+
 /*!
  * \brief The Field class contains Annotation description
  * @see sql field table
@@ -20,5 +22,5 @@ private:
     QString mName;
     QString mDescription;
 };
-
+}
 #endif // FIELD_H

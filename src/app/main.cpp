@@ -1,15 +1,21 @@
 #include <QApplication>
 #include <QtCore>
-#include "field.h"
+#include "vcfvariantreader.h"
+
+using namespace core;
 
 int main(int argc, char **argv)
 {
 
     QApplication app(argc, argv);
 
-    Field f("test","test");
+    VCFVariantReader reader("/tmp/exemples/freebayes.vcf");
 
-    qDebug()<<f.name();
+
+    for (Sample s : reader.samples())
+    {
+        qDebug()<<s.name();
+    }
 
 
     return app.exec();

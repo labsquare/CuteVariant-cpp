@@ -10,7 +10,7 @@ SOURCES += \
     genotype.cpp \
     variant.cpp \
     abstractvariantreader.cpp \
-    vcfvariantreader.cpp
+    vcfvariantreader.cpp \
 
 HEADERS += \
     field.h \
@@ -20,6 +20,6 @@ HEADERS += \
     genotype.h \
     variant.h \
     abstractvariantreader.h \
-    vcfvariantreader.h
+    vcfvariantreader.h \
 
 TARGET = cutevariantcore

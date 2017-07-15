@@ -6,6 +6,8 @@
 #include "genotype.h"
 #include "sample.h"
 
+namespace  core {
+
 class AbstractVariantReader
 {
 public:
@@ -15,13 +17,13 @@ public:
      * \brief extract fields
      * \return Field list object
      */
-    virtual QList<Field> fields() const = 0;
+    virtual QList<Field> fields() = 0;
 
     /*!
      * \brief extract samples
      * \return Samples list name
      */
-    virtual QList<Sample> samples() const = 0;
+    virtual QList<Sample> samples() = 0;
 
 
     /*!
@@ -35,7 +37,7 @@ public:
      * \param use it in a while loop : while (readGenotype)...
      * \return true if it reach the end of the line
      */
-    virtual bool readGenotype(Genotype& variant) = 0;
+    virtual bool readGenotype(Genotype& genotype) = 0;
 
 
 
@@ -54,4 +56,5 @@ private:
 
 };
 
+}
 #endif // ABSTRACTVARIANTREADER_H

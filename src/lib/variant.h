@@ -2,7 +2,7 @@
 #define VARIANT_H
 #include <QtCore>
 #include "resource.h"
-
+namespace core{
 class Variant : public Resource
 {
 public:
@@ -19,5 +19,5 @@ private:
     QByteArray mAlt;
     QHash<QString, QVariant> mAnnotations;
 };
-
+}
 #endif // VARIANT_H

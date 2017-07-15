@@ -1,5 +1,5 @@
 #include "field.h"
-
+namespace core {
 Field::Field()
     :Resource()
 {
@@ -22,5 +22,5 @@ const QString &Field::description() const
     return mDescription;
 }
 
-
+}
 

@@ -1,5 +1,5 @@
 #include "variant.h"
-
+namespace core {
 Variant::Variant()
     :Resource()
 {
@@ -20,4 +20,5 @@ void Variant::addAnnotation(const QString &key, const QVariant &value)
 void Variant::clearAnnotation()
 {
     mAnnotations.clear();
+}
 }

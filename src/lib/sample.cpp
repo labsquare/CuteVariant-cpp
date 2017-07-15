@@ -1,5 +1,5 @@
 #include "sample.h"
-
+namespace core {
 Sample::Sample()
     :Resource()
 {
@@ -7,7 +7,7 @@ Sample::Sample()
 }
 
 Sample::Sample(const QString &name)
-    :Resource()
+    :Resource(), mName(name)
 {
 
 }
@@ -15,4 +15,10 @@ Sample::Sample(const QString &name)
 QVariant Sample::phenotype(const QString &key)
 {
     return mPhenotype.value(key);
+}
+
+const QString &Sample::name() const
+{
+    return mName;
+}
 }

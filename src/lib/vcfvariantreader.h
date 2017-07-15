@@ -1,6 +1,8 @@
 #ifndef VCFVARIANTREADER_H
 #define VCFVARIANTREADER_H
 #include "abstractvariantreader.h"
+#include "vcfreader.h"
+namespace core {
 
 class VCFVariantReader : public AbstractVariantReader
 {
@@ -11,13 +13,13 @@ public:
      * \brief extract fields
      * \return Field list object
      */
-    virtual QList<Field> fields() const override;
+    virtual QList<Field> fields() override;
 
     /*!
      * \brief extract samples
      * \return Samples list name
      */
-    virtual QList<Sample> samples() const override;
+    virtual QList<Sample> samples() override;
 
 
     /*!
@@ -31,10 +33,11 @@ public:
      * \param use it in a while loop : while (readGenotype)...
      * \return true if it reach the end of the line
      */
-    virtual bool readGenotype(Genotype& variant) override;
+    virtual bool readGenotype(Genotype& genotype) override;
 
 
 
 };
+}
 
 #endif // VCFVARIANTREADER_H

@@ -1,5 +1,5 @@
 #include "region.h"
-
+namespace core {
 Region::Region()
 {
 
@@ -44,4 +44,5 @@ void Region::setEnd(const quint64 &end)
 quint64 Region::size() const
 {
     return mEnd - mStart;
+}
 }

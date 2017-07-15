@@ -1,5 +1,5 @@
 #include "abstractvariantreader.h"
-
+namespace core{
 AbstractVariantReader::AbstractVariantReader(const QString &filename)
 {
     mDevice = new QFile(filename);
@@ -15,4 +15,4 @@ QIODevice * AbstractVariantReader::device()
 {
     return mDevice;
 }
-
+}

@@ -2,6 +2,7 @@
 #define REGION_H
 #include <QtCore>
 
+namespace core {
 /*!
  * \brief The Region class
  * Contains location as bed format.
@@ -32,5 +33,5 @@ private:
 
 
 };
-
+}
 #endif // REGION_H
