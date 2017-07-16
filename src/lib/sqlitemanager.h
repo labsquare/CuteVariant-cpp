@@ -7,11 +7,16 @@
 
 namespace core {
 
-class VariantImporter
+/*!
+ * \brief The SqliteManager class
+ * This is the interface between raw SQLITE query and C++ POO
+ */
+class SqliteManager
 {
 public:
-    VariantImporter();
+    SqliteManager();
     bool importFile(const QString& filename);
+    void createProject();
 
 
 protected:

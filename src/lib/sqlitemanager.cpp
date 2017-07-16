@@ -1,13 +1,13 @@
-#include "variantimporter.h"
+#include "sqlitemanager.h"
 
 namespace core{
 
-VariantImporter::VariantImporter()
+SqliteManager::SqliteManager()
 {
 
 }
 //-------------------------------------------------------------------------------
-bool VariantImporter::importFile(const QString &filename)
+bool SqliteManager::importFile(const QString &filename)
 {
     QScopedPointer<AbstractVariantReader> reader;
 
@@ -36,7 +36,21 @@ bool VariantImporter::importFile(const QString &filename)
 
 }
 //-------------------------------------------------------------------------------
-void VariantImporter::createSample(AbstractVariantReader *reader)
+void SqliteManager::createProject()
+{
+
+    QSqlQuery query;
+
+    query.exec("DROP TABLE IF EXISTS project");
+    query.exec(QString("CREATE TABLE project ("
+                       "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                       "name TEXT NOT NULL"
+                       ")"));
+
+
+}
+//-------------------------------------------------------------------------------
+void SqliteManager::createSample(AbstractVariantReader *reader)
 {
 
     qDebug()<<"import samples";
@@ -56,7 +70,7 @@ void VariantImporter::createSample(AbstractVariantReader *reader)
 
 }
 //-------------------------------------------------------------------------------
-void VariantImporter::createFields(AbstractVariantReader *reader)
+void SqliteManager::createFields(AbstractVariantReader *reader)
 {
 
     qDebug()<<"import fields";
@@ -79,7 +93,7 @@ void VariantImporter::createFields(AbstractVariantReader *reader)
 
 }
 //-------------------------------------------------------------------------------
-void VariantImporter::createVariants(AbstractVariantReader *reader)
+void SqliteManager::createVariants(AbstractVariantReader *reader)
 {
 
     qDebug()<<"import variants";
@@ -124,7 +138,7 @@ void VariantImporter::createVariants(AbstractVariantReader *reader)
     qDebug()<<"variant installed";
 }
 
-void VariantImporter::createShema()
+void SqliteManager::createShema()
 {
     qDebug()<<"create shema";
 }

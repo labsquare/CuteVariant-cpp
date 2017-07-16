@@ -2,7 +2,7 @@
 #define PROJECT_H
 #include <QtCore>
 #include <QtSql>
-#include "variantimporter.h"
+#include "sqlitemanager.h"
 
 namespace core {
 class Project
@@ -24,7 +24,7 @@ public:
 
 private:
     QSqlDatabase mSqlDb;
-    VariantImporter mImporter;
+    SqliteManager mImporter;
 
 };
 }
