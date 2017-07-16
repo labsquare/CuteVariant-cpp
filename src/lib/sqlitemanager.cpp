@@ -36,7 +36,7 @@ bool SqliteManager::importFile(const QString &filename)
 
 }
 //-------------------------------------------------------------------------------
-void SqliteManager::createProject()
+void SqliteManager::createProject(const QString &name)
 {
 
     QSqlQuery query;
@@ -44,8 +44,17 @@ void SqliteManager::createProject()
     query.exec("DROP TABLE IF EXISTS project");
     query.exec(QString("CREATE TABLE project ("
                        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                       "name TEXT NOT NULL"
+                       "name TEXT NOT NULL,"
+                       "version TEXT,"
+                       "creation_date TEXT,"
+                       "build TEXT"
                        ")"));
+
+    query.exec(QString("INSERT INTO project (name,version,creation_date) VALUES ('%1','%2','%3')")
+               .arg(name)
+               .arg(qApp->applicationVersion())
+               .arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
+
 
 
 }
@@ -136,11 +145,6 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 
     QSqlDatabase::database().commit();
     qDebug()<<"variant installed";
-}
-
-void SqliteManager::createShema()
-{
-    qDebug()<<"create shema";
 }
 
 

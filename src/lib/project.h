@@ -17,14 +17,15 @@ public:
      * \param path
      */
     void setDatabasePath(const QString& path);
-
     void importFile(const QString& filename);
+
+
 
 
 
 private:
     QSqlDatabase mSqlDb;
-    SqliteManager mImporter;
+    SqliteManager mSqliteManager;
 
 };
 }

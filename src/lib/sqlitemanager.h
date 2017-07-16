@@ -15,8 +15,9 @@ class SqliteManager
 {
 public:
     SqliteManager();
+    void createProject(const QString& name);
     bool importFile(const QString& filename);
-    void createProject();
+
 
 
 protected:
@@ -24,7 +25,6 @@ protected:
     void createFields(AbstractVariantReader * reader);
     void createVariants(AbstractVariantReader * reader);
 
-    void createShema();
 
 
 
