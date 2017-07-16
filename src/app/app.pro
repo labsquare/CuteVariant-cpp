@@ -5,7 +5,8 @@ INCLUDEPATH += ../lib
 
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    ui/mainwindow.cpp
 
 
 
@@ -15,3 +16,6 @@ else:unix: LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
 
 INCLUDEPATH += $$PWD/../lib
 DEPENDPATH += $$PWD/../lib
+
+HEADERS += \
+    ui/mainwindow.h

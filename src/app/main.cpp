@@ -1,20 +1,22 @@
 #include <QApplication>
 #include <QtCore>
-#include "project.h"
+#include "ui/mainwindow.h"
 
-using namespace core;
+
 
 int main(int argc, char **argv)
 {
 
     QApplication app(argc, argv);
+    app.setApplicationName("CuteVariant");
+    app.setOrganizationName("Labsquare");
+    app.setOrganizationDomain("labsquare.org");
+    app.setApplicationVersion("0.0.1");
 
-    QFile::remove("/tmp/cutevariant.db");
 
-    Project prj("/tmp/cutevariant.db");
 
-    prj.importFile("/tmp/exemples/freebayes.vcf");
-
+    MainWindow w;
+    w.show();
 
     return app.exec();
 }
