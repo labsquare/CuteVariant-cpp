@@ -1,4 +1,4 @@
-QT += core widgets
+QT += core widgets sql
 
 DEPENDPATH += . ../lib
 INCLUDEPATH += ../lib

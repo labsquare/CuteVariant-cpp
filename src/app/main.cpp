@@ -1,6 +1,6 @@
 #include <QApplication>
 #include <QtCore>
-#include "vcfvariantreader.h"
+#include "project.h"
 
 using namespace core;
 
@@ -9,17 +9,11 @@ int main(int argc, char **argv)
 
     QApplication app(argc, argv);
 
-    VCFVariantReader reader("/tmp/exemples/test.chr22.ann.vcf");
+    QFile::remove("/tmp/cutevariant.db");
 
+    Project prj("/tmp/cutevariant.db");
 
-    if (reader.device()->open(QIODevice::ReadOnly))
-    {
-        while (!reader.device()->atEnd())
-        {
-            Variant var = reader.readVariant();
-            qDebug()<<var.chromosom()<<" "<<var.position()<<" "<<var.ref()<<" "<<var.alt();
-        }
-    }
+    prj.importFile("/tmp/exemples/freebayes.vcf");
 
 
     return app.exec();

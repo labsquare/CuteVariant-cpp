@@ -1,4 +1,5 @@
 QT -= widgets
+QT += sql
 
 TEMPLATE = lib 
 
@@ -11,6 +12,8 @@ SOURCES += \
     variant.cpp \
     abstractvariantreader.cpp \
     vcfvariantreader.cpp \
+    variantimporter.cpp \
+    project.cpp
 
 HEADERS += \
     field.h \
@@ -21,5 +24,7 @@ HEADERS += \
     variant.h \
     abstractvariantreader.h \
     vcfvariantreader.h \
+    variantimporter.h \
+    project.h
 
 TARGET = cutevariantcore

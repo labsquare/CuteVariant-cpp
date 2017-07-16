@@ -9,7 +9,7 @@ VCFVariantReader::VCFVariantReader(const QString &filename)
 QList<Field> VCFVariantReader::fields()
 {
 
-    return parseAnnotationFormat();
+    return parseHeader("INFO");
 
 }
 //------------------------------------------------------------------
