@@ -35,6 +35,25 @@ bool SqliteManager::importFile(const QString &filename)
 
 
 }
+
+QList<Variant> SqliteManager::variants(const VariantQuery &query)
+{
+    QList<Variant> list;
+
+    return list;
+}
+
+int SqliteManager::variantsCount(const VariantQuery &query)
+{
+
+    return 0;
+}
+
+bool SqliteManager::variantsTo(const VariantQuery &query, const QString &target)
+{
+
+    return false;
+}
 //-------------------------------------------------------------------------------
 void SqliteManager::createProject(const QString &name)
 {
