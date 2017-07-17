@@ -8,6 +8,7 @@ class Genotype : public Resource
 {
 public:
     Genotype();
+    Genotype(const Variant& variant, const Sample& sample);
 
 
 private:

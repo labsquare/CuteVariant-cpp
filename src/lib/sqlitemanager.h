@@ -20,6 +20,8 @@ public:
 
 
 
+
+
 protected:
     void createSample(AbstractVariantReader * reader);
     void createFields(AbstractVariantReader * reader);

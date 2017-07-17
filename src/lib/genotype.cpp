@@ -6,5 +6,12 @@ Genotype::Genotype()
 {
 
 }
+
+Genotype::Genotype(const Variant &variant, const Sample &sample)
+{
+  mVariant = variant;
+  mSample  = sample;
+
+}
 }
 
