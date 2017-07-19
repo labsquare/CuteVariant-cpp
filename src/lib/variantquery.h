@@ -15,8 +15,9 @@ public:
     const QStringList& columns() const;
     int offset() const;
     int limit() const;
+    QString toSql() const;
 
-    QString createQuery() const;
+    static VariantQuery fromString() ;
 
 private:
     QString mTableName;

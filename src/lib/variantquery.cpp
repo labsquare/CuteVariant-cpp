@@ -22,7 +22,7 @@ int VariantQuery::limit() const
     return mLimit;
 }
 
-QString VariantQuery::createQuery() const
+QString VariantQuery::toSql() const
 {
 
     QString query;
@@ -35,9 +35,18 @@ QString VariantQuery::createQuery() const
     }
 
 
-   return query;
+    return query;
 
 
+}
+
+VariantQuery VariantQuery::fromString()
+{
+    VariantQuery q;
+
+
+
+    return q;
 }
 
 
