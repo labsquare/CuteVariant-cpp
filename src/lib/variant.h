@@ -10,6 +10,9 @@ public:
     Variant(const QString& chr, quint64 pos, QString& ref, QString& alt);
     void addAnnotation(const QString& colname, const QVariant& value);
     void clearAnnotation();
+    QVariant annotation(const QString& colname) const;
+
+    QVariant& operator[] (const QString& colname);
 
     void setChr(const QString& chr);
     void setPos(quint64 pos);

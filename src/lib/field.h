@@ -16,7 +16,8 @@ public:
     {
         INTEGER,
         REAL,
-        TEXT
+        TEXT,
+        BOOL
     };
 
     Field();
@@ -28,6 +29,7 @@ public:
      Type type() const;
 
      QString typeName() const;
+     QString sqliteType() const;
 
 private:
     QString mColname;

@@ -13,13 +13,23 @@ Variant::Variant(const QString &chr, quint64 pos, QString &ref, QString &alt)
 }
 
 void Variant::addAnnotation(const QString& colname, const QVariant &value)
-{
+{   
     mAnnotations.insert(colname, value);
 }
 
 void Variant::clearAnnotation()
 {
     mAnnotations.clear();
+}
+
+QVariant Variant::annotation(const QString &colname) const
+{
+    return mAnnotations.value(colname,QVariant());
+}
+
+QVariant& Variant::operator[](const QString &colname)
+{
+    return mAnnotations[colname];
 }
 
 void Variant::setChr(const QString &chr)

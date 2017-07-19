@@ -41,7 +41,6 @@ public:
 
 
 
-
     const QString& filename() const;
 
     QIODevice * device() const;

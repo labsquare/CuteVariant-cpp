@@ -134,11 +134,9 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
     QString fieldQuery;
 
     QList<Field> fields =  reader->fields();
-    QHash<QString, QString> colmap ; // map colname to fields name
 
     for (Field f : fields){
-        fieldQuery.append(QString("%1 %2,").arg(f.colname()).arg(f.typeName()));
-        colmap[f.name()] = f.colname();
+        fieldQuery.append(QString("%1 %2,").arg(f.colname()).arg(f.sqliteType()));
     }
 
     QSqlQuery query;
@@ -152,7 +150,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
                        "ref TEXT NOT NULL,"
                        "alt TEXT NOT NULL,"
                        "qual REAL,"
-                       "filter TEXT"
+                       "filter TEXT,"
                        "%1"
                        "PRIMARY KEY (chr,pos,ref,alt)"
                        ") WITHOUT ROWID").arg(fieldQuery));
@@ -171,8 +169,27 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
         {
             Variant v = reader->readVariant();
 
-            query.exec(QString("INSERT INTO variants (bin,rs,chr,pos,ref,alt,qual,filter) VALUES (%1,'%2','%3',%4,'%5','%6',%7,'%8')")
-                       .arg(-1).arg(v.rsId()).arg(v.chromosom()).arg(v.position()).arg(v.ref()).arg(v.alt()).arg(v.qual()).arg(v.filter()));
+            QStringList annCols;
+            QStringList annVals;
+
+            for (Field f : fields){
+                annCols.append(f.colname());
+                annVals.append("'"+v.annotation(f.colname()).toString()+"'");
+            }
+
+
+            query.exec(QString("INSERT INTO variants (bin,rs,chr,pos,ref,alt,qual,filter,%9) VALUES (%1,'%2','%3',%4,'%5','%6',%7,'%8',%10)")
+                       .arg(-1)
+                       .arg(v.rsId())
+                       .arg(v.chromosom())
+                       .arg(v.position())
+                       .arg(v.ref())
+                       .arg(v.alt())
+                       .arg(v.qual())
+                       .arg(v.filter())
+                       .arg(annCols.join(','))
+                       .arg(annVals.join(','))
+                       );
 
             qDebug()<<query.lastQuery();
             qDebug()<<query.lastError().text();

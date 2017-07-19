@@ -66,7 +66,8 @@ private:
     // dot not manage them
     const QStringList mSpecialId = {"ANN","NMD","LOF"};
 
-    const QStringList mFieldOrder;
+    // need to parse fields header before read variant
+    QHash<QString, QString> mFieldColMap;
 
 
 
