@@ -32,6 +32,7 @@ bool SqliteManager::importFile(const QString &filename)
     createSample(reader.data());
     createFields(reader.data());
     createVariants(reader.data());
+    createGenotypes(reader.data());
 
 
 }
@@ -53,6 +54,34 @@ bool SqliteManager::variantsTo(const VariantQuery &query, const QString &target)
 {
 
     return false;
+}
+
+QList<Sample> SqliteManager::samples() const
+{
+    QSqlQuery query("SELECT * FROM samples");
+    QList<Sample> samples;
+
+
+    while(query.next())
+    {
+        Sample sample;
+        sample.setId(query.value("id").toInt());
+        sample.setName(query.value("name").toString());
+        samples.append(sample);
+    }
+
+    return samples;
+
+}
+
+QStringList SqliteManager::samplesNames() const
+{
+    QStringList names;
+    for (Sample s : samples())
+        names.append(s.name());
+
+    return names;
+
 }
 //-------------------------------------------------------------------------------
 void SqliteManager::createProject(const QString &name)
@@ -82,6 +111,7 @@ void SqliteManager::createSample(AbstractVariantReader *reader)
 {
 
     qDebug()<<"import samples";
+    mSamplesIds.clear();
     QSqlQuery query;
 
     query.exec("DROP TABLE IF EXISTS samples");
@@ -95,6 +125,7 @@ void SqliteManager::createSample(AbstractVariantReader *reader)
 
     for (Sample s : reader->samples()){
         query.exec(QString("INSERT INTO samples (name) VALUES ('%1')").arg(s.name()));
+        mSamplesIds.insert(s.name(), query.lastInsertId().toInt());
 
     }
     QSqlDatabase::database().commit();
@@ -131,19 +162,22 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 {
 
     qDebug()<<"import variants";
-    QString fieldQuery;
+    QStringList fieldQuery;
 
     QList<Field> fields =  reader->fields();
 
     for (Field f : fields){
-        fieldQuery.append(QString("%1 %2,").arg(f.colname()).arg(f.sqliteType()));
+        fieldQuery.append(QString("%1 %2").arg(f.colname()).arg(f.sqliteType()));
     }
 
     QSqlQuery query;
 
     query.exec("DROP TABLE IF EXISTS variants");
     query.exec(QString("CREATE TABLE variants ("
+                       "id INTEGER PRIMARY KEY AUTOINCREMENT ,"
                        "bin INT,"
+
+
                        "rs TEXT,"
                        "chr TEXT NOT NULL,"
                        "pos INTEGER NOT NULL,"
@@ -152,20 +186,18 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
                        "qual REAL,"
                        "filter TEXT,"
                        "%1"
-                       "PRIMARY KEY (chr,pos,ref,alt)"
-                       ") WITHOUT ROWID").arg(fieldQuery));
+                       ")").arg(fieldQuery.join(',')));
 
-    qDebug()<<query.lastQuery();
-    qDebug()<<query.lastError().text();
+    //    qDebug()<<query.lastQuery();
+    //    qDebug()<<query.lastError().text();
 
-
-
+    query.exec("CREATE INDEX variants_idx ON variants (chr,pos,ref,alt);");
 
     QSqlDatabase::database().transaction();
 
-    if (reader->device()->open(QIODevice::ReadOnly))
+    if (reader->open())
     {
-        while (!reader->device()->atEnd())
+        while (!reader->atEnd())
         {
             Variant v = reader->readVariant();
 
@@ -192,12 +224,74 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
                        );
 
             qDebug()<<query.lastQuery();
-            qDebug()<<query.lastError().text();
+
+            mVariantIds[v.name()].append(query.lastInsertId().toInt());
+
         }
     }
 
     QSqlDatabase::database().commit();
+    reader->close();
+
     qDebug()<<"variant installed";
+}
+
+void SqliteManager::createGenotypes(AbstractVariantReader *reader)
+{
+    qDebug()<<"import genotypes";
+    QSqlQuery query;
+    QStringList colnames;
+
+    // create columns sql query
+    for (Field f : reader->genotypeFields()){
+        colnames.append(QString("%1 %2").arg(f.name()).arg(f.sqliteType()));
+    }
+
+    if (!colnames.contains("GT TEXT"))
+    {
+        qCritical()<<"WARNING, THE FILE DOESN'T CONTAINS GT FIELD!!";
+        colnames.append("GT TEXT");
+    }
+
+
+    query.exec("DROP TABLE IF EXISTS genotypes");
+    query.exec(QString("CREATE TABLE genotypes ("
+                       "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                       "sample_id INTEGER NOT NULL,"
+                       "variant_id INTEGER NOT NULL,"
+                       "%1"
+                       ")").arg(colnames.join(",")));
+
+    QSqlDatabase::database().transaction();
+
+    if (reader->open())
+    {
+        while (!reader->atEnd())
+        {
+            Genotype geno = reader->readGenotype();
+
+            int sample_id  = mSamplesIds[geno.sample().name()];
+            for (quint64 variant_id : mVariantIds[geno.variant().name()])
+            {
+
+                query.exec(QString("INSERT INTO genotypes (sample_id,variant_id,GT) VALUES (%1,%2,'%3')")
+                           .arg(sample_id).arg(variant_id).arg(geno.rawGenotype()));
+
+
+                qDebug()<<query.lastQuery();
+                qDebug()<<query.lastError().text();
+
+
+
+            }
+        }
+
+    }
+    reader->close();
+
+    QSqlDatabase::database().commit();
+    reader->close();
+
 }
 
 

@@ -11,8 +11,9 @@ public:
     void addAnnotation(const QString& colname, const QVariant& value);
     void clearAnnotation();
     QVariant annotation(const QString& colname) const;
-
     QVariant& operator[] (const QString& colname);
+    bool operator==(const Variant &v1);
+
 
     void setChr(const QString& chr);
     void setPos(quint64 pos);
@@ -21,6 +22,8 @@ public:
     void setRsId(const QString& rsid);
     void setFilter(const QString& filter);
     void setQual(double qual);
+
+   QString name() const;
 
 
     const QString& chromosom() const;

@@ -19,8 +19,13 @@ public:
               quint64 pos,
               const QString& ref,
               const QString& alt,
-              const QString& sampleName,
-              const QString& rawGenotype);
+              const QString& sampleName);
+
+    void setRawGenotype(const QString& raw);
+    void addAnnotation(const QString& colname, const QVariant& value);
+    void clearAnnotation();
+    QVariant annotation(const QString& colname) const;
+    QVariant& operator[](const QString& colname);
 
 
     Genotype::Type type() const;
@@ -29,10 +34,18 @@ public:
     bool isHomo() const;
     bool isHetero() const;
 
+    const Sample& sample() const;
+    const Variant& variant() const;
+
+    const QString& rawGenotype() const;
+
 private:
     Variant mVariant;
     Sample mSample;
     QString mRawGenotype;
+
+    QHash<QString,QVariant> mAnnotations;
+
 
 
 

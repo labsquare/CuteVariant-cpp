@@ -32,6 +32,11 @@ QVariant& Variant::operator[](const QString &colname)
     return mAnnotations[colname];
 }
 
+bool Variant::operator==(const Variant &v1)
+{
+    return name() == v1.name();
+}
+
 void Variant::setChr(const QString &chr)
 {
     mChr = chr;
@@ -60,6 +65,11 @@ void Variant::setRsId(const QString &rsid)
 void Variant::setQual(double qual)
 {
     mQual = qual;
+}
+
+QString Variant::name() const
+{
+    return QString("%1-%2-%3-%4").arg(chromosom()).arg(position()).arg(ref()).arg(alt());
 }
 
 void Variant::setFilter(const QString &filter)

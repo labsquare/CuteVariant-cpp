@@ -8,9 +8,9 @@ public:
     Resource();
     quint64 id() const;
     const QString& tableName() const;
+    void setId(quint64 id);
 
 protected:
-    void setId(quint64 id);
     void setTableName(const QString& name);
 
 private:

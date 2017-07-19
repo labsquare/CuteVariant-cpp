@@ -8,6 +8,8 @@
 
 namespace core {
 
+
+
 /*!
  * \brief The SqliteManager class
  * This is the interface between raw SQLITE query and C++ POO
@@ -45,7 +47,8 @@ public:
     bool variantsTo(const VariantQuery& query, const QString& target);
 
 
-
+    QList<Sample> samples() const;
+    QStringList samplesNames() const;
 
 
 
@@ -54,11 +57,14 @@ protected:
     void createSample(AbstractVariantReader * reader);
     void createFields(AbstractVariantReader * reader);
     void createVariants(AbstractVariantReader * reader);
+    void createGenotypes(AbstractVariantReader * reader);
 
 
 
 
 private:
+    QHash<QString, QVector<int>> mVariantIds;
+    QHash<QString, int> mSamplesIds;
 
 };
 

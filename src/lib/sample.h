@@ -2,7 +2,7 @@
 #define SAMPLE_H
 #include "resource.h"
 namespace core {
-class Sample : Resource
+class Sample : public Resource
 {
 public:
     Sample();

@@ -17,6 +17,13 @@ public:
     virtual QList<Field> fields() override;
 
     /*!
+     * \brief extract fields
+     * \return Field list object
+     */
+    virtual QList<Field> genotypeFields() override;
+
+
+    /*!
      * \brief extract samples
      * \return Samples list name
      */
@@ -29,12 +36,16 @@ public:
      * \return true if it reach the end of the line
      */
     virtual Variant readVariant() override;
-//    /*!
-//     * \brief readGenotype
-//     * \param use it in a while loop : while (readGenotype)...
-//     * \return true if it reach the end of the line
-//     */
-//    virtual Genotype readGenotype() override;
+
+
+    /*!
+     * \brief readVariant
+     * \param use it in a while loop : while (readGenotype)...
+     * \return true if it reach the end of the line
+     */
+    virtual Genotype readGenotype() override;
+
+    virtual bool open() override;
 
 
 
@@ -52,7 +63,13 @@ protected:
 
     /*!
      * \brief parse Vep Annotation from ANN specification
-     * exemple :
+     * exemple : // Get Header Fields data, to process variant later
+    // Store map between fields name in the VCF and colname in sqlite
+    for (Field f : fields())
+        mFieldColMap[f.name()] = f.colname();
+
+    // Get samples to process genotype later
+    mSamples = samples();
      * http://snpeff.sourceforge.net/VCFannotationformat_v1.0.pdf
      * ##INFO=<ID=ANN,Number=.,Type=String,Description="Functional annotations: 'Allele | Annotation | Annotation_Impact | Gene_Name | Gene_ID | Feature_Type | Feature_ID | Transcript_BioType | Rank | HGVS.c | HGVS.p | cDNA.pos / cDNA.length | CDS.pos / CDS.length | AA.pos / AA.length | Distance | ERRORS / WARNINGS / INFO' ">
      * \param id
@@ -68,6 +85,12 @@ private:
 
     // need to parse fields header before read variant
     QHash<QString, QString> mFieldColMap;
+    QList<Sample> mSamples;
+
+    // used to to generate Genotype per sample in genotype read parser
+    int mCurrentSampleId = 0;
+    QString mCurrentGenotypeLine;
+
 
 
 

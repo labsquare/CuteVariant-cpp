@@ -7,15 +7,39 @@ Genotype::Genotype()
 
 }
 
-Genotype::Genotype(const QString &chr, quint64 pos, const QString &ref, const QString &alt, const QString &sampleName, const QString &rawGenotype)
+Genotype::Genotype(const QString &chr, quint64 pos, const QString &ref, const QString &alt, const QString &sampleName)
 {
     mVariant.setChr(chr);
     mVariant.setPos(pos);
     mVariant.setRef(ref);
     mVariant.setAlt(alt);
     mSample.setName(sampleName);
-    mRawGenotype = rawGenotype;
 
+}
+
+void Genotype::setRawGenotype(const QString &raw)
+{
+    mRawGenotype = raw;
+}
+
+void Genotype::addAnnotation(const QString &colname, const QVariant &value)
+{
+    mAnnotations.insert(colname, value);
+}
+
+void Genotype::clearAnnotation()
+{
+    mAnnotations.clear();
+}
+
+QVariant Genotype::annotation(const QString &colname) const
+{
+    return mAnnotations.value(colname, QVariant());
+}
+
+QVariant &Genotype::operator[](const QString &colname)
+{
+    return mAnnotations[colname];
 }
 
 Genotype::Type Genotype::type() const
@@ -46,10 +70,6 @@ Genotype::Type Genotype::type() const
         return Type::Double_alt;
 
     }
-
-
-
-
     return Homozygous_alt;
 
 }
@@ -80,6 +100,21 @@ bool Genotype::isHetero() const
 {
     return (type() == Heterozygous || type() == Double_alt);
 
+}
+
+const Sample &Genotype::sample() const
+{
+    return mSample;
+}
+
+const Variant &Genotype::variant() const
+{
+    return mVariant;
+}
+
+const QString &Genotype::rawGenotype() const
+{
+    return mRawGenotype;
 }
 
 

@@ -9,6 +9,9 @@ VCFVariantReader::VCFVariantReader(const QString &filename)
     for (Field f : fields())
         mFieldColMap[f.name()] = f.colname();
 
+    // Get samples to process genotype later
+    mSamples = samples();
+
 
 }
 //------------------------------------------------------------------
@@ -16,6 +19,11 @@ QList<Field> VCFVariantReader::fields()
 {
     return parseHeader("INFO");
 
+}
+
+QList<Field> VCFVariantReader::genotypeFields()
+{
+    return parseHeader("FORMAT");
 }
 //------------------------------------------------------------------
 
@@ -53,16 +61,9 @@ QList<Sample> VCFVariantReader::samples()
 
 Variant VCFVariantReader::readVariant()
 {
-    QString line;
-    do
-    {
-        line = device()->readLine();
-    } while (line.startsWith("#"));
-
+    QString line = device()->readLine();
 
     QStringList rows = line.split(QChar::Tabulation);
-
-
     QString chrom  = rows[0];
     quint64 pos    = rows[1].toInt();
     QString rsid   = rows[2];
@@ -103,12 +104,66 @@ Variant VCFVariantReader::readVariant()
 
 
     }
-
-
-
-
     return variant;
+}
 
+Genotype VCFVariantReader::readGenotype()
+{
+    // read after all sample has been process ...
+    if (mCurrentSampleId == 0)
+        mCurrentGenotypeLine = device()->readLine();
+
+    QStringList rows = mCurrentGenotypeLine.split(QChar::Tabulation);
+
+    QString chrom  = rows[0];
+    quint64 pos    = rows[1].toInt();
+    QString ref    = rows[3];
+    QString alt    = rows[4];
+
+    QStringList cols = rows[8].split(":");
+    QStringList vals = rows[9+mCurrentSampleId].split(":");
+
+    Genotype gen =  Genotype(chrom,pos,ref,alt,mSamples[mCurrentSampleId].name());
+
+    if (cols.length() != vals.length())
+        qCritical()<<Q_FUNC_INFO<<"genotypes fields and values have different sizes";
+
+    // save genotype annotation
+    for (int i=0; i<qMin(cols.length(), vals.length()); ++i)
+    {
+        if (cols[i] == "GT")
+            gen.setRawGenotype(vals[i]);
+        else
+            gen.addAnnotation(cols[i], vals[i]);
+    }
+
+    // read next line for the next call
+    if (mCurrentSampleId < mSamples.count() - 1)
+        mCurrentSampleId ++;
+    else
+        mCurrentSampleId = 0;
+
+    return gen;
+
+
+
+
+
+}
+
+bool VCFVariantReader::open()
+{
+    if (!AbstractVariantReader::open())
+        return false;
+
+    QString line;
+    do
+    {
+        line = device()->readLine();
+    } while (line.startsWith("#"));
+
+
+    return true;
 }
 //------------------------------------------------------------------
 
