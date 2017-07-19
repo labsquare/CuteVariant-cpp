@@ -12,16 +12,28 @@ namespace core {
 class Field : public Resource
 {
 public:
+    enum Type
+    {
+        INTEGER,
+        REAL,
+        TEXT
+    };
+
     Field();
-    Field(const QString& name, const QString& description);
+    Field(const QString& colname, const QString& name, const QString& description = QString(), const Type& type = Field::TEXT);
 
-    const QString &name() const;
-    const QString &description() const;
+     const QString& colname() const;
+     const QString &name() const;
+     const QString &description() const;
+     Type type() const;
 
+     QString typeName() const;
 
 private:
+    QString mColname;
     QString mName;
     QString mDescription;
+    Type mType = Field::TEXT;
 };
 }
 #endif // FIELD_H

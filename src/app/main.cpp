@@ -1,8 +1,6 @@
 #include <QApplication>
 #include <QtCore>
-#include "ui/mainwindow.h"
-
-
+#include "project.h"
 
 int main(int argc, char **argv)
 {
@@ -13,10 +11,10 @@ int main(int argc, char **argv)
     app.setOrganizationDomain("labsquare.org");
     app.setApplicationVersion("0.0.1");
 
+    core::Project prj("/tmp/variant.db");
+
+    prj.importFile("/tmp/TRIO1.family.vcf");
 
 
-    MainWindow w;
-    w.show();
 
-    return app.exec();
 }

@@ -60,11 +60,18 @@ Variant VCFVariantReader::readVariant()
 
    QString chrom  = rows[0];
    quint64 pos    = rows[1].toInt();
-   QByteArray ref = rows[3].toUtf8();
-   QByteArray alt = rows[4].toUtf8();
-
+   QString rsid   = rows[2];
+   QString ref    = rows[3];
+   QString alt    = rows[4];
+   QString qual   = rows[5];
+   QString filter = rows[6];
 
    Variant variant(chrom,pos, ref,alt);
+   variant.setRsId(rsid);
+   variant.setQual(qual.toDouble());
+   variant.setFilter(filter);
+
+
 
 
    return variant;
@@ -75,13 +82,14 @@ Variant VCFVariantReader::readVariant()
 //Genotype VCFVariantReader::readGenotype()
 //{
 
-//}
+//}toInt();
 
 //------------------------------------------------------------------
 
 QList<Field> VCFVariantReader::parseHeader(const QString &id)
 {
     QList<Field> fields;
+    int annotation_index = 0 ; // Annotation number index
 
     if ( device()->open(QIODevice::ReadOnly))
     {
@@ -97,13 +105,17 @@ QList<Field> VCFVariantReader::parseHeader(const QString &id)
                 QRegularExpression ex(QString("^##%1=<ID=(.+),Number=(.+),Type=(.+),Description=\"(.+)\".+").arg(id));
                 QRegularExpressionMatch match = ex.match(line);
 
-                QString id   = match.captured(1);
+                QString name   = match.captured(1);
                 QString desc = match.captured(4);
 
                 // do not save specialID info fields like ANN, SnpEff, VEP...
                 // manage them separatly
-                if (!mSpecialId.contains(id))
-                    fields.append(Field(id, desc));
+                if (!mSpecialId.contains(id)){
+                    QString colname = QString("%1_%2").arg(id).arg(annotation_index);
+                    fields.append(Field(colname, name, desc));
+
+                    ++annotation_index;
+                }
             }
 
         } while (line.startsWith("##"));

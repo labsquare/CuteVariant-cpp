@@ -91,10 +91,13 @@ void SqliteManager::createSample(AbstractVariantReader *reader)
                        ")"));
 
 
+    QSqlDatabase::database().transaction();
+
     for (Sample s : reader->samples()){
         query.exec(QString("INSERT INTO samples (name) VALUES ('%1')").arg(s.name()));
 
     }
+    QSqlDatabase::database().commit();
 
 }
 //-------------------------------------------------------------------------------
@@ -107,16 +110,19 @@ void SqliteManager::createFields(AbstractVariantReader *reader)
     query.exec("DROP TABLE IF EXISTS fields");
     query.exec(QString("CREATE TABLE fields ("
                        "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                       "name TEXT NOT NULL,"
+                       "colname TEXT NOT NULL,"
+                       "name TEXT,"
                        "description TEXT,"
                        "type TEXT"
                        ")"));
 
+    QSqlDatabase::database().transaction();
 
     for (Field f : reader->fields())
     {
-        query.exec(QString("INSERT INTO fields (name,description) VALUES ('%1', '%2')").arg(f.name()).arg(f.description()));
+        query.exec(QString("INSERT INTO fields (colname,name,description,type) VALUES ('%1', '%2','%3','%4')").arg(f.colname()).arg(f.name()).arg(f.description()).arg(f.typeName()));
     }
+    QSqlDatabase::database().commit();
 
 
 }
@@ -127,23 +133,34 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
     qDebug()<<"import variants";
     QString fieldQuery;
 
-    int fieldCount = reader->fields().count();
+    QList<Field> fields =  reader->fields();
+    QHash<QString, QString> colmap ; // map colname to fields name
 
-    for (int i=0; i<fieldCount; ++i)
-        fieldQuery.append(QString("ANN_%1 TEXT,").arg(i));
+    for (Field f : fields){
+        fieldQuery.append(QString("%1 %2,").arg(f.colname()).arg(f.typeName()));
+        colmap[f.name()] = f.colname();
+    }
 
     QSqlQuery query;
 
     query.exec("DROP TABLE IF EXISTS variants");
     query.exec(QString("CREATE TABLE variants ("
                        "bin INT,"
+                       "rs TEXT,"
                        "chr TEXT NOT NULL,"
                        "pos INTEGER NOT NULL,"
                        "ref TEXT NOT NULL,"
                        "alt TEXT NOT NULL,"
+                       "qual REAL,"
+                       "filter TEXT"
                        "%1"
                        "PRIMARY KEY (chr,pos,ref,alt)"
                        ") WITHOUT ROWID").arg(fieldQuery));
+
+    qDebug()<<query.lastQuery();
+    qDebug()<<query.lastError().text();
+
+
 
 
     QSqlDatabase::database().transaction();
@@ -154,8 +171,8 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
         {
             Variant v = reader->readVariant();
 
-            query.exec(QString("INSERT INTO variants (bin,chr,pos,ref,alt) VALUES (%1,'%2',%3,'%4','%5')")
-                       .arg(-1).arg(v.chromosom()).arg(v.position()).arg(QString(v.ref())).arg(QString(v.alt())));
+            query.exec(QString("INSERT INTO variants (bin,rs,chr,pos,ref,alt,qual,filter) VALUES (%1,'%2','%3',%4,'%5','%6',%7,'%8')")
+                       .arg(-1).arg(v.rsId()).arg(v.chromosom()).arg(v.position()).arg(v.ref()).arg(v.alt()).arg(v.qual()).arg(v.filter()));
 
             qDebug()<<query.lastQuery();
             qDebug()<<query.lastError().text();

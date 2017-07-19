@@ -64,7 +64,9 @@ protected:
 private:
     // special INFO field id like ANN, SnpEff..
     // dot not manage them
-    const QStringList mSpecialId = {"ANN"};
+    const QStringList mSpecialId = {"ANN","NMD","LOF"};
+
+    const QStringList mFieldOrder;
 
 
 
