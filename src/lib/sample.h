@@ -11,6 +11,8 @@ public:
 
     const QString& name() const;
 
+    void setName(const QString& name);
+
 
 private:
     QString mName;

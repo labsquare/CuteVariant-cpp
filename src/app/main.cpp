@@ -1,6 +1,9 @@
 #include <QApplication>
 #include <QtCore>
 #include "project.h"
+#include "genotype.h"
+
+using namespace core;
 
 int main(int argc, char **argv)
 {
@@ -11,10 +14,13 @@ int main(int argc, char **argv)
     app.setOrganizationDomain("labsquare.org");
     app.setApplicationVersion("0.0.1");
 
-    core::Project prj("/tmp/variant.db");
+//    core::Project prj("/tmp/variant.db");
 
-    prj.importFile("/tmp/TRIO1.family.vcf");
+//    prj.importFile("/tmp/TRIO1.family.vcf");
 
+    Genotype g = Genotype("chr1",234,"A","C","sacha", "5/5");
+
+    qDebug()<<g.typeName();
 
 
 }

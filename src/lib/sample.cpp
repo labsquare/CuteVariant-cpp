@@ -7,9 +7,9 @@ Sample::Sample()
 }
 
 Sample::Sample(const QString &name)
-    :Resource(), mName(name)
+    :Resource()
 {
-
+    setName(name);
 }
 
 QVariant Sample::phenotype(const QString &key)
@@ -20,5 +20,10 @@ QVariant Sample::phenotype(const QString &key)
 const QString &Sample::name() const
 {
     return mName;
+}
+
+void Sample::setName(const QString &name)
+{
+    mName = name;
 }
 }
