@@ -27,12 +27,18 @@ bool SqliteManager::importFile(const QString &filename)
         return false;
     }
 
+    QElapsedTimer timer;
+    timer.start();
+
     qDebug()<<"import "<<filename;
 
     createSample(reader.data());
     createFields(reader.data());
     createVariants(reader.data());
     createGenotypes(reader.data());
+
+    qDebug() << "Import done in " << timer.elapsed() << "milliseconds";
+
 
 
 }
@@ -223,8 +229,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
                        .arg(annVals.join(','))
                        );
 
-            qDebug()<<query.lastQuery();
-
+            // store variant ids
             mVariantIds[v.name()].append(query.lastInsertId().toInt());
 
         }
@@ -232,8 +237,6 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 
     QSqlDatabase::database().commit();
     reader->close();
-
-    qDebug()<<"variant installed";
 }
 
 void SqliteManager::createGenotypes(AbstractVariantReader *reader)
@@ -243,7 +246,10 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
     QStringList colnames;
 
     // create columns sql query
-    for (Field f : reader->genotypeFields()){
+
+    QList<Field> fields = reader->genotypeFields();
+
+    for (Field f : fields){
         colnames.append(QString("%1 %2").arg(f.name()).arg(f.sqliteType()));
     }
 
@@ -270,18 +276,27 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
         {
             Genotype geno = reader->readGenotype();
 
+            QStringList annoCols;
+            QStringList annoVals;
+
+            for (Field f : fields){
+
+                annoCols.append(f.name());
+                annoVals.append("'"+geno.annotation(f.name()).toString()+"'");
+            }
+
+
             int sample_id  = mSamplesIds[geno.sample().name()];
             for (quint64 variant_id : mVariantIds[geno.variant().name()])
             {
 
-                query.exec(QString("INSERT INTO genotypes (sample_id,variant_id,GT) VALUES (%1,%2,'%3')")
-                           .arg(sample_id).arg(variant_id).arg(geno.rawGenotype()));
-
-
-                qDebug()<<query.lastQuery();
-                qDebug()<<query.lastError().text();
-
-
+                query.exec(QString("INSERT INTO genotypes (sample_id,variant_id,GT,%4) VALUES (%1,%2,'%3',%5)")
+                           .arg(sample_id)
+                           .arg(variant_id)
+                           .arg(geno.rawGenotype())
+                           .arg(annoCols.join(','))
+                           .arg(annoVals.join(',').simplified())
+                           );
 
             }
         }
@@ -290,7 +305,7 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
     reader->close();
 
     QSqlDatabase::database().commit();
-    reader->close();
+
 
 }
 

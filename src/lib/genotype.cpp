@@ -32,6 +32,11 @@ void Genotype::clearAnnotation()
     mAnnotations.clear();
 }
 
+QStringList Genotype::annotationNames() const
+{
+    return mAnnotations.keys();
+}
+
 QVariant Genotype::annotation(const QString &colname) const
 {
     return mAnnotations.value(colname, QVariant());

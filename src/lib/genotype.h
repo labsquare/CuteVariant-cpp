@@ -24,6 +24,7 @@ public:
     void setRawGenotype(const QString& raw);
     void addAnnotation(const QString& colname, const QVariant& value);
     void clearAnnotation();
+    QStringList annotationNames() const;
     QVariant annotation(const QString& colname) const;
     QVariant& operator[](const QString& colname);
 
