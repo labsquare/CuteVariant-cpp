@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mModel   = new core::ResultModel;
     mProject = new core::Project("/tmp/variant.db");
 
-//    mProject->importFile("/tmp/TRIO1.family.vcf");
+    mProject->importFile("/tmp/TRIO1.family.vcf");
 
     mModel->setProject(mProject);
 

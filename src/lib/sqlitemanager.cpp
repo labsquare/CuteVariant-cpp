@@ -126,6 +126,9 @@ void SqliteManager::createSample(AbstractVariantReader *reader)
                        ")"));
 
 
+    query.exec("CREATE INDEX samples_idx ON samples (id)");
+
+
     QSqlDatabase::database().transaction();
 
     for (Sample s : reader->samples()){
@@ -197,6 +200,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
     //    qDebug()<<query.lastError().text();
 
     query.exec("CREATE INDEX variants_idx ON variants (chr,pos,ref,alt);");
+    query.exec("CREATE INDEX variants_idx2 ON variants (id);");
 
     QSqlDatabase::database().transaction();
 
@@ -266,6 +270,9 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
                        "variant_id INTEGER NOT NULL,"
                        "%1"
                        ")").arg(colnames.join(",")));
+
+    query.exec("CREATE INDEX genotypes_idx ON genotypes (variant_id, sample_id);");
+
 
     QSqlDatabase::database().transaction();
 
