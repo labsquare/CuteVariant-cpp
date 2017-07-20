@@ -5,15 +5,24 @@ using namespace core;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    restoreSettings();
 
-    // File menu
-    QMenu * fileMenu = menuBar()->addMenu(tr("&File"));
-    QAction * openAction = fileMenu->addAction(tr("&Load files"),this, SLOT(openFile()), QKeySequence::Open);
+    mView    = new QTableView;
+    mQueryEdit =  new QLineEdit;
+    mModel   = new core::VariantModel;
+    mProject = new core::Project("/tmp/variant.db");
+    mModel->setProjet(mProject);
+
+    mView->setModel(mModel);
+
+    QToolBar * bar = addToolBar("query");
+    bar->addWidget(mQueryEdit);
 
 
+    setCentralWidget(mView);
 
-    fileMenu->addAction(openAction);
+
+    connect(mQueryEdit, &QLineEdit::returnPressed, mModel, [this](){mModel->setQuery(mQueryEdit->text());});
+
 
 }
 

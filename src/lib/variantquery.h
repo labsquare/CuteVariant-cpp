@@ -11,20 +11,44 @@ namespace core {
 class VariantQuery
 {
 public:
-    VariantQuery(const QString& tableName = "variants", const QStringList& columns = QStringList(), const QJsonObject& filter = QJsonObject(), int offset = 0, int limit = 1000);
-    const QStringList& columns() const;
+    enum QueryStruct
+    {
+        Columns,
+        Columns_Where,
+        Columns_Where_In,
+        Unknown
+    };
+
+    VariantQuery(const QString& tableName = "variants",
+                 const QStringList& columns = QStringList(),
+                 const QString& condition = QString());
+
+    const QStringList &columns() const;
+    const QString& tableName() const;
+    const QString& condition() const;
+    const QString& region() const;
     int offset() const;
     int limit() const;
-    QString toSql() const;
+    void setRegion(const QString& region);
+    void setColumns(const QStringList& columns);
+    void setTableName(const QString& tableName);
+    void setCondition(const QString& condition);
 
-    static VariantQuery fromString() ;
+    QString toSql() const;
+    static VariantQuery fromString(const QString& raw) ;
+
+    QueryStruct queryStruct() const;
+
+
 
 private:
     QString mTableName;
     QStringList mColumns;
-    QJsonObject mFilter;
+    QString mCondition;
+    QString mRegion;
+
     int mOffset = 0;
-    int mLimit  = 0;
+    int mLimit  = 100;
 
 
 };

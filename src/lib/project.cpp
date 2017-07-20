@@ -30,4 +30,9 @@ void Project::importFile(const QString &filename)
     mSqliteManager.importFile(filename);
 }
 
+SqliteManager *Project::sqliteManager()
+{
+    return &mSqliteManager;
+}
+
 }

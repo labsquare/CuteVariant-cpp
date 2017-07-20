@@ -3,6 +3,7 @@
 
 #include <QtWidgets>
 #include <QtCore>
+#include "variantmodel.h"
 
 class MainWindow : public QMainWindow
 {
@@ -26,6 +27,13 @@ public Q_SLOTS:
 private:
     QString mCurrentFile;
     QString mCurrentDBFile;
+
+    QTableView * mView;
+    QLineEdit * mQueryEdit;
+
+    core::VariantModel * mModel;
+    core::Project * mProject;
+
 
 
 };

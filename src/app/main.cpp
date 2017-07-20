@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QtCore>
+#include "ui/mainwindow.h"
 #include "project.h"
 #include "genotype.h"
 
@@ -16,14 +17,15 @@ int main(int argc, char **argv)
     app.setOrganizationDomain("labsquare.org");
     app.setApplicationVersion("0.0.1");
 
-    core::Project prj("/tmp/variant.db");
-    prj.importFile("/tmp/TRIO1.family.vcf");
+
+    MainWindow win;
+
+    win.show();
 
 
+    app.exec();
 
-  //  VariantQuery q = VariantQuery::fromString("SELECT variant (AF>3 and AF<4) chr pos ref alt DP AO");
 
-   // qDebug()<<q.toSql();
 
 
 

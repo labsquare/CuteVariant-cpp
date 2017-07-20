@@ -19,11 +19,13 @@ public:
     void setDatabasePath(const QString& path);
     void importFile(const QString& filename);
 
+    SqliteManager * sqliteManager();
 
 
 
 
-private:
+
+//private:
     QSqlDatabase mSqlDb;
     SqliteManager mSqliteManager;
 

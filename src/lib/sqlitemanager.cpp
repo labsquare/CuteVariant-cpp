@@ -47,6 +47,24 @@ QList<Variant> SqliteManager::variants(const VariantQuery &query)
 {
     QList<Variant> list;
 
+    QSqlQuery q (query.toSql());
+
+    qDebug()<<"SQL "<<query.toSql();
+    qDebug()<<Q_FUNC_INFO<<q.lastError().text();
+
+
+    while (q.next())
+    {
+        QSqlRecord rec = q.record();
+
+        list.append(Variant());
+
+        list.last().setChr(rec.value("chr").toString());
+        list.last().setPos(rec.value("pos").toInt());
+        list.last().setRef(rec.value("ref").toString());
+        list.last().setAlt(rec.value("alt").toString());
+    }
+
     return list;
 }
 
