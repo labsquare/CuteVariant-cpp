@@ -14,8 +14,8 @@ SOURCES += \
     vcfvariantreader.cpp \
     project.cpp \
     sqlitemanager.cpp \
-    variantquery.cpp \
-    variantmodel.cpp
+    resultmodel.cpp \
+    querybuilder.cpp
 
 HEADERS += \
     field.h \
@@ -28,7 +28,7 @@ HEADERS += \
     vcfvariantreader.h \
     project.h \
     sqlitemanager.h \
-    variantquery.h \
-    variantmodel.h
+    resultmodel.h \
+    querybuilder.h
 
 TARGET = cutevariantcore

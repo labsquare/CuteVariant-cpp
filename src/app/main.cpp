@@ -4,7 +4,7 @@
 #include "project.h"
 #include "genotype.h"
 
-#include "variantquery.h"
+#include "querybuilder.h"
 
 using namespace core;
 
@@ -19,7 +19,6 @@ int main(int argc, char **argv)
 
 
     MainWindow win;
-
     win.show();
 
 

@@ -6,11 +6,14 @@ using namespace core;
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 
-    mView    = new QTableView;
+    mView    = new QTreeView;
     mQueryEdit =  new QLineEdit;
-    mModel   = new core::VariantModel;
+    mModel   = new core::ResultModel;
     mProject = new core::Project("/tmp/variant.db");
-    mModel->setProjet(mProject);
+
+//    mProject->importFile("/tmp/TRIO1.family.vcf");
+
+    mModel->setProject(mProject);
 
     mView->setModel(mModel);
 
@@ -21,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setCentralWidget(mView);
 
 
+    mQueryEdit->setText("SELECT qual FROM variants");
     connect(mQueryEdit, &QLineEdit::returnPressed, mModel, [this](){mModel->setQuery(mQueryEdit->text());});
 
 

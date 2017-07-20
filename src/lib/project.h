@@ -29,6 +29,7 @@ public:
     QSqlDatabase mSqlDb;
     SqliteManager mSqliteManager;
 
+
 };
 }
 #endif // PROJECT_H

@@ -8,7 +8,7 @@ namespace core {
  * \brief The VariantQuery class
  * Use this class to generate sqlite query
  */
-class VariantQuery
+class QueryBuilder
 {
 public:
     enum QueryStruct
@@ -19,9 +19,11 @@ public:
         Unknown
     };
 
-    VariantQuery(const QString& tableName = "variants",
-                 const QStringList& columns = QStringList(),
-                 const QString& condition = QString());
+    QueryBuilder();
+    QueryBuilder(const QString& tableName,
+          const QStringList& columns,
+          const QString& condition);
+    QueryBuilder(const QString& raw);
 
     const QStringList &columns() const;
     const QString& tableName() const;
@@ -35,9 +37,15 @@ public:
     void setCondition(const QString& condition);
 
     QString toSql() const;
-    static VariantQuery fromString(const QString& raw) ;
+    void parse(const QString& raw) ;
 
     QueryStruct queryStruct() const;
+
+protected:
+    // detect if columns or condition have the extra keyworks genotype().GT
+    bool hasGenotypeInColumns();
+    bool hasGenotypeInCondition();
+
 
 
 
@@ -46,9 +54,17 @@ private:
     QStringList mColumns;
     QString mCondition;
     QString mRegion;
+    QString mRaw;
 
     int mOffset = 0;
     int mLimit  = 100;
+
+    const QString GenotypeKeyword = "genotype";
+    const QString SampleKeyword = "sample";
+
+    // sampleName : genotype Fields.
+    // exemple : SACHA : GT
+    QHash<QString, QString> mGenotypeFields;
 
 
 };

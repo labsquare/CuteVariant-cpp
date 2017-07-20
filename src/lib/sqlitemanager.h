@@ -4,7 +4,7 @@
 #include <QtSql>
 #include "abstractvariantreader.h"
 #include "vcfvariantreader.h"
-#include "variantquery.h"
+#include "querybuilder.h"
 
 namespace core {
 
@@ -21,34 +21,12 @@ public:
     void createProject(const QString& name);
     bool importFile(const QString& filename);
 
-    /*!
-     * \brief variants
-     * \param query
-     * select variants from database
-     * \return
-     */
-    QList<Variant> variants(const VariantQuery& query);
-
-    /*!
-     * \brief variantsCount
-     * \param query
-     * Return variants count
-     * \return
-     */
-    int variantsCount(const VariantQuery& query);
-
-    /*!
-     * \brief variantsTo
-     * \param query
-     * \param taget
-     * Save variant selection into target
-     * \return
-     */
-    bool variantsTo(const VariantQuery& query, const QString& target);
-
-
     QList<Sample> samples() const;
     QStringList samplesNames() const;
+
+    QString queryToSql(const QString& raw);
+
+
 
 
 
@@ -65,6 +43,9 @@ protected:
 private:
     QHash<QString, QVector<int>> mVariantIds;
     QHash<QString, int> mSamplesIds;
+
+    QueryBuilder mQueryBuilder;
+
 
 };
 

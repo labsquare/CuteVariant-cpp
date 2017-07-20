@@ -3,7 +3,7 @@
 
 #include <QtWidgets>
 #include <QtCore>
-#include "variantmodel.h"
+#include "resultmodel.h"
 
 class MainWindow : public QMainWindow
 {
@@ -28,10 +28,10 @@ private:
     QString mCurrentFile;
     QString mCurrentDBFile;
 
-    QTableView * mView;
+    QTreeView * mView;
     QLineEdit * mQueryEdit;
 
-    core::VariantModel * mModel;
+    core::ResultModel * mModel;
     core::Project * mProject;
 
 

@@ -43,48 +43,11 @@ bool SqliteManager::importFile(const QString &filename)
 
 }
 
-QList<Variant> SqliteManager::variants(const VariantQuery &query)
-{
-    QList<Variant> list;
-
-    QSqlQuery q (query.toSql());
-
-    qDebug()<<"SQL "<<query.toSql();
-    qDebug()<<Q_FUNC_INFO<<q.lastError().text();
-
-
-    while (q.next())
-    {
-        QSqlRecord rec = q.record();
-
-        list.append(Variant());
-
-        list.last().setChr(rec.value("chr").toString());
-        list.last().setPos(rec.value("pos").toInt());
-        list.last().setRef(rec.value("ref").toString());
-        list.last().setAlt(rec.value("alt").toString());
-    }
-
-    return list;
-}
-
-int SqliteManager::variantsCount(const VariantQuery &query)
-{
-
-    return 0;
-}
-
-bool SqliteManager::variantsTo(const VariantQuery &query, const QString &target)
-{
-
-    return false;
-}
-
+//-------------------------------------------------------------------------------
 QList<Sample> SqliteManager::samples() const
 {
     QSqlQuery query("SELECT * FROM samples");
     QList<Sample> samples;
-
 
     while(query.next())
     {
@@ -97,7 +60,7 @@ QList<Sample> SqliteManager::samples() const
     return samples;
 
 }
-
+//-------------------------------------------------------------------------------
 QStringList SqliteManager::samplesNames() const
 {
     QStringList names;
@@ -106,6 +69,24 @@ QStringList SqliteManager::samplesNames() const
 
     return names;
 
+}
+//-------------------------------------------------------------------------------
+QString SqliteManager::queryToSql(const QString &raw)
+{
+    mQueryBuilder.parse(raw);
+
+    // improve performance
+    // ugly.. ALl the things should be inside query builder ...
+
+    QString sql = mQueryBuilder.toSql();
+
+    for (Sample s : samples())
+    {
+        sql = sql.replace(QString("INDEX_OF_%1").arg(s.name()), QString::number(s.id()));
+    }
+
+
+    return sql;
 }
 //-------------------------------------------------------------------------------
 void SqliteManager::createProject(const QString &name)
