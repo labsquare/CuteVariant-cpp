@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 
 
     Project prj("/tmp/variant.db");
-    prj.importFile("/tmp/TRIO1.family.vcf");
+    prj.importFile("/tmp/test.vcf");
 
 //     VCFVariantReader * reader = new VCFVariantReader("/tmp/vep.vcf");
 

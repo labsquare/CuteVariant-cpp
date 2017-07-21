@@ -67,8 +67,12 @@ Variant VCFVariantReader::readVariant()
 
 
     QString line = device()->readLine();
-
-    QStringList rows = line.split(QChar::Tabulation);
+    QStringList rows = line.split('\t');
+    if ( rows.size() < 8)
+    {
+        qCritical()<<"Wrong fields number in file";
+        return Variant();
+    }
     QString chrom  = rows[0];
     quint64 pos    = rows[1].toInt();
     QString rsid   = rows[2];
@@ -152,6 +156,12 @@ Genotype VCFVariantReader::readGenotype()
         mCurrentGenotypeLine = device()->readLine();
 
     QStringList rows = mCurrentGenotypeLine.split(QChar::Tabulation);
+
+    if (rows.size() < 10)
+    {
+        qCritical()<<"Cannot read genotype. Wrong fields count";
+        return Genotype();
+    }
 
     QString chrom  = rows[0];
     quint64 pos    = rows[1].toInt();
