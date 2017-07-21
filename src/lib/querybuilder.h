@@ -38,13 +38,12 @@ public:
     void setTableName(const QString& tableName);
     void setCondition(const QString& condition);
     void setOrderBy(const QString& order);
+
+    void setSampleIds(const QHash<QString, int>& sampleIds);
+
+
+
     void setRawQuery(const QString& raw);
-
-    void setSampleId(const QString& name, int id);
-
-
-
-
     QString toSql() const;
 
 
@@ -76,6 +75,7 @@ private:
 
     // store samples and ids
     QHash<QString, int> mSamplesIds;
+
 
 
 

@@ -43,6 +43,7 @@ protected:
 private:
     QHash<QString, QVector<int>> mVariantIds;
     QHash<QString, int> mSamplesIds;
+
     QueryBuilder mQueryBuilder;
 
 

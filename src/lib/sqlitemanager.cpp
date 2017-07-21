@@ -39,8 +39,7 @@ bool SqliteManager::importFile(const QString &filename)
 
     qInfo()<< "Import done in " << timer.elapsed() << "milliseconds";
 
-
-
+    return true;
 }
 
 //-------------------------------------------------------------------------------
@@ -79,9 +78,7 @@ QList<Field> SqliteManager::fields() const
 QString SqliteManager::buildVariantQuery(const QString &raw)
 {
     mQueryBuilder.setRawQuery(raw);
-
-    for (Sample s: samples())
-        mQueryBuilder.setSampleId(s.name(), s.id());
+    mQueryBuilder.setSampleIds(mSamplesIds);
 
 
     return "sql";
@@ -247,7 +244,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
             query.addBindValue(v.filter());
 
             for (Field f : fields)
-                query.addBindValue(f.colname());
+                query.addBindValue(v[f.colname()]);
 
 
             if (!query.exec())
@@ -329,7 +326,6 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
 
     }
     reader->close();
-
     QSqlDatabase::database().commit();
 }
 
