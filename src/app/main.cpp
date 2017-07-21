@@ -18,8 +18,20 @@ int main(int argc, char **argv)
     app.setApplicationVersion("0.0.1");
 
 
-    MainWindow win;
-    win.show();
+
+    Project prj("/tmp/variant.db");
+    prj.importFile("/tmp/TRIO1.family.vcf");
+
+//     VCFVariantReader * reader = new VCFVariantReader("/tmp/vep.vcf");
+
+//    for (Field f : reader->parseHeader("INFO"))
+//    {
+//        qDebug()<<f.colname();
+//    }
+
+
+//    MainWindow win;
+//    win.show();
 
 
     app.exec();

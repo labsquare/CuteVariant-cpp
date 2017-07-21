@@ -160,8 +160,17 @@ void SqliteManager::createFields(AbstractVariantReader *reader)
     for (Field f : reader->fields())
     {
         query.exec(QString("INSERT INTO fields (colname,name,description,type) VALUES ('%1', '%2','%3','%4')").arg(f.colname()).arg(f.name()).arg(f.description()).arg(f.typeName()));
+
+        if (query.lastError().isValid())
+        {
+            qDebug()<<query.lastQuery();
+            qDebug()<<query.lastError().text();
+        }
+
     }
     QSqlDatabase::database().commit();
+
+
 
 
 }
@@ -184,8 +193,6 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
     query.exec(QString("CREATE TABLE variants ("
                        "id INTEGER PRIMARY KEY AUTOINCREMENT ,"
                        "bin INT,"
-
-
                        "rs TEXT,"
                        "chr TEXT NOT NULL,"
                        "pos INTEGER NOT NULL,"
@@ -195,6 +202,13 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
                        "filter TEXT,"
                        "%1"
                        ")").arg(fieldQuery.join(',')));
+
+    if (query.lastError().isValid())
+    {
+        qDebug()<<query.lastQuery();
+        qDebug()<<query.lastError().text();
+        return;
+    }
 
     //    qDebug()<<query.lastQuery();
     //    qDebug()<<query.lastError().text();

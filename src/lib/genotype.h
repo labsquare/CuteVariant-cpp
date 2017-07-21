@@ -21,23 +21,57 @@ public:
               const QString& alt,
               const QString& sampleName);
 
+    /*!
+     * \brief set raw genotype
+     * \param raw : For example 0/1 for heterzygous or 0|0 for homozygous
+     */
     void setRawGenotype(const QString& raw);
+    /*!
+     * \brief add annotation to the genotype
+     * \param colname
+     * \param value
+     */
     void addAnnotation(const QString& colname, const QVariant& value);
     void clearAnnotation();
+    /*!
+     * \brief annotationNames
+     * \return annotation columns names
+     */
     QStringList annotationNames() const;
+    /*!
+     * \brief get annotation from colname
+     * \param colname
+     * \return annotation value
+     */
     QVariant annotation(const QString& colname) const;
     QVariant& operator[](const QString& colname);
 
 
+    /*!
+     * \brief type of genotype
+     * \return homozygous or heterozygous
+     */
     Genotype::Type type() const;
     QString typeName() const;
 
     bool isHomo() const;
     bool isHetero() const;
 
+    /*!
+     * \brief sample
+     * \return the sample associated with this genotype
+     */
     const Sample& sample() const;
+    /*!
+     * \brief variant
+     * \return the variant associated with this genotype
+     */
     const Variant& variant() const;
 
+    /*!
+     * \brief rawGenotype
+     * \return genotype in format "0/1"
+     */
     const QString& rawGenotype() const;
 
 private:

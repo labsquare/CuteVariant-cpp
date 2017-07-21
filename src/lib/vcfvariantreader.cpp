@@ -17,13 +17,12 @@ VCFVariantReader::VCFVariantReader(const QString &filename)
 //------------------------------------------------------------------
 QList<Field> VCFVariantReader::fields()
 {
-    return parseHeader("INFO");
-
+   return parseHeader(QStringLiteral("INFO"));
 }
 
 QList<Field> VCFVariantReader::genotypeFields()
 {
-    return parseHeader("FORMAT");
+    return parseHeader(QStringLiteral("FORMAT"));
 }
 //------------------------------------------------------------------
 
@@ -41,12 +40,11 @@ QList<Sample> VCFVariantReader::samples()
             // #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	BLANK	NA12878	NA12891	NA12892	NA19238	NA19239	NA19240
 
             QString line = stream.readLine();
-            if (line.startsWith("#CHROM"))
+            if (line.startsWith(QStringLiteral("#CHROM")))
             {
                 QStringList header = line.split(QChar::Tabulation);
                 if (header.size() > 9)
                 {
-                    qDebug()<<header.size();
                     for (int i = 9 ; i< header.size(); ++i)
                         samples.append(Sample(header.at(i)));
                 }
@@ -131,7 +129,7 @@ Genotype VCFVariantReader::readGenotype()
     // save genotype annotation
     for (int i=0; i<qMin(cols.length(), vals.length()); ++i)
     {
-        if (cols[i] == "GT")
+        if (cols[i] == QStringLiteral("GT"))
             gen.setRawGenotype(vals[i]);
         else
             gen.addAnnotation(cols[i], vals[i]);
@@ -145,10 +143,6 @@ Genotype VCFVariantReader::readGenotype()
 
     return gen;
 
-
-
-
-
 }
 
 bool VCFVariantReader::open()
@@ -156,6 +150,7 @@ bool VCFVariantReader::open()
     if (!AbstractVariantReader::open())
         return false;
 
+    // Avoid comment when reading
     QString line;
     do
     {
@@ -167,17 +162,9 @@ bool VCFVariantReader::open()
 }
 //------------------------------------------------------------------
 
-//Genotype VCFVariantReader::readGenotype()
-//{
-
-//}toInt();
-
-//------------------------------------------------------------------
-
 QList<Field> VCFVariantReader::parseHeader(const QString &id)
-{
+{  
     QList<Field> fields;
-    int annotation_index = 1 ; // Annotation number index
 
     if ( device()->open(QIODevice::ReadOnly))
     {
@@ -187,22 +174,22 @@ QList<Field> VCFVariantReader::parseHeader(const QString &id)
         do
         {
             line = stream.readLine();
-
             // Parse Header line
             if (line.startsWith(QString("##%1").arg(id)))
             {
-                QRegularExpression ex(QString("^##%1=<ID=(.+),Number=(.+),Type=(.+),Description=\"(.+)\".+").arg(id));
+                QRegularExpression ex(QStringLiteral("^##%1=<ID=(.+),Number=(.+),Type=(.+),Description=\"(.+)\".+").arg(id));
                 QRegularExpressionMatch match = ex.match(line);
 
                 QString name   = match.captured(1);
                 QString type   = match.captured(3);
                 QString desc   = match.captured(4);
 
-                // parse Fields info line
-                // do not save specialID info fields like ANN, SnpEff, VEP...
-                // manage them separatly
-                if (!mSpecialId.contains(id)){
-                    QString colname = QString("%1_%2").arg(id).arg(annotation_index);
+                if (mSpecialId.contains(name)){
+                   fields += parseAnnotationHeaderLine(line);
+                }
+
+                else
+                {
 
                     Field::Type fType = Field::TEXT;
 
@@ -218,63 +205,49 @@ QList<Field> VCFVariantReader::parseHeader(const QString &id)
                     if (type == "Flag")
                         fType = Field::BOOL;
 
-
-                    fields.append(Field(colname, name, desc, fType));
-
-                    ++annotation_index;
+                    fields.append(Field("INFO_"+name, name, desc, fType));
                 }
+
             }
 
         } while (line.startsWith("##"));
     }
+
     device()->close();
 
     return fields;
 }
 
-QList<Field> VCFVariantReader::parseAnnotationFormat()
+QList<Field> VCFVariantReader::parseAnnotationHeaderLine(const QString& line)
 {
+
+    // typical annotation are in the following form. Many fields in one line
+    //##INFO=<ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|DISTANCE|STRAND|FLAGS|SYMBOL_SOURCE|HGNC_ID|TSL|APPRIS|SIFT|PolyPhen|AF|AFR_AF|AMR_AF|EAS_AF|EUR_AF|SAS_AF|AA_AF|EA_AF|ExAC_AF|ExAC_Adj_AF|ExAC_AFR_AF|ExAC_AMR_AF|ExAC_EAS_AF|ExAC_FIN_AF|ExAC_NFE_AF|ExAC_OTH_AF|ExAC_SAS_AF|CLIN_SIG|SOMATIC|PHENO|PUBMED|MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE|MetaSVM_pred|MetaSVM_score">
+
     QList<Field> fields;
 
-    if ( device()->open(QIODevice::ReadOnly))
-    {
-        QTextStream stream(device());
-        QString line;
 
-        do
+        QRegularExpression ex(QStringLiteral("^##INFO=<ID=(?<id>.+),Number=(?<number>.+),Type=(?<type>.+),Description=\"(?<desc>.+):(?<ann>.+)\""));
+        QRegularExpressionMatch match = ex.match(line);
+
+        if (match.hasMatch())
         {
-            line = stream.readLine();
+            QString id   = match.captured("id");
+            QString ann  = match.captured("ann");
+            // remove quote if exists.. ( snpEFF )
+            ann = ann.remove("\'");
+            ann = ann.remove("\"");
+            ann = ann.simplified();
+            ann = ann.remove(QChar::Space);
 
+            qDebug()<<ann.split("|");
 
-            if (line.startsWith("##INFO=<ID=ANN"))
+            for (QString a : ann.split("|"))
             {
-                QRegularExpression ex("^##INFO=<ID=ANN,Number=(.+),Type=(.+),Description=\"(.+)\".+");
-                QRegularExpressionMatch match = ex.match(line);
-
-                if (!match.hasMatch())
-                    qDebug()<<Q_FUNC_INFO<<"no match ANN";
-
-                QString desc = match.captured(3);
-
-                //"Functional annotations: 'Allele | Annotation | Annotation_Impact | Gene_Name | Gene_ID | Feature_Type | Feature_ID | Transcript_BioType | Rank | HGVS.c | HGVS.p | cDNA.pos / cDNA.length | CDS.pos / CDS.length | AA.pos / AA.length | Distance | ERRORS / WARNINGS / INFO' "
-                ex.setPattern("\'(.+)\'");
-                match = ex.match(desc);
-
-                if (!match.hasMatch())
-                    qDebug()<<Q_FUNC_INFO<<"no match ANN fields";
-
-                QStringList items = match.captured(1).split('|');
-
-                // Field name looks like : ANN_1, ANN_2 ....
-
-                for (int i=0; i<items.length(); ++i)
-                    fields.append(Field(QString("ANN_%1").arg(i), items.at(i)));
-                break;
+                fields.append(Field(id+"_"+a,a,"See Annotation specification"));
             }
+        }
 
-        } while (line.startsWith("##"));
-    }
-    device()->close();
 
     return fields;
 }

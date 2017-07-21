@@ -12,9 +12,12 @@ const QString &Field::colname() const
 }
 
 Field::Field(const QString& colname,const QString &name, const QString &description, const Type& type)
-    :Resource(),mColname(colname), mName(name), mDescription(description), mType(type)
+    :Resource()
 {
-
+    setColname(colname);
+    setName(name);
+    setDescription(description);
+    setType(type);
 }
 
 const QString &Field::name() const
@@ -67,5 +70,43 @@ QString Field::sqliteType() const
   return "TEXT";
 
 }
+
+QString Field::simplified(const QString &name)
+{
+    // remove white space
+    QString out = name.simplified();
+
+    // replace "." by "_"
+    out =  out.replace(".","_");
+    out = out.remove("'");
+    out = out.remove("\"");
+
+    return out;
+
+}
+
+void Field::setColname(const QString &colname)
+{
+    // save only the first world for sql syntax..
+    QRegularExpression exp("(\\w+)");
+    mColname = exp.match(simplified(colname)).captured(1).toUpper();
+}
+
+void Field::setName(const QString &name)
+{
+    mName = simplified(name);
+}
+
+void Field::setDescription(const QString &description)
+{
+    mDescription = simplified(description);
+}
+
+void Field::setType(Field::Type type)
+{
+    mType = type;
+}
+
+
 
 }

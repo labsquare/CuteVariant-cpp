@@ -31,6 +31,18 @@ public:
      QString typeName() const;
      QString sqliteType() const;
 
+     /*!
+      * \brief simplified the string to save into sql
+      * \param name
+      * \return sql valid String
+      */
+     static QString simplified(const QString& name);
+
+     void setColname(const QString& colname);
+     void setName(const QString& name);
+     void setDescription(const QString& description);
+     void setType(Type type);
+
 private:
     QString mColname;
     QString mName;

@@ -49,7 +49,7 @@ public:
 
 
 
-protected:
+//protected:
     /*!
      * \brief parse Vcf Header according ID.
      * For exemple, with id equal 'INFO', 3 fields will be extract:
@@ -61,8 +61,11 @@ protected:
      */
     QList<Field> parseHeader(const QString& id);
 
+
+
+
     /*!
-     * \brief parse Vep Annotation from ANN specification
+     * \brief parse Annotation from ANN specification
      * exemple : // Get Header Fields data, to process variant later
     // Store map between fields name in the VCF and colname in sqlite
     for (Field f : fields())
@@ -75,13 +78,18 @@ protected:
      * \param id
      * \return
      */
-    QList<Field> parseAnnotationFormat();
+    QList<Field> parseAnnotationHeaderLine(const QString& line);
+
+
+
+
+
 
 
 private:
     // special INFO field id like ANN, SnpEff..
     // dot not manage them
-    const QStringList mSpecialId = {"ANN","NMD","LOF"};
+    const QStringList mSpecialId = {"ANN","NMD","LOF","CSQ"};
 
     // need to parse fields header before read variant
     QHash<QString, QString> mFieldColMap;
