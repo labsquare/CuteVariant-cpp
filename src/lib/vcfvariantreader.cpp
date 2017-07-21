@@ -17,7 +17,7 @@ VCFVariantReader::VCFVariantReader(const QString &filename)
 //------------------------------------------------------------------
 QList<Field> VCFVariantReader::fields()
 {
-   return parseHeader(QStringLiteral("INFO"));
+    return parseHeader(QStringLiteral("INFO"));
 }
 
 QList<Field> VCFVariantReader::genotypeFields()
@@ -59,6 +59,13 @@ QList<Sample> VCFVariantReader::samples()
 
 Variant VCFVariantReader::readVariant()
 {
+    // return dupliate variant before processing next line
+    if (!mDuplicateVariant.isEmpty())
+    {
+        return mDuplicateVariant.takeLast();
+    }
+
+
     QString line = device()->readLine();
 
     QStringList rows = line.split(QChar::Tabulation);
@@ -89,17 +96,50 @@ Variant VCFVariantReader::readVariant()
             QString key = pair.first();
             QString val = pair.last();
 
+            //
             // Do not manage special key like ANN
-            if (!mSpecialId.contains(key))
+            //
+            if (mSpecialId.contains(key))
+            {
+                QStringList allAnn = val.split(",");
+
+                // Save first annotation as usual
+                int index = 0;
+                for (QString annValue : allAnn.first().split("|")){
+                    variant[mSpecialIdMap[key].value(index)] = annValue;
+                    ++index;
+                }
+
+                // save duplicate variant if many annotations for this variant
+                if (allAnn.size() > 1)
+                {
+                    mDuplicateVariant.clear();
+                    for (int dupId = 1; dupId<allAnn.size(); ++dupId)
+                    {
+                        Variant dupVariant = variant;
+                        int index = 0;
+                        for (QString annValue : allAnn[dupId].split("|")){
+                            dupVariant[mSpecialIdMap[key].value(index)] = annValue;
+                            ++index;
+                        }
+                        mDuplicateVariant.append(dupVariant);
+                    }
+                }
+            }
+
+            // normal info fields
+            else
+            {
                 variant[mFieldColMap[key]] = val;
+            }
         }
 
+        // Bool TAGS
         else
         {
             // If key is present, means it's true
             variant[mFieldColMap[item]] = 1;
         }
-
 
     }
     return variant;
@@ -185,7 +225,7 @@ QList<Field> VCFVariantReader::parseHeader(const QString &id)
                 QString desc   = match.captured(4);
 
                 if (mSpecialId.contains(name)){
-                   fields += parseAnnotationHeaderLine(line);
+                    fields += parseAnnotationHeaderLine(line);
                 }
 
                 else
@@ -227,26 +267,25 @@ QList<Field> VCFVariantReader::parseAnnotationHeaderLine(const QString& line)
     QList<Field> fields;
 
 
-        QRegularExpression ex(QStringLiteral("^##INFO=<ID=(?<id>.+),Number=(?<number>.+),Type=(?<type>.+),Description=\"(?<desc>.+):(?<ann>.+)\""));
-        QRegularExpressionMatch match = ex.match(line);
+    QRegularExpression ex(QStringLiteral("^##INFO=<ID=(?<id>.+),Number=(?<number>.+),Type=(?<type>.+),Description=\"(?<desc>.+):(?<ann>.+)\""));
+    QRegularExpressionMatch match = ex.match(line);
 
-        if (match.hasMatch())
+    if (match.hasMatch())
+    {
+        QString id   = match.captured("id");
+        QString ann  = match.captured("ann");
+        // remove quote if exists.. ( snpEFF )
+        ann = ann.remove("\'");
+        ann = ann.remove("\"");
+        ann = ann.simplified();
+        ann = ann.remove(QChar::Space);
+
+        for (QString a : ann.split("|"))
         {
-            QString id   = match.captured("id");
-            QString ann  = match.captured("ann");
-            // remove quote if exists.. ( snpEFF )
-            ann = ann.remove("\'");
-            ann = ann.remove("\"");
-            ann = ann.simplified();
-            ann = ann.remove(QChar::Space);
-
-            qDebug()<<ann.split("|");
-
-            for (QString a : ann.split("|"))
-            {
-                fields.append(Field(id+"_"+a,a,"See Annotation specification"));
-            }
+            fields.append(Field(id+"_"+a,a,"See Annotation specification"));
+            mSpecialIdMap[id].append(fields.last().colname());
         }
+    }
 
 
     return fields;

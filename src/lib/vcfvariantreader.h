@@ -91,13 +91,23 @@ private:
     // dot not manage them
     const QStringList mSpecialId = {"ANN","NMD","LOF","CSQ"};
 
+    QHash<QString, QStringList> mSpecialIdMap;
+
+
     // need to parse fields header before read variant
     QHash<QString, QString> mFieldColMap;
+
     QList<Sample> mSamples;
 
     // used to to generate Genotype per sample in genotype read parser
     int mCurrentSampleId = 0;
     QString mCurrentGenotypeLine;
+
+
+    // One Line can have multiple annotation
+    // We decide to store one annotation by row in variant table.
+    // That's means duplicate variant with different annotation
+    QList<Variant> mDuplicateVariant;
 
 
 
