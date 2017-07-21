@@ -3,6 +3,7 @@
 #include <QtCore>
 #include <QtSql>
 #include "sqlitemanager.h"
+#include "querybuilder.h"
 
 namespace core {
 class Project
@@ -19,15 +20,13 @@ public:
     void setDatabasePath(const QString& path);
     void importFile(const QString& filename);
 
+
     SqliteManager * sqliteManager();
 
-
-
-
-
-//private:
+private:
     QSqlDatabase mSqlDb;
     SqliteManager mSqliteManager;
+
 
 
 };

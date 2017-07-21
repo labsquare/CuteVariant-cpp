@@ -20,10 +20,8 @@ public:
     };
 
     QueryBuilder();
-    QueryBuilder(const QString& tableName,
-          const QStringList& columns,
-          const QString& condition);
     QueryBuilder(const QString& raw);
+
 
     const QStringList &columns() const;
     const QString& tableName() const;
@@ -31,15 +29,24 @@ public:
     const QString& region() const;
     int offset() const;
     int limit() const;
+    const QString& orderBy() const;
+    QueryStruct queryStruct() const;
+
+
     void setRegion(const QString& region);
     void setColumns(const QStringList& columns);
     void setTableName(const QString& tableName);
     void setCondition(const QString& condition);
+    void setOrderBy(const QString& order);
+    void setRawQuery(const QString& raw);
+
+    void setSampleId(const QString& name, int id);
+
+
+
 
     QString toSql() const;
-    void parse(const QString& raw) ;
 
-    QueryStruct queryStruct() const;
 
 protected:
     // detect if columns or condition have the extra keyworks genotype().GT
@@ -58,6 +65,7 @@ private:
 
     int mOffset = 0;
     int mLimit  = 100;
+    QString mOrderBy = "ANN_GENE_NAME";
 
     const QString GenotypeKeyword = "genotype";
     const QString SampleKeyword = "sample";
@@ -65,6 +73,12 @@ private:
     // sampleName : genotype Fields.
     // exemple : SACHA : GT
     QHash<QString, QString> mGenotypeFields;
+
+    // store samples and ids
+    QHash<QString, int> mSamplesIds;
+
+
+
 
 
 };

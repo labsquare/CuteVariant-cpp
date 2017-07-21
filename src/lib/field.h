@@ -42,12 +42,16 @@ public:
      void setName(const QString& name);
      void setDescription(const QString& description);
      void setType(Type type);
+     void setType(const QString& name);
 
 private:
     QString mColname;
     QString mName;
     QString mDescription;
     Type mType = Field::TEXT;
+
+
+
 };
 }
 #endif // FIELD_H

@@ -22,9 +22,9 @@ public:
     bool importFile(const QString& filename);
 
     QList<Sample> samples() const;
-    QStringList samplesNames() const;
+    QList<Field> fields() const;
 
-    QString queryToSql(const QString& raw);
+    QString buildVariantQuery(const QString& raw);
 
 
 
@@ -43,7 +43,6 @@ protected:
 private:
     QHash<QString, QVector<int>> mVariantIds;
     QHash<QString, int> mSamplesIds;
-
     QueryBuilder mQueryBuilder;
 
 

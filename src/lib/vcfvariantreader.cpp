@@ -3,16 +3,6 @@ namespace core {
 VCFVariantReader::VCFVariantReader(const QString &filename)
     :AbstractVariantReader(filename)
 {
-
-    // Get Header Fields data, to process variant later
-    // Store map between fields name in the VCF and colname in sqlite
-    for (Field f : fields())
-        mFieldColMap[f.name()] = f.colname();
-
-    // Get samples to process genotype later
-    mSamples = samples();
-
-
 }
 //------------------------------------------------------------------
 QList<Field> VCFVariantReader::fields()
@@ -178,12 +168,8 @@ Genotype VCFVariantReader::readGenotype()
 
     // save genotype annotation
     for (int i=0; i<qMin(cols.length(), vals.length()); ++i)
-    {
-        if (cols[i] == QStringLiteral("GT"))
-            gen.setRawGenotype(vals[i]);
-        else
-            gen.addAnnotation(cols[i], vals[i]);
-    }
+        gen.addAnnotation(cols[i], vals[i]);
+
 
     // read next line for the next call
     if (mCurrentSampleId < mSamples.count() - 1)
@@ -197,6 +183,14 @@ Genotype VCFVariantReader::readGenotype()
 
 bool VCFVariantReader::open()
 {
+    // Get Header Fields data, to process variant later
+    // Store map between fields name in the VCF and colname in sqlite
+    for (Field f : fields())
+        mFieldColMap[f.name()] = f.colname();
+
+    // Get samples to process genotype later
+    mSamples = samples();
+
     if (!AbstractVariantReader::open())
         return false;
 

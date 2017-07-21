@@ -10,6 +10,14 @@ public:
     const QString& tableName() const;
     void setId(quint64 id);
 
+    /*!
+     * \brief simplified the string to save into sql
+     * \param name
+     * \return sql valid String
+     */
+    static QString normalize(const QString& string);
+
+
 protected:
     void setTableName(const QString& name);
 

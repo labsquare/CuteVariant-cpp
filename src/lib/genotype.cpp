@@ -19,7 +19,7 @@ Genotype::Genotype(const QString &chr, quint64 pos, const QString &ref, const QS
 
 void Genotype::setRawGenotype(const QString &raw)
 {
-    mRawGenotype = raw;
+    mAnnotations["GT"] = raw;
 }
 
 void Genotype::addAnnotation(const QString &colname, const QVariant &value)
@@ -117,9 +117,9 @@ const Variant &Genotype::variant() const
     return mVariant;
 }
 
-const QString &Genotype::rawGenotype() const
+QString Genotype::rawGenotype() const
 {
-    return mRawGenotype;
+    return mAnnotations.value("GT", "!/!").toString();
 }
 
 

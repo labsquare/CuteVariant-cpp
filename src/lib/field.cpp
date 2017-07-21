@@ -54,20 +54,20 @@ QString Field::typeName() const
 
 QString Field::sqliteType() const
 {
-  if (type() == Field::TEXT)
-      return "TEXT";
+    if (type() == Field::TEXT)
+        return "TEXT";
 
-  if (type() == Field::REAL)
-      return "REAL";
+    if (type() == Field::REAL)
+        return "REAL";
 
-  if (type() == Field::INTEGER)
-      return "INTEGER";
+    if (type() == Field::INTEGER)
+        return "INTEGER";
 
-  // Sqlite doesn't have bool type
-  if (type() == Field::BOOL)
-      return "INTEGER";
+    // Sqlite doesn't have bool type
+    if (type() == Field::BOOL)
+        return "INTEGER";
 
-  return "TEXT";
+    return "TEXT";
 
 }
 
@@ -105,6 +105,24 @@ void Field::setDescription(const QString &description)
 void Field::setType(Field::Type type)
 {
     mType = type;
+}
+
+void Field::setType(const QString &name)
+{
+    //By default
+    setType(Field::TEXT);
+
+    if (name == "TEXT")
+        setType(Field::TEXT);
+
+    if (name == "BOOL")
+        setType(Field::BOOL);
+
+    if (name == "INTEGER")
+        setType(Field::INTEGER);
+
+    if (name == "REAL")
+        setType(Field::REAL);
 }
 
 

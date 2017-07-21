@@ -6,16 +6,11 @@ QueryBuilder::QueryBuilder()
 
 }
 
-QueryBuilder::QueryBuilder(const QString& tableName, const QStringList &columns, const QString &condtion)
-    :mTableName(tableName), mColumns(columns), mCondition(condtion)
-{
-
-}
 //---------------------------------------------------------------------------------
 
 QueryBuilder::QueryBuilder(const QString &raw)
 {
-    parse(raw);
+    setRawQuery(raw);
 }
 //---------------------------------------------------------------------------------
 
@@ -47,10 +42,16 @@ int QueryBuilder::limit() const
 {
     return mLimit;
 }
+
+const QString &QueryBuilder::orderBy() const
+{
+    return mOrderBy;
+}
 //---------------------------------------------------------------------------------
 
 QString QueryBuilder::toSql() const
 {
+
 
     if (queryStruct() == Unknown)
         return "Unknown";
@@ -80,13 +81,14 @@ QString QueryBuilder::toSql() const
     if (queryStruct() == Columns)
     {
 
-        QString query = QString("SELECT chr,pos,ref,alt, %1 FROM %2 %5 %6 LIMIT %3 OFFSET %4")
+        QString query = QString("SELECT chr,pos,ref,alt, %1 FROM %2 %5 %6  ORDER BY %7 LIMIT %3 OFFSET %4")
                 .arg(columns().join(','))
                 .arg(tableName())
                 .arg(limit())
                 .arg(offset())
                 .arg(jointure.join(" "))
-                .arg(joinCond);
+                .arg(joinCond)
+                .arg(orderBy());
 
         return query;
     }
@@ -94,12 +96,13 @@ QString QueryBuilder::toSql() const
 
     if (queryStruct() == Columns_Where)
     {
-        QString query = QString("SELECT chr,pos,ref,alt, %1 FROM %2 WHERE %3 LIMIT %4 OFFSET %5")
+        QString query = QString("SELECT chr,pos,ref,alt, %1 FROM %2 WHERE %3 ORDER BY %6 LIMIT %4 OFFSET %5")
                 .arg(columns().join(','))
                 .arg(tableName())
                 .arg(condition())
                 .arg(limit())
-                .arg(offset());
+                .arg(offset())
+                .arg(orderBy());
 
         return query;
     }
@@ -138,7 +141,13 @@ void QueryBuilder::setCondition(const QString &condition)
 }
 //---------------------------------------------------------------------------------
 
-void QueryBuilder::parse(const QString& raw)
+void QueryBuilder::setOrderBy(const QString &order)
+{
+    mOrderBy = order;
+}
+//---------------------------------------------------------------------------------
+
+void QueryBuilder::setRawQuery(const QString& raw)
 {
     mRaw = raw;
     QString processRaw = raw;
@@ -163,11 +172,7 @@ void QueryBuilder::parse(const QString& raw)
     }
 
 
-
     qDebug()<<"PROCESSSS" <<processRaw;
-
-
-
 
     // (?i) Mean ignore case
     QRegularExpression exp1(QStringLiteral("^(?i)(SELECT) (?<columns>.+) (?i)(FROM) (?<table>\\w+)$"));
@@ -208,6 +213,14 @@ void QueryBuilder::parse(const QString& raw)
         setTableName(match.captured("table"));
     }
 
+}
+//---------------------------------------------------------------------------------
+void QueryBuilder::setSampleId(const QString &name, int id)
+{
+
+
+
+    mSamplesIds.insert(name, id);
 }
 //---------------------------------------------------------------------------------
 

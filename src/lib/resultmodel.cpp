@@ -14,7 +14,7 @@ void ResultModel::setQuery(const QString &raw)
 {
     clear();
 
-    QSqlQuery query(mProject->sqliteManager()->queryToSql(raw));
+    QSqlQuery query(mProject->sqliteManager()->buildVariantQuery(raw));
 
     qDebug()<<query.lastQuery();
     qDebug()<<query.lastError().text();

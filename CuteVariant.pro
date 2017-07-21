@@ -4,6 +4,9 @@ SUBDIRS = src/lib \
 
 CONFIG += ordered
 
+QMAKE_CXXFLAGS  += -Ofast
+
+
 QMAKE_CXXFLAGS += -std=c++11
 
 RESOURCES += \

@@ -72,7 +72,7 @@ public:
      * \brief rawGenotype
      * \return genotype in format "0/1"
      */
-    const QString& rawGenotype() const;
+    QString rawGenotype() const;
 
 private:
     Variant mVariant;
