@@ -4,6 +4,7 @@
 #include <QtWidgets>
 #include <QtCore>
 #include "resultmodel.h"
+#include "queryeditor.h"
 
 class MainWindow : public QMainWindow
 {
@@ -29,7 +30,7 @@ private:
     QString mCurrentDBFile;
 
     QTreeView * mView;
-    QLineEdit * mQueryEdit;
+    QueryEditor * mEditor;
 
     core::ResultModel * mModel;
     core::Project * mProject;

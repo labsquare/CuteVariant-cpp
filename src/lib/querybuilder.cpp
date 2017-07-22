@@ -4,14 +4,12 @@ namespace core {
 QueryBuilder::QueryBuilder()
 {
 
+    mRegExps[SelectFrom]        = QRegularExpression("SELECT (?<select>.+) FROM (?<from>\\w+)$");
+    mRegExps[SelectFromWhere]   = QRegularExpression("SELECT (?<select>.+) FROM (?<from>\\w+) WHERE (?<where>.+)$");
+    mRegExps[SelectFromWhereIn] = QRegularExpression("SELECT (?<select>.+) FROM (?<from>\\w+) WHERE (?<where>.+) IN (?<region>\\w+)$");
+
 }
 
-//---------------------------------------------------------------------------------
-
-QueryBuilder::QueryBuilder(const QString &raw)
-{
-    setRawQuery(raw);
-}
 //---------------------------------------------------------------------------------
 
 const QStringList &QueryBuilder::columns() const
@@ -53,59 +51,59 @@ QString QueryBuilder::toSql() const
 {
 
 
-    if (queryStruct() == Unknown)
-        return "Unknown";
+//    if (queryStruct() == Unknown)
+//        return "Unknown";
 
-    // build jointure with genotypes
-    QStringList jointure;
-    QString joinCond;
+//    // build jointure with genotypes
+//    QStringList jointure;
+//    QString joinCond;
 
-    if (!mGenotypeFields.isEmpty())
-    {
+//    if (!mGenotypeFields.isEmpty())
+//    {
 
-        QStringList joinCondList;
+//        QStringList joinCondList;
 
-        for (QString sample : mGenotypeFields.keys())
-        {
-            jointure.append(QString("LEFT JOIN genotypes AS g_%1 ON variants.id = g_%1.variant_id")
-                            .arg(sample));
+//        for (QString sample : mGenotypeFields.keys())
+//        {
+//            jointure.append(QString("LEFT JOIN genotypes AS g_%1 ON variants.id = g_%1.variant_id")
+//                            .arg(sample));
 
-            joinCondList.append(QString("g_%1.sample_id == INDEX_OF_%1 ").arg(sample));
+//            joinCondList.append(QString("g_%1.sample_id == INDEX_OF_%1 ").arg(sample));
 
-        }
+//        }
 
-        joinCond = "WHERE " + joinCondList.join(" AND ");
+//        joinCond = "WHERE " + joinCondList.join(" AND ");
 
-    }
+//    }
 
-    if (queryStruct() == Columns)
-    {
+//    if (queryStruct() == Columns)
+//    {
 
-        QString query = QString("SELECT chr,pos,ref,alt, %1 FROM %2 %5 %6  ORDER BY %7 LIMIT %3 OFFSET %4")
-                .arg(columns().join(','))
-                .arg(tableName())
-                .arg(limit())
-                .arg(offset())
-                .arg(jointure.join(" "))
-                .arg(joinCond)
-                .arg(orderBy());
+//        QString query = QString("SELECT chr,pos,ref,alt, %1 FROM %2 %5 %6  ORDER BY %7 LIMIT %3 OFFSET %4")
+//                .arg(columns().join(','))
+//                .arg(tableName())
+//                .arg(limit())
+//                .arg(offset())
+//                .arg(jointure.join(" "))
+//                .arg(joinCond)
+//                .arg(orderBy());
 
-        return query;
-    }
+//        return query;
+//    }
 
 
-    if (queryStruct() == Columns_Where)
-    {
-        QString query = QString("SELECT chr,pos,ref,alt, %1 FROM %2 WHERE %3 ORDER BY %6 LIMIT %4 OFFSET %5")
-                .arg(columns().join(','))
-                .arg(tableName())
-                .arg(condition())
-                .arg(limit())
-                .arg(offset())
-                .arg(orderBy());
+//    if (queryStruct() == Columns_Where)
+//    {
+//        QString query = QString("SELECT chr,pos,ref,alt, %1 FROM %2 WHERE %3 ORDER BY %6 LIMIT %4 OFFSET %5")
+//                .arg(columns().join(','))
+//                .arg(tableName())
+//                .arg(condition())
+//                .arg(limit())
+//                .arg(offset())
+//                .arg(orderBy());
 
-        return query;
-    }
+//        return query;
+//    }
 
 
 }
@@ -153,15 +151,8 @@ void QueryBuilder::setRawQuery(const QString& raw)
     QString processRaw = raw;
 
 
-
-
-    QRegularExpression exp("SELECT (?<columns>.+?) FROM (?:(?<table>.+?)(?: WHERE (?<filter>.+?))(?: IN (?<iregion>.+))|(?<from>.+?)(?: WHERE (?P<where>.+))|(?<from>.+))");
-
-    QRegularExpressionMatch match = exp.match(raw);
-
-    qDebug()<<exp.isValid();
-    qDebug()<<match.hasMatch()<< "count "<<match.capturedLength();
-    qDebug()<<match.capturedTexts();
+    if (!queryMatch(raw))
+        qDebug()<<"invalid";
 
 
 
@@ -228,6 +219,20 @@ void QueryBuilder::setRawQuery(const QString& raw)
 //    }
 
 }
+
+QueryBuilder::QueryType QueryBuilder::queryMatch(const QString &raw)
+{
+
+    for (QueryType type : mRegExps.keys())
+    {
+        if (mRegExps[type].match(raw).hasMatch())
+            return type;
+    }
+
+    return QueryBuilder::InValid;
+
+}
+
 //---------------------------------------------------------------------------------
 
 void QueryBuilder::setSampleIds(const QHash<QString, int> &sampleIds)
@@ -237,41 +242,7 @@ void QueryBuilder::setSampleIds(const QHash<QString, int> &sampleIds)
 
 //---------------------------------------------------------------------------------
 
-QueryBuilder::QueryStruct QueryBuilder::queryStruct() const
-{
-    if (columns().isEmpty())
-        return Unknown;
-
-    if (!columns().isEmpty() && condition().isEmpty() && region().isEmpty())
-        return Columns;
-
-    if (!columns().isEmpty() && !condition().isEmpty() && region().isEmpty())
-        return Columns_Where;
-
-    if (!columns().isEmpty() && !condition().isEmpty() && !region().isEmpty())
-        return Columns_Where_In;
-
-
-}
 //---------------------------------------------------------------------------------
-bool QueryBuilder::hasGenotypeInColumns()
-{
-    for (QString c : columns())
-    {
-        if (c.contains(GenotypeKeyword))
-            return true;
-    }
-    return false;
-}
-//---------------------------------------------------------------------------------
-
-bool QueryBuilder::hasGenotypeInCondition()
-{
-    return condition().contains(GenotypeKeyword);
-}
-//---------------------------------------------------------------------------------
-
-
 
 
 

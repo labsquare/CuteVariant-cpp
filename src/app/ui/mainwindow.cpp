@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 
     mView    = new QTreeView;
-    mQueryEdit =  new QLineEdit;
+    mEditor  = new QueryEditor;
     mModel   = new core::ResultModel;
     mProject = new core::Project("/tmp/variant.db");
 
@@ -17,15 +17,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     mView->setModel(mModel);
 
-    QToolBar * bar = addToolBar("query");
-    bar->addWidget(mQueryEdit);
-
-
     setCentralWidget(mView);
 
+    QDockWidget * dock = new QDockWidget();
+    dock->setWidget(mEditor);
+    addDockWidget(Qt::BottomDockWidgetArea, dock);
 
-    mQueryEdit->setText("SELECT qual FROM variants");
-    connect(mQueryEdit, &QLineEdit::returnPressed, mModel, [this](){mModel->setQuery(mQueryEdit->text());});
+
+
+
+    mEditor->setPlainText("SELECT qual FROM variants");
+    connect(mEditor, &QueryEditor::returnPressed, mModel, [this](){mModel->setQuery(mEditor->toPlainText());});
 
 
 }

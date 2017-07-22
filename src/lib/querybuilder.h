@@ -11,16 +11,15 @@ namespace core {
 class QueryBuilder
 {
 public:
-    enum QueryStruct
+    enum QueryType
     {
-        Columns,
-        Columns_Where,
-        Columns_Where_In,
-        Unknown
+        InValid,
+        SelectFrom,
+        SelectFromWhere,
+        SelectFromWhereIn,
     };
 
     QueryBuilder();
-    QueryBuilder(const QString& raw);
 
 
     const QStringList &columns() const;
@@ -30,7 +29,7 @@ public:
     int offset() const;
     int limit() const;
     const QString& orderBy() const;
-    QueryStruct queryStruct() const;
+
 
 
     void setRegion(const QString& region);
@@ -38,19 +37,15 @@ public:
     void setTableName(const QString& tableName);
     void setCondition(const QString& condition);
     void setOrderBy(const QString& order);
-
     void setSampleIds(const QHash<QString, int>& sampleIds);
-
-
-
     void setRawQuery(const QString& raw);
+
+    QueryType queryMatch(const QString& raw);
+
     QString toSql() const;
 
 
 protected:
-    // detect if columns or condition have the extra keyworks genotype().GT
-    bool hasGenotypeInColumns();
-    bool hasGenotypeInCondition();
 
 
 
@@ -61,17 +56,13 @@ private:
     QString mCondition;
     QString mRegion;
     QString mRaw;
+    int mOffset      = 0;
+    int mLimit       = 100;
+    QString mOrderBy = "ID";
 
-    int mOffset = 0;
-    int mLimit  = 100;
-    QString mOrderBy = "ANN_GENE_NAME";
 
-    const QString GenotypeKeyword = "genotype";
-    const QString SampleKeyword = "sample";
+    QHash<QueryType, QRegularExpression> mRegExps;
 
-    // sampleName : genotype Fields.
-    // exemple : SACHA : GT
-    QHash<QString, QString> mGenotypeFields;
 
     // store samples and ids
     QHash<QString, int> mSamplesIds;

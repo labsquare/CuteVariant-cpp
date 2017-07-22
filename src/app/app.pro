@@ -6,7 +6,9 @@ INCLUDEPATH += ../lib
 
 SOURCES += \
     main.cpp \
-    ui/mainwindow.cpp
+    ui/mainwindow.cpp \
+    ui/queryeditor.cpp \
+    ui/queryhighlighter.cpp
 
 
 
@@ -18,4 +20,6 @@ INCLUDEPATH += $$PWD/../lib
 DEPENDPATH += $$PWD/../lib
 
 HEADERS += \
-    ui/mainwindow.h
+    ui/mainwindow.h \
+    ui/queryeditor.h \
+    ui/queryhighlighter.h
