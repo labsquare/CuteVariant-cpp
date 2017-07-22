@@ -6,6 +6,7 @@
 #include "resultmodel.h"
 #include "queryeditor.h"
 #include "fieldsmodel.h"
+#include "samplemodel.h"
 
 class MainWindow : public QMainWindow
 {
@@ -35,7 +36,7 @@ private:
 
     core::ResultModel * mModel;
     core::Project * mProject;
-    core::FieldsModel * mFieldModel;
+    core::SampleModel * mFieldModel;
 
 
 

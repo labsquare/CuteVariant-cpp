@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mEditor  = new QueryEditor;
     mProject = new core::Project("/tmp/variant.db");
     mModel   = new core::ResultModel(mProject);
-    mFieldModel = new core::FieldsModel(mProject);
+    mFieldModel = new core::SampleModel(mProject);
 
 //   mProject->importFile("/tmp/TRIO1.family.vcf");
 
@@ -24,10 +24,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     addDockWidget(Qt::BottomDockWidgetArea, dock);
 
     // tmp test
-    QTreeView * fieldView = new QTreeView;
-    fieldView->setModel(mFieldModel);
+    QTabWidget * tab = new QTabWidget;
+
+    QTreeView * fView = new QTreeView;
+    fView->setModel(new core::FieldsModel(mProject));
+    tab->addTab(fView, "fields");
+
+
+    QTreeView * sView = new QTreeView;
+    sView->setModel(new core::SampleModel(mProject));
+    tab->addTab(sView, "samples");
+
+
     QDockWidget * dock2 = new QDockWidget();
-    dock2->setWidget(fieldView);
+    dock2->setWidget(tab);
 
     addDockWidget(Qt::BottomDockWidgetArea, dock2);
     addDockWidget(Qt::BottomDockWidgetArea, dock);
