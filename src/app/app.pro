@@ -8,7 +8,9 @@ SOURCES += \
     main.cpp \
     ui/mainwindow.cpp \
     ui/queryeditor.cpp \
-    ui/queryhighlighter.cpp
+    ui/queryhighlighter.cpp \
+    ui/logicmodel.cpp \
+    ui/logicview.cpp
 
 
 
@@ -22,4 +24,6 @@ DEPENDPATH += $$PWD/../lib
 HEADERS += \
     ui/mainwindow.h \
     ui/queryeditor.h \
-    ui/queryhighlighter.h
+    ui/queryhighlighter.h \
+    ui/logicmodel.h \
+    ui/logicview.h

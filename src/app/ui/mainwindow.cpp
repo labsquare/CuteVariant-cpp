@@ -36,6 +36,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     tab->addTab(sView, "samples");
 
 
+    LogicView * lView = new LogicView;
+    tab->addTab(lView, "logic");
+
+
     QDockWidget * dock2 = new QDockWidget();
     dock2->setWidget(tab);
 

@@ -8,6 +8,8 @@
 #include "fieldsmodel.h"
 #include "samplemodel.h"
 
+#include "logicview.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
