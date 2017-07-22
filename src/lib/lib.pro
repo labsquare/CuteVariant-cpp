@@ -15,7 +15,8 @@ SOURCES += \
     project.cpp \
     sqlitemanager.cpp \
     resultmodel.cpp \
-    querybuilder.cpp
+    querybuilder.cpp \
+    fieldsmodel.cpp
 
 HEADERS += \
     field.h \
@@ -29,6 +30,7 @@ HEADERS += \
     project.h \
     sqlitemanager.h \
     resultmodel.h \
-    querybuilder.h
+    querybuilder.h \
+    fieldsmodel.h
 
 TARGET = cutevariantcore

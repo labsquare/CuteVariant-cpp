@@ -1,11 +1,6 @@
 #include "resultmodel.h"
 namespace core {
-ResultModel::ResultModel(QObject *parent)
-{
-
-}
-
-void ResultModel::setProject(Project *prj)
+ResultModel::ResultModel(Project * prj, QObject *parent)
 {
     mProject = prj;
 }

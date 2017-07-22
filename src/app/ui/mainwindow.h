@@ -5,6 +5,7 @@
 #include <QtCore>
 #include "resultmodel.h"
 #include "queryeditor.h"
+#include "fieldsmodel.h"
 
 class MainWindow : public QMainWindow
 {
@@ -34,6 +35,7 @@ private:
 
     core::ResultModel * mModel;
     core::Project * mProject;
+    core::FieldsModel * mFieldModel;
 
 
 

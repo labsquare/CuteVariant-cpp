@@ -10,8 +10,8 @@ class ResultModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    ResultModel(QObject * parent = nullptr);
-    void setProject(Project * prj);
+    ResultModel(Project * prj, QObject * parent = nullptr);
+
 
     void setQuery(const QString& raw);
 
