@@ -6,7 +6,7 @@ QueryBuilder::QueryBuilder()
 
     mRegExps[SelectFrom]        = QRegularExpression("SELECT (?<select>.+) FROM (?<from>\\w+)$");
     mRegExps[SelectFromWhere]   = QRegularExpression("SELECT (?<select>.+) FROM (?<from>\\w+) WHERE (?<where>.+)$");
-    mRegExps[SelectFromWhereIn] = QRegularExpression("SELECT (?<select>.+) FROM (?<from>\\w+) WHERE (?<where>.+) IN (?<region>\\w+)$");
+    mRegExps[SelectFromWhereIn] = QRegularExpression("SELECT (?<select>.+) FROM (?<from>\\w+) WHERE (?<where>.+) IN (?<in>\\w+)$");
 
 }
 
@@ -50,60 +50,100 @@ const QString &QueryBuilder::orderBy() const
 QString QueryBuilder::toSql() const
 {
 
+    QString select = "SELECT "+columns().join(",")+" ";
+    QString from   = "FROM "+ tableName()+ " ";
+    QString where  = condition();
 
-//    if (queryStruct() == Unknown)
-//        return "Unknown";
+    // Create Join
+    QString joinsql;
+    QStringList joinwheresql;
 
-//    // build jointure with genotypes
-//    QStringList jointure;
-//    QString joinCond;
-
-//    if (!mGenotypeFields.isEmpty())
-//    {
-
-//        QStringList joinCondList;
-
-//        for (QString sample : mGenotypeFields.keys())
-//        {
-//            jointure.append(QString("LEFT JOIN genotypes AS g_%1 ON variants.id = g_%1.variant_id")
-//                            .arg(sample));
-
-//            joinCondList.append(QString("g_%1.sample_id == INDEX_OF_%1 ").arg(sample));
-
-//        }
-
-//        joinCond = "WHERE " + joinCondList.join(" AND ");
-
-//    }
-
-//    if (queryStruct() == Columns)
-//    {
-
-//        QString query = QString("SELECT chr,pos,ref,alt, %1 FROM %2 %5 %6  ORDER BY %7 LIMIT %3 OFFSET %4")
-//                .arg(columns().join(','))
-//                .arg(tableName())
-//                .arg(limit())
-//                .arg(offset())
-//                .arg(jointure.join(" "))
-//                .arg(joinCond)
-//                .arg(orderBy());
-
-//        return query;
-//    }
+    for (QString sample : mGenotypeSamplesFields)
+    {
+        joinsql.append(QStringLiteral(" LEFT JOIN genotypes as gt_%1 ON variants.id = gt_%1.variant_id ").arg(sample));
+        joinwheresql.append(QStringLiteral(" gt_%1.sample_id = %2 ").arg(sample).arg(mSamplesIds[sample]));
+    }
 
 
-//    if (queryStruct() == Columns_Where)
-//    {
-//        QString query = QString("SELECT chr,pos,ref,alt, %1 FROM %2 WHERE %3 ORDER BY %6 LIMIT %4 OFFSET %5")
-//                .arg(columns().join(','))
-//                .arg(tableName())
-//                .arg(condition())
-//                .arg(limit())
-//                .arg(offset())
-//                .arg(orderBy());
+    where += joinwheresql.join(" AND ");
 
-//        return query;
-//    }
+
+    if (where.isEmpty())
+        return select + from  +" LIMIT "+QString::number(limit());
+    else
+        return select + from + joinsql+ " WHERE " +where +" LIMIT "+QString::number(limit());
+
+
+
+
+
+
+
+}
+//---------------------------------------------------------------------------------
+void QueryBuilder::clear()
+{
+    mTableName.clear();
+    mColumns.clear();
+    mRegion.clear();
+    mCondition.clear();
+    mGenotypeSamplesFields.clear();
+}
+
+//---------------------------------------------------------------------------------
+
+QString QueryBuilder::normGenotype(const QString &raw)
+{
+    // detect genotype[NAME].GT  => gt_NAME.GT
+    QRegularExpression exp;
+    QRegularExpressionMatchIterator all;
+
+    exp.setPattern(QStringLiteral("genotype\\[(\'|\")?(?<sample>\\w+)(\'|\")?\\]\\.(?<param>\\w+)"));
+    all = exp.globalMatch(raw);
+
+    QString out = raw;
+    while (all.hasNext())
+    {
+        QRegularExpressionMatch m = all.next();
+        qDebug()<<m.capturedTexts();
+        out = out.replace(m.captured(0), QString("gt_%1.%2").arg(m.captured("sample")).arg(m.captured("param")));
+    }
+    return out;
+}
+//---------------------------------------------------------------------------------
+
+QString QueryBuilder::normAnnotation(const QString &raw)
+{
+    // detect INFO.DP or ANN.DP == > INFO_DP
+    QRegularExpression exp;
+    QRegularExpressionMatchIterator all;
+
+    exp.setPattern("(?<key>\\w+)\\.(?<value>\\w+)");
+    all = exp.globalMatch(raw);
+
+    QString out = raw;
+    while (all.hasNext())
+    {
+        QRegularExpressionMatch m = all.next();
+        if (!m.captured(0).contains("gt"))
+            out = out.replace(m.captured(0), QString("%1_%2").arg(m.captured("key")).arg(m.captured("value")));
+    }
+
+    return out;
+}
+//---------------------------------------------------------------------------------
+
+void QueryBuilder::detectGenotypeField(const QString &raw)
+{
+    // detect gt_sacha_GT fields like
+    QRegularExpression exp (QStringLiteral("gt_(?<sample>\\w+).(?<field>\\w+)"));
+    QRegularExpressionMatchIterator all = exp.globalMatch(raw);
+
+    while (all.hasNext())
+    {
+        QRegularExpressionMatch m = all.next();
+        mGenotypeSamplesFields.append(m.captured(1));
+    }
 
 
 }
@@ -117,25 +157,37 @@ const QString &QueryBuilder::region() const
 
 void QueryBuilder::setRegion(const QString &region)
 {
-    mRegion = region;
+    mRegion = region.simplified();
 }
 //---------------------------------------------------------------------------------
 
 void QueryBuilder::setColumns(const QStringList &columns)
 {
-    mColumns = columns;
+    mColumns.clear();
+    for (QString s : columns)
+    {
+        if (!s.isEmpty())
+            mColumns.append(s.simplified());
+    }
+
+    // check presence of genotype fields
+    detectGenotypeField(columns.join(" "));
+
 }
 //---------------------------------------------------------------------------------
 
 void QueryBuilder::setTableName(const QString &tableName)
 {
-    mTableName = tableName;
+    mTableName = tableName.simplified();
 }
 //---------------------------------------------------------------------------------
 
 void QueryBuilder::setCondition(const QString &condition)
 {
-    mCondition = condition;
+    mCondition = condition.simplified();
+
+    // check presence of genotype fields
+    detectGenotypeField(mCondition);
 }
 //---------------------------------------------------------------------------------
 
@@ -145,80 +197,62 @@ void QueryBuilder::setOrderBy(const QString &order)
 }
 //---------------------------------------------------------------------------------
 
-void QueryBuilder::setRawQuery(const QString& raw)
+void QueryBuilder::fromRawQuery(const QString& raw)
 {
     mRaw = raw;
     QString processRaw = raw;
 
+    QueryType type = queryMatch(processRaw);
 
-    if (!queryMatch(raw))
-        qDebug()<<"invalid";
+    if (!type)
+    {
+        qDebug()<<"invalid query";
+        return;
+    }
 
+    clear();
 
-
-
-//    // detect extra keywords
-//    // genotype columns
-//    mGenotypeFields.clear();
-//    QRegularExpression genotypeExp(QStringLiteral("genotype\\((?<sample>\\w+)\\)\\.(?<field>\\w+)"));
-//    QRegularExpressionMatchIterator all_match = genotypeExp.globalMatch(processRaw);
-//    while(all_match.hasNext())
-//    {
-
-//        QRegularExpressionMatch match = all_match.next();
-//        QString sample = match.captured("sample");
-//        QString field  = match.captured("field");
-//        qDebug()<<sample<<" "<<field;
-//        mGenotypeFields[sample] = field;
-//        processRaw = processRaw.replace(QRegularExpression(QString("genotype\\(%1\\)").arg(sample)),
-//                                        QString("g_%1").arg(sample.simplified()));
+    processRaw = normGenotype(processRaw);
+    processRaw = normAnnotation(processRaw);
 
 
-//    }
+    qDebug()<<processRaw;
+
+    if (type == QueryType::SelectFrom)
+    {
+        QRegularExpressionMatch match = mRegExps[type].match(processRaw);
+        setColumns(match.captured("select").replace(QChar::Space,',').split(","));
+        setTableName(match.captured("from"));
+    }
 
 
-//    qDebug()<<"PROCESSSS" <<processRaw;
+    if (type == QueryType::SelectFromWhere)
+    {
+        QRegularExpressionMatch match = mRegExps[type].match(processRaw);
+        setColumns(match.captured("select").replace(QChar::Space,',').split(","));
+        setTableName(match.captured("from"));
+        setCondition(match.captured("where"));
 
-//    // (?i) Mean ignore case
-//    QRegularExpression exp1(QStringLiteral("^(?i)(SELECT) (?<columns>.+) (?i)(FROM) (?<table>\\w+)$"));
-//    QRegularExpression exp2(QStringLiteral("^(?i)(SELECT) (?<columns>.+) (?i)(FROM) (?<table>\\w+) (?i)(WHERE) (?<condition>.+)$"));
-//    QRegularExpression exp3(QStringLiteral("^(?i)(SELECT) (?<columns>.+) (?i)(FROM) (?<table>\\w+) (?i)(WHERE) (?<condition>.+) IN (?<region>\\w+)$"));
+    }
 
-//    QRegularExpressionMatch match;
+    if (type == QueryType::SelectFromWhereIn)
+    {
+        QRegularExpressionMatch match = mRegExps[type].match(processRaw);
+        setColumns(match.captured("select").replace(QChar::Space,',').split(","));
+        setTableName(match.captured("from"));
+        setCondition(match.captured("where"));
+        setRegion(match.captured("in"));
+    }
 
-//    // SELECT x FROM y WHERE z IN r
-//    match = exp3.match(processRaw);
-//    if (match.hasMatch())
-//    {
-//        qDebug()<<"exp3"<<match.capturedTexts();
-//        setColumns(match.captured("columns").split(","));
-//        setTableName(match.captured("table"));
-//        setCondition(match.captured("condition"));
-//        setRegion(match.captured("region"));
 
-//    }
+    qInfo()<<"COLUMNS"<<columns();
+    qInfo()<<"TABLE"<<tableName();
+    qInfo()<<"CONDITION"<<condition();
+    qInfo()<<"REGION"<<region();
 
-//    // SELECT x FROM y WHERE z
-//    match = exp2.match(processRaw);
-//    if (match.hasMatch())
-//    {
-//        qDebug()<<"exp2"<<match.capturedTexts();
-//        setColumns(match.captured("columns").split(","));
-//        setTableName(match.captured("table"));
-//        setCondition(match.captured("condition"));
-//    }
-
-//    // SELECT x FROM y
-//    match = exp1.match(processRaw);
-//    if (match.hasMatch())
-//    {
-
-//        qDebug()<<"exp1"<<match.capturedTexts();
-//        setColumns(match.captured("columns").split(","));
-//        setTableName(match.captured("table"));
-//    }
 
 }
+//---------------------------------------------------------------------------------
 
 QueryBuilder::QueryType QueryBuilder::queryMatch(const QString &raw)
 {
@@ -240,7 +274,6 @@ void QueryBuilder::setSampleIds(const QHash<QString, int> &sampleIds)
     mSamplesIds = sampleIds;
 }
 
-//---------------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------------
 

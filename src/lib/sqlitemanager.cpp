@@ -77,11 +77,17 @@ QList<Field> SqliteManager::fields() const
 //-------------------------------------------------------------------------------
 QString SqliteManager::buildVariantQuery(const QString &raw)
 {
-    mQueryBuilder.setRawQuery(raw);
-    mQueryBuilder.setSampleIds(mSamplesIds);
+    mQueryBuilder.fromRawQuery(raw);
+
+    QHash<QString, int> sids;
+    for (Sample s : samples())
+        sids[s.name()] = s.id();
+
+        mQueryBuilder.setSampleIds(sids);
 
 
-    return "sql";
+
+    return mQueryBuilder.toSql();
 }
 //-------------------------------------------------------------------------------
 void SqliteManager::createProject(const QString &name)

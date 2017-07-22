@@ -38,15 +38,21 @@ public:
     void setCondition(const QString& condition);
     void setOrderBy(const QString& order);
     void setSampleIds(const QHash<QString, int>& sampleIds);
-    void setRawQuery(const QString& raw);
+    void fromRawQuery(const QString& raw);
 
     QueryType queryMatch(const QString& raw);
 
     QString toSql() const;
 
 
+    void clear();
+
 protected:
 
+
+    QString normGenotype(const QString& raw);
+    QString normAnnotation(const QString& raw);
+    void detectGenotypeField(const QString& raw);
 
 
 
@@ -55,13 +61,13 @@ private:
     QStringList mColumns;
     QString mCondition;
     QString mRegion;
-    QString mRaw;
     int mOffset      = 0;
     int mLimit       = 100;
     QString mOrderBy = "ID";
-
-
+    QString mRaw;
     QHash<QueryType, QRegularExpression> mRegExps;
+    QStringList mGenotypeSamplesFields;
+
 
 
     // store samples and ids
