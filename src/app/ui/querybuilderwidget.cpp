@@ -16,11 +16,18 @@ QueryBuilderWidget::QueryBuilderWidget(core::Project *prj, QWidget *parent)
 
     setLayout(mLayout);
 
+    // add Column widget
+    QTreeView * columnView = new QTreeView;
+    mColumnModel = new ColumnModel(mProject);
+    columnView->setModel(mColumnModel);
+    addWidget(columnView);
     addWidget(new LogicView);
-    addWidget(new QPlainTextEdit);
+
+
+
+
 
     mActionGroup->setExclusive(true);
-
     connect(mActionGroup, &QActionGroup::triggered, this, &QueryBuilderWidget::toolbarClicked);
 
 }

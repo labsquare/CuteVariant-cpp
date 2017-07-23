@@ -3,6 +3,7 @@
 #include <QtWidgets>
 #include "project.h"
 #include "logicview.h"
+#include "columnmodel.h"
 
 class QueryBuilderWidget : public QWidget
 {
@@ -20,6 +21,10 @@ private:
     QStackedWidget * mStack;
     QHash<QAction*, QWidget*> mWidgets;
     QActionGroup * mActionGroup;
+
+    ColumnModel * mColumnModel;
+
+
 };
 
 #endif // QUERYBUILDERWIDGET_H

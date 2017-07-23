@@ -23,6 +23,7 @@ public:
 
     QList<Sample> samples() const;
     QList<Field> fields() const;
+    QList<Field> genotype(const Sample& sample);
 
     QString buildVariantQuery(const QString& raw);
 

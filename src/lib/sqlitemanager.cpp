@@ -74,6 +74,26 @@ QList<Field> SqliteManager::fields() const
     }
     return fields;
 }
+
+QList<Field> SqliteManager::genotype(const Sample &sample)
+{
+//    QList<Field> fields;
+//    QSqlQuery query(QStringLiteral("SELECT * FROM `genotypes` WHERE sample_id = %1").arg(sample.id()));
+//    while(query.next())
+//    {
+
+//        Field field;
+//        //field.setId(query.value("id").toInt());
+//        //field.setColname(query.value("colname").toString());
+//        field.setName(query.value("name").toString());
+//        field.setDescription(query.value("description").toString());
+//        field.setType(query.value("type").toString());
+//        fields.append(field);
+//    }
+//    return fields;
+
+
+}
 //-------------------------------------------------------------------------------
 QString SqliteManager::buildVariantQuery(const QString &raw)
 {
