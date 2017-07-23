@@ -34,6 +34,7 @@ bool SqliteManager::importFile(const QString &filename)
 
     createSample(reader.data());
     createFields(reader.data());
+    createGenotypeFields(reader.data());
     createVariants(reader.data());
     createGenotypes(reader.data());
 
@@ -70,11 +71,33 @@ QList<Field> SqliteManager::fields() const
         field.setName(query.value("name").toString());
         field.setDescription(query.value("description").toString());
         field.setType(query.value("type").toString());
+        field.setCategory(query.value("category").toString());
+
         fields.append(field);
     }
     return fields;
 }
+//-------------------------------------------------------------------------------
 
+QList<Field> SqliteManager::genotypeFields() const
+{
+    QList<Field> fields;
+    QSqlQuery query(QStringLiteral("SELECT * FROM `genotype_fields`"));
+    while(query.next())
+    {
+        Field field;
+        field.setId(query.value("id").toInt());
+        field.setColname(query.value("colname").toString());
+        field.setName(query.value("name").toString());
+        field.setDescription(query.value("description").toString());
+        field.setType(query.value("type").toString());
+        field.setCategory(query.value("category").toString());
+
+        fields.append(field);
+    }
+    return fields;
+}
+//-------------------------------------------------------------------------------
 QList<Field> SqliteManager::genotype(const Sample &sample)
 {
 //    QList<Field> fields;
@@ -185,16 +208,18 @@ void SqliteManager::createFields(AbstractVariantReader *reader)
                               "colname TEXT NOT NULL,"
                               "name TEXT,"
                               "description TEXT,"
+                              "category TEXT,"
                               "type TEXT"
                               ")"));
 
     QSqlDatabase::database().transaction();
     for (Field f : reader->fields())
     {
-        query.prepare(QStringLiteral("INSERT INTO fields (colname,name,description,type) VALUES (?,?,?,?)"));
+        query.prepare(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES (?,?,?,?,?)"));
         query.addBindValue(f.colname());
         query.addBindValue(f.name());
         query.addBindValue(f.description());
+        query.addBindValue(f.category());
         query.addBindValue(f.typeName());
         //qInfo()<<"Create "<<f.name();
 
@@ -207,6 +232,42 @@ void SqliteManager::createFields(AbstractVariantReader *reader)
     }
     QSqlDatabase::database().commit();
 
+}
+
+void SqliteManager::createGenotypeFields(AbstractVariantReader *reader)
+{
+    qDebug()<<"Import genotype fields";
+    QSqlQuery query;
+
+    query.exec(QStringLiteral("DROP TABLE IF EXISTS genotype_fields"));
+    query.exec(QStringLiteral("CREATE TABLE genotype_fields ("
+                              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                              "colname TEXT NOT NULL,"
+                              "name TEXT,"
+                              "description TEXT,"
+                              "category TEXT,"
+                              "type TEXT"
+                              ")"));
+
+    QSqlDatabase::database().transaction();
+    for (Field f : reader->genotypeFields())
+    {
+        query.prepare(QStringLiteral("INSERT INTO genotype_fields (colname,name,description,category,type) VALUES (?,?,?,?,?)"));
+        query.addBindValue(f.colname());
+        query.addBindValue(f.name());
+        query.addBindValue(f.description());
+        query.addBindValue(f.category());
+        query.addBindValue(f.typeName());
+        //qInfo()<<"Create "<<f.name();
+
+        if (!query.exec())
+        {
+            qWarning()<<Q_FUNC_INFO<<query.lastQuery();
+            qWarning()<<Q_FUNC_INFO<<query.lastError().text();
+        }
+
+    }
+    QSqlDatabase::database().commit();
 }
 //-------------------------------------------------------------------------------
 void SqliteManager::createVariants(AbstractVariantReader *reader)
@@ -288,7 +349,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
     QSqlDatabase::database().commit();
     reader->close();
 }
-
+//-------------------------------------------------------------------------------
 void SqliteManager::createGenotypes(AbstractVariantReader *reader)
 {
     qDebug()<<"Import Genotypes";
@@ -354,6 +415,8 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
     reader->close();
     QSqlDatabase::database().commit();
 }
+//-------------------------------------------------------------------------------
+
 
 
 }

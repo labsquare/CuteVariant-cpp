@@ -23,31 +23,34 @@ public:
     Field();
     Field(const QString& colname, const QString& name, const QString& description = QString(), const Type& type = Field::TEXT);
 
-     const QString& colname() const;
-     const QString &name() const;
-     const QString &description() const;
-     Type type() const;
+    const QString& colname() const;
+    const QString &name() const;
+    const QString &description() const;
+    Type type() const;
 
-     QString typeName() const;
-     QString sqliteType() const;
+    QString typeName() const;
+    QString sqliteType() const;
+    QString category() const;
 
-     /*!
+    /*!
       * \brief simplified the string to save into sql
       * \param name
       * \return sql valid String
       */
-     static QString simplified(const QString& name);
+    static QString simplified(const QString& name);
 
-     void setColname(const QString& colname);
-     void setName(const QString& name);
-     void setDescription(const QString& description);
-     void setType(Type type);
-     void setType(const QString& name);
+    void setColname(const QString& colname);
+    void setName(const QString& name);
+    void setDescription(const QString& description);
+    void setType(Type type);
+    void setType(const QString& name);
+    void setCategory(const QString& category);
 
 private:
     QString mColname;
     QString mName;
     QString mDescription;
+    QString mCategory;
     Type mType = Field::TEXT;
 
 

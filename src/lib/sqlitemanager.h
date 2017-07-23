@@ -23,6 +23,8 @@ public:
 
     QList<Sample> samples() const;
     QList<Field> fields() const;
+    QList<Field> genotypeFields() const;
+
     QList<Field> genotype(const Sample& sample);
 
     QString buildVariantQuery(const QString& raw);
@@ -35,6 +37,7 @@ public:
 protected:
     void createSample(AbstractVariantReader * reader);
     void createFields(AbstractVariantReader * reader);
+    void createGenotypeFields(AbstractVariantReader * reader);
     void createVariants(AbstractVariantReader * reader);
     void createGenotypes(AbstractVariantReader * reader);
 

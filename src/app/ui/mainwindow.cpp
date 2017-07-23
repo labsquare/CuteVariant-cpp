@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mQueryBuilderWidget = new QueryBuilderWidget(mProject);
     mResultModel        = new core::ResultModel(mProject);
 
-    //    mProject->importFile("/tmp/TRIO1.family.vcf");
+//    mProject->importFile("/home/sacha/TRIO1.family.vcf");
 
     // setup widgets
     QSplitter * mainSplitter = new QSplitter(Qt::Vertical);

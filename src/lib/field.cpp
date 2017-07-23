@@ -71,6 +71,11 @@ QString Field::sqliteType() const
 
 }
 
+QString Field::category() const
+{
+ return mCategory;
+}
+
 QString Field::simplified(const QString &name)
 {
     // remove white space
@@ -123,6 +128,11 @@ void Field::setType(const QString &name)
 
     if (name == "REAL")
         setType(Field::REAL);
+}
+
+void Field::setCategory(const QString &category)
+{
+    mCategory = category;
 }
 
 

@@ -250,6 +250,7 @@ QList<Field> VCFVariantReader::parseHeader(const QString &id)
                         fType = Field::BOOL;
 
                     fields.append(Field("INFO_"+name, name, desc, fType));
+                    fields.last().setCategory(id);
                 }
 
             }
@@ -287,6 +288,7 @@ QList<Field> VCFVariantReader::parseAnnotationHeaderLine(const QString& line)
         for (QString a : ann.split("|"))
         {
             fields.append(Field(id+"_"+a,a,"See Annotation specification"));
+            fields.last().setCategory("ANN");
             mSpecialIdMap[id].append(fields.last().colname());
         }
     }

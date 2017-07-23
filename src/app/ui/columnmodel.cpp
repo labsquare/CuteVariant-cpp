@@ -25,12 +25,13 @@ void ColumnModel::load()
     commonItem->appendRow(new QStandardItem("filter"));
 
     appendRow(commonItem);
-
+    commonItem->setCheckable(true);
 
 
     // add annotation
     QStandardItem * annItem = new QStandardItem;
     annItem->setText("annotation");
+    annItem->setCheckable(true);
 
     for (core::Field f : mProject->sqliteManager()->fields())
     {
@@ -38,6 +39,7 @@ void ColumnModel::load()
         QStandardItem * c1 = new QStandardItem;
         c1->setText(f.colname());
         c1->setToolTip(f.description());
+        c1->setCheckable(true);
 
 
         annItem->appendRow(c1);
@@ -50,6 +52,8 @@ void ColumnModel::load()
     // add Samples
     QStandardItem * sampleItem = new QStandardItem;
     sampleItem->setText("samples");
+    sampleItem->setCheckable(true);
+
 
     for (core::Sample s : mProject->sqliteManager()->samples())
     {
@@ -57,6 +61,16 @@ void ColumnModel::load()
         QStandardItem * c1 = new QStandardItem;
         c1->setText(s.name());
         sampleItem->appendRow(c1);
+        c1->setCheckable(true);
+
+
+        for (core::Field f : mProject->sqliteManager()->genotypeFields())
+        {
+            QStandardItem * g = new QStandardItem(f.name());
+            g->setToolTip(f.description());
+            g->setCheckable(true);
+            c1->appendRow(g);
+        }
     }
 
     appendRow(sampleItem);
