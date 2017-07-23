@@ -5,10 +5,7 @@
 #include <QtCore>
 #include "resultmodel.h"
 #include "queryeditor.h"
-#include "fieldsmodel.h"
-#include "samplemodel.h"
-
-#include "logicview.h"
+#include "querybuilderwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -27,7 +24,9 @@ public:
     void writeSettings();
 
 public Q_SLOTS:
+    void importFile();
     void openFile();
+    void saveFile();
 
 private:
     QString mCurrentFile;
@@ -35,10 +34,9 @@ private:
 
     QTreeView * mView;
     QueryEditor * mEditor;
-
-    core::ResultModel * mModel;
     core::Project * mProject;
-    core::SampleModel * mFieldModel;
+    core::ResultModel * mResultModel;
+    QueryBuilderWidget * mQueryBuilderWidget;
 
 
 

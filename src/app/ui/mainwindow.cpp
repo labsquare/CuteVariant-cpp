@@ -6,50 +6,39 @@ using namespace core;
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 
-    mView    = new QTreeView;
-    mEditor  = new QueryEditor;
-    mProject = new core::Project("/tmp/variant.db");
-    mModel   = new core::ResultModel(mProject);
-    mFieldModel = new core::SampleModel(mProject);
+    mView               = new QTreeView;
+    mEditor             = new QueryEditor;
+    mProject            = new core::Project("/home/sacha/variant.db");
+    mQueryBuilderWidget = new QueryBuilderWidget(mProject);
+    mResultModel        = new core::ResultModel(mProject);
 
-//   mProject->importFile("/tmp/TRIO1.family.vcf");
+    //    mProject->importFile("/tmp/TRIO1.family.vcf");
 
+    // setup widgets
+    QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
+    mainSplitter->addWidget(mView);
+    mainSplitter->addWidget(mEditor);
+    mView->setModel(mResultModel);
+    setCentralWidget(mainSplitter);
 
-    mView->setModel(mModel);
-
-    setCentralWidget(mView);
-
-    QDockWidget * dock = new QDockWidget();
-    dock->setWidget(mEditor);
-    addDockWidget(Qt::BottomDockWidgetArea, dock);
-
-    // tmp test
-    QTabWidget * tab = new QTabWidget;
-
-    QTreeView * fView = new QTreeView;
-    fView->setModel(new core::FieldsModel(mProject));
-    tab->addTab(fView, "fields");
-
-
-    QTreeView * sView = new QTreeView;
-    sView->setModel(new core::SampleModel(mProject));
-    tab->addTab(sView, "samples");
-
-
-    LogicView * lView = new LogicView;
-    tab->addTab(lView, "logic");
-
-
-    QDockWidget * dock2 = new QDockWidget();
-    dock2->setWidget(tab);
-
-    addDockWidget(Qt::BottomDockWidgetArea, dock2);
-    addDockWidget(Qt::BottomDockWidgetArea, dock);
-
+    QDockWidget * leftDock = new QDockWidget;
+    leftDock->setWidget(mQueryBuilderWidget);
+    addDockWidget(Qt::LeftDockWidgetArea, leftDock);
+    leftDock->setTitleBarWidget(new QWidget());
 
 
     mEditor->setPlainText("SELECT qual FROM variants");
-    connect(mEditor, &QueryEditor::returnPressed, mModel, [this](){mModel->setQuery(mEditor->toPlainText());});
+    connect(mEditor, &QueryEditor::returnPressed, mResultModel, [this](){mResultModel->setQuery(mEditor->toPlainText());});
+
+
+    // setup toolbox
+    QToolBar * bar = addToolBar("main");
+
+    bar->addAction(tr("Import"),this, SLOT(importFile()));
+    bar->addAction(tr("Open"),this, SLOT(openFile()));
+    bar->addAction(tr("Save"),this, SLOT(saveFile()));
+
+
 
 
 }
@@ -68,6 +57,11 @@ void MainWindow::writeSettings()
     settings.setValue("currentFile", mCurrentFile);
     settings.setValue("currentDBFile", mCurrentFile);
     settings.endGroup();
+}
+
+void MainWindow::importFile()
+{
+
 }
 
 
@@ -112,5 +106,10 @@ void MainWindow::openFile()
         }
     }
 
+
+}
+
+void MainWindow::saveFile()
+{
 
 }

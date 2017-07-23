@@ -10,7 +10,8 @@ SOURCES += \
     ui/queryeditor.cpp \
     ui/queryhighlighter.cpp \
     ui/logicmodel.cpp \
-    ui/logicview.cpp
+    ui/logicview.cpp \
+    ui/querybuilderwidget.cpp
 
 
 
@@ -26,4 +27,5 @@ HEADERS += \
     ui/queryeditor.h \
     ui/queryhighlighter.h \
     ui/logicmodel.h \
-    ui/logicview.h
+    ui/logicview.h \
+    ui/querybuilderwidget.h
