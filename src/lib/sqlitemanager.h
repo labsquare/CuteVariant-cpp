@@ -2,6 +2,8 @@
 #define VARIANTIMPORTER_H
 #include <QSqlDatabase>
 #include <QtSql>
+#include <QObject>
+#include <QtConcurrent>
 #include "abstractvariantreader.h"
 #include "vcfvariantreader.h"
 #include "querybuilder.h"
@@ -14,27 +16,23 @@ namespace core {
  * \brief The SqliteManager class
  * This is the interface between raw SQLITE query and C++ POO
  */
-class SqliteManager
+class SqliteManager : public QObject
 {
+    Q_OBJECT
 public:
-    SqliteManager();
+    SqliteManager(QObject * parent = 0);
     void createProject(const QString& name);
-    bool importFile(const QString& filename);
 
     QList<Sample> samples() const;
     QList<Field> fields() const;
     QList<Field> genotypeFields() const;
 
     QList<Field> genotype(const Sample& sample);
-
     QString buildVariantQuery(const QString& raw);
 
+    QFuture<bool> asyncImportFile(const QString& filename);
+    bool importFile(const QString& filename);
 
-
-
-
-
-protected:
     void createSample(AbstractVariantReader * reader);
     void createFields(AbstractVariantReader * reader);
     void createGenotypeFields(AbstractVariantReader * reader);
@@ -42,7 +40,9 @@ protected:
     void createGenotypes(AbstractVariantReader * reader);
 
 
-
+Q_SIGNALS:
+    void importRangeChanged(int min, int max);
+    void importProgressChanged(int progress, const QString& message = QString());
 
 private:
     QHash<QString, QVector<int>> mVariantIds;

@@ -1,4 +1,5 @@
 QT += core widgets sql
+QT += concurrent
 
 DEPENDPATH += . ../lib
 INCLUDEPATH += ../lib
@@ -12,7 +13,8 @@ SOURCES += \
     ui/logicmodel.cpp \
     ui/logicview.cpp \
     ui/querybuilderwidget.cpp \
-    ui/columnmodel.cpp
+    ui/columnmodel.cpp \
+    ui/importdialog.cpp
 
 
 
@@ -30,4 +32,5 @@ HEADERS += \
     ui/logicmodel.h \
     ui/logicview.h \
     ui/querybuilderwidget.h \
-    ui/columnmodel.h
+    ui/columnmodel.h \
+    ui/importdialog.h

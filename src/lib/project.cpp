@@ -3,6 +3,7 @@
 namespace core {
 Project::Project()
 {
+    mSqliteManager = new SqliteManager;
 }
 
 Project::Project(const QString &path)
@@ -10,6 +11,11 @@ Project::Project(const QString &path)
 {
 
     setDatabasePath(path);
+}
+
+Project::~Project()
+{
+    delete mSqliteManager;
 }
 
 void Project::setDatabasePath(const QString &path)
@@ -21,18 +27,18 @@ void Project::setDatabasePath(const QString &path)
         qDebug()<<"cannot open database";
 
     QFileInfo info(path);
-    mSqliteManager.createProject(info.baseName());
+    mSqliteManager->createProject(info.baseName());
 }
 
 void Project::importFile(const QString &filename)
 {
 
-    mSqliteManager.importFile(filename);
+    mSqliteManager->importFile(filename);
 }
 
 SqliteManager *Project::sqliteManager()
 {
-    return &mSqliteManager;
+    return mSqliteManager;
 }
 
 }

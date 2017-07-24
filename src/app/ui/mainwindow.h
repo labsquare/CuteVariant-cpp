@@ -6,6 +6,7 @@
 #include "resultmodel.h"
 #include "queryeditor.h"
 #include "querybuilderwidget.h"
+#include "importdialog.h"
 
 class MainWindow : public QMainWindow
 {

@@ -1,5 +1,6 @@
 QT -= widgets
 QT += sql
+QT += concurrent
 
 TEMPLATE = lib 
 

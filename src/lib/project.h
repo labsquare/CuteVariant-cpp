@@ -11,6 +11,7 @@ class Project
 public:
     Project();
     Project(const QString& path);
+    ~Project();
 
     /*!
      * \brief setDatabasePath
@@ -23,9 +24,11 @@ public:
 
     SqliteManager * sqliteManager();
 
+
+
 private:
     QSqlDatabase mSqlDb;
-    SqliteManager mSqliteManager;
+    SqliteManager * mSqliteManager;
 
 
 

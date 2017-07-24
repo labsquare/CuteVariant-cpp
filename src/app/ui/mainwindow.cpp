@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mQueryBuilderWidget = new QueryBuilderWidget(mProject);
     mResultModel        = new core::ResultModel(mProject);
 
-//    mProject->importFile("/home/sacha/TRIO1.family.vcf");
+    //    mProject->importFile("/home/sacha/TRIO1.family.vcf");
 
     // setup widgets
     QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
@@ -61,6 +61,24 @@ void MainWindow::writeSettings()
 
 void MainWindow::importFile()
 {
+
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),
+                                                    QDir::homePath(),
+                                                    tr("Images (*.vcf)"));
+
+
+    ImportDialog dialog(mProject);
+    dialog.setFilename(filename);
+
+    if (!dialog.exec())
+    {
+        qDebug()<<"sorry.. ";
+    }
+
+
+
+
+
 
 }
 

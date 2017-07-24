@@ -2,7 +2,8 @@
 
 namespace core{
 
-SqliteManager::SqliteManager()
+SqliteManager::SqliteManager(QObject * parent)
+    :QObject(parent)
 {
 
 }
@@ -39,6 +40,9 @@ bool SqliteManager::importFile(const QString &filename)
     createGenotypes(reader.data());
 
     qInfo()<< "Import done in " << timer.elapsed() << "milliseconds";
+
+    emit importRangeChanged(0,1);
+    emit importProgressChanged(1,QString("Done in %1 ms").arg(timer.elapsed()));
 
     return true;
 }
@@ -100,20 +104,20 @@ QList<Field> SqliteManager::genotypeFields() const
 //-------------------------------------------------------------------------------
 QList<Field> SqliteManager::genotype(const Sample &sample)
 {
-//    QList<Field> fields;
-//    QSqlQuery query(QStringLiteral("SELECT * FROM `genotypes` WHERE sample_id = %1").arg(sample.id()));
-//    while(query.next())
-//    {
+    //    QList<Field> fields;
+    //    QSqlQuery query(QStringLiteral("SELECT * FROM `genotypes` WHERE sample_id = %1").arg(sample.id()));
+    //    while(query.next())
+    //    {
 
-//        Field field;
-//        //field.setId(query.value("id").toInt());
-//        //field.setColname(query.value("colname").toString());
-//        field.setName(query.value("name").toString());
-//        field.setDescription(query.value("description").toString());
-//        field.setType(query.value("type").toString());
-//        fields.append(field);
-//    }
-//    return fields;
+    //        Field field;
+    //        //field.setId(query.value("id").toInt());
+    //        //field.setColname(query.value("colname").toString());
+    //        field.setName(query.value("name").toString());
+    //        field.setDescription(query.value("description").toString());
+    //        field.setType(query.value("type").toString());
+    //        fields.append(field);
+    //    }
+    //    return fields;
 
 
 }
@@ -126,11 +130,18 @@ QString SqliteManager::buildVariantQuery(const QString &raw)
     for (Sample s : samples())
         sids[s.name()] = s.id();
 
-        mQueryBuilder.setSampleIds(sids);
+    mQueryBuilder.setSampleIds(sids);
 
 
 
     return mQueryBuilder.toSql();
+}
+//-------------------------------------------------------------------------------
+QFuture<bool> SqliteManager::asyncImportFile(const QString &filename)
+{
+
+    return QtConcurrent::run(this, &SqliteManager::importFile, filename);
+
 }
 //-------------------------------------------------------------------------------
 void SqliteManager::createProject(const QString &name)
@@ -167,6 +178,7 @@ void SqliteManager::createSample(AbstractVariantReader *reader)
     mSamplesIds.clear();
     qInfo()<<"Import Samples";
 
+
     query.exec(QStringLiteral("DROP TABLE IF EXISTS samples"));
     query.exec(QStringLiteral("CREATE TABLE samples ("
                               "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -176,9 +188,14 @@ void SqliteManager::createSample(AbstractVariantReader *reader)
 
     QSqlDatabase::database().transaction();
 
-    for (Sample s : reader->samples()){
+    QList<Sample> samples = reader->samples();
+    emit importRangeChanged(0,samples.length());
+    emit importProgressChanged(0,QString("Import samples"));
+
+    for (int i=0; i< samples.length(); ++i){
+        emit importProgressChanged(i, QString("%1 imported").arg(samples[i].name()));
         query.prepare(QStringLiteral("INSERT INTO samples (name) VALUES (:name)"));
-        query.bindValue(0, s.name());
+        query.bindValue(0, samples[i].name());
 
         if (!query.exec())
         {
@@ -188,7 +205,7 @@ void SqliteManager::createSample(AbstractVariantReader *reader)
 
         // store samples ids for later
         else
-            mSamplesIds[s.name()] = query.lastInsertId().toInt();
+            mSamplesIds[samples[i].name()] = query.lastInsertId().toInt();
 
     }
 
@@ -200,6 +217,7 @@ void SqliteManager::createFields(AbstractVariantReader *reader)
 {
 
     qDebug()<<"Import Fields";
+
     QSqlQuery query;
 
     query.exec(QStringLiteral("DROP TABLE IF EXISTS fields"));
@@ -213,15 +231,22 @@ void SqliteManager::createFields(AbstractVariantReader *reader)
                               ")"));
 
     QSqlDatabase::database().transaction();
-    for (Field f : reader->fields())
+
+
+    QList<Field> fields = reader->fields();
+    emit importRangeChanged(0,fields.count());
+    emit importProgressChanged(0,QString("Import Fields"));
+
+    for (int i=0; i< fields.length(); ++i)
     {
+        emit importProgressChanged(i,QString());
+
         query.prepare(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES (?,?,?,?,?)"));
-        query.addBindValue(f.colname());
-        query.addBindValue(f.name());
-        query.addBindValue(f.description());
-        query.addBindValue(f.category());
-        query.addBindValue(f.typeName());
-        //qInfo()<<"Create "<<f.name();
+        query.addBindValue(fields[i].colname());
+        query.addBindValue(fields[i].name());
+        query.addBindValue(fields[i].description());
+        query.addBindValue(fields[i].category());
+        query.addBindValue(fields[i].typeName());
 
         if (!query.exec())
         {
@@ -230,6 +255,7 @@ void SqliteManager::createFields(AbstractVariantReader *reader)
         }
 
     }
+
     QSqlDatabase::database().commit();
 
 }
@@ -237,6 +263,7 @@ void SqliteManager::createFields(AbstractVariantReader *reader)
 void SqliteManager::createGenotypeFields(AbstractVariantReader *reader)
 {
     qDebug()<<"Import genotype fields";
+
     QSqlQuery query;
 
     query.exec(QStringLiteral("DROP TABLE IF EXISTS genotype_fields"));
@@ -250,14 +277,21 @@ void SqliteManager::createGenotypeFields(AbstractVariantReader *reader)
                               ")"));
 
     QSqlDatabase::database().transaction();
-    for (Field f : reader->genotypeFields())
+
+    QList<Field> fields = reader->genotypeFields();
+    emit importRangeChanged(0,fields.count());
+    emit importProgressChanged(0,QString("Import Genotype fields"));
+
+    for (int i=0; i<fields.size(); ++i)
     {
+        emit importProgressChanged(i,QString());
+
         query.prepare(QStringLiteral("INSERT INTO genotype_fields (colname,name,description,category,type) VALUES (?,?,?,?,?)"));
-        query.addBindValue(f.colname());
-        query.addBindValue(f.name());
-        query.addBindValue(f.description());
-        query.addBindValue(f.category());
-        query.addBindValue(f.typeName());
+        query.addBindValue(fields[i].colname());
+        query.addBindValue(fields[i].name());
+        query.addBindValue(fields[i].description());
+        query.addBindValue(fields[i].category());
+        query.addBindValue(fields[i].typeName());
         //qInfo()<<"Create "<<f.name();
 
         if (!query.exec())
@@ -315,10 +349,17 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 
     if (reader->open())
     {
+        emit importRangeChanged(0, reader->device()->size());
+        emit importProgressChanged(0,QString("Import Variants"));
+
         while (!reader->atEnd())
         {
             Variant v = reader->readVariant();
             QString placeHolders = QString(",?").repeated(fields.size() + 8);
+
+            if (reader->device()->pos() % 100 == 0)
+                emit importProgressChanged(reader->device()->pos(),QString());
+
 
             query.prepare(QStringLiteral("INSERT INTO variants VALUES (NULL%1)").arg(placeHolders));
             query.addBindValue("-1");
@@ -353,6 +394,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 void SqliteManager::createGenotypes(AbstractVariantReader *reader)
 {
     qDebug()<<"Import Genotypes";
+    emit importProgressChanged(50, "Import genotypes");
 
     // First : get genotype fields saved previously to construct the table
     QList<Field> fields = reader->genotypeFields();
@@ -387,9 +429,15 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
     QSqlDatabase::database().transaction();
     if (reader->open())
     {
+        emit importRangeChanged(0, reader->device()->size());
+        emit importProgressChanged(0,QString("Import Genotype"));
+
         while (!reader->atEnd())
         {
             Genotype geno = reader->readGenotype();
+
+            if (reader->device()->pos() % 100 == 0)
+                emit importProgressChanged(reader->device()->pos(),QString());
 
 
             int sample_id = mSamplesIds[geno.sample().name()];
