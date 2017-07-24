@@ -39,11 +39,16 @@ public:
     QFuture<bool> asyncImportFile(const QString& filename);
     bool importFile(const QString& filename);
 
+
+protected:
+    void createFile(const QString& filename);
     void createSample(AbstractVariantReader * reader);
     void createFields(AbstractVariantReader * reader);
     void createGenotypeFields(AbstractVariantReader * reader);
     void createVariants(AbstractVariantReader * reader);
     void createGenotypes(AbstractVariantReader * reader);
+
+    static QByteArray md5sum(const QString& filename);
 
 
 Q_SIGNALS:

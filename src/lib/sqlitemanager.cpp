@@ -38,11 +38,12 @@ bool SqliteManager::importFile(const QString &filename)
     QElapsedTimer timer;
     timer.start();
 
-    createSample(reader.data());
-    createFields(reader.data());
-    createGenotypeFields(reader.data());
-    createVariants(reader.data());
-    createGenotypes(reader.data());
+    createFile(filename);
+    //    createSample(reader.data());
+    //    createFields(reader.data());
+    //    createGenotypeFields(reader.data());
+    //    createVariants(reader.data());
+    //    createGenotypes(reader.data());
 
     qInfo()<< "Import done in " << timer.elapsed() << "milliseconds";
 
@@ -201,6 +202,38 @@ void SqliteManager::createProject(const QString &name)
     }
 
 }
+//-------------------------------------------------------------------------------
+
+void SqliteManager::createFile(const QString &filename)
+{
+
+    QSqlQuery query;
+    QFileInfo info(filename);
+    query.exec(QStringLiteral("DROP TABLE IF EXISTS `file`"));
+    query.exec(QStringLiteral("CREATE TABLE `file` ("
+                              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                              "name TEXT NOT NULL,"
+                              "size TEXT,"
+                              "creation_date TEXT,"
+                              "md5sum TEXT"
+                              ")"));
+
+
+    query.prepare(QStringLiteral("INSERT into `file` VALUES (NULL,?,?,?,? )"));
+
+    query.bindValue(0, info.fileName());
+    query.bindValue(1, info.size());
+    query.bindValue(2, info.created().toString(Qt::ISODate));
+    query.bindValue(3, SqliteManager::md5sum(filename));
+
+
+    if (!query.exec())
+    {
+        qWarning()<<Q_FUNC_INFO<<query.lastQuery();
+        qWarning()<<Q_FUNC_INFO<<query.lastError().text();
+    }
+}
+
 //-------------------------------------------------------------------------------
 void SqliteManager::createSample(AbstractVariantReader *reader)
 {
@@ -505,6 +538,24 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
     }
     reader->close();
     QSqlDatabase::database().commit();
+}
+//-------------------------------------------------------------------------------
+QByteArray SqliteManager::md5sum(const QString &filename)
+{
+    QByteArray out;
+    QFile file(filename);
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QCryptographicHash hash(QCryptographicHash::Md5);
+        if (hash.addData(&file))
+            out = hash.result();
+        else
+            qWarning()<<Q_FUNC_INFO<<"cannot hash file "<<filename;
+
+    }
+    file.close();
+    return out.toHex();
+
 }
 //-------------------------------------------------------------------------------
 

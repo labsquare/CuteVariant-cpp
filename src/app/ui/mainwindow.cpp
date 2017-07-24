@@ -76,7 +76,17 @@ void MainWindow::importFile()
                                                     tr("Images (*.vcf)"));
 
     QFileInfo info(filename);
-    mProject->setDatabasePath(info.dir().filePath(info.baseName()+".db"));
+    QString dbPath = info.dir().filePath(info.baseName()+".db");
+
+    int ret = QMessageBox::warning(this, "Warning", "one database already exists. Do you want to remove it ?",QMessageBox::Ok|QMessageBox::Cancel );
+    if (ret == QMessageBox::Ok)
+        QFile::remove(dbPath);
+    else
+        return;
+
+
+
+    mProject->setDatabasePath(dbPath);
 
 
     ImportDialog dialog(mProject);
