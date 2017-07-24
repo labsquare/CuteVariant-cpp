@@ -160,7 +160,7 @@ int SqliteManager::variantQueryCount() const
 
 
 }
-
+//-------------------------------------------------------------------------------
 QueryBuilder *const SqliteManager::queryBuilder() const
 {
     return mQueryBuilder;
@@ -424,8 +424,6 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 void SqliteManager::createGenotypes(AbstractVariantReader *reader)
 {
     qDebug()<<"Import Genotypes";
-    emit importProgressChanged(50, "Import genotypes");
-
     // First : get genotype fields saved previously to construct the table
     QList<Field> fields = reader->genotypeFields();
     QStringList colnames;

@@ -196,11 +196,14 @@ bool VCFVariantReader::open()
 
     // Avoid comment when reading
     QString line;
+    int lastPos = 0;
     do
     {
+        lastPos = device()->pos();
         line = device()->readLine();
     } while (line.startsWith("#"));
 
+    device()->seek(lastPos);
 
     return true;
 }
