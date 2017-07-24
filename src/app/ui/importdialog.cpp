@@ -13,7 +13,6 @@ ImportDialog::ImportDialog(core::Project *prj)
 
     layout->addWidget(mBar);
     layout->addWidget(mEdit);
-    layout->addStretch();
     layout->addWidget(mButtonBox);
     setLayout(layout);
 
@@ -24,6 +23,9 @@ ImportDialog::ImportDialog(core::Project *prj)
             mBar,SLOT(setRange(int,int)));
 
     connect(mButtonBox, SIGNAL(rejected()), this,SLOT(reject()));
+    connect(mButtonBox, SIGNAL(accepted()), this,SLOT(accept()));
+
+    connect(&mWatcher,SIGNAL(finished()), this,SLOT(importFinished()));
 
 
 }
@@ -45,6 +47,8 @@ int ImportDialog::exec()
         return QDialog::Rejected;
     }
 
+
+
     return QDialog::Accepted;
 }
 
@@ -56,4 +60,11 @@ void ImportDialog::updateStep(int progress, const QString &message)
 
     if (!message.isEmpty())
         mEdit->appendPlainText(message);
+}
+
+void ImportDialog::importFinished()
+{
+
+    mButtonBox->addButton(QDialogButtonBox::Ok);
+
 }

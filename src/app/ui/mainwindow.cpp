@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     mView               = new QTreeView;
     mEditor             = new QueryEditor;
-    mProject            = new core::Project("/home/sacha/variant.db");
+    mProject            = new core::Project();
     mQueryBuilderWidget = new QueryBuilderWidget(mProject);
     mResultModel        = new core::ResultModel(mProject);
 
@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     bar->addAction(tr("Import"),this, SLOT(importFile()));
     bar->addAction(tr("Open"),this, SLOT(openFile()));
     bar->addAction(tr("Save"),this, SLOT(saveFile()));
+    bar->addAction(tr("Reload"),this, SLOT(reload()));
+
     bar->addAction(tr("Play"), mQueryBuilderWidget, [this]()
     {
         mQueryBuilderWidget->buildQuery();
@@ -73,13 +75,16 @@ void MainWindow::importFile()
                                                     QDir::homePath(),
                                                     tr("Images (*.vcf)"));
 
+    QFileInfo info(filename);
+    mProject->setDatabasePath(info.dir().filePath(info.baseName()+".db"));
+
 
     ImportDialog dialog(mProject);
     dialog.setFilename(filename);
 
-    if (!dialog.exec())
+    if (dialog.exec())
     {
-        qDebug()<<"sorry.. ";
+        reload();
     }
 
 
@@ -136,5 +141,11 @@ void MainWindow::openFile()
 
 void MainWindow::saveFile()
 {
+
+}
+
+void MainWindow::reload()
+{
+    mQueryBuilderWidget->load();
 
 }

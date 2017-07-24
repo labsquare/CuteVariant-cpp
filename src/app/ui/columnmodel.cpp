@@ -4,7 +4,7 @@ ColumnModel::ColumnModel(core::Project *prj, QObject *parent)
     :QStandardItemModel(parent), mProject(prj)
 {
 
-    load();
+    //load();
 
     connect(this,SIGNAL(itemChanged(QStandardItem*)),
             this,SLOT(itemCheckChanged(QStandardItem*)));
@@ -15,6 +15,7 @@ ColumnModel::ColumnModel(core::Project *prj, QObject *parent)
 
 void ColumnModel::load()
 {
+    clear();
     setColumnCount(1);
 
     // add common Item
@@ -22,12 +23,12 @@ void ColumnModel::load()
     mVariantItem->appendRow(createItem(tr("chromosom"), tr("Chromosome"),"chr"));
     mVariantItem->appendRow(createItem(tr("position"), tr("genomic position"),"pos"));
 
-//    mVariantItem->child(0)->setCheckState(Qt::Checked);
-//    mVariantItem->child(0)->setEnabled(false);
+    //    mVariantItem->child(0)->setCheckState(Qt::Checked);
+    //    mVariantItem->child(0)->setEnabled(false);
 
 
-//    mVariantItem->child(1)->setCheckState(Qt::Checked);
-//    mVariantItem->child(1)->setEnabled(false);
+    //    mVariantItem->child(1)->setCheckState(Qt::Checked);
+    //    mVariantItem->child(1)->setEnabled(false);
 
 
 
@@ -58,20 +59,24 @@ void ColumnModel::load()
     // add Samples
     mSampleItem = createItem("Samples", "fields of samples");
 
-    for (core::Sample s : mProject->sqliteManager()->samples())
+    if (!mProject->sqliteManager()->samples().isEmpty())
     {
 
-        QStandardItem * c1 = createItem(s.name(), "Sample name", s.name());
-        mSampleItem->appendRow(c1);
-
-        for (core::Field f : mProject->sqliteManager()->genotypeFields())
+        for (core::Sample s : mProject->sqliteManager()->samples())
         {
-            // TODO : check how colname are saved ...
-            QStandardItem * g = createItem(f.name(), f.description(),f.name());
-            c1->appendRow(g);
+
+            QStandardItem * c1 = createItem(s.name(), "Sample name", s.name());
+            mSampleItem->appendRow(c1);
+
+            for (core::Field f : mProject->sqliteManager()->genotypeFields())
+            {
+                // TODO : check how colname are saved ...
+                QStandardItem * g = createItem(f.name(), f.description(),f.name());
+                c1->appendRow(g);
+            }
         }
+        appendRow(mSampleItem);
     }
-    appendRow(mSampleItem);
 }
 //---------------------------------------------------------
 QStringList ColumnModel::toColumns() const

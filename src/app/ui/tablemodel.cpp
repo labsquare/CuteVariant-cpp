@@ -4,7 +4,7 @@ TableModel::TableModel(core::Project *prj, QObject *parent)
     :QAbstractListModel(parent)
 {
     mPrj = prj;
-    load();
+    //load();
 }
 
 int TableModel::rowCount(const QModelIndex &parent) const

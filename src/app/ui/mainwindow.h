@@ -29,6 +29,10 @@ public Q_SLOTS:
     void openFile();
     void saveFile();
 
+
+protected Q_SLOTS:
+    void reload();
+
 private:
     QString mCurrentFile;
     QString mCurrentDBFile;

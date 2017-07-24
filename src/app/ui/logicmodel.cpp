@@ -90,7 +90,7 @@ LogicModel::LogicModel(QObject * parent)
 {
 
     createGroup();
-    createCondition(item(0,0));
+  //  createCondition(item(0,0));
 
 
 

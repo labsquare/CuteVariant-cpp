@@ -14,6 +14,7 @@ public:
 
 public Q_SLOTS:
     void buildQuery();
+    void load();
 
 protected:
     void addWidget(QWidget * w);

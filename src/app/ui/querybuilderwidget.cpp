@@ -59,6 +59,12 @@ void QueryBuilderWidget::buildQuery()
 
 }
 
+void QueryBuilderWidget::load()
+{
+    mColumnModel->load();
+    mTableModel->load();
+}
+
 void QueryBuilderWidget::addWidget(QWidget *w)
 {
 

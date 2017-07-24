@@ -16,6 +16,7 @@ public:
 
 protected Q_SLOTS:
     void updateStep(int progress, const QString& message);
+    void importFinished();
 
 private:
     core::Project * mPrj;
