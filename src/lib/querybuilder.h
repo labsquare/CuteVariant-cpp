@@ -44,6 +44,8 @@ public:
 
     QString toSql() const;
 
+    bool hasGenotypeField() const;
+
 
     void clear();
 
@@ -52,7 +54,7 @@ protected:
 
     QString normGenotype(const QString& raw);
     QString normAnnotation(const QString& raw);
-    void detectGenotypeField(const QString& raw);
+    QStringList detectGenotypeField() const ;
 
 
 
@@ -66,7 +68,6 @@ private:
     QString mOrderBy = "ID";
     QString mRaw;
     QHash<QueryType, QRegularExpression> mRegExps;
-    QStringList mGenotypeSamplesFields;
 
 
 

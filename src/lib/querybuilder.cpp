@@ -49,36 +49,57 @@ const QString &QueryBuilder::orderBy() const
 
 QString QueryBuilder::toSql() const
 {
+    QString out;
+    QStringList genotypeSamples = detectGenotypeField();
 
-    QString select = "SELECT "+columns().join(",")+" ";
-    QString from   = "FROM "+ tableName()+ " ";
-    QString where  = condition();
+    qDebug()<<"ICI "<<genotypeSamples<<" "<<genotypeSamples.size();
 
-    // Create Join
-    QString joinsql;
-    QStringList joinwheresql;
-
-    for (QString sample : mGenotypeSamplesFields)
+    if (genotypeSamples.isEmpty())
     {
-        joinsql.append(QStringLiteral(" LEFT JOIN genotypes as gt_%1 ON variants.id = gt_%1.variant_id ").arg(sample));
-        joinwheresql.append(QStringLiteral(" gt_%1.sample_id = %2 ").arg(sample).arg(mSamplesIds[sample]));
+        qDebug()<<"CONDITION "<<condition()<<" "<<condition().size();
+        if (condition().isEmpty()){
+            out = QString("SELECT %1 FROM %2")
+                    .arg(columns().join(","))
+                    .arg(tableName());
+        }
+
+        else{
+            out = QString("SELECT %1 FROM %2 WHERE %3")
+                    .arg(columns().join(","))
+                    .arg(tableName())
+                    .arg(condition());
+        }
+
+    }
+    else
+    {
+        QString joinsql;
+        QStringList joinwheresql;
+
+        for (QString sample : genotypeSamples)
+        {
+            joinsql.append(QStringLiteral(" LEFT JOIN genotypes as gt_%1 ON variants.id = gt_%1.variant_id ").arg(sample));
+            joinwheresql.append(QStringLiteral(" gt_%1.sample_id = %2 ").arg(sample).arg(mSamplesIds[sample]));
+        }
+
+        if (!condition().isEmpty())
+            joinwheresql.prepend(condition()+" ");
+
+        out = QString("SELECT %1 FROM %2 %3 WHERE %4")
+                .arg(columns().join(","))
+                .arg(tableName())
+                .arg(joinsql)
+                .arg(joinwheresql.join(" AND "));
     }
 
+    out += " LIMIT "+QString::number(limit());
+    return out ;
 
-    where += joinwheresql.join(" AND ");
-
-
-    if (where.isEmpty())
-        return select + from  +" LIMIT "+QString::number(limit());
-    else
-        return select + from + joinsql+ " WHERE " +where +" LIMIT "+QString::number(limit());
-
-
-
-
-
-
-
+}
+//---------------------------------------------------------------------------------
+bool QueryBuilder::hasGenotypeField() const
+{
+    return !detectGenotypeField().isEmpty();
 }
 //---------------------------------------------------------------------------------
 void QueryBuilder::clear()
@@ -87,7 +108,6 @@ void QueryBuilder::clear()
     mColumns.clear();
     mRegion.clear();
     mCondition.clear();
-    mGenotypeSamplesFields.clear();
 }
 
 //---------------------------------------------------------------------------------
@@ -125,6 +145,7 @@ QString QueryBuilder::normAnnotation(const QString &raw)
     while (all.hasNext())
     {
         QRegularExpressionMatch m = all.next();
+        // Not not transform gt..
         if (!m.captured(0).contains("gt"))
             out = out.replace(m.captured(0), QString("%1_%2").arg(m.captured("key")).arg(m.captured("value")));
     }
@@ -133,8 +154,12 @@ QString QueryBuilder::normAnnotation(const QString &raw)
 }
 //---------------------------------------------------------------------------------
 
-void QueryBuilder::detectGenotypeField(const QString &raw)
+QStringList QueryBuilder::detectGenotypeField() const
 {
+    QStringList genotypeSamples;
+    QSet<QString> uniques;
+    // genotype fields can be in columns or conditions
+    QString raw = columns().join(" ") + " " + condition();
     // detect gt_sacha_GT fields like
     QRegularExpression exp (QStringLiteral("gt_(?<sample>\\w+).(?<field>\\w+)"));
     QRegularExpressionMatchIterator all = exp.globalMatch(raw);
@@ -142,10 +167,14 @@ void QueryBuilder::detectGenotypeField(const QString &raw)
     while (all.hasNext())
     {
         QRegularExpressionMatch m = all.next();
-        mGenotypeSamplesFields.append(m.captured(1));
+        uniques.insert(m.captured(1));
     }
 
+    for (QString s:  uniques)
+        genotypeSamples.append(s);
 
+
+    return genotypeSamples;
 }
 //---------------------------------------------------------------------------------
 
@@ -170,9 +199,6 @@ void QueryBuilder::setColumns(const QStringList &columns)
             mColumns.append(s.simplified());
     }
 
-    // check presence of genotype fields
-    detectGenotypeField(columns.join(" "));
-
 }
 //---------------------------------------------------------------------------------
 
@@ -185,9 +211,6 @@ void QueryBuilder::setTableName(const QString &tableName)
 void QueryBuilder::setCondition(const QString &condition)
 {
     mCondition = condition.simplified();
-
-    // check presence of genotype fields
-    detectGenotypeField(mCondition);
 }
 //---------------------------------------------------------------------------------
 
