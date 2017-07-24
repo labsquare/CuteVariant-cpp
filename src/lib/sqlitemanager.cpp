@@ -39,11 +39,11 @@ bool SqliteManager::importFile(const QString &filename)
     timer.start();
 
     createFile(filename);
-    //    createSample(reader.data());
-    //    createFields(reader.data());
-    //    createGenotypeFields(reader.data());
-    //    createVariants(reader.data());
-    //    createGenotypes(reader.data());
+    createSample(reader.data());
+    createFields(reader.data());
+    createGenotypeFields(reader.data());
+    createVariants(reader.data());
+    createGenotypes(reader.data());
 
     qInfo()<< "Import done in " << timer.elapsed() << "milliseconds";
 
