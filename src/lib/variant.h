@@ -23,6 +23,8 @@ public:
     void setFilter(const QString& filter);
     void setQual(double qual);
 
+    bool isNull() const;
+
    QString name() const;
 
 

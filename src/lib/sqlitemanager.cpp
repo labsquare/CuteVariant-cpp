@@ -385,6 +385,9 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
         while (!reader->atEnd())
         {
             Variant v = reader->readVariant();
+            if (v.isNull())
+                continue;
+
             QString placeHolders = QString(",?").repeated(fields.size() + 8);
 
             if (reader->device()->pos() % 100 == 0)
@@ -414,6 +417,8 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
             // store variant ids
             else
                 mVariantIds[v.name()].append(query.lastInsertId().toInt());
+
+
         }
     }
 
@@ -424,6 +429,13 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 void SqliteManager::createGenotypes(AbstractVariantReader *reader)
 {
     qDebug()<<"Import Genotypes";
+
+    if (samples().isEmpty())
+    {
+        qDebug()<<"No samples, No genotype to import";
+        return;
+    }
+
     // First : get genotype fields saved previously to construct the table
     QList<Field> fields = reader->genotypeFields();
     QStringList colnames;
@@ -463,6 +475,9 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
         while (!reader->atEnd())
         {
             Genotype geno = reader->readGenotype();
+
+            if (geno.isNull())
+                continue;
 
             if (reader->device()->pos() % 100 == 0)
                 emit importProgressChanged(reader->device()->pos(),QString());

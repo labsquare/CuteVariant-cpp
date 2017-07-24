@@ -107,6 +107,11 @@ bool Genotype::isHetero() const
 
 }
 
+bool Genotype::isNull() const
+{
+    return mVariant.isNull() || mRawGenotype.isNull();
+}
+
 const Sample &Genotype::sample() const
 {
     return mSample;

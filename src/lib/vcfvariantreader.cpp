@@ -57,6 +57,10 @@ Variant VCFVariantReader::readVariant()
 
 
     QString line = device()->readLine();
+
+    if (line.isEmpty())
+        return Variant();
+
     QStringList rows = line.split('\t');
     if ( rows.size() < 8)
     {

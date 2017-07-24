@@ -57,6 +57,8 @@ public:
     bool isHomo() const;
     bool isHetero() const;
 
+    bool isNull() const;
+
     /*!
      * \brief sample
      * \return the sample associated with this genotype

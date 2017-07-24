@@ -67,6 +67,11 @@ void Variant::setQual(double qual)
     mQual = qual;
 }
 
+bool Variant::isNull() const
+{
+    return chromosom().isEmpty();
+}
+
 QString Variant::name() const
 {
     return QString("%1-%2-%3-%4").arg(chromosom()).arg(position()).arg(ref()).arg(alt());
