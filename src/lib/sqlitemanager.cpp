@@ -126,6 +126,40 @@ QList<Field> SqliteManager::genotype(const Sample &sample)
 
 
 }
+//----------------------------------------------------------
+QHash<QString, int> SqliteManager::tables() const
+{
+    QHash<QString, int> tablesCount;
+
+    QSqlQuery query("SELECT * FROM sqlite_sequence");
+    while (query.next())
+    {
+        QString name = query.record().value("name").toString();
+        if (name == "variants" || name.startsWith("variants_"))
+            tablesCount[name] = query.record().value("seq").toInt();
+    }
+
+    return tablesCount;
+}
+//----------------------------------------------------------
+QSqlQuery SqliteManager::variantQuery() const
+{
+    QString q = queryBuilder()->toSql();
+    return QSqlQuery(q);
+}
+
+int SqliteManager::variantQueryCount() const
+{
+    QString q = queryBuilder()->toSql();
+    q.remove(QRegularExpression("LIMIT \\d+"));
+    QSqlQuery query(QStringLiteral("SELECT COUNT(*) as 'count' FROM (%1)").arg(q));
+
+    query.next();
+
+    return query.record().value("count").toInt();
+
+
+}
 
 QueryBuilder *const SqliteManager::queryBuilder() const
 {

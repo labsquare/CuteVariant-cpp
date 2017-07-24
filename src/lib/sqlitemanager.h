@@ -30,6 +30,9 @@ public:
     QList<Field> fields() const;
     QList<Field> genotypeFields() const;
     QList<Field> genotype(const Sample& sample);
+    QHash<QString, int> tables() const;
+    QSqlQuery variantQuery() const;
+    int variantQueryCount() const;
 
     QueryBuilder * const queryBuilder() const;
 

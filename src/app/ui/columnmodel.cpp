@@ -21,6 +21,16 @@ void ColumnModel::load()
     mVariantItem = createItem("Variants","Based columns");
     mVariantItem->appendRow(createItem(tr("chromosom"), tr("Chromosome"),"chr"));
     mVariantItem->appendRow(createItem(tr("position"), tr("genomic position"),"pos"));
+
+//    mVariantItem->child(0)->setCheckState(Qt::Checked);
+//    mVariantItem->child(0)->setEnabled(false);
+
+
+//    mVariantItem->child(1)->setCheckState(Qt::Checked);
+//    mVariantItem->child(1)->setEnabled(false);
+
+
+
     mVariantItem->appendRow(createItem(tr("reference"), tr("reference nucleotid"),"ref"));
     mVariantItem->appendRow(createItem(tr("alternative"), tr("alternative nucleotid"),"alt"));
     mVariantItem->appendRow(createItem(tr("quality"), tr("quality score"),"qual"));

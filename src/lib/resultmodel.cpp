@@ -15,9 +15,7 @@ void ResultModel::setQuery(const QString &raw)
 void ResultModel::load()
 {
     clear();
-    QString q = mProject->sqliteManager()->queryBuilder()->toSql();
-    QSqlQuery query;
-    query.exec(q);
+    QSqlQuery query = mProject->sqliteManager()->variantQuery();
 
     qDebug()<<query.lastError().text();
     qDebug()<<query.lastQuery();
@@ -42,6 +40,9 @@ void ResultModel::load()
             if (i==0){
 
                 item->setCheckable(true);
+
+                item->setRowCount(10);
+
                 // add Here sub child
             }
         }

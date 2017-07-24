@@ -41,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     {
         mQueryBuilderWidget->buildQuery();
         mResultModel->load();
+        statusBar()->showMessage(QString::number(mProject->sqliteManager()->variantQueryCount()));
+
     } );
 
 

@@ -113,7 +113,7 @@ void LogicModel::createGroup(QStandardItem *parent)
 void LogicModel::createCondition(QStandardItem *parent)
 {
     ConditionItem * item = new ConditionItem;
-    item->setValue("chrom", "==", "'chr3'");
+    item->setValue("chr", "==", "'chr3'");
     parent->appendRow(item);
 }
 
@@ -140,9 +140,12 @@ Operator LogicModel::logicOperator(const QString &name)
 QString LogicModel::makeQuery()
 {
 
-    QString out;
-    return recursiveQuery(item(0,0));
+    QString out = recursiveQuery(item(0,0));
 
+    if (out == "(AND)")
+        return QString();
+
+    return out;
 
 
 }

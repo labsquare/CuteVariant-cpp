@@ -79,6 +79,18 @@ QString QueryBuilder::toSql() const
         QString joinsql;
         QStringList joinwheresql;
 
+        // use good column name
+        QRegularExpression exp("gt_(\\w+)\\.(\\w+)");
+        QStringList cols = columns();
+        for (QString &c : cols)
+        {
+            qDebug()<<c;
+            QRegularExpressionMatch m = exp.match(c);
+            if (m.hasMatch())
+                c = c.replace(m.captured(0), m.captured(0)+" AS '"+m.captured(1)+"."+m.captured(2)+"'");
+        }
+
+
         for (QString sample : genotypeSamples)
         {
             joinsql.append(QStringLiteral(" LEFT JOIN genotypes as gt_%1 ON variants.id = gt_%1.variant_id ").arg(sample));
@@ -89,7 +101,7 @@ QString QueryBuilder::toSql() const
             joinwheresql.prepend(condition()+" ");
 
         out = QString("SELECT %1 FROM %2 %3 WHERE %4")
-                .arg(columns().join(","))
+                .arg(cols.join(","))
                 .arg(tableName())
                 .arg(joinsql)
                 .arg(joinwheresql.join(" AND "));

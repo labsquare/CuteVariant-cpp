@@ -4,6 +4,7 @@
 #include "project.h"
 #include "logicview.h"
 #include "columnmodel.h"
+#include "tablemodel.h"
 
 class QueryBuilderWidget : public QWidget
 {
@@ -27,6 +28,7 @@ private:
     QActionGroup * mActionGroup;
 
     ColumnModel * mColumnModel;
+    TableModel * mTableModel;
     LogicView * mLogicView;
 
 

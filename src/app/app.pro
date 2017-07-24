@@ -15,7 +15,8 @@ SOURCES += \
     ui/querybuilderwidget.cpp \
     ui/columnmodel.cpp \
     ui/importdialog.cpp \
-    ui/qfonticon.cpp
+    ui/qfonticon.cpp \
+    ui/tablemodel.cpp
 
 
 
@@ -37,7 +38,8 @@ HEADERS += \
     ui/querybuilderwidget.h \
     ui/columnmodel.h \
     ui/importdialog.h \
-    ui/qfonticon.h
+    ui/qfonticon.h \
+    ui/tablemodel.h
 
 RESOURCES += \
     icons/icons.qrc
