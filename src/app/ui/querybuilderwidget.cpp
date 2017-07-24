@@ -21,10 +21,10 @@ QueryBuilderWidget::QueryBuilderWidget(core::Project *prj, QWidget *parent)
     mColumnModel = new ColumnModel(mProject);
     columnView->setModel(mColumnModel);
     addWidget(columnView);
-    addWidget(new LogicView);
 
-
-
+    // add logic view
+    mLogicView = new LogicView;
+    addWidget(mLogicView);
 
 
     mActionGroup->setExclusive(true);
@@ -38,6 +38,7 @@ void QueryBuilderWidget::buildQuery()
 
     builder->setColumns(mColumnModel->toColumns());
     builder->setTableName("variants");
+    builder->setCondition(mLogicView->query());
 
 }
 

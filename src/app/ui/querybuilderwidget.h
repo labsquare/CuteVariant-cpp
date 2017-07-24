@@ -27,6 +27,7 @@ private:
     QActionGroup * mActionGroup;
 
     ColumnModel * mColumnModel;
+    LogicView * mLogicView;
 
 
 };

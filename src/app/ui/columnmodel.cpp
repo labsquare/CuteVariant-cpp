@@ -19,10 +19,13 @@ void ColumnModel::load()
 
     // add common Item
     mVariantItem = createItem("Variants","Based columns");
-    mVariantItem->appendRow(createItem("chromosom", "Chromosome","chr"));
-    mVariantItem->appendRow(createItem("position", "genomic position","pos"));
-    mVariantItem->appendRow(createItem("reference", "reference nucleotid","ref"));
-    mVariantItem->appendRow(createItem("alternative", "alternative nucleotid","alt"));
+    mVariantItem->appendRow(createItem(tr("chromosom"), tr("Chromosome"),"chr"));
+    mVariantItem->appendRow(createItem(tr("position"), tr("genomic position"),"pos"));
+    mVariantItem->appendRow(createItem(tr("reference"), tr("reference nucleotid"),"ref"));
+    mVariantItem->appendRow(createItem(tr("alternative"), tr("alternative nucleotid"),"alt"));
+    mVariantItem->appendRow(createItem(tr("quality"), tr("quality score"),"qual"));
+    mVariantItem->appendRow(createItem(tr("filter"), tr("filter pass"),"filter"));
+
     appendRow(mVariantItem);
 
     // Add extra
