@@ -518,8 +518,6 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
 
             int sample_id = mSamplesIds[geno.sample().name()];
 
-            qDebug()<<"import geno sample "<<mVariantIds << geno.sample().name();
-
 
             for (quint64 variant_id : mVariantIds[geno.variant().name()])
             {
@@ -530,8 +528,6 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
 
                 for (Field f : fields)
                     query.addBindValue(geno.annotation(f.name()));
-
-                qWarning()<<Q_FUNC_INFO<<query.lastQuery();
 
 
                 if (!query.exec())
