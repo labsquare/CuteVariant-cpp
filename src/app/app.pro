@@ -14,7 +14,10 @@ SOURCES += \
     ui/logicview.cpp \
     ui/querybuilderwidget.cpp \
     ui/columnmodel.cpp \
-    ui/importdialog.cpp
+    ui/importdialog.cpp \
+    ui/qfonticon.cpp
+
+
 
 
 
@@ -33,4 +36,8 @@ HEADERS += \
     ui/logicview.h \
     ui/querybuilderwidget.h \
     ui/columnmodel.h \
-    ui/importdialog.h
+    ui/importdialog.h \
+    ui/qfonticon.h
+
+RESOURCES += \
+    icons/icons.qrc

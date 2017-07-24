@@ -37,6 +37,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     bar->addAction(tr("Import"),this, SLOT(importFile()));
     bar->addAction(tr("Open"),this, SLOT(openFile()));
     bar->addAction(tr("Save"),this, SLOT(saveFile()));
+    bar->addAction(tr("Play"), mQueryBuilderWidget, [this]()
+    {
+        mQueryBuilderWidget->buildQuery();
+        mResultModel->load();
+    } );
 
 
 

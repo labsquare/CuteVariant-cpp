@@ -7,8 +7,12 @@
 
 class QueryBuilderWidget : public QWidget
 {
+    Q_OBJECT
 public:
     QueryBuilderWidget(core::Project * prj, QWidget * parent = nullptr);
+
+public Q_SLOTS:
+    void buildQuery();
 
 protected:
     void addWidget(QWidget * w);

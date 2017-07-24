@@ -32,6 +32,15 @@ QueryBuilderWidget::QueryBuilderWidget(core::Project *prj, QWidget *parent)
 
 }
 
+void QueryBuilderWidget::buildQuery()
+{
+    core::QueryBuilder * builder = mProject->sqliteManager()->queryBuilder();
+
+    builder->setColumns(mColumnModel->toColumns());
+    builder->setTableName("variants");
+
+}
+
 void QueryBuilderWidget::addWidget(QWidget *w)
 {
 

@@ -11,12 +11,12 @@ class ResultModel : public QStandardItemModel
     Q_OBJECT
 public:
     ResultModel(Project * prj, QObject * parent = nullptr);
-
-
     void setQuery(const QString& raw);
 
+public Q_SLOTS:
+    void load();
+
 private:
-    QList<QSqlRecord> mRecords;
 
     Project * mProject;
 };

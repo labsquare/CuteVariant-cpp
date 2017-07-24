@@ -8,16 +8,19 @@ ResultModel::ResultModel(Project * prj, QObject *parent)
 void ResultModel::setQuery(const QString &raw)
 {
     clear();
-
     mProject->sqliteManager()->queryBuilder()->setFromRaw(raw);
-    QString q = mProject->sqliteManager()->queryBuilder()->toSql();
+    load();
+}
 
+void ResultModel::load()
+{
+    clear();
+    QString q = mProject->sqliteManager()->queryBuilder()->toSql();
     QSqlQuery query;
     query.exec(q);
 
     qDebug()<<query.lastError().text();
     qDebug()<<query.lastQuery();
-
 
     setColumnCount(query.record().count());
 
@@ -41,8 +44,6 @@ void ResultModel::setQuery(const QString &raw)
                 item->setCheckable(true);
                 // add Here sub child
             }
-
-
         }
 
         appendRow(row);
