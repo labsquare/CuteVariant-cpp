@@ -5,7 +5,12 @@ namespace core{
 SqliteManager::SqliteManager(QObject * parent)
     :QObject(parent)
 {
-
+    mQueryBuilder = new QueryBuilder(this);
+}
+//-------------------------------------------------------------------------------
+SqliteManager::~SqliteManager()
+{
+    delete mQueryBuilder;
 }
 //-------------------------------------------------------------------------------
 bool SqliteManager::importFile(const QString &filename)
@@ -121,21 +126,12 @@ QList<Field> SqliteManager::genotype(const Sample &sample)
 
 
 }
-//-------------------------------------------------------------------------------
-QString SqliteManager::buildVariantQuery(const QString &raw)
+
+QueryBuilder *const SqliteManager::queryBuilder() const
 {
-    mQueryBuilder.fromRawQuery(raw);
-
-    QHash<QString, int> sids;
-    for (Sample s : samples())
-        sids[s.name()] = s.id();
-
-    mQueryBuilder.setSampleIds(sids);
-
-
-
-    return mQueryBuilder.toSql();
+    return mQueryBuilder;
 }
+
 //-------------------------------------------------------------------------------
 QFuture<bool> SqliteManager::asyncImportFile(const QString &filename)
 {

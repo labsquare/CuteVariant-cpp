@@ -6,6 +6,8 @@
 #include "querybuilder.h"
 
 namespace core {
+class QueryBuilder;
+class SqliteManager;
 class Project
 {
 public:

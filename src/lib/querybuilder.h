@@ -2,12 +2,14 @@
 #define VARIANTQUERY_H
 #include <QtCore>
 #include "field.h"
+#include "sqlitemanager.h"
 
 namespace core {
 /*!
  * \brief The VariantQuery class
  * Use this class to generate sqlite query
  */
+class SqliteManager;
 class QueryBuilder
 {
 public:
@@ -19,7 +21,7 @@ public:
         SelectFromWhereIn,
     };
 
-    QueryBuilder();
+    QueryBuilder(SqliteManager * sqlite);
 
 
     const QStringList &columns() const;
@@ -37,8 +39,7 @@ public:
     void setTableName(const QString& tableName);
     void setCondition(const QString& condition);
     void setOrderBy(const QString& order);
-    void setSampleIds(const QHash<QString, int>& sampleIds);
-    void fromRawQuery(const QString& raw);
+    void setFromRaw(const QString& raw);
 
     QueryType queryMatch(const QString& raw);
 
@@ -69,13 +70,7 @@ private:
     QString mRaw;
     QHash<QueryType, QRegularExpression> mRegExps;
 
-
-
-    // store samples and ids
-    QHash<QString, int> mSamplesIds;
-
-
-
+    SqliteManager * mSqlite;
 
 
 

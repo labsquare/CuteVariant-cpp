@@ -1,17 +1,17 @@
 #include "querybuilder.h"
 namespace core {
 
-QueryBuilder::QueryBuilder()
-{
 
+//---------------------------------------------------------------------------------
+QueryBuilder::QueryBuilder(SqliteManager *sqlite)
+{
+    mSqlite = sqlite;
     mRegExps[SelectFrom]        = QRegularExpression("SELECT (?<select>.+) FROM (?<from>\\w+)$");
     mRegExps[SelectFromWhere]   = QRegularExpression("SELECT (?<select>.+) FROM (?<from>\\w+) WHERE (?<where>.+)$");
     mRegExps[SelectFromWhereIn] = QRegularExpression("SELECT (?<select>.+) FROM (?<from>\\w+) WHERE (?<where>.+) IN (?<in>\\w+)$");
 
 }
-
 //---------------------------------------------------------------------------------
-
 const QStringList &QueryBuilder::columns() const
 {
     return mColumns;
@@ -40,7 +40,7 @@ int QueryBuilder::limit() const
 {
     return mLimit;
 }
-
+//---------------------------------------------------------------------------------
 const QString &QueryBuilder::orderBy() const
 {
     return mOrderBy;
@@ -50,13 +50,17 @@ const QString &QueryBuilder::orderBy() const
 QString QueryBuilder::toSql() const
 {
     QString out;
-    QStringList genotypeSamples = detectGenotypeField();
 
-    qDebug()<<"ICI "<<genotypeSamples<<" "<<genotypeSamples.size();
+    // Get samples Id
+    QHash<QString, int> sampleIds;
+    for (Sample s : mSqlite->samples())
+        sampleIds[s.name()] = s.id();
+
+    // Get genotypes Sample from keywords genotype[SAMPLE].GT
+    QStringList genotypeSamples = detectGenotypeField();
 
     if (genotypeSamples.isEmpty())
     {
-        qDebug()<<"CONDITION "<<condition()<<" "<<condition().size();
         if (condition().isEmpty()){
             out = QString("SELECT %1 FROM %2")
                     .arg(columns().join(","))
@@ -69,7 +73,6 @@ QString QueryBuilder::toSql() const
                     .arg(tableName())
                     .arg(condition());
         }
-
     }
     else
     {
@@ -79,7 +82,7 @@ QString QueryBuilder::toSql() const
         for (QString sample : genotypeSamples)
         {
             joinsql.append(QStringLiteral(" LEFT JOIN genotypes as gt_%1 ON variants.id = gt_%1.variant_id ").arg(sample));
-            joinwheresql.append(QStringLiteral(" gt_%1.sample_id = %2 ").arg(sample).arg(mSamplesIds[sample]));
+            joinwheresql.append(QStringLiteral(" gt_%1.sample_id = %2 ").arg(sample).arg(sampleIds[sample]));
         }
 
         if (!condition().isEmpty())
@@ -109,7 +112,6 @@ void QueryBuilder::clear()
     mRegion.clear();
     mCondition.clear();
 }
-
 //---------------------------------------------------------------------------------
 
 QString QueryBuilder::normGenotype(const QString &raw)
@@ -220,7 +222,7 @@ void QueryBuilder::setOrderBy(const QString &order)
 }
 //---------------------------------------------------------------------------------
 
-void QueryBuilder::fromRawQuery(const QString& raw)
+void QueryBuilder::setFromRaw(const QString& raw)
 {
     mRaw = raw;
     QString processRaw = raw;
@@ -287,17 +289,7 @@ QueryBuilder::QueryType QueryBuilder::queryMatch(const QString &raw)
     }
 
     return QueryBuilder::InValid;
-
 }
-
-//---------------------------------------------------------------------------------
-
-void QueryBuilder::setSampleIds(const QHash<QString, int> &sampleIds)
-{
-    mSamplesIds = sampleIds;
-}
-
-
 //---------------------------------------------------------------------------------
 
 

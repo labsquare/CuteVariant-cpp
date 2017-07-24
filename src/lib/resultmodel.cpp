@@ -9,8 +9,8 @@ void ResultModel::setQuery(const QString &raw)
 {
     clear();
 
-
-    QString q = mProject->sqliteManager()->buildVariantQuery(raw);
+    mProject->sqliteManager()->queryBuilder()->setFromRaw(raw);
+    QString q = mProject->sqliteManager()->queryBuilder()->toSql();
 
     QSqlQuery query;
     query.exec(q);

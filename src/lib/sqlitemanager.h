@@ -16,19 +16,22 @@ namespace core {
  * \brief The SqliteManager class
  * This is the interface between raw SQLITE query and C++ POO
  */
+class Project;
+class QueryBuilder;
 class SqliteManager : public QObject
 {
     Q_OBJECT
 public:
     SqliteManager(QObject * parent = 0);
+    ~SqliteManager();
     void createProject(const QString& name);
 
     QList<Sample> samples() const;
     QList<Field> fields() const;
     QList<Field> genotypeFields() const;
-
     QList<Field> genotype(const Sample& sample);
-    QString buildVariantQuery(const QString& raw);
+
+    QueryBuilder * const queryBuilder() const;
 
     QFuture<bool> asyncImportFile(const QString& filename);
     bool importFile(const QString& filename);
@@ -47,8 +50,7 @@ Q_SIGNALS:
 private:
     QHash<QString, QVector<int>> mVariantIds;
     QHash<QString, int> mSamplesIds;
-
-    QueryBuilder mQueryBuilder;
+    QueryBuilder * mQueryBuilder;
 
 
 };
