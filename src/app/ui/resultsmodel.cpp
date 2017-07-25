@@ -50,7 +50,7 @@ void ResultsModel::load(int offset, int limit)
         {
             QStandardItem * item = new QStandardItem();
             item->setText(query.record().value(i).toString());
-            item->setData(query.record().value("variants.id"));
+            item->setData(query.record().value(0));
             row.append(item);
 
             if (i==0){

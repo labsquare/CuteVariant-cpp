@@ -3,7 +3,7 @@
 #include <QtWidgets>
 #include "project.h"
 #include "logicview.h"
-#include "columnmodel.h"
+#include "columnview.h"
 #include "tablemodel.h"
 
 class QueryBuilderWidget : public QWidget
@@ -13,12 +13,12 @@ public:
     QueryBuilderWidget(core::Project * prj, QWidget * parent = nullptr);
 
 public Q_SLOTS:
-    void buildQuery();
+    void updateQuery();
     void load();
 
 protected Q_SLOTS:
     void addWidget(QWidget * w);
-    void toolbarClicked(QAction * action);
+    void changeWidget(QAction * action);
 
 
 private:
@@ -28,8 +28,7 @@ private:
     QStackedWidget * mStack;
     QHash<QAction*, QWidget*> mWidgets;
 
-    ColumnModel * mColumnModel;
-    TableModel * mTableModel;
+    ColumnView * mColumnView;
     LogicView * mLogicView;
 
 

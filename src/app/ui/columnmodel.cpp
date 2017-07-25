@@ -81,7 +81,7 @@ void ColumnModel::load()
     }
 }
 //---------------------------------------------------------
-QStringList ColumnModel::toColumns() const
+QStringList ColumnModel::selectedColumns() const
 {
     // get columns variants
     QStringList columns;
@@ -122,7 +122,7 @@ void ColumnModel::itemCheckChanged(QStandardItem *item)
         item->child(row)->setCheckState(item->checkState());
     }
 
-    qDebug()<<toColumns();
+    qDebug()<<selectedColumns();
 
 }
 //---------------------------------------------------------

@@ -47,11 +47,11 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
 
 
     mBottomToolBar->setIconSize(QSize(16,16));
-    mBottomToolBar->addAction(QFontIcon::icon(0xf100),"<<", this, SLOT(pageFirst()));
-    mBottomToolBar->addAction(QFontIcon::icon(0xf104),"<", this, SLOT(pageDown()));
+    mBottomToolBar->addAction(QIcon::fromTheme("arrow-left-double"),"<<", this, SLOT(pageFirst()));
+    mBottomToolBar->addAction(QIcon::fromTheme("arrow-left"),"<", this, SLOT(pageDown()));
     mBottomToolBar->addWidget(mPageBox);
-    mBottomToolBar->addAction(QFontIcon::icon(0xf105),">", this, SLOT(pageUp()));
-    mBottomToolBar->addAction(QFontIcon::icon(0xf101),">>", this, SLOT(pageLast()));
+    mBottomToolBar->addAction(QIcon::fromTheme("arrow-right"),">", this, SLOT(pageUp()));
+    mBottomToolBar->addAction(QIcon::fromTheme("arrow-right-double"),">>", this, SLOT(pageLast()));
 
 
 
@@ -117,22 +117,23 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
     if (index.isValid())
     {
         int variantID = mModel->item(index.row())->data().toInt();
+        qDebug()<<variantID;
         core::Variant var = mPrj->sqliteManager()->variant(variantID);
 
         QMenu menu(this);
-        menu.addAction(QFontIcon::icon(0xf0ea), var.coordinate(),[&var](){
+        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
            qApp->clipboard()->setText(var.coordinate());
         });
 
-        menu.addAction(QFontIcon::icon(0xf0ea), var.name(),[&var](){
+        menu.addAction(QIcon::fromTheme("edit-copy"), var.name(),[&var](){
             qApp->clipboard()->setText(var.name());
         });
 
-        menu.addAction(QFontIcon::icon(0xf08e), "IGV",[&var](){
+        menu.addAction(QIcon::fromTheme("edit-link"), "IGV",[&var](){
             QDesktopServices::openUrl(var.igvUrl());
         });
 
-        menu.addAction(QFontIcon::icon(0xf08e), "Varsome",[&var](){
+        menu.addAction(QIcon::fromTheme("edit-link"), "Varsome",[&var](){
             QDesktopServices::openUrl(var.varsomeUrl());
         });
 

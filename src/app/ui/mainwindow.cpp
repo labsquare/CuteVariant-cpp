@@ -18,40 +18,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
     mainSplitter->addWidget(mResultsView);
     //mainSplitter->addWidget(mEditor);
-    setCentralWidget(mainSplitter);
 
-    QDockWidget * leftDock = new QDockWidget;
-    leftDock->setWidget(mQueryBuilderWidget);
-    addDockWidget(Qt::LeftDockWidgetArea, leftDock);
-    leftDock->setTitleBarWidget(new QWidget());
-    leftDock->setContentsMargins(0,0,0,0);
+    QSplitter * secondSplitter = new QSplitter(Qt::Horizontal);
+    secondSplitter->addWidget(mQueryBuilderWidget);
+    secondSplitter->addWidget(mainSplitter);
+    secondSplitter->setStretchFactor(0, 20);
+    secondSplitter->setStretchFactor(1, 80);
 
-    //    setStyleSheet("QMainWindow::separator {"
-    //                  "width: 10px;"
-    //                  "height: 2px;"
-    //                  "margin: -10px;"
-    //                  "padding: 5px;}"
-    //              );
-
-
-    mEditor->setPlainText("SELECT qual FROM variants");
-    //    connect(mEditor, &QueryEditor::returnPressed, mResultModel, [this](){mResultModel->setQuery(mEditor->toPlainText());});
+    setCentralWidget(secondSplitter);
 
 
     // setup toolbox
     QToolBar * bar = addToolBar("main");
+    bar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    bar->setFloatable(false);
+    bar->setMovable(false);
 
-    bar->addAction(tr("Import"),this, SLOT(importFile()));
-    bar->addAction(tr("Open"),this, SLOT(openFile()));
-    bar->addAction(tr("Save"),this, SLOT(saveFile()));
-    bar->addAction(tr("Reload"),this, SLOT(reload()));
-
-    bar->addAction(tr("Play"), mQueryBuilderWidget, [this]()
-    {
-        mQueryBuilderWidget->buildQuery();
-        mResultsView->load();
-
-    });
+    bar->addAction(QIcon::fromTheme("document-import"),tr("Import"),this, SLOT(importFile()));
+    bar->addAction(QIcon::fromTheme("document-open"),tr("Open"),this, SLOT(openFile()));
+    bar->addAction(QIcon::fromTheme("document-save"),tr("Save"),this, SLOT(saveFile()));
+    bar->addAction(QIcon::fromTheme("run-build"),tr("Play"),this,SLOT(refresh()));
 
 
     // add spacer
@@ -63,14 +49,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     restoreSettings();
 
     mProject->setDatabasePath("/home/sacha/TRIO1.family.vcf.db");
-    reload();
+    reset();
 
 }
-
+//-------------------------------------------------------------------------
 MainWindow::~MainWindow()
 {
     writeSettings();
 }
+//-------------------------------------------------------------------------
 
 void MainWindow::writeSettings()
 {
@@ -78,51 +65,9 @@ void MainWindow::writeSettings()
     settings.beginGroup("MainWindow");
     settings.setValue("size", size());
     settings.setValue("pos", pos());
-    settings.setValue("currentFile", mCurrentFile);
-    settings.setValue("currentDBFile", mCurrentFile);
     settings.endGroup();
 }
-
-void MainWindow::importFile()
-{
-
-    QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),
-                                                    QDir::homePath(),
-                                                    tr("Images (*.vcf)"));
-
-    if (filename.isEmpty())
-        return;
-
-    QString dbPath = filename + ".db";
-
-    if (QFile::exists(dbPath))
-    {
-        int ret = QMessageBox::warning(this, "Warning", "one database already exists. Do you want to remove it ?",QMessageBox::Ok|QMessageBox::Cancel );
-        if (ret == QMessageBox::Ok)
-            QFile::remove(dbPath);
-        else
-            return;
-    }
-
-
-    mProject->setDatabasePath(dbPath);
-
-
-    ImportDialog dialog(mProject);
-    dialog.setFilename(filename);
-
-    if (dialog.exec())
-    {
-        reload();
-    }
-
-
-
-
-
-
-}
-
+//-------------------------------------------------------------------------
 
 void MainWindow::restoreSettings()
 {
@@ -130,23 +75,46 @@ void MainWindow::restoreSettings()
     settings.beginGroup("MainWindow");
     resize(settings.value("size", QSize(400, 400)).toSize());
     move(settings.value("pos", QPoint(200, 200)).toPoint());
-    mCurrentFile = settings.value("currentFile", "").toString();
-    mCurrentDBFile = settings.value("currentDBFile", "").toString();
     settings.endGroup();
+}
+//-------------------------------------------------------------------------
 
+void MainWindow::importFile()
+{
 
-    Project prj(mCurrentDBFile);
-    prj.importFile(mCurrentFile);
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),QDir::homePath(),tr("Images (*.vcf)"));
+    if (filename.isEmpty())
+        return;
+
+    QString dbPath = filename + ".db";
+    if (QFile::exists(dbPath))
+    {
+        int ret = QMessageBox::warning(this,
+                                       tr("Warning"),
+                                       tr("one database already exists. Do you want to remove it ?"),
+                                       QMessageBox::Ok|QMessageBox::Cancel);
+        if (ret == QMessageBox::Ok)
+            QFile::remove(dbPath);
+        else
+            return;
+    }
+
+    mProject->setDatabasePath(dbPath);
+    ImportDialog dialog(mProject);
+    dialog.setFilename(filename);
+
+    if (dialog.exec())
+     reset();
+
 }
 
-
-
+//-------------------------------------------------------------------------
 
 void MainWindow::closeEvent(QCloseEvent *)
 {
     writeSettings();
 }
-
+//-------------------------------------------------------------------------
 
 void MainWindow::openFile()
 {
@@ -154,21 +122,28 @@ void MainWindow::openFile()
     if (!fileName.isEmpty())
     {
         mProject->setDatabasePath(fileName);
-        reload();
+        reset();
         return;
 
     }
-
-
 }
-
+//-------------------------------------------------------------------------
 void MainWindow::saveFile()
 {
 
 }
-
-void MainWindow::reload()
+//-------------------------------------------------------------------------
+void MainWindow::refresh()
 {
+
+    mQueryBuilderWidget->updateQuery();
+    mResultsView->load();
+
+}
+//-------------------------------------------------------------------------
+void MainWindow::reset()
+{
+
     mQueryBuilderWidget->load();
     mResultsView->load();
 

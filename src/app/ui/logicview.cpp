@@ -1,13 +1,17 @@
 #include "logicview.h"
 
-LogicView::LogicView(QWidget * parent)
+LogicView::LogicView(core::Project *prj, QWidget * parent)
     :QTreeView(parent)
 {
+    mPrj   = prj;
     mModel = new LogicModel;
 
+    viewport()->setAutoFillBackground( false );
+    setFrameShape(QFrame::NoFrame);
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
+    header()->hide();
 
     setDragDropMode(QAbstractItemView::InternalMove);
     //setDragDropMode(QAbstractItemView::DragDrop);
@@ -21,6 +25,8 @@ LogicView::LogicView(QWidget * parent)
     addAction(new QAction("C"));
     addAction(new QAction("E"));
     addAction(new QAction("S"));
+
+    setWindowTitle(tr("Conditions"));
 
 
 }

@@ -32,7 +32,8 @@ public Q_SLOTS:
 
 
 protected Q_SLOTS:
-    void reload();
+    void refresh();
+    void reset();
 
 private:
     QString mCurrentFile;

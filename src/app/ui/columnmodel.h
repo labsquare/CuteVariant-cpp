@@ -12,7 +12,7 @@ public:
     ColumnModel(core::Project * prj, QObject * parent = nullptr);
     void load();
 
-    QStringList toColumns() const;
+    QStringList selectedColumns() const;
 
 protected Q_SLOTS:
     void itemCheckChanged(QStandardItem *item);

@@ -19,7 +19,8 @@ SOURCES += \
     ui/resultsview.cpp \
     ui/resultsmodel.cpp \
     ui/qfonticon.cpp \
-    ui/locationlineedit.cpp
+    ui/locationlineedit.cpp \
+    ui/columnview.cpp
 
 
 
@@ -41,12 +42,12 @@ HEADERS += \
     ui/querybuilderwidget.h \
     ui/columnmodel.h \
     ui/importdialog.h \
-    ui/qfonticon.h \
     ui/tablemodel.h \
     ui/resultsview.h \
     ui/resultsmodel.h \
     ui/qfonticon.h \
-    ui/locationlineedit.h
+    ui/locationlineedit.h \
+    ui/columnview.h
 
 RESOURCES += \
     icons/icons.qrc
