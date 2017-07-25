@@ -15,10 +15,10 @@ SOURCES += \
     ui/querybuilderwidget.cpp \
     ui/columnmodel.cpp \
     ui/importdialog.cpp \
-    ui/qfonticon.cpp \
     ui/tablemodel.cpp \
     ui/resultsview.cpp \
-    ui/resultsmodel.cpp
+    ui/resultsmodel.cpp \
+    ui/qfonticon.cpp
 
 
 
@@ -43,7 +43,8 @@ HEADERS += \
     ui/qfonticon.h \
     ui/tablemodel.h \
     ui/resultsview.h \
-    ui/resultsmodel.h
+    ui/resultsmodel.h \
+    ui/qfonticon.h
 
 RESOURCES += \
     icons/icons.qrc

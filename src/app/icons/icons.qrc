@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>radio_button.png</file>
         <file>radiobutton_marked.png</file>
+        <file alias="fontawesome">fontawesome.ttf</file>
     </qresource>
 </RCC>

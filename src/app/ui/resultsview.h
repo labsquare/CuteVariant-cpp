@@ -4,6 +4,7 @@
 #include <QtWidgets>
 #include "resultsmodel.h"
 #include "project.h"
+#include "qfonticon.h"
 
 class ResultsView : public QWidget
 {

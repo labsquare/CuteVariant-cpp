@@ -20,8 +20,11 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
 
     mPageBox->setValidator(mPageValidator);
     mPageBox->setFrame(false);
-    mPageBox->setInputMask("9999999");
+    //mPageBox->setInputMask("9999999");
     mPageBox->setMaximumWidth(50);
+    mPageBox->setStyleSheet("* { background-color: rgba(0, 0, 0, 0); }");
+    mPageBox->setAlignment(Qt::AlignHCenter);
+    connect(mPageBox,SIGNAL(returnPressed()),this,SLOT(load()));
 
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -43,11 +46,12 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
     mTopToolBar->addAction("Export");
 
 
-    mBottomToolBar->addAction(QIcon(),"<<", this, SLOT(pageFirst()));
-    mBottomToolBar->addAction(QIcon(),"<", this, SLOT(pageDown()));
+    mBottomToolBar->setIconSize(QSize(16,16));
+    mBottomToolBar->addAction(QFontIcon::icon(0xf100),"<<", this, SLOT(pageFirst()));
+    mBottomToolBar->addAction(QFontIcon::icon(0xf104),"<", this, SLOT(pageDown()));
     mBottomToolBar->addWidget(mPageBox);
-    mBottomToolBar->addAction(QIcon(),">", this, SLOT(pageUp()));
-    mBottomToolBar->addAction(QIcon(),">>", this, SLOT(pageLast()));
+    mBottomToolBar->addAction(QFontIcon::icon(0xf105),">", this, SLOT(pageUp()));
+    mBottomToolBar->addAction(QFontIcon::icon(0xf101),">>", this, SLOT(pageLast()));
 
 
 
@@ -55,6 +59,7 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
 
 void ResultsView::load()
 {
+    setFocus();
     // 100 page constant for now
     int totalCount = mModel->totalVariantCount();
 
@@ -94,6 +99,7 @@ void ResultsView::pageLast()
 void ResultsView::setPage(int page)
 {
     mPageBox->setText(QString::number(page));
+    mPageBox->setAlignment(Qt::AlignHCenter);
     load();
 
 }

@@ -6,6 +6,6 @@
         <file>LICENSE</file>
     </qresource>
     <qresource prefix="/icons">
-        <file>cutevariant.png</file>
+        <file alias="fontawesome">src/app/icons/fontawesome.ttf</file>
     </qresource>
 </RCC>
