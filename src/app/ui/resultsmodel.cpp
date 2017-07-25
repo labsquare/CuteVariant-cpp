@@ -33,7 +33,7 @@ void ResultsModel::load(int offset, int limit)
     qDebug()<<query.lastError().text();
     qDebug()<<query.lastQuery();
 
-    setColumnCount(query.record().count());
+    setColumnCount(query.record().count()-1);
 
     QStringList header;
     // from 1 to avoid id
