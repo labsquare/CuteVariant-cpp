@@ -14,6 +14,13 @@ public:
 public Q_SLOTS:
     void load();
 
+protected Q_SLOTS:
+    void pageUp();
+    void pageDown();
+    void pageFirst();
+    void pageLast();
+    void setPage(int page);
+
 
 private:
     QTreeView * mView;
@@ -21,8 +28,9 @@ private:
     core::Project * mPrj;
     QToolBar * mTopToolBar;
     QToolBar * mBottomToolBar;
-    QSpinBox * mPageBox;
+    QLineEdit * mPageBox;
     QLabel * mCountLabel;
+    QIntValidator * mPageValidator;
 };
 
 #endif // RESULTSVIEW_H

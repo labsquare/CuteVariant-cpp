@@ -40,6 +40,8 @@ public:
     void setCondition(const QString& condition);
     void setOrderBy(const QString& order);
     void setFromRaw(const QString& raw);
+    void setLimit(int limit);
+    void setOffset(int offset);
 
     QueryType queryMatch(const QString& raw);
 

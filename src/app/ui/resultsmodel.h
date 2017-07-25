@@ -12,10 +12,10 @@ public:
     ResultsModel(core::Project * prj, QObject * parent = nullptr);
     void setQuery(const QString& raw);
 
-    int variantCount() const;
+    int totalVariantCount() const;
 
 public Q_SLOTS:
-    void load();
+    void load(int offset = 0, int limit = 100);
 
 private:
 

@@ -107,7 +107,7 @@ QString QueryBuilder::toSql() const
                 .arg(joinwheresql.join(" AND "));
     }
 
-    out += " LIMIT "+QString::number(limit());
+    out += " LIMIT "+QString::number(limit()) + " OFFSET "+QString::number(offset());
     return out ;
 
 }
@@ -288,6 +288,16 @@ void QueryBuilder::setFromRaw(const QString& raw)
     qInfo()<<"REGION"<<region();
 
 
+}
+//---------------------------------------------------------------------------------
+void QueryBuilder::setLimit(int limit)
+{
+    mLimit = limit;
+}
+//---------------------------------------------------------------------------------
+void QueryBuilder::setOffset(int offset)
+{
+    mOffset = offset;
 }
 //---------------------------------------------------------------------------------
 

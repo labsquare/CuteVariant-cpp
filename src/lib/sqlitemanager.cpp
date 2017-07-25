@@ -152,7 +152,7 @@ QSqlQuery SqliteManager::variantQuery() const
 int SqliteManager::variantQueryCount() const
 {
     QString q = queryBuilder()->toSql();
-    q.remove(QRegularExpression("LIMIT \\d+"));
+    q.remove(QRegularExpression("LIMIT \\d+ OFFSET \\d+"));
     QSqlQuery query(QStringLiteral("SELECT COUNT(*) as 'count' FROM (%1)").arg(q));
 
     query.next();

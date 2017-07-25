@@ -12,15 +12,19 @@ void ResultsModel::setQuery(const QString &raw)
     load();
 }
 
-int ResultsModel::variantCount() const
+int ResultsModel::totalVariantCount() const
 {
     return mProject->sqliteManager()->variantQueryCount();
 
 }
 
-void ResultsModel::load()
+void ResultsModel::load(int offset, int limit)
 {
     clear();
+
+    mProject->sqliteManager()->queryBuilder()->setOffset(offset);
+    mProject->sqliteManager()->queryBuilder()->setLimit(limit);
+
     QSqlQuery query = mProject->sqliteManager()->variantQuery();
 
     qDebug()<<query.lastError().text();

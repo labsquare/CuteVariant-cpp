@@ -13,10 +13,15 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
 
     mTopToolBar    = new QToolBar;
     mBottomToolBar = new QToolBar;
-    mPageBox       = new QSpinBox;
+    mPageBox       = new QLineEdit;
+    mPageValidator = new QIntValidator;
     mCountLabel    = new QLabel;
 
+
+    mPageBox->setValidator(mPageValidator);
     mPageBox->setFrame(false);
+    mPageBox->setInputMask("9999999");
+    mPageBox->setMaximumWidth(50);
 
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -38,11 +43,11 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
     mTopToolBar->addAction("Export");
 
 
-    mBottomToolBar->addAction("<<");
-    mBottomToolBar->addAction("<");
+    mBottomToolBar->addAction(QIcon(),"<<", this, SLOT(pageFirst()));
+    mBottomToolBar->addAction(QIcon(),"<", this, SLOT(pageDown()));
     mBottomToolBar->addWidget(mPageBox);
-    mBottomToolBar->addAction(">");
-    mBottomToolBar->addAction(">>");
+    mBottomToolBar->addAction(QIcon(),">", this, SLOT(pageUp()));
+    mBottomToolBar->addAction(QIcon(),">>", this, SLOT(pageLast()));
 
 
 
@@ -50,6 +55,45 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
 
 void ResultsView::load()
 {
-    mModel->load();
-    mCountLabel->setText(QString("%1 variant(s)").arg(mModel->variantCount()));
+    // 100 page constant for now
+    int totalCount = mModel->totalVariantCount();
+
+    mPageValidator->setRange(0, totalCount/100);
+
+    mModel->load(mPageBox->text().toInt() * 100, 100 );
+    mCountLabel->setText(QString("%1 variant(s)").arg(mModel->totalVariantCount()));
+
+}
+
+void ResultsView::pageUp()
+{
+    int page = mPageBox->text().toInt();
+    if (page + 1 <= mPageValidator->top()){
+        setPage(page+1);
+    }
+}
+
+void ResultsView::pageDown()
+{
+    int page = mPageBox->text().toInt();
+    if (page - 1 >= 0){
+        setPage(page-1);
+    }
+}
+
+void ResultsView::pageFirst()
+{
+    setPage(mPageValidator->bottom());
+}
+
+void ResultsView::pageLast()
+{
+    setPage(mPageValidator->top());
+}
+
+void ResultsView::setPage(int page)
+{
+    mPageBox->setText(QString::number(page));
+    load();
+
 }
