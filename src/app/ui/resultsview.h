@@ -22,6 +22,9 @@ protected Q_SLOTS:
     void pageLast();
     void setPage(int page);
 
+protected:
+    void contextMenuEvent(QContextMenuEvent * event);
+
 
 private:
     QTreeView * mView;

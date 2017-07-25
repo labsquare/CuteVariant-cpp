@@ -25,16 +25,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     leftDock->setTitleBarWidget(new QWidget());
     leftDock->setContentsMargins(0,0,0,0);
 
-//    setStyleSheet("QMainWindow::separator {"
-//                  "width: 10px;"
-//                  "height: 2px;"
-//                  "margin: -10px;"
-//                  "padding: 5px;}"
-//              );
+    //    setStyleSheet("QMainWindow::separator {"
+    //                  "width: 10px;"
+    //                  "height: 2px;"
+    //                  "margin: -10px;"
+    //                  "padding: 5px;}"
+    //              );
 
 
     mEditor->setPlainText("SELECT qual FROM variants");
-//    connect(mEditor, &QueryEditor::returnPressed, mResultModel, [this](){mResultModel->setQuery(mEditor->toPlainText());});
+    //    connect(mEditor, &QueryEditor::returnPressed, mResultModel, [this](){mResultModel->setQuery(mEditor->toPlainText());});
 
 
     // setup toolbox
@@ -53,13 +53,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     } );
 
 
+    restoreSettings();
 
+    mProject->setDatabasePath("/home/sacha/TRIO1.family.vcf.db");
+    reload();
 
 }
 
 MainWindow::~MainWindow()
 {
-
+    writeSettings();
 }
 
 void MainWindow::writeSettings()

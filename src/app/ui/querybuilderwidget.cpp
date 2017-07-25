@@ -24,6 +24,12 @@ QueryBuilderWidget::QueryBuilderWidget(core::Project *prj, QWidget *parent)
     columnView->setModel(mColumnModel);
     addWidget(columnView);
 
+
+//    columnView->setStyleSheet("QTreeView::indicator:unchecked {image: url(:/on.png);}"
+//                              "QTreeView::indicator:checked {image: url(:/off.png);}"
+//                              );
+
+
     // add table model
     QTableView * tableView = new QTableView;
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);

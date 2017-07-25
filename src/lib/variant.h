@@ -26,6 +26,9 @@ public:
     bool isNull() const;
 
    QString name() const;
+   QString coordinate() const;
+   QUrl igvUrl() const;
+   QUrl varsomeUrl() const;
 
 
     const QString& chromosom() const;

@@ -77,6 +77,22 @@ QString Variant::name() const
     return QString("%1-%2-%3-%4").arg(chromosom()).arg(position()).arg(ref()).arg(alt());
 }
 
+QString Variant::coordinate() const
+{
+    return QString("%1:%2").arg(mChr).arg(mPos);
+}
+
+QUrl Variant::igvUrl() const
+{
+    return QUrl(QString("http://localhost:60151/locus?%1:%2").arg(chromosom()).arg(position()));
+}
+
+QUrl Variant::varsomeUrl() const
+{
+    return QUrl(QString("https://varsome.com/variant/hg19/%2").arg(name()));
+
+}
+
 void Variant::setFilter(const QString &filter)
 {
     mFilter = filter;

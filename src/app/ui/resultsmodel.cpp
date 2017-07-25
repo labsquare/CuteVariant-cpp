@@ -3,6 +3,8 @@ ResultsModel::ResultsModel(core::Project * prj, QObject *parent)
     :QStandardItemModel(parent)
 {
     mProject = prj;
+
+
 }
 
 void ResultsModel::setQuery(const QString &raw)
@@ -25,6 +27,7 @@ void ResultsModel::load(int offset, int limit)
     mProject->sqliteManager()->queryBuilder()->setOffset(offset);
     mProject->sqliteManager()->queryBuilder()->setLimit(limit);
 
+
     QSqlQuery query = mProject->sqliteManager()->variantQuery();
 
     qDebug()<<query.lastError().text();
@@ -33,7 +36,8 @@ void ResultsModel::load(int offset, int limit)
     setColumnCount(query.record().count());
 
     QStringList header;
-    for (int i=0; i<query.record().count(); ++i)
+    // from 1 to avoid id
+    for (int i=1; i<query.record().count(); ++i)
         header.append(query.record().field(i).name());
 
     setHorizontalHeaderLabels(header);
@@ -41,15 +45,18 @@ void ResultsModel::load(int offset, int limit)
     while (query.next())
     {
         QList<QStandardItem*> row ;
-        for (int i=0; i<query.record().count(); ++i)
+        // from 1 to avoid id
+        for (int i=1; i<query.record().count(); ++i)
         {
             QStandardItem * item = new QStandardItem();
             item->setText(query.record().value(i).toString());
+            item->setData(query.record().value("id"));
             row.append(item);
 
             if (i==0){
 
                 item->setCheckable(true);
+                item->setEditable(false);
 
                 item->setRowCount(10);
 

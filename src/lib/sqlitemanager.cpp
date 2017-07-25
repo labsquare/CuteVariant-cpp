@@ -162,6 +162,34 @@ int SqliteManager::variantQueryCount() const
 
 }
 //-------------------------------------------------------------------------------
+Variant SqliteManager::variant(int variantId) const
+{
+    QSqlQuery query;
+    query.prepare(QStringLiteral("SELECT chr,rs,pos,ref,alt FROM variants WHERE id=:id"));
+    query.bindValue(":id", variantId);
+
+    if (!query.exec())
+    {
+        qDebug()<<Q_FUNC_INFO<<query.lastQuery();
+        qDebug()<<Q_FUNC_INFO<<query.lastError().text();
+    }
+
+    query.next();
+    QString chr = query.record().value("chr").toString();
+    quint64 pos = query.record().value("pos").toInt();
+    QString rs = query.record().value("rs").toString();
+    QString ref = query.record().value("ref").toString();
+    QString alt = query.record().value("alt").toString();
+
+    qDebug()<<variantId<<" "<<query.lastQuery();
+    qDebug()<<chr<<" "<<pos<<" "<<ref<<" "<<alt;
+
+    Variant v =  Variant(chr,pos,ref, alt);
+    v.setRsId(rs);
+
+    return v;
+}
+//-------------------------------------------------------------------------------
 QueryBuilder *const SqliteManager::queryBuilder() const
 {
     return mQueryBuilder;

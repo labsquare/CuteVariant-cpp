@@ -3,5 +3,7 @@
         <file>radio_button.png</file>
         <file>radiobutton_marked.png</file>
         <file alias="fontawesome">fontawesome.ttf</file>
+        <file>off.png</file>
+        <file>on.png</file>
     </qresource>
 </RCC>

@@ -11,6 +11,8 @@ ColumnModel::ColumnModel(core::Project *prj, QObject *parent)
 
 
 
+
+
 }
 
 void ColumnModel::load()
@@ -130,6 +132,9 @@ QStandardItem *ColumnModel::createItem(const QString &name, const QString &descr
     item->setToolTip(description);
     item->setCheckable(true);
     item->setEditable(false);
+
+
+
     item->setData(colname);
 
 

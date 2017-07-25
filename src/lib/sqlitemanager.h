@@ -33,6 +33,7 @@ public:
     QHash<QString, int> tables() const;
     QSqlQuery variantQuery() const;
     int variantQueryCount() const;
+    Variant variant(int variantId) const;
 
     QueryBuilder * const queryBuilder() const;
 

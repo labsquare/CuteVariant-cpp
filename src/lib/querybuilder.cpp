@@ -51,6 +51,7 @@ QString QueryBuilder::toSql() const
 {
     QString out;
 
+
     // Get samples Id
     QHash<QString, int> sampleIds;
     for (Sample s : mSqlite->samples())
@@ -62,13 +63,13 @@ QString QueryBuilder::toSql() const
     if (genotypeSamples.isEmpty())
     {
         if (condition().isEmpty()){
-            out = QString("SELECT %1 FROM %2")
+            out = QString("SELECT id,%1 FROM %2")
                     .arg(columns().join(","))
                     .arg(tableName());
         }
 
         else{
-            out = QString("SELECT %1 FROM %2 WHERE %3")
+            out = QString("SELECT id,%1 FROM %2 WHERE %3")
                     .arg(columns().join(","))
                     .arg(tableName())
                     .arg(condition());
@@ -100,7 +101,7 @@ QString QueryBuilder::toSql() const
         if (!condition().isEmpty())
             joinwheresql.prepend(condition()+" ");
 
-        out = QString("SELECT %1 FROM %2 %3 WHERE %4")
+        out = QString("SELECT id,%1 FROM %2 %3 WHERE %4")
                 .arg(cols.join(","))
                 .arg(tableName())
                 .arg(joinsql)
