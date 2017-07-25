@@ -75,6 +75,9 @@ void MainWindow::importFile()
                                                     QDir::homePath(),
                                                     tr("Images (*.vcf)"));
 
+    if (filename.isEmpty())
+        return;
+
     QString dbPath = filename + ".db";
 
     if (QFile::exists(dbPath))
@@ -132,19 +135,13 @@ void MainWindow::closeEvent(QCloseEvent *)
 
 void MainWindow::openFile()
 {
-    QStringList fileNames = QFileDialog::getOpenFileNames(this,tr("Open VCF file"), QDir::homePath(), tr("VCF Extension (*.vcf);; Any Extension (*)"));
-    if (!fileNames.isEmpty())
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Open DB file"), QDir::homePath(), tr("DB Extension (*.db)"));
+    if (!fileName.isEmpty())
     {
-        for (QString file : fileNames)
-        {
-            qDebug()<<"open only the first one";
-            mCurrentFile = file;
-            mCurrentDBFile = file +".db";
-            QFile::remove(mCurrentDBFile);
-            Project prj(mCurrentDBFile);
-            prj.importFile(mCurrentFile);
-            return;
-        }
+        mProject->setDatabasePath(fileName);
+        reload();
+        return;
+
     }
 
 
