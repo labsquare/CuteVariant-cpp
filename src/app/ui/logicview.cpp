@@ -16,6 +16,13 @@ LogicView::LogicView(QWidget * parent)
 
     setUniformRowHeights(true);
 
+    setWindowTitle("Filter");
+
+    addAction(new QAction("C"));
+    addAction(new QAction("E"));
+    addAction(new QAction("S"));
+
+
 }
 
 void LogicView::contextMenuEvent(QContextMenuEvent *event)

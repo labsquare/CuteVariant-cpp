@@ -16,7 +16,7 @@ public Q_SLOTS:
     void buildQuery();
     void load();
 
-protected:
+protected Q_SLOTS:
     void addWidget(QWidget * w);
     void toolbarClicked(QAction * action);
 
@@ -24,9 +24,9 @@ protected:
 private:
     core::Project * mProject;
     QToolBar * mBar;
+    QPushButton * mMenuButton;
     QStackedWidget * mStack;
     QHash<QAction*, QWidget*> mWidgets;
-    QActionGroup * mActionGroup;
 
     ColumnModel * mColumnModel;
     TableModel * mTableModel;
