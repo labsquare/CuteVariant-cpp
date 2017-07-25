@@ -5,20 +5,21 @@
 #include <QtSql>
 #include "project.h"
 
-namespace core {
-class ResultModel : public QStandardItemModel
+class ResultsModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    ResultModel(Project * prj, QObject * parent = nullptr);
+    ResultsModel(core::Project * prj, QObject * parent = nullptr);
     void setQuery(const QString& raw);
+
+    int variantCount() const;
 
 public Q_SLOTS:
     void load();
 
 private:
 
-    Project * mProject;
+    core::Project * mProject;
 };
-}
+
 #endif // RESULTMODEL_H

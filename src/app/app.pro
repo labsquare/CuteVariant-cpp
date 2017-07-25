@@ -17,7 +17,8 @@ SOURCES += \
     ui/importdialog.cpp \
     ui/qfonticon.cpp \
     ui/tablemodel.cpp \
-    ui/resultsview.cpp
+    ui/resultsview.cpp \
+    ui/resultsmodel.cpp
 
 
 
@@ -41,7 +42,8 @@ HEADERS += \
     ui/importdialog.h \
     ui/qfonticon.h \
     ui/tablemodel.h \
-    ui/resultsview.h
+    ui/resultsview.h \
+    ui/resultsmodel.h
 
 RESOURCES += \
     icons/icons.qrc

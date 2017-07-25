@@ -15,7 +15,6 @@ SOURCES += \
     vcfvariantreader.cpp \
     project.cpp \
     sqlitemanager.cpp \
-    resultmodel.cpp \
     querybuilder.cpp \
     fieldsmodel.cpp \
     samplemodel.cpp
@@ -31,7 +30,6 @@ HEADERS += \
     vcfvariantreader.h \
     project.h \
     sqlitemanager.h \
-    resultmodel.h \
     querybuilder.h \
     fieldsmodel.h \
     samplemodel.h

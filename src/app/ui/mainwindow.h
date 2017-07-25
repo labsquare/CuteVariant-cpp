@@ -3,7 +3,7 @@
 
 #include <QtWidgets>
 #include <QtCore>
-#include "resultmodel.h"
+#include "resultsview.h"
 #include "queryeditor.h"
 #include "querybuilderwidget.h"
 #include "importdialog.h"
@@ -40,7 +40,7 @@ private:
     QTreeView * mView;
     QueryEditor * mEditor;
     core::Project * mProject;
-    core::ResultModel * mResultModel;
+    ResultsView * mResultsView;
     QueryBuilderWidget * mQueryBuilderWidget;
 
 

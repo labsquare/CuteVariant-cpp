@@ -1,18 +1,24 @@
-#include "resultmodel.h"
-namespace core {
-ResultModel::ResultModel(Project * prj, QObject *parent)
+#include "resultsmodel.h"
+ResultsModel::ResultsModel(core::Project * prj, QObject *parent)
+    :QStandardItemModel(parent)
 {
     mProject = prj;
 }
 
-void ResultModel::setQuery(const QString &raw)
+void ResultsModel::setQuery(const QString &raw)
 {
     clear();
     mProject->sqliteManager()->queryBuilder()->setFromRaw(raw);
     load();
 }
 
-void ResultModel::load()
+int ResultsModel::variantCount() const
+{
+    return mProject->sqliteManager()->variantQueryCount();
+
+}
+
+void ResultsModel::load()
 {
     clear();
     QSqlQuery query = mProject->sqliteManager()->variantQuery();
@@ -50,4 +56,4 @@ void ResultModel::load()
         appendRow(row);
     }
 }
-}
+

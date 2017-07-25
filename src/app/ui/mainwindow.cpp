@@ -6,29 +6,35 @@ using namespace core;
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 
-    mView               = new QTreeView;
     mEditor             = new QueryEditor;
     mProject            = new core::Project();
     mQueryBuilderWidget = new QueryBuilderWidget(mProject);
-    mResultModel        = new core::ResultModel(mProject);
+    mResultsView        = new ResultsView(mProject);
 
     //    mProject->importFile("/home/sacha/TRIO1.family.vcf");
 
     // setup widgets
     QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
-    mainSplitter->addWidget(mView);
-    mainSplitter->addWidget(mEditor);
-    mView->setModel(mResultModel);
+    mainSplitter->addWidget(mResultsView);
+    //mainSplitter->addWidget(mEditor);
     setCentralWidget(mainSplitter);
 
     QDockWidget * leftDock = new QDockWidget;
     leftDock->setWidget(mQueryBuilderWidget);
     addDockWidget(Qt::LeftDockWidgetArea, leftDock);
     leftDock->setTitleBarWidget(new QWidget());
+    leftDock->setContentsMargins(0,0,0,0);
+
+//    setStyleSheet("QMainWindow::separator {"
+//                  "width: 10px;"
+//                  "height: 2px;"
+//                  "margin: -10px;"
+//                  "padding: 5px;}"
+//              );
 
 
     mEditor->setPlainText("SELECT qual FROM variants");
-    connect(mEditor, &QueryEditor::returnPressed, mResultModel, [this](){mResultModel->setQuery(mEditor->toPlainText());});
+//    connect(mEditor, &QueryEditor::returnPressed, mResultModel, [this](){mResultModel->setQuery(mEditor->toPlainText());});
 
 
     // setup toolbox
@@ -42,8 +48,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     bar->addAction(tr("Play"), mQueryBuilderWidget, [this]()
     {
         mQueryBuilderWidget->buildQuery();
-        mResultModel->load();
-        statusBar()->showMessage(QString::number(mProject->sqliteManager()->variantQueryCount()));
+        mResultsView->load();
 
     } );
 
@@ -155,5 +160,6 @@ void MainWindow::saveFile()
 void MainWindow::reload()
 {
     mQueryBuilderWidget->load();
+    mResultsView->load();
 
 }
