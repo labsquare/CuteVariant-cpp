@@ -18,7 +18,8 @@ SOURCES += \
     ui/tablemodel.cpp \
     ui/resultsview.cpp \
     ui/resultsmodel.cpp \
-    ui/qfonticon.cpp
+    ui/qfonticon.cpp \
+    ui/locationlineedit.cpp
 
 
 
@@ -44,7 +45,8 @@ HEADERS += \
     ui/tablemodel.h \
     ui/resultsview.h \
     ui/resultsmodel.h \
-    ui/qfonticon.h
+    ui/qfonticon.h \
+    ui/locationlineedit.h
 
 RESOURCES += \
     icons/icons.qrc

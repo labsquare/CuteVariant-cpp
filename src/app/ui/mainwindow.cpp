@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mProject            = new core::Project();
     mQueryBuilderWidget = new QueryBuilderWidget(mProject);
     mResultsView        = new ResultsView(mProject);
+    mLocLineEdit        = new LocationLineEdit(mProject);
 
     //    mProject->importFile("/home/sacha/TRIO1.family.vcf");
 
@@ -50,8 +51,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
         mQueryBuilderWidget->buildQuery();
         mResultsView->load();
 
-    } );
+    });
 
+
+    // add spacer
+    QWidget* spacer = new QWidget();
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    bar->addWidget(spacer);
+    bar->addWidget(mLocLineEdit);
 
     restoreSettings();
 

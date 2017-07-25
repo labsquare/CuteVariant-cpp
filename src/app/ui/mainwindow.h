@@ -7,6 +7,7 @@
 #include "queryeditor.h"
 #include "querybuilderwidget.h"
 #include "importdialog.h"
+#include "locationlineedit.h"
 
 class MainWindow : public QMainWindow
 {
@@ -42,6 +43,7 @@ private:
     core::Project * mProject;
     ResultsView * mResultsView;
     QueryBuilderWidget * mQueryBuilderWidget;
+    LocationLineEdit * mLocLineEdit;
 
 
 
