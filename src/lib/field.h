@@ -46,6 +46,8 @@ public:
     void setType(const QString& name);
     void setCategory(const QString& category);
 
+    bool operator ==(const Field& other);
+
 private:
     QString mColname;
     QString mName;

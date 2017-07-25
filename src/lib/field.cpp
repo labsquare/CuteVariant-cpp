@@ -93,7 +93,7 @@ QString Field::simplified(const QString &name)
 void Field::setColname(const QString &colname)
 {
     // save only the first world for sql syntax..
-    QRegularExpression exp("(\\w+)");
+    QRegularExpression exp("([^\\s]+)");
     mColname = exp.match(simplified(colname)).captured(1).toUpper();
 }
 
@@ -133,6 +133,11 @@ void Field::setType(const QString &name)
 void Field::setCategory(const QString &category)
 {
     mCategory = category;
+}
+
+bool Field::operator ==(const Field &other)
+{
+    return colname() == other.colname();
 }
 
 

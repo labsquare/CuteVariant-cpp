@@ -405,7 +405,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
     QStringList fieldColumns;
 
     for (Field f : fields){
-        fieldColumns.append(QStringLiteral("%1 %2").arg(f.colname()).arg(f.sqliteType()));
+        fieldColumns.append(QStringLiteral("`%1` %2").arg(f.colname()).arg(f.sqliteType()));
     }
 
     // Second : Create the variant table
