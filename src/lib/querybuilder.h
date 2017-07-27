@@ -31,6 +31,8 @@ public:
     int offset() const;
     int limit() const;
     const QString& orderBy() const;
+    const QStringList& groupBy() const;
+    const QStringList& selectionIds() const;
 
 
 
@@ -42,6 +44,9 @@ public:
     void setFromRaw(const QString& raw);
     void setLimit(int limit);
     void setOffset(int offset);
+    void setGroupBy(const QStringList& group);
+    void setSelectionIds(const QStringList& selectionIds);
+
 
     QueryType queryMatch(const QString& raw);
 
@@ -55,6 +60,7 @@ public:
 protected:
 
 
+
     QString normGenotype(const QString& raw);
     QString normAnnotation(const QString& raw);
     QStringList detectGenotypeField() const ;
@@ -62,6 +68,8 @@ protected:
 
 
 private:
+    QStringList mGroupBy;
+    QStringList mSelectionIds;
     QString mTableName;
     QStringList mColumns;
     QString mCondition;

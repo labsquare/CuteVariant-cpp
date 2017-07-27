@@ -19,6 +19,9 @@ public:
     bool canFetchMore(const QModelIndex &parent) const override;
     void fetchMore(const QModelIndex& parent) override;
 
+    int totalVariantCount() const;
+
+
     void load();
 
 private:

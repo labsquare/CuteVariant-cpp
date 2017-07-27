@@ -5,7 +5,7 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
     mPrj = prj;
 
     mView = new QTreeView(this);
-    mModel = new ResultsModel(prj);
+    mModel = new ResultTreeModel(prj);
     mView->setModel(mModel);
 
 
@@ -68,8 +68,10 @@ void ResultsView::load()
     if (mPageBox->text().isEmpty())
         mPageBox->setText("0");
 
-    mModel->load(mPageBox->text().toInt() * 100, 100 );
-    mCountLabel->setText(QString("%1 variant(s)").arg(mModel->totalVariantCount()));
+//   // mModel->load(mPageBox->text().toInt() * 100, 100 );
+   mCountLabel->setText(QString("%1 variant(s)").arg(mModel->totalVariantCount()));
+
+    mModel->load();
 
 }
 
@@ -110,37 +112,37 @@ void ResultsView::setPage(int page)
 void ResultsView::contextMenuEvent(QContextMenuEvent *event)
 {
 
-    // strange.. I need to compute the map myself...
-    QPoint p = mView->mapFromParent(event->pos()) - QPoint(0,mView->header()->height());
-    QModelIndex index = mView->indexAt(p);
+//    // strange.. I need to compute the map myself...
+//    QPoint p = mView->mapFromParent(event->pos()) - QPoint(0,mView->header()->height());
+//    QModelIndex index = mView->indexAt(p);
 
-    if (index.isValid())
-    {
-        int variantID = mModel->item(index.row())->data().toInt();
-        qDebug()<<variantID;
-        core::Variant var = mPrj->sqliteManager()->variant(variantID);
+//    if (index.isValid())
+//    {
+//        int variantID = mModel->item(index.row())->data().toInt();
+//        qDebug()<<variantID;
+//        core::Variant var = mPrj->sqliteManager()->variant(variantID);
 
-        QMenu menu(this);
-        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
-           qApp->clipboard()->setText(var.coordinate());
-        });
+//        QMenu menu(this);
+//        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
+//           qApp->clipboard()->setText(var.coordinate());
+//        });
 
-        menu.addAction(QIcon::fromTheme("edit-copy"), var.name(),[&var](){
-            qApp->clipboard()->setText(var.name());
-        });
+//        menu.addAction(QIcon::fromTheme("edit-copy"), var.name(),[&var](){
+//            qApp->clipboard()->setText(var.name());
+//        });
 
-        menu.addAction(QIcon::fromTheme("edit-link"), "IGV",[&var](){
-            QDesktopServices::openUrl(var.igvUrl());
-        });
+//        menu.addAction(QIcon::fromTheme("edit-link"), "IGV",[&var](){
+//            QDesktopServices::openUrl(var.igvUrl());
+//        });
 
-        menu.addAction(QIcon::fromTheme("edit-link"), "Varsome",[&var](){
-            QDesktopServices::openUrl(var.varsomeUrl());
-        });
+//        menu.addAction(QIcon::fromTheme("edit-link"), "Varsome",[&var](){
+//            QDesktopServices::openUrl(var.varsomeUrl());
+//        });
 
-        menu.exec(event->globalPos());
+//        menu.exec(event->globalPos());
 
 
 
-    }
+//    }
 
 }

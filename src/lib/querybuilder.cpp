@@ -46,6 +46,16 @@ const QString &QueryBuilder::orderBy() const
     return mOrderBy;
 }
 //---------------------------------------------------------------------------------
+const QStringList &QueryBuilder::groupBy() const
+{
+    return mGroupBy;
+}
+//---------------------------------------------------------------------------------
+const QStringList &QueryBuilder::selectionIds() const
+{
+    return mSelectionIds;
+}
+//---------------------------------------------------------------------------------
 
 QString QueryBuilder::toSql() const
 {
@@ -60,19 +70,39 @@ QString QueryBuilder::toSql() const
     // Get genotypes Sample from keywords genotype[SAMPLE].GT
     QStringList genotypeSamples = detectGenotypeField();
 
+    // store genotype to modify later
+    QStringList cols = columns();
+
+    // store condition to modify later
+    QString conds = condition();
+
+    // store group By
+    QStringList gpBy = groupBy();
+
+
+
+    if (!selectionIds().isEmpty()){
+        conds += QString(" variants.id IN (%1) ").arg(selectionIds().join(","));
+        gpBy.clear();
+    }
+    else if (!gpBy.isEmpty()) {
+        cols += " COUNT(variants.id) as 'count', group_concat(variants.id) as 'childs' ";
+
+    }
+
     if (genotypeSamples.isEmpty())
     {
-        if (condition().isEmpty()){
+        if (conds.isEmpty()){
             out = QString("SELECT variants.id,%1 FROM %2")
-                    .arg(columns().join(","))
+                    .arg(cols.join(","))
                     .arg(tableName());
         }
 
         else{
             out = QString("SELECT variants.id,%1 FROM %2 WHERE %3")
-                    .arg(columns().join(","))
+                    .arg(cols.join(","))
                     .arg(tableName())
-                    .arg(condition());
+                    .arg(conds);
         }
     }
     else
@@ -82,7 +112,6 @@ QString QueryBuilder::toSql() const
 
         // use good column name
         QRegularExpression exp("gt_(\\w+)\\.(\\w+)");
-        QStringList cols = columns();
         for (QString &c : cols)
         {
             qDebug()<<c;
@@ -98,8 +127,8 @@ QString QueryBuilder::toSql() const
             joinwheresql.append(QStringLiteral(" gt_%1.sample_id = %2 ").arg(sample).arg(sampleIds[sample]));
         }
 
-        if (!condition().isEmpty())
-            joinwheresql.prepend(condition()+" ");
+        if (!conds.isEmpty())
+            joinwheresql.prepend(conds+" ");
 
         out = QString("SELECT variants.id,%1 FROM %2 %3 WHERE %4")
                 .arg(cols.join(","))
@@ -108,10 +137,15 @@ QString QueryBuilder::toSql() const
                 .arg(joinwheresql.join(" AND "));
     }
 
+    if (!gpBy.isEmpty())
+        out += QStringLiteral(" GROUP BY %1").arg(gpBy.join(","));
+
+
     out += " LIMIT "+QString::number(limit()) + " OFFSET "+QString::number(offset());
     return out ;
 
 }
+
 //---------------------------------------------------------------------------------
 bool QueryBuilder::hasGenotypeField() const
 {
@@ -124,7 +158,9 @@ void QueryBuilder::clear()
     mColumns.clear();
     mRegion.clear();
     mCondition.clear();
+    mGroupBy.clear();
 }
+
 //---------------------------------------------------------------------------------
 
 QString QueryBuilder::normGenotype(const QString &raw)
@@ -299,6 +335,16 @@ void QueryBuilder::setLimit(int limit)
 void QueryBuilder::setOffset(int offset)
 {
     mOffset = offset;
+}
+//---------------------------------------------------------------------------------
+void QueryBuilder::setGroupBy(const QStringList &group)
+{
+    mGroupBy = group;
+}
+//---------------------------------------------------------------------------------
+void QueryBuilder::setSelectionIds(const QStringList &ids)
+{
+    mSelectionIds = ids;
 }
 //---------------------------------------------------------------------------------
 

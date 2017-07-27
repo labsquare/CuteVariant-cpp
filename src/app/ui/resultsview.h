@@ -2,7 +2,7 @@
 #define RESULTSVIEW_H
 
 #include <QtWidgets>
-#include "resultsmodel.h"
+#include "resulttreemodel.h"
 #include "project.h"
 #include "qfonticon.h"
 
@@ -28,7 +28,7 @@ protected:
 
 private:
     QTreeView * mView;
-    ResultsModel * mModel;
+    ResultTreeModel * mModel;
     core::Project * mPrj;
     QToolBar * mTopToolBar;
     QToolBar * mBottomToolBar;

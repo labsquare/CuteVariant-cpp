@@ -25,12 +25,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     secondSplitter->setStretchFactor(0, 20);
     secondSplitter->setStretchFactor(1, 80);
 
-
-    QTreeView * view = new QTreeView;
-    rModel = new ResultTreeModel(mProject);
-    view->setModel(rModel);
-
-    setCentralWidget(view);
+    setCentralWidget(secondSplitter);
 
 
 
@@ -152,6 +147,5 @@ void MainWindow::reset()
 
     mQueryBuilderWidget->load();
     mResultsView->load();
-    rModel->load();
 
 }

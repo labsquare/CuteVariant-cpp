@@ -117,16 +117,19 @@ void ResultTreeModel::fetchMore(const QModelIndex &parent)
     int parentRow   = parent.row();
     QStringList ids = mRecords[parent.row()].value("childs").toString().split(",");
 
+
     qDebug()<<"childs"<<ids;
 
     beginInsertRows(parent,0, count-1);
     mChilds[parentRow].clear();
 
-    QSqlQuery query(QString("SELECT id, chr, pos, ref, alt, ANN_FEATURE_ID FROM variants WHERE id IN (%1)").arg(ids.join(",")));
+    mProject->sqliteManager()->queryBuilder()->setSelectionIds(ids);
+    QString q = mProject->sqliteManager()->queryBuilder()->toSql();
+
+    QSqlQuery query(q);
     while (query.next())
     {
         mChilds[parentRow].append(query.record());
-        qDebug()<<"add "<<query.record();
     }
 
 
@@ -140,17 +143,33 @@ void ResultTreeModel::fetchMore(const QModelIndex &parent)
 
 }
 //---------------------------------------------------------------------------
+int ResultTreeModel::totalVariantCount() const
+{
+    return mProject->sqliteManager()->variantQueryCount();
+
+}
+//---------------------------------------------------------------------------
 void ResultTreeModel::load()
 {
     beginResetModel();
     mRecords.clear();
     QSqlQuery query;
-    query.exec("SELECT id, chr, pos, ref, alt, ANN_FEATURE_ID, COUNT(id) as 'count', group_concat(id) as 'childs' FROM variants GROUP BY chr,pos,ref, alt LIMIT 100");
+
+    mProject->sqliteManager()->queryBuilder()->setGroupBy({"ANN_GENE_ID"});
+    mProject->sqliteManager()->queryBuilder()->setSelectionIds({});
+
+    QString q = mProject->sqliteManager()->queryBuilder()->toSql();
+
+    if (!query.exec(q))
+    {
+        qDebug()<<query.lastError().text();
+        qDebug()<<query.lastQuery();
+    }
+    //    query.exec("SELECT id, chr, pos, ref, alt, ANN_FEATURE_ID, COUNT(id) as 'count', group_concat(id) as 'childs' FROM variants GROUP BY chr,pos,ref, alt LIMIT 100");
 
 
     while (query.next())
     {
-        qDebug()<<"record" <<query.record().value("chr")<<" "<<query.record().value("count").toInt();
         mRecords.append(query.record());
 
     }
