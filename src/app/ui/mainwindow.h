@@ -47,6 +47,7 @@ private:
     QueryBuilderWidget * mQueryBuilderWidget;
     LocationLineEdit * mLocLineEdit;
 
+    ResultTreeModel * rModel;
 
 
 };
