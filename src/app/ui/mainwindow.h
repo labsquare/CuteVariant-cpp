@@ -8,6 +8,7 @@
 #include "querybuilderwidget.h"
 #include "importdialog.h"
 #include "locationlineedit.h"
+#include "resulttreemodel.h"
 
 class MainWindow : public QMainWindow
 {

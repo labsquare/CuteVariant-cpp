@@ -14,6 +14,8 @@ public:
 
     int totalVariantCount() const;
 
+
+
 public Q_SLOTS:
     void load(int offset = 0, int limit = 100);
 
