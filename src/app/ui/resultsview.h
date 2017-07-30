@@ -16,16 +16,18 @@ public:
 public Q_SLOTS:
     void setQuery(const core::VariantQuery& query);
 
+
 protected Q_SLOTS:
     void pageUp();
     void pageDown();
     void pageFirst();
     void pageLast();
     void setPage(int page);
+    void save();
+    void exportCsv();
 
 protected:
     void contextMenuEvent(QContextMenuEvent * event);
-    void setupToolbar();
 
 
 
@@ -38,6 +40,7 @@ private:
     QLineEdit * mPageBox;
     QLabel * mCountLabel;
     QIntValidator * mPageValidator;
+
 };
 
 #endif // RESULTSVIEW_H

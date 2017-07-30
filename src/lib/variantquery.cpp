@@ -82,7 +82,7 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
 {
     QString query;
 
-    QString select     = "variants.id, "+columns().join(",");
+    QString select     = table()+".id, "+columns().join(",");
     QString tableName  = table().isEmpty() ? "variants" : table();
     QString where      = condition();
 
@@ -101,7 +101,7 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
     for (QString sample : detectSamplesFields())
     {
 
-        joinSamples.append(QString(" LEFT JOIN genotypes as gt_%1 ON variants.id = gt_%1.variant_id ").arg(sample));
+        joinSamples.append(QString(" LEFT JOIN genotypes as gt_%1 ON %2.id = gt_%1.variant_id ").arg(sample).arg(tableName));
         whereSamples.append(QString(" gt_%1.sample_id = %2 ").arg(sample).arg(samplesIds[sample]));
     }
 
@@ -116,7 +116,7 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
 
     // add extra fields for group by
     if (!groupBy().isEmpty())
-        select += " ,COUNT(variants.id) as 'count', group_concat(variants.id) as 'childs' ";
+        select += QString(" ,COUNT(`%1`.id) as 'count', group_concat(`%1`.id) as 'childs' ").arg(tableName);
 
 
     // SELECT columns FROM table

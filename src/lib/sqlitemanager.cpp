@@ -5,6 +5,7 @@ namespace core{
 SqliteManager::SqliteManager(QObject * parent)
     :QObject(parent)
 {
+
 }
 //-------------------------------------------------------------------------------
 SqliteManager::~SqliteManager()
@@ -125,20 +126,25 @@ QList<Field> SqliteManager::genotype(const Sample &sample) const
 
 
 }
-//----------------------------------------------------------
-QHash<QString, int> SqliteManager::tables() const
-{
-    QHash<QString, int> tablesCount;
 
-    QSqlQuery query("SELECT * FROM sqlite_sequence");
+//-------------------------------------------------------------------------------
+QList<VariantSelection> SqliteManager::variantSelections()
+{
+
+    QList<VariantSelection> list;
+    list.append(VariantSelection("variants","all variants", -1));
+    QSqlQuery query("SELECT * FROM sqlite_master WHERE type = 'view'");
     while (query.next())
     {
-        QString name = query.record().value("name").toString();
-        if (name == "variants" || name.startsWith("variants_"))
-            tablesCount[name] = query.record().value("seq").toInt();
+        VariantSelection s = VariantSelection();
+        s.setName(query.record().value("tbl_name").toString());
+        s.setSql(query.record().value("sql").toString());
+        list.append(s);
+
     }
 
-    return tablesCount;
+    return list;
+
 }
 //-------------------------------------------------------------------------------
 QSqlQuery SqliteManager::variants(const VariantQuery &query) const
@@ -170,20 +176,24 @@ int SqliteManager::variantsCount(const VariantQuery &query) const
 }
 //-------------------------------------------------------------------------------
 
-void SqliteManager::variantsTo(const VariantQuery &query, const QString &tablename)
+bool SqliteManager::variantsTo(const VariantQuery &query, const QString &tablename, const QString &description)
 {
     VariantQuery q = query;
     q.setLimit(0);
+    q.setGroupBy({});
+    q.setColumns({"*"});
 
     QSqlQuery viewQuery;
     viewQuery.exec(QString("DROP VIEW IF EXISTS %1").arg(tablename));
 
-    if (!viewQuery.exec(QString("CREATE VIEW %1 AS (%2)").arg(tablename).arg(q.toSql(this))))
+    if (!viewQuery.exec(QString("CREATE VIEW %1 AS %2").arg(tablename).arg(q.toSql(this))))
     {
         qDebug()<<viewQuery.lastQuery();
         qDebug()<<viewQuery.lastError().text();
+        return false;
     }
 
+    return true;
 }
 
 //-------------------------------------------------------------------------------

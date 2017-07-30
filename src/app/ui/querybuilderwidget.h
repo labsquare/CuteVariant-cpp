@@ -4,7 +4,7 @@
 #include "project.h"
 #include "logicview.h"
 #include "columnview.h"
-#include "tablemodel.h"
+#include "selectionview.h"
 #include "variantquery.h"
 
 class QueryBuilderWidget : public QWidget
@@ -34,6 +34,8 @@ private:
 
     ColumnView * mColumnView;
     LogicView * mLogicView;
+    SelectionView * mSelectionView;
+
 
 
 };

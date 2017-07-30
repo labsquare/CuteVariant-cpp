@@ -136,7 +136,7 @@ void ResultTreeModel::fetchMore(const QModelIndex &parent)
     mChilds[parentRow].clear();
 
     core::VariantQuery temp = mCurrentQuery;
-    temp.setCondition(QString("variants.id IN (%1)").arg(ids.join(",")));
+    temp.setCondition(QString("%2.id IN (%1)").arg(ids.join(",")).arg(mCurrentQuery.table()));
     temp.setGroupBy({});
     temp.setNoLimit();
 
@@ -188,6 +188,11 @@ QSqlRecord ResultTreeModel::record(const QModelIndex &index)
 
     return QSqlRecord();
 
+}
+//---------------------------------------------------------------------------
+const core::VariantQuery &ResultTreeModel::currentQuery() const
+{
+    return mCurrentQuery;
 }
 
 //---------------------------------------------------------------------------

@@ -15,12 +15,12 @@ SOURCES += \
     ui/querybuilderwidget.cpp \
     ui/columnmodel.cpp \
     ui/importdialog.cpp \
-    ui/tablemodel.cpp \
     ui/resultsview.cpp \
     ui/qfonticon.cpp \
     ui/locationlineedit.cpp \
     ui/columnview.cpp \
-    ui/resulttreemodel.cpp
+    ui/resulttreemodel.cpp \
+    ui/selectionview.cpp
 
 
 
@@ -42,12 +42,12 @@ HEADERS += \
     ui/querybuilderwidget.h \
     ui/columnmodel.h \
     ui/importdialog.h \
-    ui/tablemodel.h \
     ui/resultsview.h \
     ui/qfonticon.h \
     ui/locationlineedit.h \
     ui/columnview.h \
-    ui/resulttreemodel.h
+    ui/resulttreemodel.h \
+    ui/selectionview.h
 
 RESOURCES += \
     icons/icons.qrc

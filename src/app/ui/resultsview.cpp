@@ -43,13 +43,19 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
     setLayout(vLayout);
 
 
+    mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    mTopToolBar->addAction(QIcon::fromTheme("document-save"), "Save table", this, SLOT(save()));
+    mTopToolBar->addAction(QIcon::fromTheme("document-export"),"Export table", this, SLOT(exportCsv()));
+
+
+
 
     mBottomToolBar->setIconSize(QSize(16,16));
-    mBottomToolBar->addAction(QIcon::fromTheme("arrow-left-double"),"<<", this, SLOT(pageFirst()));
-    mBottomToolBar->addAction(QIcon::fromTheme("arrow-left"),"<", this, SLOT(pageDown()));
+    mBottomToolBar->addAction(QIcon::fromTheme("go-first"),"<<", this, SLOT(pageFirst()));
+    mBottomToolBar->addAction(QIcon::fromTheme("go-previous"),"<", this, SLOT(pageDown()));
     mBottomToolBar->addWidget(mPageBox);
-    mBottomToolBar->addAction(QIcon::fromTheme("arrow-right"),">", this, SLOT(pageUp()));
-    mBottomToolBar->addAction(QIcon::fromTheme("arrow-right-double"),">>", this, SLOT(pageLast()));
+    mBottomToolBar->addAction(QIcon::fromTheme("go-next"),">", this, SLOT(pageUp()));
+    mBottomToolBar->addAction(QIcon::fromTheme("go-last"),">>", this, SLOT(pageLast()));
 
 
 
@@ -68,7 +74,6 @@ void ResultsView::setQuery(const core::VariantQuery &query)
     mCountLabel->setText(QString("%1 r(s)").arg(totalCount));
 
     setFocus();
-    setupToolbar();
 
     mModel->setQuery(temp);
     setPage(0);
@@ -110,6 +115,39 @@ void ResultsView::setPage(int page)
 
 }
 
+void ResultsView::save()
+{
+    QDialog dialog(this);
+    QLineEdit * nameEdit = new QLineEdit(&dialog);
+    QTextEdit * descEdit = new QTextEdit(&dialog);
+    QDialogButtonBox * buttons = new QDialogButtonBox(QDialogButtonBox::Save|QDialogButtonBox::Cancel, &dialog);
+    QFormLayout * fLayout = new QFormLayout;
+
+    fLayout->addRow("Table name", nameEdit);
+    fLayout->addRow("Description", descEdit);
+    fLayout->addWidget(buttons);
+    connect(buttons, &QDialogButtonBox::accepted,[&dialog](){dialog.accept();});
+    connect(buttons, &QDialogButtonBox::rejected,[&dialog](){dialog.reject();});
+    dialog.setLayout(fLayout);
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+
+        if (!mPrj->sqliteManager()->variantsTo(mModel->currentQuery(), nameEdit->text()))
+            QMessageBox::warning(this,"error", "cannot create table");
+
+
+    }
+
+
+
+}
+
+void ResultsView::exportCsv()
+{
+
+}
+
 void ResultsView::contextMenuEvent(QContextMenuEvent *event)
 {
 
@@ -147,15 +185,4 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
     }
 }
 
-void ResultsView::setupToolbar()
-{
-    mTopToolBar->clear();
-    QComboBox * orderMenu = new QComboBox();
-    for (int i=0 ; i<mModel->columnCount(); ++i)
-    {
-        orderMenu->addItem(mModel->headerData(i,Qt::Horizontal, Qt::DisplayRole).toString());
-    }
 
-    mTopToolBar->addWidget(orderMenu);
-
-}

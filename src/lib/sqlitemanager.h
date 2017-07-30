@@ -7,6 +7,7 @@
 #include "abstractvariantreader.h"
 #include "vcfvariantreader.h"
 #include "variantquery.h"
+#include "selection.h"
 
 namespace core {
 
@@ -30,11 +31,12 @@ public:
     QList<Field> fields() const;
     QList<Field> genotypeFields() const;
     QList<Field> genotype(const Sample& sample) const;
-    QHash<QString, int> tables() const;
+    QList<VariantSelection> variantSelections();
+
 
     QSqlQuery variants(const VariantQuery & query) const;
     int variantsCount(const VariantQuery& query) const;
-    void variantsTo(const VariantQuery& query, const QString& tablename);
+    bool variantsTo(const VariantQuery& query, const QString& tablename, const QString& description = QString());
 
 
     Variant variant(int variantId) const;

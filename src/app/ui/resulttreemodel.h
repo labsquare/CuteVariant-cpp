@@ -27,6 +27,8 @@ public:
 
     QSqlRecord record(const QModelIndex& index);
 
+    const core::VariantQuery& currentQuery() const;
+
 
 public Q_SLOTS:
     void load();
