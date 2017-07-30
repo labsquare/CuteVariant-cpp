@@ -166,10 +166,18 @@ Qt::SortOrder VariantQuery::sortOder() const
     return mSortOder;
 }
 
-void VariantQuery::setSortOder(Qt::SortOrder sortOder)
+void VariantQuery::setSortOrder(Qt::SortOrder sortOder)
 {
     mSortOder = sortOder;
 }
+
+void VariantQuery::setNoLimit()
+{
+    setLimit(0);
+    setOffset(0);
+}
+
+
 
 QStringList VariantQuery::orderBy() const
 {

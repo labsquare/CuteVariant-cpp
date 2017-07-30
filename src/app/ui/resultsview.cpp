@@ -7,6 +7,7 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
     mView = new QTreeView(this);
     mModel = new ResultTreeModel(prj);
     mView->setModel(mModel);
+    mView->setSortingEnabled(true);
 
 
     QVBoxLayout * vLayout = new QVBoxLayout;
@@ -43,8 +44,6 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
 
 
 
-
-
     mBottomToolBar->setIconSize(QSize(16,16));
     mBottomToolBar->addAction(QIcon::fromTheme("arrow-left-double"),"<<", this, SLOT(pageFirst()));
     mBottomToolBar->addAction(QIcon::fromTheme("arrow-left"),"<", this, SLOT(pageDown()));
@@ -59,19 +58,21 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
 void ResultsView::setQuery(const core::VariantQuery &query)
 {
 
+    core::VariantQuery temp = query;
+    temp.setGroupBy({"chr","pos","ref","alt"});
 
-    mModel->setQuery(query);
-
-    //    // 100 page constant for now
-    int totalCount = mModel->totalRowCount();
+    // 100 page constant for now
+    int totalCount = mPrj->sqliteManager()->variantsCount(temp);
     mPageValidator->setRange(0, totalCount/100);
 
-    if (mPageBox->text().isEmpty())
-        mPageBox->setText("0");
-
-    mCountLabel->setText(QString("%1 r(s)").arg(mModel->totalRowCount()));
+    mCountLabel->setText(QString("%1 r(s)").arg(totalCount));
 
     setFocus();
+    setupToolbar();
+
+    mModel->setQuery(temp);
+    setPage(0);
+
 
 }
 
@@ -120,29 +121,41 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
     {
 
         qDebug()<<mModel->record(index).value("id");
-//        int variantID = mModel->item(index.row())->data().toInt();
-//        qDebug()<<variantID;
-//        core::Variant var = mPrj->sqliteManager()->variant(variantID);
+        //        int variantID = mModel->item(index.row())->data().toInt();
+        //        qDebug()<<variantID;
+        //        core::Variant var = mPrj->sqliteManager()->variant(variantID);
 
-//        QMenu menu(this);
-//        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
-//            qApp->clipboard()->setText(var.coordinate());
-//        });
+        //        QMenu menu(this);
+        //        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
+        //            qApp->clipboard()->setText(var.coordinate());
+        //        });
 
-//        menu.addAction(QIcon::fromTheme("edit-copy"), var.name(),[&var](){
-//            qApp->clipboard()->setText(var.name());
-//        });
+        //        menu.addAction(QIcon::fromTheme("edit-copy"), var.name(),[&var](){
+        //            qApp->clipboard()->setText(var.name());
+        //        });
 
-//        menu.addAction(QIcon::fromTheme("edit-link"), "IGV",[&var](){
-//            QDesktopServices::openUrl(var.igvUrl());
-//        });
+        //        menu.addAction(QIcon::fromTheme("edit-link"), "IGV",[&var](){
+        //            QDesktopServices::openUrl(var.igvUrl());
+        //        });
 
-//        menu.addAction(QIcon::fromTheme("edit-link"), "Varsome",[&var](){
-//            QDesktopServices::openUrl(var.varsomeUrl());
-//        });
+        //        menu.addAction(QIcon::fromTheme("edit-link"), "Varsome",[&var](){
+        //            QDesktopServices::openUrl(var.varsomeUrl());
+        //        });
 
-//        menu.exec(event->globalPos());
+        //        menu.exec(event->globalPos());
 
     }
+}
+
+void ResultsView::setupToolbar()
+{
+    mTopToolBar->clear();
+    QComboBox * orderMenu = new QComboBox();
+    for (int i=0 ; i<mModel->columnCount(); ++i)
+    {
+        orderMenu->addItem(mModel->headerData(i,Qt::Horizontal, Qt::DisplayRole).toString());
+    }
+
+    mTopToolBar->addWidget(orderMenu);
 
 }

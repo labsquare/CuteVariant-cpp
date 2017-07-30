@@ -34,6 +34,7 @@ public:
 
     QSqlQuery variants(const VariantQuery & query) const;
     int variantsCount(const VariantQuery& query) const;
+    void variantsTo(const VariantQuery& query, const QString& tablename);
 
 
     Variant variant(int variantId) const;

@@ -151,21 +151,26 @@ void ResultTreeModel::fetchMore(const QModelIndex &parent)
     endInsertRows();
 }
 //---------------------------------------------------------------------------
-int ResultTreeModel::totalRowCount() const
+void ResultTreeModel::sort(int column, Qt::SortOrder order)
 {
-    return mTotalRowCount;
+
+    if (column < columnCount()) {
+        QString col = headerData(column, Qt::Horizontal, Qt::DisplayRole).toString();
+        qDebug()<<col;
+        mCurrentQuery.setOrderBy({col});
+        mCurrentQuery.setSortOrder(order);
+        load();
+    }
+
 }
+
+
 //---------------------------------------------------------------------------
 void ResultTreeModel::setQuery(const core::VariantQuery &q)
 {
     mCurrentQuery = q ;
-    mCurrentQuery.setGroupBy({"chr","pos","ref","alt"});
-
-    // compute one time row count
-    mTotalRowCount = mProject->sqliteManager()->variantsCount(mCurrentQuery);
-
-    load();
 }
+//---------------------------------------------------------------------------
 
 QSqlRecord ResultTreeModel::record(const QModelIndex &index)
 {
@@ -183,13 +188,10 @@ QSqlRecord ResultTreeModel::record(const QModelIndex &index)
 }
 
 //---------------------------------------------------------------------------
-void ResultTreeModel::load(int offset, int limit)
+void ResultTreeModel::load()
 {
     beginResetModel();
     mRecords.clear();
-
-    mCurrentQuery.setOffset(offset);
-    mCurrentQuery.setLimit(limit);
 
     QSqlQuery query = mProject->sqliteManager()->variants(mCurrentQuery);
     qDebug()<<query.lastError().text();
@@ -198,4 +200,11 @@ void ResultTreeModel::load(int offset, int limit)
     while (query.next())
         mRecords.append(query.record());
     endResetModel();
+}
+//---------------------------------------------------------------------------
+void ResultTreeModel::load(int offset, int limit)
+{
+    mCurrentQuery.setOffset(offset);
+    mCurrentQuery.setLimit(limit);
+    load();
 }

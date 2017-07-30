@@ -43,7 +43,9 @@ public:
 
 
     Qt::SortOrder sortOder() const;
-    void setSortOder(Qt::SortOrder sortOder);
+    void setSortOrder(Qt::SortOrder sortOder);
+
+    void setNoLimit();
 
 protected:
     QStringList detectSamplesFields() const;

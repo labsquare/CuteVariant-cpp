@@ -168,6 +168,23 @@ int SqliteManager::variantsCount(const VariantQuery &query) const
     return countQuery.record().value("count").toInt();
 
 }
+//-------------------------------------------------------------------------------
+
+void SqliteManager::variantsTo(const VariantQuery &query, const QString &tablename)
+{
+    VariantQuery q = query;
+    q.setLimit(0);
+
+    QSqlQuery viewQuery;
+    viewQuery.exec(QString("DROP VIEW IF EXISTS %1").arg(tablename));
+
+    if (!viewQuery.exec(QString("CREATE VIEW %1 AS (%2)").arg(tablename).arg(q.toSql(this))))
+    {
+        qDebug()<<viewQuery.lastQuery();
+        qDebug()<<viewQuery.lastError().text();
+    }
+
+}
 
 //-------------------------------------------------------------------------------
 Variant SqliteManager::variant(int variantId) const

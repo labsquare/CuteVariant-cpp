@@ -25,6 +25,8 @@ protected Q_SLOTS:
 
 protected:
     void contextMenuEvent(QContextMenuEvent * event);
+    void setupToolbar();
+
 
 
 private:
