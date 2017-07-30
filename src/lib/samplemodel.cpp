@@ -10,11 +10,13 @@ SampleModel::SampleModel(Project *prj, QObject * parent )
 
 int SampleModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return mDatas.count();
 }
 
 int SampleModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 1;
 }
 

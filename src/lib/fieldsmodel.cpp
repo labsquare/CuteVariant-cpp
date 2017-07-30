@@ -12,11 +12,13 @@ FieldsModel::FieldsModel(Project * prj, QObject * parent)
 
 int FieldsModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return mDatas.count();
 }
 
 int FieldsModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 2;
 }
 

@@ -29,7 +29,7 @@ public:
     QList<Sample> samples() const;
     QList<Field> fields() const;
     QList<Field> genotypeFields() const;
-    QList<Field> genotype(const Sample& sample);
+    QList<Field> genotype(const Sample& sample) const;
     QHash<QString, int> tables() const;
 
     QSqlQuery variants(const VariantQuery & query) const;

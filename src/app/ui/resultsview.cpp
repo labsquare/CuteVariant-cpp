@@ -41,9 +41,8 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
     vLayout->setContentsMargins(0,0,0,0);
     setLayout(vLayout);
 
-    mTopToolBar->addAction("Sort");
-    mTopToolBar->addAction("Group By");
-    mTopToolBar->addAction("Export");
+
+
 
 
     mBottomToolBar->setIconSize(QSize(16,16));
@@ -113,37 +112,37 @@ void ResultsView::setPage(int page)
 void ResultsView::contextMenuEvent(QContextMenuEvent *event)
 {
 
-    //    // strange.. I need to compute the map myself...
-    //    QPoint p = mView->mapFromParent(event->pos()) - QPoint(0,mView->header()->height());
-    //    QModelIndex index = mView->indexAt(p);
+    // strange.. I need to compute the map myself...
+    QPoint p = mView->mapFromParent(event->pos()) - QPoint(0,mView->header()->height());
+    QModelIndex index = mView->indexAt(p);
 
-    //    if (index.isValid())
-    //    {
-    //        int variantID = mModel->item(index.row())->data().toInt();
-    //        qDebug()<<variantID;
-    //        core::Variant var = mPrj->sqliteManager()->variant(variantID);
+    if (index.isValid())
+    {
 
-    //        QMenu menu(this);
-    //        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
-    //           qApp->clipboard()->setText(var.coordinate());
-    //        });
+        qDebug()<<mModel->record(index).value("id");
+//        int variantID = mModel->item(index.row())->data().toInt();
+//        qDebug()<<variantID;
+//        core::Variant var = mPrj->sqliteManager()->variant(variantID);
 
-    //        menu.addAction(QIcon::fromTheme("edit-copy"), var.name(),[&var](){
-    //            qApp->clipboard()->setText(var.name());
-    //        });
+//        QMenu menu(this);
+//        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
+//            qApp->clipboard()->setText(var.coordinate());
+//        });
 
-    //        menu.addAction(QIcon::fromTheme("edit-link"), "IGV",[&var](){
-    //            QDesktopServices::openUrl(var.igvUrl());
-    //        });
+//        menu.addAction(QIcon::fromTheme("edit-copy"), var.name(),[&var](){
+//            qApp->clipboard()->setText(var.name());
+//        });
 
-    //        menu.addAction(QIcon::fromTheme("edit-link"), "Varsome",[&var](){
-    //            QDesktopServices::openUrl(var.varsomeUrl());
-    //        });
+//        menu.addAction(QIcon::fromTheme("edit-link"), "IGV",[&var](){
+//            QDesktopServices::openUrl(var.igvUrl());
+//        });
 
-    //        menu.exec(event->globalPos());
+//        menu.addAction(QIcon::fromTheme("edit-link"), "Varsome",[&var](){
+//            QDesktopServices::openUrl(var.varsomeUrl());
+//        });
 
+//        menu.exec(event->globalPos());
 
-
-    //    }
+    }
 
 }

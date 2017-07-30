@@ -42,12 +42,14 @@ int ResultTreeModel::rowCount(const QModelIndex &parent) const
     if (parent.parent() == QModelIndex())
         return mChilds[parent.row()].count();
 
-    //    return 0;
+    return 0;
 }
 //---------------------------------------------------------------------------
 
 int ResultTreeModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
+
     if (mRecords.isEmpty())
         return 0;
 
@@ -75,6 +77,20 @@ QVariant ResultTreeModel::data(const QModelIndex &index, int role) const
         }
     }
     return QVariant() ;
+}
+//---------------------------------------------------------------------------
+QVariant ResultTreeModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole)
+    {
+
+        if (orientation == Qt::Horizontal)
+            return mRecords.first().fieldName(section+1);
+
+    }
+
+    return QVariant();
+
 }
 //---------------------------------------------------------------------------
 
@@ -149,6 +165,21 @@ void ResultTreeModel::setQuery(const core::VariantQuery &q)
     mTotalRowCount = mProject->sqliteManager()->variantsCount(mCurrentQuery);
 
     load();
+}
+
+QSqlRecord ResultTreeModel::record(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return QSqlRecord();
+
+    if ( index.parent() == QModelIndex())
+        return mRecords.at(index.row());
+
+    if ( index.parent().parent() == QModelIndex())
+        return mChilds[index.parent().row()].at(index.row());
+
+    return QSqlRecord();
+
 }
 
 //---------------------------------------------------------------------------

@@ -9,11 +9,13 @@ TableModel::TableModel(core::Project *prj, QObject *parent)
 
 int TableModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return mDatas.count();
 }
 
 int TableModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 2;
 }
 

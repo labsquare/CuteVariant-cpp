@@ -2,7 +2,7 @@
 
 
 QueryBuilderWidget::QueryBuilderWidget(core::Project *prj, QWidget *parent)
-    :mProject(prj), QWidget(parent)
+    :QWidget(parent), mProject(prj)
 {
     mBar         = new QToolBar;
     mStack       = new QStackedWidget;

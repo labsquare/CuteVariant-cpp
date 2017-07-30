@@ -5,7 +5,6 @@
 #include "project.h"
 #include "genotype.h"
 
-#include "querybuilder.h"
 
 using namespace core;
 

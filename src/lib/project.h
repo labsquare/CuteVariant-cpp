@@ -3,7 +3,6 @@
 #include <QtCore>
 #include <QtSql>
 #include "sqlitemanager.h"
-#include "querybuilder.h"
 
 namespace core {
 class QueryBuilder;

@@ -17,12 +17,16 @@ public:
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     bool hasChildren(const QModelIndex &parent) const override;
     bool canFetchMore(const QModelIndex &parent) const override;
     void fetchMore(const QModelIndex& parent) override;
 
+
     int totalRowCount() const;
     void setQuery(const core::VariantQuery& q);
+
+    QSqlRecord record(const QModelIndex& index);
 
 
 public Q_SLOTS:
