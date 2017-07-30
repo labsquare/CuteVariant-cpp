@@ -130,12 +130,15 @@ void ResultTreeModel::fetchMore(const QModelIndex &parent)
     QStringList ids = mRecords[parent.row()].value("childs").toString().split(",");
 
 
+    qDebug()<<ids;
+
     beginInsertRows(parent,0, count-1);
     mChilds[parentRow].clear();
 
     core::VariantQuery temp = mCurrentQuery;
     temp.setCondition(QString("variants.id IN (%1)").arg(ids.join(",")));
     temp.setGroupBy({});
+    temp.setNoLimit();
 
     QSqlQuery query = mProject->sqliteManager()->variants(temp);
 
@@ -192,6 +195,7 @@ void ResultTreeModel::load()
 {
     beginResetModel();
     mRecords.clear();
+    mChilds.clear();
 
     QSqlQuery query = mProject->sqliteManager()->variants(mCurrentQuery);
     qDebug()<<query.lastError().text();
