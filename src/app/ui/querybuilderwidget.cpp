@@ -60,12 +60,21 @@ QueryBuilderWidget::QueryBuilderWidget(core::Project *prj, QWidget *parent)
 
 }
 
+core::VariantQuery QueryBuilderWidget::query() const
+{
+    core::VariantQuery q;
+    q.setColumns(mColumnView->selectedColumns());
+//    q.setTable("variants");
+//    q.setCondition(mLogicView->query());
+
+    return q;
+}
+
 void QueryBuilderWidget::updateQuery()
 {
-    core::QueryBuilder * builder = mProject->sqliteManager()->queryBuilder();
-    builder->setColumns(mColumnView->selectedColumns());
-    builder->setTableName("variants");
-    builder->setCondition(mLogicView->query());
+    //    builder->setColumns(mColumnView->selectedColumns());
+    //    builder->setTableName("variants");
+    //    builder->setCondition(mLogicView->query());
 
 }
 

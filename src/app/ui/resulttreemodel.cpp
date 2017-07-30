@@ -51,8 +51,7 @@ int ResultTreeModel::columnCount(const QModelIndex &parent) const
     if (mRecords.isEmpty())
         return 0;
 
-
-    return mRecords.first().count() - 2;
+    return mCurrentQuery.columns().size();
 
 }
 //---------------------------------------------------------------------------
@@ -66,15 +65,13 @@ QVariant ResultTreeModel::data(const QModelIndex &index, int role) const
     {
         if (index.parent() == QModelIndex()){
             QSqlRecord rec = mRecords[index.row()];
-            return rec.value(index.column());
+            return rec.value(index.column()+1);
         }
 
         if (index.parent().parent() == QModelIndex())
         {
             QSqlRecord rec = mChilds[index.parent().row()][index.row()];
-            return rec.value(index.column());
-
-
+            return rec.value(index.column()+1);
         }
     }
     return QVariant() ;
@@ -112,21 +109,20 @@ void ResultTreeModel::fetchMore(const QModelIndex &parent)
     if (parent == QModelIndex())
         return ;
 
-
     int count       = mRecords[parent.row()].value("count").toInt();
     int parentRow   = parent.row();
     QStringList ids = mRecords[parent.row()].value("childs").toString().split(",");
 
 
-    qDebug()<<"childs"<<ids;
-
     beginInsertRows(parent,0, count-1);
     mChilds[parentRow].clear();
 
-    mProject->sqliteManager()->queryBuilder()->setSelectionIds(ids);
-    QString q = mProject->sqliteManager()->queryBuilder()->toSql();
+    core::VariantQuery temp = mCurrentQuery;
+    temp.setCondition(QString("variants.id IN (%1)").arg(ids.join(",")));
+    temp.setGroupBy({});
 
-    QSqlQuery query(q);
+    QSqlQuery query = mProject->sqliteManager()->variants(temp);
+
     while (query.next())
     {
         mChilds[parentRow].append(query.record());
@@ -136,45 +132,39 @@ void ResultTreeModel::fetchMore(const QModelIndex &parent)
     qDebug()<<query.lastError().text();
     qDebug()<<query.lastQuery();
 
-
-
     endInsertRows();
-
-
 }
 //---------------------------------------------------------------------------
-int ResultTreeModel::totalVariantCount() const
+int ResultTreeModel::totalRowCount() const
 {
-    return mProject->sqliteManager()->variantQueryCount();
-
+    return mTotalRowCount;
 }
 //---------------------------------------------------------------------------
-void ResultTreeModel::load()
+void ResultTreeModel::setQuery(const core::VariantQuery &q)
+{
+    mCurrentQuery = q ;
+    mCurrentQuery.setGroupBy({"chr","pos","ref","alt"});
+
+    // compute one time row count
+    mTotalRowCount = mProject->sqliteManager()->variantsCount(mCurrentQuery);
+
+    load();
+}
+
+//---------------------------------------------------------------------------
+void ResultTreeModel::load(int offset, int limit)
 {
     beginResetModel();
     mRecords.clear();
-    QSqlQuery query;
 
-    mProject->sqliteManager()->queryBuilder()->setGroupBy({"ANN_GENE_ID"});
-    mProject->sqliteManager()->queryBuilder()->setSelectionIds({});
+    mCurrentQuery.setOffset(offset);
+    mCurrentQuery.setLimit(limit);
 
-    QString q = mProject->sqliteManager()->queryBuilder()->toSql();
-
-    if (!query.exec(q))
-    {
-        qDebug()<<query.lastError().text();
-        qDebug()<<query.lastQuery();
-    }
-    //    query.exec("SELECT id, chr, pos, ref, alt, ANN_FEATURE_ID, COUNT(id) as 'count', group_concat(id) as 'childs' FROM variants GROUP BY chr,pos,ref, alt LIMIT 100");
-
+    QSqlQuery query = mProject->sqliteManager()->variants(mCurrentQuery);
+    qDebug()<<query.lastError().text();
+    qDebug()<<query.lastQuery();
 
     while (query.next())
-    {
         mRecords.append(query.record());
-
-    }
-
-    qDebug()<<"populate "<<mRecords.size();
-
     endResetModel();
 }

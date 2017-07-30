@@ -5,12 +5,16 @@
 #include "logicview.h"
 #include "columnview.h"
 #include "tablemodel.h"
+#include "variantquery.h"
 
 class QueryBuilderWidget : public QWidget
 {
     Q_OBJECT
 public:
     QueryBuilderWidget(core::Project * prj, QWidget * parent = nullptr);
+
+    core::VariantQuery query() const;
+
 
 public Q_SLOTS:
     void updateQuery();

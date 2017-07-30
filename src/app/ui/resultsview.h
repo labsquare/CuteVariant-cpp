@@ -5,6 +5,7 @@
 #include "resulttreemodel.h"
 #include "project.h"
 #include "qfonticon.h"
+#include "variantquery.h"
 
 class ResultsView : public QWidget
 {
@@ -13,7 +14,7 @@ public:
     explicit ResultsView(core::Project * prj, QWidget *parent = nullptr);
 
 public Q_SLOTS:
-    void load();
+    void setQuery(const core::VariantQuery& query);
 
 protected Q_SLOTS:
     void pageUp();

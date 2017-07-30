@@ -17,7 +17,6 @@ SOURCES += \
     ui/importdialog.cpp \
     ui/tablemodel.cpp \
     ui/resultsview.cpp \
-    ui/resultsmodel.cpp \
     ui/qfonticon.cpp \
     ui/locationlineedit.cpp \
     ui/columnview.cpp \
@@ -45,7 +44,6 @@ HEADERS += \
     ui/importdialog.h \
     ui/tablemodel.h \
     ui/resultsview.h \
-    ui/resultsmodel.h \
     ui/qfonticon.h \
     ui/locationlineedit.h \
     ui/columnview.h \

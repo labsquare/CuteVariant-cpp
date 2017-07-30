@@ -4,6 +4,8 @@
 #include <QtSql>
 #include <QSqlRecord>
 #include "project.h"
+#include "variantquery.h"
+
 class ResultTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -19,15 +21,20 @@ public:
     bool canFetchMore(const QModelIndex &parent) const override;
     void fetchMore(const QModelIndex& parent) override;
 
-    int totalVariantCount() const;
+    int totalRowCount() const;
+    void setQuery(const core::VariantQuery& q);
 
 
-    void load();
+public Q_SLOTS:
+    void load(int offset = 0, int limit = 100);
 
 private:
     core::Project * mProject;
+    core::VariantQuery mCurrentQuery;
     QList<QSqlRecord> mRecords;
     QHash<int, QList<QSqlRecord>> mChilds;
+    int mTotalRowCount = 0;
+
 
 };
 

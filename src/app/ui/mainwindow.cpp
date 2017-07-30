@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mResultsView        = new ResultsView(mProject);
     mLocLineEdit        = new LocationLineEdit(mProject);
 
-    //    mProject->importFile("/home/sacha/TRIO1.family.vcf");
 
     // setup widgets
     QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
@@ -105,7 +104,7 @@ void MainWindow::importFile()
     dialog.setFilename(filename);
 
     if (dialog.exec())
-     reset();
+        reset();
 
 }
 
@@ -137,8 +136,10 @@ void MainWindow::saveFile()
 void MainWindow::refresh()
 {
 
-    mQueryBuilderWidget->updateQuery();
-    mResultsView->load();
+
+    mResultsView->setQuery(mQueryBuilderWidget->query());
+
+
 
 }
 //-------------------------------------------------------------------------
@@ -146,6 +147,6 @@ void MainWindow::reset()
 {
 
     mQueryBuilderWidget->load();
-    mResultsView->load();
+    //    mResultsView->setQuery();
 
 }

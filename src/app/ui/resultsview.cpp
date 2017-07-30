@@ -25,7 +25,7 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
     mPageBox->setMaximumWidth(50);
     mPageBox->setStyleSheet("* { background-color: rgba(0, 0, 0, 0); }");
     mPageBox->setAlignment(Qt::AlignHCenter);
-    connect(mPageBox,SIGNAL(returnPressed()),this,SLOT(load()));
+    connect(mPageBox,SIGNAL(returnPressed()),this,SLOT(setQuery()));
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
@@ -57,21 +57,22 @@ ResultsView::ResultsView(core::Project *prj, QWidget *parent) : QWidget(parent)
 
 }
 
-void ResultsView::load()
+void ResultsView::setQuery(const core::VariantQuery &query)
 {
-    setFocus();
-    // 100 page constant for now
-    int totalCount = mModel->totalVariantCount();
 
+
+    mModel->setQuery(query);
+
+    //    // 100 page constant for now
+    int totalCount = mModel->totalRowCount();
     mPageValidator->setRange(0, totalCount/100);
 
     if (mPageBox->text().isEmpty())
         mPageBox->setText("0");
 
-//   // mModel->load(mPageBox->text().toInt() * 100, 100 );
-   mCountLabel->setText(QString("%1 variant(s)").arg(mModel->totalVariantCount()));
+    mCountLabel->setText(QString("%1 r(s)").arg(mModel->totalRowCount()));
 
-    mModel->load();
+    setFocus();
 
 }
 
@@ -105,44 +106,44 @@ void ResultsView::setPage(int page)
 {
     mPageBox->setText(QString::number(page));
     mPageBox->setAlignment(Qt::AlignHCenter);
-    load();
+    mModel->load(page*100, 100);
 
 }
 
 void ResultsView::contextMenuEvent(QContextMenuEvent *event)
 {
 
-//    // strange.. I need to compute the map myself...
-//    QPoint p = mView->mapFromParent(event->pos()) - QPoint(0,mView->header()->height());
-//    QModelIndex index = mView->indexAt(p);
+    //    // strange.. I need to compute the map myself...
+    //    QPoint p = mView->mapFromParent(event->pos()) - QPoint(0,mView->header()->height());
+    //    QModelIndex index = mView->indexAt(p);
 
-//    if (index.isValid())
-//    {
-//        int variantID = mModel->item(index.row())->data().toInt();
-//        qDebug()<<variantID;
-//        core::Variant var = mPrj->sqliteManager()->variant(variantID);
+    //    if (index.isValid())
+    //    {
+    //        int variantID = mModel->item(index.row())->data().toInt();
+    //        qDebug()<<variantID;
+    //        core::Variant var = mPrj->sqliteManager()->variant(variantID);
 
-//        QMenu menu(this);
-//        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
-//           qApp->clipboard()->setText(var.coordinate());
-//        });
+    //        QMenu menu(this);
+    //        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
+    //           qApp->clipboard()->setText(var.coordinate());
+    //        });
 
-//        menu.addAction(QIcon::fromTheme("edit-copy"), var.name(),[&var](){
-//            qApp->clipboard()->setText(var.name());
-//        });
+    //        menu.addAction(QIcon::fromTheme("edit-copy"), var.name(),[&var](){
+    //            qApp->clipboard()->setText(var.name());
+    //        });
 
-//        menu.addAction(QIcon::fromTheme("edit-link"), "IGV",[&var](){
-//            QDesktopServices::openUrl(var.igvUrl());
-//        });
+    //        menu.addAction(QIcon::fromTheme("edit-link"), "IGV",[&var](){
+    //            QDesktopServices::openUrl(var.igvUrl());
+    //        });
 
-//        menu.addAction(QIcon::fromTheme("edit-link"), "Varsome",[&var](){
-//            QDesktopServices::openUrl(var.varsomeUrl());
-//        });
+    //        menu.addAction(QIcon::fromTheme("edit-link"), "Varsome",[&var](){
+    //            QDesktopServices::openUrl(var.varsomeUrl());
+    //        });
 
-//        menu.exec(event->globalPos());
+    //        menu.exec(event->globalPos());
 
 
 
-//    }
+    //    }
 
 }

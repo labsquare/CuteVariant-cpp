@@ -5,12 +5,10 @@ namespace core{
 SqliteManager::SqliteManager(QObject * parent)
     :QObject(parent)
 {
-    mQueryBuilder = new QueryBuilder(this);
 }
 //-------------------------------------------------------------------------------
 SqliteManager::~SqliteManager()
 {
-    delete mQueryBuilder;
 }
 //-------------------------------------------------------------------------------
 bool SqliteManager::importFile(const QString &filename)
@@ -142,25 +140,35 @@ QHash<QString, int> SqliteManager::tables() const
 
     return tablesCount;
 }
-//----------------------------------------------------------
-QSqlQuery SqliteManager::variantQuery() const
+//-------------------------------------------------------------------------------
+QSqlQuery SqliteManager::variants(const VariantQuery &query) const
 {
-    QString q = queryBuilder()->toSql();
-    return QSqlQuery(q);
+
+    return QSqlQuery(query.toSql(this));
+}
+//-------------------------------------------------------------------------------
+int SqliteManager::variantsCount(const VariantQuery &query) const
+{
+    VariantQuery q = query;
+    // set no limit ..
+    q.setLimit(0);
+    q.setColumns({"id"});
+
+    QString sql = QString("SELECT COUNT(*) as 'count' FROM (%1)").arg(q.toSql(this));
+    qDebug()<<sql;
+
+    QSqlQuery countQuery;
+    if (!countQuery.exec(sql))
+    {
+        qDebug()<<countQuery.lastQuery();
+        qDebug()<<countQuery.lastError().text();
+    }
+
+    countQuery.next();
+    return countQuery.record().value("count").toInt();
+
 }
 
-int SqliteManager::variantQueryCount() const
-{
-    QString q = queryBuilder()->toSql();
-    q.remove(QRegularExpression("LIMIT \\d+ OFFSET \\d+"));
-    QSqlQuery query(QStringLiteral("SELECT COUNT(*) as 'count' FROM (%1)").arg(q));
-
-    query.next();
-
-    return query.record().value("count").toInt();
-
-
-}
 //-------------------------------------------------------------------------------
 Variant SqliteManager::variant(int variantId) const
 {
@@ -189,11 +197,7 @@ Variant SqliteManager::variant(int variantId) const
 
     return v;
 }
-//-------------------------------------------------------------------------------
-QueryBuilder *const SqliteManager::queryBuilder() const
-{
-    return mQueryBuilder;
-}
+
 
 //-------------------------------------------------------------------------------
 QFuture<bool> SqliteManager::asyncImportFile(const QString &filename)

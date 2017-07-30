@@ -6,7 +6,7 @@
 #include <QtConcurrent>
 #include "abstractvariantreader.h"
 #include "vcfvariantreader.h"
-#include "querybuilder.h"
+#include "variantquery.h"
 
 namespace core {
 
@@ -17,7 +17,7 @@ namespace core {
  * This is the interface between raw SQLITE query and C++ POO
  */
 class Project;
-class QueryBuilder;
+class VariantQuery;
 class SqliteManager : public QObject
 {
     Q_OBJECT
@@ -31,11 +31,12 @@ public:
     QList<Field> genotypeFields() const;
     QList<Field> genotype(const Sample& sample);
     QHash<QString, int> tables() const;
-    QSqlQuery variantQuery() const;
-    int variantQueryCount() const;
-    Variant variant(int variantId) const;
 
-    QueryBuilder * const queryBuilder() const;
+    QSqlQuery variants(const VariantQuery & query) const;
+    int variantsCount(const VariantQuery& query) const;
+
+
+    Variant variant(int variantId) const;
 
     QFuture<bool> asyncImportFile(const QString& filename);
     bool importFile(const QString& filename);
@@ -59,7 +60,6 @@ Q_SIGNALS:
 private:
     QHash<QString, QVector<int>> mVariantIds;
     QHash<QString, int> mSamplesIds;
-    QueryBuilder * mQueryBuilder;
 
 
 };
