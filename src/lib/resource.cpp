@@ -1,5 +1,5 @@
 #include "resource.h"
-namespace core {
+namespace cvar {
 Resource::Resource()
 {
 

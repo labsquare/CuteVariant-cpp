@@ -1,6 +1,6 @@
 #include "sqlitemanager.h"
 
-namespace core{
+namespace cvar{
 
 SqliteManager::SqliteManager(QObject * parent)
     :QObject(parent)

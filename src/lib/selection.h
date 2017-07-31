@@ -1,7 +1,7 @@
 #ifndef VARIANTTABLE_H
 #define VARIANTTABLE_H
 #include <QtCore>
-namespace core{
+namespace cvar{
 
 class VariantSelection
 {

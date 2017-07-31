@@ -1,6 +1,6 @@
 #include "project.h"
 
-namespace core {
+namespace cvar {
 Project::Project()
 {
     mSqliteManager = new SqliteManager;

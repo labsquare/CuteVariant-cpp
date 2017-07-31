@@ -1,6 +1,6 @@
 #include "selection.h"
 
-namespace core{
+namespace cvar{
 
 VariantSelection::VariantSelection()
 {

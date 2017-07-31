@@ -2,7 +2,7 @@
 #define VARIANT_H
 #include <QtCore>
 #include "resource.h"
-namespace core{
+namespace cvar{
 class Variant : public Resource
 {
 public:

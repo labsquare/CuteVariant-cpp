@@ -4,7 +4,7 @@
 #include <QtSql>
 #include "sqlitemanager.h"
 
-namespace core {
+namespace cvar {
 class QueryBuilder;
 class SqliteManager;
 class Project

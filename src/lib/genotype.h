@@ -4,7 +4,7 @@
 #include "resource.h"
 #include "variant.h"
 #include "sample.h"
-namespace core {
+namespace cvar {
 class Genotype : public Resource
 {
 public:

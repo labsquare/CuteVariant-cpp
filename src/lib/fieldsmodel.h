@@ -4,7 +4,7 @@
 #include "field.h"
 #include "project.h"
 
-namespace core {
+namespace cvar {
 class FieldsModel : public QAbstractListModel
 {
 public:

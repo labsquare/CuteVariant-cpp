@@ -6,7 +6,7 @@
 #include "genotype.h"
 #include "sample.h"
 
-namespace  core {
+namespace  cvar {
 
 class AbstractVariantReader
 {

@@ -1,5 +1,5 @@
 #include "samplemodel.h"
-namespace core {
+namespace cvar {
 SampleModel::SampleModel(Project *prj, QObject * parent )
     :QAbstractListModel(parent)
 {

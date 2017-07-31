@@ -1,7 +1,7 @@
 #ifndef SAMPLE_H
 #define SAMPLE_H
 #include "resource.h"
-namespace core {
+namespace cvar {
 class Sample : public Resource
 {
 public:

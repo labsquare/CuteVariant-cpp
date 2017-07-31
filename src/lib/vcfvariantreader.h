@@ -3,7 +3,7 @@
 #include "abstractvariantreader.h"
 #include "vcfreader.h"
 #include "field.h"
-namespace core {
+namespace cvar {
 
 class VCFVariantReader : public AbstractVariantReader
 {

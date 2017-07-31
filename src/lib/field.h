@@ -3,7 +3,7 @@
 #include <QtCore>
 #include "resource.h"
 
-namespace core {
+namespace cvar {
 
 /*!
  * \brief The Field class contains Annotation description

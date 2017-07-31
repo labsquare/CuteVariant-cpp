@@ -5,24 +5,9 @@ DEPENDPATH += . ../lib
 INCLUDEPATH += ../lib
 
 
-SOURCES += \
-    main.cpp \
-    ui/mainwindow.cpp \
-    ui/queryeditor.cpp \
-    ui/queryhighlighter.cpp \
-    ui/logicmodel.cpp \
-    ui/logicview.cpp \
-    ui/querybuilderwidget.cpp \
-    ui/columnmodel.cpp \
-    ui/importdialog.cpp \
-    ui/resultsview.cpp \
-    ui/qfonticon.cpp \
-    ui/locationlineedit.cpp \
-    ui/columnview.cpp \
-    ui/resulttreemodel.cpp \
-    ui/selectionview.cpp
-
-
+include(queryeditor/queryeditor.pri)
+include(resultsview/resultsview.pri)
+include(querybuilder/querybuilder.pri)
 
 
 
@@ -33,21 +18,15 @@ else:unix: LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
 INCLUDEPATH += $$PWD/../lib
 DEPENDPATH += $$PWD/../lib
 
-HEADERS += \
-    ui/mainwindow.h \
-    ui/queryeditor.h \
-    ui/queryhighlighter.h \
-    ui/logicmodel.h \
-    ui/logicview.h \
-    ui/querybuilderwidget.h \
-    ui/columnmodel.h \
-    ui/importdialog.h \
-    ui/resultsview.h \
-    ui/qfonticon.h \
-    ui/locationlineedit.h \
-    ui/columnview.h \
-    ui/resulttreemodel.h \
-    ui/selectionview.h
 
-RESOURCES += \
-    icons/icons.qrc
+
+RESOURCES += icons/icons.qrc
+
+HEADERS += \
+    mainwindow.h \
+    importdialog.h
+
+SOURCES += \
+    main.cpp \
+    mainwindow.cpp \
+    importdialog.cpp

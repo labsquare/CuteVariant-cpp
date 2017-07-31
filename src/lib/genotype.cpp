@@ -1,5 +1,5 @@
 #include "genotype.h"
-namespace core {
+namespace cvar {
 
 Genotype::Genotype()
     :Resource()

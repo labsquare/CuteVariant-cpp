@@ -1,5 +1,5 @@
 #include "sample.h"
-namespace core {
+namespace cvar {
 Sample::Sample()
     :Resource()
 {

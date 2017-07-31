@@ -1,6 +1,6 @@
 #include "variantquery.h"
 
-namespace core {
+namespace cvar {
 VariantQuery::VariantQuery()
 {
 

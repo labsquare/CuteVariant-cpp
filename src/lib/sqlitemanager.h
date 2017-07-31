@@ -9,7 +9,7 @@
 #include "variantquery.h"
 #include "selection.h"
 
-namespace core {
+namespace cvar {
 
 
 

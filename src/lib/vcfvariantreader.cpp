@@ -1,5 +1,5 @@
 #include "vcfvariantreader.h"
-namespace core {
+namespace cvar {
 VCFVariantReader::VCFVariantReader(const QString &filename)
     :AbstractVariantReader(filename)
 {

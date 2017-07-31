@@ -1,7 +1,7 @@
 #ifndef RESOURCE_H
 #define RESOURCE_H
 #include <QtCore>
-namespace core {
+namespace cvar {
 class Resource
 {
 public:

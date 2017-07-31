@@ -3,7 +3,7 @@
 #include <QAbstractListModel>
 #include "sample.h"
 #include "project.h"
-namespace core{
+namespace cvar{
 class SampleModel : public QAbstractListModel
 {
 public:

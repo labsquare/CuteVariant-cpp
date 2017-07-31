@@ -1,5 +1,5 @@
 #include "field.h"
-namespace core {
+namespace cvar {
 Field::Field()
     :Resource()
 {

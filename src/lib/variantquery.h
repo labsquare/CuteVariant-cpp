@@ -3,7 +3,7 @@
 #include <QtCore>
 #include "project.h"
 
-namespace core {
+namespace cvar {
 
 class SqliteManager;
 class VariantQuery

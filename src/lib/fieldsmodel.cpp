@@ -1,6 +1,6 @@
 #include "fieldsmodel.h"
 
-namespace core {
+namespace cvar {
 FieldsModel::FieldsModel(Project * prj, QObject * parent)
     :QAbstractListModel(parent)
 {

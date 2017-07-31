@@ -1,5 +1,5 @@
 #include "variant.h"
-namespace core {
+namespace cvar {
 Variant::Variant()
     :Resource()
 {

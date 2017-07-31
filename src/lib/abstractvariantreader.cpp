@@ -1,5 +1,5 @@
 #include "abstractvariantreader.h"
-namespace core{
+namespace cvar{
 AbstractVariantReader::AbstractVariantReader(const QString &filename)
 {
     mDevice = new QFile(filename);

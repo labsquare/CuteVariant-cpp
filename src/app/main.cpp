@@ -1,12 +1,11 @@
 #include <QApplication>
 #include <QtCore>
-#include "ui/qfonticon.h"
-#include "ui/mainwindow.h"
+#include "mainwindow.h"
 #include "project.h"
 #include "genotype.h"
 
 
-using namespace core;
+using namespace cvar;
 
 int main(int argc, char **argv)
 {
@@ -17,7 +16,6 @@ int main(int argc, char **argv)
     app.setOrganizationDomain("labsquare.org");
     app.setApplicationVersion("0.0.1");
 
-    QFontIcon::addFont(":/fontawesome");
 
 //    Project prj("/tmp/variant.db");
 //    prj.importFile("/tmp/TRIO1.family.vcf");
