@@ -6,13 +6,10 @@ using namespace cvar;
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 
-    mProject            = new cvar::Project();
-
-
     mEditor                = new QueryEditor;
-    mQueryBuilderWidget    = new QueryBuilderWidget(mProject);
-    mResultsView           = new ResultsView(mProject);
-    mLocLineEdit           = new LocationLineEdit(mProject);
+    mQueryBuilderWidget    = new QueryBuilderWidget();
+    mResultsView           = new ResultsView();
+    mLocLineEdit           = new LocationLineEdit();
 
 
     // setup widgets
@@ -50,7 +47,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     restoreSettings();
 
-    mProject->setDatabasePath("/home/sacha/TRIO1.family.vcf.db");
+    cutevariant->setDatabasePath("/home/sacha/TRIO1.family.vcf.db");
+
     reset();
 
 }
@@ -101,8 +99,8 @@ void MainWindow::importFile()
             return;
     }
 
-    mProject->setDatabasePath(dbPath);
-    ImportDialog dialog(mProject);
+    cutevariant->setDatabasePath(dbPath);
+    ImportDialog dialog;
     dialog.setFilename(filename);
 
     if (dialog.exec())
@@ -123,7 +121,7 @@ void MainWindow::openFile()
     QString fileName = QFileDialog::getOpenFileName(this,tr("Open DB file"), QDir::homePath(), tr("DB Extension (*.db)"));
     if (!fileName.isEmpty())
     {
-        mProject->setDatabasePath(fileName);
+        cutevariant->setDatabasePath(fileName);
         reset();
         return;
 

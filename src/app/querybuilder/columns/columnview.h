@@ -8,7 +8,7 @@ class ColumnView : public QTreeView
 {
     Q_OBJECT
 public:
-    ColumnView(cvar::Project * prj, QWidget * parent = nullptr);
+    ColumnView(QWidget * parent = nullptr);
     QStringList selectedColumns() const;
 
 public Q_SLOTS:
@@ -16,7 +16,6 @@ public Q_SLOTS:
 
 
 private:
-    cvar::Project * mProject;
     ColumnModel * mModel;
 };
 

@@ -1,21 +1,25 @@
 #include "project.h"
 
 namespace cvar {
+
+Project * Project::mInstance = nullptr;
+
 Project::Project()
 {
     mSqliteManager = new SqliteManager;
 }
 
-Project::Project(const QString &path)
-    :Project()
-{
-
-    setDatabasePath(path);
-}
-
 Project::~Project()
 {
     delete mSqliteManager;
+}
+
+Project *Project::i()
+{
+    if (!mInstance)
+        mInstance = new Project();
+
+    return mInstance;
 }
 
 void Project::setDatabasePath(const QString &path)

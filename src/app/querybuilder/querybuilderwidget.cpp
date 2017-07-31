@@ -1,8 +1,8 @@
 #include "querybuilderwidget.h"
 
 
-QueryBuilderWidget::QueryBuilderWidget(cvar::Project *prj, QWidget *parent)
-    :QWidget(parent), mProject(prj)
+QueryBuilderWidget::QueryBuilderWidget(QWidget *parent)
+    :QWidget(parent)
 {
     mBar         = new QToolBar;
     mStack       = new QStackedWidget;
@@ -32,13 +32,13 @@ QueryBuilderWidget::QueryBuilderWidget(cvar::Project *prj, QWidget *parent)
     //    addWidget(new ColumnView(prj));
 
 
-    mSelectionView = new SelectionView(mProject);
+    mSelectionView = new SelectionView();
     addWidget(mSelectionView);
 
-    mColumnView = new ColumnView(mProject);
+    mColumnView = new ColumnView();
     addWidget(mColumnView);
 
-    mLogicView = new LogicView(mProject);
+    mLogicView = new LogicView();
     addWidget(mLogicView);
 
 

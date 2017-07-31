@@ -1,9 +1,8 @@
 #include "logicview.h"
 
-LogicView::LogicView(cvar::Project *prj, QWidget * parent)
+LogicView::LogicView(QWidget * parent)
     :QTreeView(parent)
 {
-    mPrj      = prj;
     mModel    = new LogicModel;
     mDelegate = new LogicDelegate;
 

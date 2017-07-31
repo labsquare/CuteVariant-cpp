@@ -10,7 +10,7 @@ class LogicView : public QTreeView
 {
     Q_OBJECT
 public:
-    LogicView(cvar::Project * prj, QWidget * parent = Q_NULLPTR);
+    LogicView(QWidget * parent = Q_NULLPTR);
     void contextMenuEvent(QContextMenuEvent* event);
     QString query();
 
@@ -24,7 +24,6 @@ private:
     LogicModel * mModel;
     LogicDelegate * mDelegate;
 
-    cvar::Project * mPrj;
 };
 
 #endif // LOGICVIEW_H

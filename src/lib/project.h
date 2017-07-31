@@ -4,32 +4,30 @@
 #include <QtSql>
 #include "sqlitemanager.h"
 
+#define cutevariant cvar::Project::i()
+
 namespace cvar {
 class QueryBuilder;
 class SqliteManager;
 class Project
 {
 public:
-    Project();
-    Project(const QString& path);
     ~Project();
 
-    /*!
-     * \brief setDatabasePath
-     * set sqlite database path
-     * \param path
-     */
+
+    static Project * i();
+
     void setDatabasePath(const QString& path);
     void importFile(const QString& filename);
-
-
     SqliteManager * sqliteManager();
 
 
-
 private:
+    Project();
+
     QSqlDatabase mSqlDb;
     SqliteManager * mSqliteManager;
+    static Project * mInstance;
 
 
 

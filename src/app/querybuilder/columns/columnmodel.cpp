@@ -1,7 +1,7 @@
 #include "columnmodel.h"
 
-ColumnModel::ColumnModel(cvar::Project *prj, QObject *parent)
-    :QStandardItemModel(parent), mProject(prj)
+ColumnModel::ColumnModel( QObject *parent)
+    :QStandardItemModel(parent)
 {
 
     //load();
@@ -51,7 +51,7 @@ void ColumnModel::load()
 
     // add annotation
     mAnnotationItem = createItem("Annotation","Annotation fields");
-    for (cvar::Field f : mProject->sqliteManager()->fields())
+    for (cvar::Field f : cutevariant->sqliteManager()->fields())
     {
         QStandardItem * c1 = createItem(f.name(),f.description(),f.colname());
         mAnnotationItem->appendRow(c1);
@@ -61,16 +61,16 @@ void ColumnModel::load()
     // add Samples
     mSampleItem = createItem("Samples", "fields of samples");
 
-    if (!mProject->sqliteManager()->samples().isEmpty())
+    if (!cutevariant->sqliteManager()->samples().isEmpty())
     {
 
-        for (cvar::Sample s : mProject->sqliteManager()->samples())
+        for (cvar::Sample s : cutevariant->sqliteManager()->samples())
         {
 
             QStandardItem * c1 = createItem(s.name(), "Sample name", s.name());
             mSampleItem->appendRow(c1);
 
-            for (cvar::Field f : mProject->sqliteManager()->genotypeFields())
+            for (cvar::Field f : cutevariant->sqliteManager()->genotypeFields())
             {
                 // TODO : check how colname are saved ...
                 QStandardItem * g = createItem(f.name(), f.description(),f.name());

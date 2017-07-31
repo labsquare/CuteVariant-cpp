@@ -42,8 +42,6 @@ private:
     QString mCurrentFile;
     QString mCurrentDBFile;
 
-    cvar::Project * mProject;
-
 
     QTreeView * mView;
     QueryEditor * mEditor;

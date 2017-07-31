@@ -1,11 +1,10 @@
 #include "resultsview.h"
 
-ResultsView::ResultsView(cvar::Project *prj, QWidget *parent) : QWidget(parent)
+ResultsView::ResultsView(QWidget *parent) : QWidget(parent)
 {
-    mPrj = prj;
 
     mView = new QTreeView(this);
-    mModel = new ResultTreeModel(prj);
+    mModel = new ResultTreeModel();
     mView->setModel(mModel);
     mView->setSortingEnabled(true);
 
@@ -68,7 +67,7 @@ void ResultsView::setQuery(const cvar::VariantQuery &query)
     temp.setGroupBy({"chr","pos","ref","alt"});
 
     // 100 page constant for now
-    int totalCount = mPrj->sqliteManager()->variantsCount(temp);
+    int totalCount = cutevariant->sqliteManager()->variantsCount(temp);
     mPageValidator->setRange(0, totalCount/100);
 
     mCountLabel->setText(QString("%1 r(s)").arg(totalCount));
@@ -133,7 +132,7 @@ void ResultsView::save()
     if (dialog.exec() == QDialog::Accepted)
     {
 
-        if (!mPrj->sqliteManager()->variantsTo(mModel->currentQuery(), nameEdit->text()))
+        if (!cutevariant->sqliteManager()->variantsTo(mModel->currentQuery(), nameEdit->text()))
             QMessageBox::warning(this,"error", "cannot create table");
 
 
@@ -161,7 +160,7 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
         qDebug()<<mModel->record(index).value("id");
         //        int variantID = mModel->item(index.row())->data().toInt();
         //        qDebug()<<variantID;
-        //        cvar::Variant var = mPrj->sqliteManager()->variant(variantID);
+        //        cvar::Variant var = cutevariant->sqliteManager()->variant(variantID);
 
         //        QMenu menu(this);
         //        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){

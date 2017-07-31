@@ -10,7 +10,7 @@ class ResultTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    ResultTreeModel(cvar::Project * prj, QObject * parent = nullptr);
+    ResultTreeModel(QObject * parent = nullptr);
 
     QModelIndex index(int row, int column, const QModelIndex &parent) const override;
     QModelIndex parent(const QModelIndex &child) const override;
@@ -36,7 +36,6 @@ public Q_SLOTS:
 
 
 private:
-    cvar::Project * mProject;
     cvar::VariantQuery mCurrentQuery;
     QList<QSqlRecord> mRecords;
     QHash<int, QList<QSqlRecord>> mChilds;

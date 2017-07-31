@@ -1,8 +1,8 @@
 #include "selectionview.h"
 
 
-SelectionView::SelectionView(cvar::Project *prj, QWidget *parent)
-    :QListView(parent), mPrj(prj)
+SelectionView::SelectionView(QWidget *parent)
+    :QListView(parent)
 {
     mModel = new QStringListModel;
     setModel(mModel);
@@ -22,7 +22,7 @@ void SelectionView::load()
 {
 
     QStringList list;
-    for (cvar::VariantSelection selection : mPrj->sqliteManager()->variantSelections())
+    for (cvar::VariantSelection selection : cutevariant->sqliteManager()->variantSelections())
         list.append(selection.name());
 
     mModel->setStringList(list);

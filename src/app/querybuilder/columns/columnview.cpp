@@ -1,10 +1,9 @@
 #include "columnview.h"
 
-ColumnView::ColumnView(cvar::Project *prj, QWidget *parent)
+ColumnView::ColumnView(QWidget *parent)
     :QTreeView(parent)
 {
-    mProject = prj;
-    mModel   = new ColumnModel(prj);
+    mModel   = new ColumnModel();
     setModel(mModel);
     setWindowTitle(tr("Fields"));
     viewport()->setAutoFillBackground( false );

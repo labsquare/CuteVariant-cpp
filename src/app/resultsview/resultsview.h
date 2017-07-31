@@ -10,7 +10,7 @@ class ResultsView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ResultsView(cvar::Project * prj, QWidget *parent = nullptr);
+    explicit ResultsView( QWidget *parent = nullptr);
 
 public Q_SLOTS:
     void setQuery(const cvar::VariantQuery& query);
@@ -33,7 +33,6 @@ protected:
 private:
     QTreeView * mView;
     ResultTreeModel * mModel;
-    cvar::Project * mPrj;
     QToolBar * mTopToolBar;
     QToolBar * mBottomToolBar;
     QLineEdit * mPageBox;

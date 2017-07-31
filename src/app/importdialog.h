@@ -8,7 +8,7 @@ class ImportDialog : public QDialog
 {
     Q_OBJECT
 public:
-    ImportDialog( cvar::Project * prj);
+    ImportDialog();
     void setFilename(const QString& file);
 
     virtual int exec() override;
@@ -19,7 +19,6 @@ protected Q_SLOTS:
     void importFinished();
 
 private:
-    cvar::Project * mPrj;
     QProgressBar * mBar;
     QPlainTextEdit * mEdit;
     QDialogButtonBox * mButtonBox;

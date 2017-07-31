@@ -2,10 +2,9 @@
 
 
 
-ResultTreeModel::ResultTreeModel(cvar::Project *prj, QObject *parent)
+ResultTreeModel::ResultTreeModel( QObject *parent)
     :QAbstractItemModel(parent)
 {
-    mProject = prj;
 }
 //---------------------------------------------------------------------------
 
@@ -140,7 +139,7 @@ void ResultTreeModel::fetchMore(const QModelIndex &parent)
     temp.setGroupBy({});
     temp.setNoLimit();
 
-    QSqlQuery query = mProject->sqliteManager()->variants(temp);
+    QSqlQuery query = cutevariant->sqliteManager()->variants(temp);
 
     while (query.next())
     {
@@ -202,7 +201,7 @@ void ResultTreeModel::load()
     mRecords.clear();
     mChilds.clear();
 
-    QSqlQuery query = mProject->sqliteManager()->variants(mCurrentQuery);
+    QSqlQuery query = cutevariant->sqliteManager()->variants(mCurrentQuery);
     qDebug()<<query.lastError().text();
     qDebug()<<query.lastQuery();
 

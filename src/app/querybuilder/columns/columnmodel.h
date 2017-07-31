@@ -1,15 +1,15 @@
 #ifndef COLUMNMODEL_H
 #define COLUMNMODEL_H
 #include <QStandardItemModel>
-#include "project.h"
 #include "field.h"
 #include "sample.h"
+#include "project.h"
 
 class ColumnModel : public QStandardItemModel
 {
     Q_OBJECT
 public:
-    ColumnModel(cvar::Project * prj, QObject * parent = nullptr);
+    ColumnModel( QObject * parent = nullptr);
     void load();
 
     QStringList selectedColumns() const;
@@ -25,7 +25,6 @@ protected:
 
 private:
 
-cvar::Project * mProject;
 QStandardItem * mVariantItem;
 QStandardItem * mAnnotationItem;
 QStandardItem * mSampleItem;

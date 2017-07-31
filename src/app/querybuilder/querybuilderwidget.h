@@ -11,7 +11,7 @@ class QueryBuilderWidget : public QWidget
 {
     Q_OBJECT
 public:
-    QueryBuilderWidget(cvar::Project * prj, QWidget * parent = nullptr);
+    QueryBuilderWidget(QWidget * parent = nullptr);
 
     cvar::VariantQuery query() const;
 
@@ -26,7 +26,6 @@ protected Q_SLOTS:
 
 
 private:
-    cvar::Project * mProject;
     QToolBar * mBar;
     QPushButton * mMenuButton;
     QStackedWidget * mStack;

@@ -7,11 +7,11 @@
 class LocationLineEdit : public QLineEdit
 {
 public:
-    LocationLineEdit(cvar::Project * prj, QWidget * parent = nullptr);
+    LocationLineEdit(QWidget * parent = nullptr);
 
 
 private:
-    cvar::Project * mPrj;
+
 };
 
 #endif // LOCATIONLINEEDIT_H
