@@ -1,21 +1,6 @@
 #include "logicmodel.h"
 #include <QDebug>
 
-QHash<QString,Operator> LogicModel::sLogicOperator ={
-    {"and",{"and", "&&", QObject::tr("all is true")}},
-    {"or" ,{"or", "||",  QObject::tr("one must be true")}}
-};
-
-
-QHash<QString,Operator> LogicModel::sConditionOperator ={
-    {"gt",{"gt", ">", QObject::tr("greater than")}},
-    {"gte",{"gte", ">=", QObject::tr("greater than or equal")}},
-    {"lt",{"lt", "<", QObject::tr("lesser than")}},
-    {"lte",{"lte", "<=", QObject::tr("lesser than or equal")}},
-    {"eq",{"eq", "=", QObject::tr("equal")}},
-    {"neq",{"neq", "=", QObject::tr("not equal")}}
-};
-
 
 
 GroupItem::GroupItem(const QString &logicOperator)
@@ -99,43 +84,24 @@ LogicModel::LogicModel(QObject * parent)
 void LogicModel::createGroup(QStandardItem *parent)
 {
 
-    Operator op = LogicModel::logicOperator("and");
-    GroupItem * gp = new GroupItem(op.name.toUpper());
-    gp->setToolTip(op.description);
+//    OperatorToRemove op = LogicModel::logicOperator("and");
+//    GroupItem * gp = new GroupItem(op.name.toUpper());
+//    gp->setToolTip(op.description);
 
-    if (parent == Q_NULLPTR)
-        appendRow(gp);
-    else
-        parent->appendRow(gp);
+//    if (parent == Q_NULLPTR)
+//        appendRow(gp);
+//    else
+//        parent->appendRow(gp);
 
 }
 
 void LogicModel::createCondition(QStandardItem *parent)
 {
-    ConditionItem * item = new ConditionItem;
-    item->setValue("chr", "==", "'chr3'");
-    parent->appendRow(item);
+//    ConditionItem * item = new ConditionItem;
+//    item->setValue("chr", "==", "'chr3'");
+//    parent->appendRow(item);
 }
 
-QList<Operator> LogicModel::logicOperators()
-{
-    return sLogicOperator.values();
-}
-
-QList<Operator> LogicModel::conditionOperators()
-{
-    return sConditionOperator.values();
-}
-
-Operator LogicModel::conditionOperator(const QString &name)
-{
-    return sConditionOperator.value(name);
-}
-
-Operator LogicModel::logicOperator(const QString &name)
-{
-    return sLogicOperator.value(name);
-}
 
 QString LogicModel::makeQuery()
 {

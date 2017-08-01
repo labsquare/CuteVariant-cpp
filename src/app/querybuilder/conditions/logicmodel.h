@@ -7,17 +7,11 @@
 /*!
  * The following struct and class are used to manage the dynamic filter model
  */
-struct Operator;
 class GroupItem;
 class ConditionItem;
 class LogicModel;
 
 
-struct Operator{
-    QString name;
-    QString symbol;
-    QString description;
-};
 
 
 class GroupItem : public QStandardItem
@@ -63,11 +57,11 @@ public:
     void createGroup(QStandardItem * parent = Q_NULLPTR);
     void createCondition(QStandardItem * parent);
 
-    static  QList<Operator> conditionOperators() ;
-    static  QList<Operator> logicOperators();
+//    static  QList<OperatorToRemove> conditionOperators() ;
+//    static  QList<OperatorToRemove> logicOperators();
 
-    static Operator conditionOperator(const QString& name) ;
-    static Operator logicOperator(const QString& name);
+//    static OperatorToRemove conditionOperator(const QString& name) ;
+//    static OperatorToRemove logicOperator(const QString& name);
 
     QString makeQuery() ;
 
@@ -79,8 +73,6 @@ protected:
 
 private:
 
-    static QHash<QString,Operator> sLogicOperator;
-    static QHash<QString,Operator> sConditionOperator;
 
 
 };

@@ -1,23 +1,23 @@
 #ifndef CONDITIONDIALOG_H
 #define CONDITIONDIALOG_H
 #include <QtWidgets>
-#include "condannwidget.h"
 #include "project.h"
+
+#include "annotationconditionpage.h"
+#include "genotypeconditionpage.h"
+
 
 class ConditionDialog : public QDialog
 {
 public:
-    ConditionDialog(cvar::Project * prj, QWidget * parent = nullptr);
+    ConditionDialog(QWidget * parent = nullptr);
     void addWidget(QWidget * w);
 
 protected:
 
-
-
 private:
     QDialogButtonBox * mBox;
     QTabWidget * mTabWidget;
-    cvar::Project * mPrj;
 
 };
 

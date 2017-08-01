@@ -49,6 +49,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     cutevariant->setDatabasePath("/home/sacha/TRIO1.family.vcf.db");
 
+
+    ConditionDialog dialog;
+    dialog.exec();
+
     reset();
 
 }
