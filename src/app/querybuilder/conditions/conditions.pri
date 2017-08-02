@@ -9,13 +9,15 @@ HEADERS += \
     $$PWD/genotypeconditionpage.h \
     $$PWD/annotationconditionpage.h \
     $$PWD/conditionfieldfactory.h \
-    $$PWD/abstractfield.h \
-    $$PWD/integerfield.h \
-    $$PWD/stringfield.h \
     $$PWD/boolfield.h \
-    $$PWD/doublefield.h \
-    $$PWD/listfield.h \
-    $$PWD/operator.h
+    $$PWD/operator.h \
+    $$PWD/abstractfieldwidget.h \
+    $$PWD/stringfieldwidget.h \
+    $$PWD/integerfieldwidget.h \
+    $$PWD/doublefieldwidget.h \
+    $$PWD/listfieldwidget.h \
+    $$PWD/rangefieldwidget.h \
+    $$PWD/conditionalitem.h
 
 SOURCES += \
     $$PWD/conditiondialog.cpp \
@@ -25,10 +27,12 @@ SOURCES += \
     $$PWD/genotypeconditionpage.cpp \
     $$PWD/conditionfieldfactory.cpp \
     $$PWD/annotationconditionpage.cpp \
-    $$PWD/abstractfield.cpp \
-    $$PWD/integerfield.cpp \
-    $$PWD/stringfield.cpp \
     $$PWD/boolfield.cpp \
-    $$PWD/doublefield.cpp \
-    $$PWD/listfield.cpp \
-    $$PWD/operator.cpp
+    $$PWD/operator.cpp \
+    $$PWD/abstractfieldwidget.cpp \
+    $$PWD/stringfieldwidget.cpp \
+    $$PWD/integerfieldwidget.cpp \
+    $$PWD/doublefieldwidget.cpp \
+    $$PWD/listfieldwidget.cpp \
+    $$PWD/rangefieldwidget.cpp \
+    $$PWD/conditionalitem.cpp

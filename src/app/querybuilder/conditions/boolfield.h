@@ -1,9 +1,9 @@
 #ifndef BOOLFIELD_H
 #define BOOLFIELD_H
 #include <QtWidgets>
-#include "abstractfield.h"
+#include "abstractfieldwidget.h"
 
-class BoolField : public AbstractField
+class BoolField : public AbstractFieldWidget
 {
 public:
     BoolField(QWidget * parent = nullptr);

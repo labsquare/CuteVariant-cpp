@@ -1,7 +1,7 @@
 #include "boolfield.h"
 
 BoolField::BoolField(QWidget *parent)
-    :AbstractField(parent)
+    :AbstractFieldWidget(parent)
 {
 
     mBox = new QComboBox;

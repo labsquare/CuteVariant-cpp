@@ -3,22 +3,20 @@
 AnnotationConditionPage::AnnotationConditionPage(QWidget *parent) : QWidget(parent)
 {
 
-    mFieldbox = new QComboBox;
-    mDescription = new QLabel;
+    mFieldbox     = new QComboBox;
+    mDescription  = new QLabel;
+    mOperatorBox  = new QComboBox;
+    mValueWidget  = nullptr;
 
-
-    QComboBox * test1 = new QComboBox;
-    QSpinBox * test2  = new QSpinBox;
-
-    test2->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    mOperatorBox->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
 
     mFormLayout = new QFormLayout;
     mFormLayout->addRow("fields",mFieldbox);
-    mFormLayout->addRow("operator",test1);
-    mFormLayout->addRow("value",new ListField);
+    mFormLayout->addRow("operator",mOperatorBox);
+    mFormLayout->addRow("value",new QWidget);
 
 
-    mFormLayout->setFormAlignment(Qt::AlignVCenter|Qt::AlignCenter);
+    mFormLayout->setFormAlignment(Qt::AlignTop|Qt::AlignHCenter);
 
 
     mDescription->setWordWrap(true);
@@ -31,7 +29,19 @@ AnnotationConditionPage::AnnotationConditionPage(QWidget *parent) : QWidget(pare
     loadFields();
 
     // see Qt documentation for this syntax
-    connect(mFieldbox, SIGNAL(currentIndexChanged(int)),this,SLOT(fieldChanged(int)));
+    connect(mFieldbox, SIGNAL(activated(int)),this,SLOT(loadOperators()));
+    connect(mOperatorBox, SIGNAL(activated(int)),this,SLOT(loadForm()));
+
+
+}
+
+ConditionalItem *AnnotationConditionPage::toItem() const
+{
+
+    return new ConditionalItem(mFieldbox->currentText(),
+                               Operator::Type(mOperatorBox->currentData().toInt()),
+                               mValueWidget->value()
+                               );
 
 }
 
@@ -41,18 +51,42 @@ void AnnotationConditionPage::loadFields()
     mFieldbox->clear();
     mFields =  cutevariant->sqliteManager()->fields();
     for (cvar::Field f : mFields)
-        mFieldbox->addItem(f.name(),f.id());
+        mFieldbox->addItem(f.name().toUpper(),f.id());
 
 
+    loadOperators();
 }
 
-void AnnotationConditionPage::fieldChanged(int index)
+void AnnotationConditionPage::loadOperators()
 {
+    mOperatorBox->clear();
+    for (Operator::Type type : ConditionFieldFactory::operatorsList(mFields[mFieldbox->currentIndex()]))
+        mOperatorBox->addItem(Operator::name(type).toUpper(), int(type));
 
-    // avaible from Qt 5.8
-    mFormLayout->removeRow(2);
-    mFormLayout->insertRow(2,"Value", ConditionFieldFactory::widget(mFields[index]));
-
-
+    loadForm();
 
 }
+void AnnotationConditionPage::loadForm()
+{
+    // delete
+    mFormLayout->removeRow(2);
+
+    mValueWidget = nullptr;
+
+
+    if (mOperatorBox->currentData() == int(Operator::In))
+        mValueWidget = new ListFieldWidget;
+
+    if (mOperatorBox->currentData() == int(Operator::Between))
+        mValueWidget = new RangeFieldWidget;
+
+    if (mValueWidget == nullptr)
+        mValueWidget = ConditionFieldFactory::widget(mFields[mFieldbox->currentIndex()]);
+
+
+    // the method avaible from Qt 5.8
+    mFormLayout->insertRow(2,"Value", mValueWidget);
+
+}
+
+

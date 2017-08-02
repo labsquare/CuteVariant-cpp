@@ -5,6 +5,7 @@
 
 #include "annotationconditionpage.h"
 #include "genotypeconditionpage.h"
+#include "conditionalitem.h"
 
 
 class ConditionDialog : public QDialog
@@ -13,7 +14,9 @@ public:
     ConditionDialog(QWidget * parent = nullptr);
     void addWidget(QWidget * w);
 
-protected:
+
+    ConditionalItem * toItem();
+
 
 private:
     QDialogButtonBox * mBox;

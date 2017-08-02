@@ -2,11 +2,11 @@
 #define ABSTRACTFIELD_H
 #include <QtWidgets>
 
-class AbstractField : public QWidget
+class AbstractFieldWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AbstractField(QWidget *parent = 0);
+    explicit AbstractFieldWidget(QWidget *parent = 0);
 
     virtual QVariant value() const = 0;
     virtual void setValue(const QVariant& value) = 0;

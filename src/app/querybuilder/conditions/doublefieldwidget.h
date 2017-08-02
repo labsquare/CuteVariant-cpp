@@ -1,12 +1,12 @@
 #ifndef DOUBLEFIELD_H
 #define DOUBLEFIELD_H
 #include <QtWidgets>
-#include "abstractfield.h"
+#include "abstractfieldwidget.h"
 
-class DoubleField : public AbstractField
+class DoubleFieldWidget : public AbstractFieldWidget
 {
 public:
-    DoubleField(QWidget * parent = nullptr);
+    DoubleFieldWidget(QWidget * parent = nullptr);
     QVariant value() const override;
     void setValue(const QVariant& value) override;
 

@@ -3,7 +3,9 @@
 #include <QtWidgets>
 #include "project.h"
 #include "conditionfieldfactory.h"
-#include "listfield.h"
+#include "listfieldwidget.h"
+#include "rangefieldwidget.h"
+#include "conditionalitem.h"
 
 class AnnotationConditionPage : public QWidget
 {
@@ -11,20 +13,25 @@ class AnnotationConditionPage : public QWidget
 public:
     explicit AnnotationConditionPage(QWidget *parent = 0);
 
+    ConditionalItem * toItem() const;
+
 
 protected:
     void loadFields();
 
 protected Q_SLOTS:
-    void fieldChanged(int index);
+    void loadOperators();
+    void loadForm();
 
 
 
 private:
     QComboBox * mFieldbox;
+    QComboBox * mOperatorBox;
     QLabel * mDescription;
     QList<cvar::Field> mFields;
     QFormLayout * mFormLayout;
+    AbstractFieldWidget * mValueWidget;
 
 
 

@@ -1,13 +1,13 @@
 #ifndef LISTFIELD_H
 #define LISTFIELD_H
 #include <QtWidgets>
-#include "abstractfield.h"
+#include "abstractfieldwidget.h"
 
-class ListField : public AbstractField
+class ListFieldWidget : public AbstractFieldWidget
 {
     Q_OBJECT
 public:
-    ListField(QWidget * parent = nullptr);
+    ListFieldWidget(QWidget * parent = nullptr);
     QVariant value() const override;
     void setValue(const QVariant& value) override;
 

@@ -1,7 +1,7 @@
-#include "integerfield.h"
+#include "integerfieldwidget.h"
 
-IntegerField::IntegerField(QWidget *parent)
-    :AbstractField(parent)
+IntegerFieldWidget::IntegerFieldWidget(QWidget *parent)
+    :AbstractFieldWidget(parent)
 {
     mSpinBox = new QSpinBox;
     mSlider  = new QSlider(Qt::Horizontal);
@@ -22,23 +22,23 @@ IntegerField::IntegerField(QWidget *parent)
 
 }
 
-QVariant IntegerField::value() const
+QVariant IntegerFieldWidget::value() const
 {
     return mSpinBox->value();
 }
 
-void IntegerField::setValue(const QVariant &value)
+void IntegerFieldWidget::setValue(const QVariant &value)
 {
     mSpinBox->setValue(value.toInt());
 }
 
-void IntegerField::setRange(int min, int max)
+void IntegerFieldWidget::setRange(int min, int max)
 {
     mSpinBox->setRange(min,max);
     mSlider->setRange(min,max);
 }
 
-void IntegerField::valueChanged(int value)
+void IntegerFieldWidget::valueChanged(int value)
 {
 
 

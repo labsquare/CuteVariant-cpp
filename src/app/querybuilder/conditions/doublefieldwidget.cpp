@@ -1,10 +1,10 @@
-#include "doublefield.h"
+#include "doublefieldwidget.h"
 
-DoubleField::DoubleField(QWidget *parent)
-    :AbstractField(parent)
+DoubleFieldWidget::DoubleFieldWidget(QWidget *parent)
+    :AbstractFieldWidget(parent)
 {
     mSpinBox = new QDoubleSpinBox;
-    mSlider  = new QSlider;
+    mSlider  = new QSlider(Qt::Horizontal);
 
     QVBoxLayout * vLayout = new QVBoxLayout;
     vLayout->addWidget(mSpinBox);
@@ -18,17 +18,17 @@ DoubleField::DoubleField(QWidget *parent)
 
 }
 
-QVariant DoubleField::value() const
+QVariant DoubleFieldWidget::value() const
 {
     return mSpinBox->value();
 }
 
-void DoubleField::setValue(const QVariant &value)
+void DoubleFieldWidget::setValue(const QVariant &value)
 {
     mSpinBox->setValue(value.toInt());
 }
 
-void DoubleField::setRange(double min, double max)
+void DoubleFieldWidget::setRange(double min, double max)
 {
     mSpinBox->setRange(min,max);
     mSlider->setRange(min,max);

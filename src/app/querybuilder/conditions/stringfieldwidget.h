@@ -1,12 +1,12 @@
 #ifndef STRINGFIELD_H
 #define STRINGFIELD_H
 #include <QWidget>
-#include "abstractfield.h"
+#include "abstractfieldwidget.h"
 
-class StringField : public AbstractField
+class StringFieldWidget : public AbstractFieldWidget
 {
 public:
-    StringField(QWidget * parent = nullptr);
+    StringFieldWidget(QWidget * parent = nullptr);
 
     QVariant value() const override;
     void setValue(const QVariant& value);

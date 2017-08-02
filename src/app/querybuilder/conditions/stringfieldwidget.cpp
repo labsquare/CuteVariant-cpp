@@ -1,7 +1,7 @@
-#include "stringfield.h"
+#include "stringfieldwidget.h"
 
-StringField::StringField(QWidget *parent)
-    :AbstractField(parent)
+StringFieldWidget::StringFieldWidget(QWidget *parent)
+    :AbstractFieldWidget(parent)
 {
 
     mEdit = new QLineEdit(this);
@@ -18,17 +18,17 @@ StringField::StringField(QWidget *parent)
     setLayout(vLayout);
 }
 
-QVariant StringField::value() const
+QVariant StringFieldWidget::value() const
 {
     return mEdit->text();
 }
 
-void StringField::setValue(const QVariant &value)
+void StringFieldWidget::setValue(const QVariant &value)
 {
     mEdit->setText(value.toString());
 }
 
-void StringField::setCompletion(QAbstractItemModel * m)
+void StringFieldWidget::setCompletion(QAbstractItemModel * m)
 {
     mEdit->completer()->setModel(m);
 

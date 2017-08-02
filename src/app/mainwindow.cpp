@@ -53,6 +53,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     ConditionDialog dialog;
     dialog.exec();
 
+    qDebug()<<dialog.toItem()->text();
+
     reset();
 
 }

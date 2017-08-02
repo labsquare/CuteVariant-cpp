@@ -1,7 +1,7 @@
-#include "listfield.h"
+#include "listfieldwidget.h"
 
-ListField::ListField(QWidget *parent)
-    :AbstractField(parent)
+ListFieldWidget::ListFieldWidget(QWidget *parent)
+    :AbstractFieldWidget(parent)
 {
 
     mView = new QListWidget;
@@ -21,15 +21,15 @@ ListField::ListField(QWidget *parent)
 //    remButton->setFlat(true);
     buttonLayout->setContentsMargins(0,0,0,0);
 
-    connect(addButton, &QPushButton::clicked, this, &ListField::add);
-    connect(remButton, &QPushButton::clicked, this, &ListField::rem);
+    connect(addButton, &QPushButton::clicked, this, &ListFieldWidget::add);
+    connect(remButton, &QPushButton::clicked, this, &ListFieldWidget::rem);
 
     vLayout->addLayout(buttonLayout);
     setLayout(vLayout);
 
 }
 
-QVariant ListField::value() const
+QVariant ListFieldWidget::value() const
 {
     QStringList list;
     for (int i = 0; i<mView->count(); ++i)
@@ -40,7 +40,7 @@ QVariant ListField::value() const
     return list;
 }
 
-void ListField::setValue(const QVariant &value)
+void ListFieldWidget::setValue(const QVariant &value)
 {
     QVariantList list = value.toList();
     mView->clear();
@@ -55,15 +55,18 @@ void ListField::setValue(const QVariant &value)
 
 }
 
-void ListField::add()
+void ListFieldWidget::add()
 {
     QListWidgetItem * item = new QListWidgetItem("<edit>");
     item->setFlags (item->flags () | Qt::ItemIsEditable);
 
     mView->addItem(item);
+
+    mView->setCurrentItem(item);
+    mView->editItem(item);
 }
 
-void ListField::rem()
+void ListFieldWidget::rem()
 {
     delete mView->takeItem(mView->currentRow());
 }
