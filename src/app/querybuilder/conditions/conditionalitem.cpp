@@ -1,17 +1,23 @@
 #include "conditionalitem.h"
 
-ConditionalItem::ConditionalItem(const QString &field, Operator::Type op, const QVariant &value)
-    :QStandardItem()
+ConditionalItem::ConditionalItem(const cvar::Field &field, Operator::Type op, const QVariant &value)
+    :QStandardItem(), mField(field)
 {
-    setData(field, FieldRole);
+
+    setData(field.name(), FieldRole);
     setData(op, OperatorRole);
     setData(value, ValueRole);
     updateText();
+
+    setEditable(false);
 }
 
-void ConditionalItem::setField(const QString &f)
+
+
+void ConditionalItem::setField(const cvar::Field &f)
 {
-    setData(f, FieldRole);
+    setData(f.name(),FieldRole);
+    mField = f;
     updateText();
 }
 
@@ -27,9 +33,14 @@ void ConditionalItem::setValue(const QVariant &value)
     updateText();
 }
 
-QString ConditionalItem::field() const
+int ConditionalItem::type() const
 {
-    return data(FieldRole).toString();
+    return FilterModel::ConditionalType;
+}
+
+const cvar::Field& ConditionalItem::field() const
+{
+    return mField;
 }
 
 QString ConditionalItem::operatorName() const
@@ -49,5 +60,7 @@ QVariant ConditionalItem::value() const
 
 void ConditionalItem::updateText()
 {
-   setText(QString("%1 %2 %3").arg(field()).arg(operatorName()).arg(value().toString()));
+    setText(QString("%1 %2 %3").arg(field().name()).arg(operatorName()).arg(value().toString()));
+    setData(QString("%1 %2 '%3'").arg(field().colname()).arg(operatorName()).arg(value().toString()), ConditionRole);
+
 }

@@ -38,10 +38,22 @@ AnnotationConditionPage::AnnotationConditionPage(QWidget *parent) : QWidget(pare
 ConditionalItem *AnnotationConditionPage::toItem() const
 {
 
-    return new ConditionalItem(mFieldbox->currentText(),
+    return new ConditionalItem(mFields[mFieldbox->currentIndex()],
                                Operator::Type(mOperatorBox->currentData().toInt()),
                                mValueWidget->value()
                                );
+
+}
+
+void AnnotationConditionPage::fromItem(ConditionalItem *item)
+{
+    qDebug()<<item->field().name();
+
+    mFieldbox->setCurrentText(item->field().name().toUpper());
+    loadOperators();
+    mOperatorBox->setCurrentText(Operator::name(item->operatorType()).toUpper());
+    loadForm();
+    mValueWidget->setValue(item->value());
 
 }
 

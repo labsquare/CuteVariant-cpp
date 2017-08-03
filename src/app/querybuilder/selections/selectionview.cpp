@@ -11,6 +11,8 @@ SelectionView::SelectionView(QWidget *parent)
     setFrameShape(QFrame::NoFrame);
 
     setWindowTitle("Selection");
+
+    load();
 }
 
 QString SelectionView::tableName() const

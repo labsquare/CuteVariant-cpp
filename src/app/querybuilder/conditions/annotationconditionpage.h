@@ -14,6 +14,7 @@ public:
     explicit AnnotationConditionPage(QWidget *parent = 0);
 
     ConditionalItem * toItem() const;
+    void fromItem(ConditionalItem * item);
 
 
 protected:

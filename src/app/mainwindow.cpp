@@ -50,11 +50,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     cutevariant->setDatabasePath("/home/sacha/TRIO1.family.vcf.db");
 
 
-    ConditionDialog dialog;
-    dialog.exec();
-
-    qDebug()<<dialog.toItem()->text();
-
     reset();
 
 }
@@ -142,17 +137,10 @@ void MainWindow::saveFile()
 void MainWindow::refresh()
 {
 
-
     mResultsView->setQuery(mQueryBuilderWidget->query());
-
-
-
 }
 //-------------------------------------------------------------------------
 void MainWindow::reset()
 {
-
         mQueryBuilderWidget->load();
-
-
 }

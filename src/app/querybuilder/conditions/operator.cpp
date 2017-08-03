@@ -12,6 +12,7 @@ QHash<Operator::Type, QPair<QString, QString> > Operator::sMaps =
     {Operator::In, {"in","IN"}},
     {Operator::Between, {"between","BETWEEN"}},
     {Operator::Like, {"like","LIKE"}}
+
 };
 
 QString Operator::symbol(Operator::Type type)

@@ -16,6 +16,7 @@ public:
 
 
     ConditionalItem * toItem();
+    void fromItem(ConditionalItem * item);
 
 
 private:

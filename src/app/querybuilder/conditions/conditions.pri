@@ -3,9 +3,6 @@ INCLUDEPATH += $$PWD
 
 HEADERS += \
     $$PWD/conditiondialog.h \
-    $$PWD/logicdelegate.h \
-    $$PWD/logicmodel.h \
-    $$PWD/logicview.h \
     $$PWD/genotypeconditionpage.h \
     $$PWD/annotationconditionpage.h \
     $$PWD/conditionfieldfactory.h \
@@ -17,13 +14,14 @@ HEADERS += \
     $$PWD/doublefieldwidget.h \
     $$PWD/listfieldwidget.h \
     $$PWD/rangefieldwidget.h \
-    $$PWD/conditionalitem.h
+    $$PWD/conditionalitem.h \
+    $$PWD/logicitem.h \
+    $$PWD/filterview.h \
+    $$PWD/filtermodel.h \
+    $$PWD/filterdelegate.h
 
 SOURCES += \
     $$PWD/conditiondialog.cpp \
-    $$PWD/logicdelegate.cpp \
-    $$PWD/logicmodel.cpp \
-    $$PWD/logicview.cpp \
     $$PWD/genotypeconditionpage.cpp \
     $$PWD/conditionfieldfactory.cpp \
     $$PWD/annotationconditionpage.cpp \
@@ -35,4 +33,8 @@ SOURCES += \
     $$PWD/doublefieldwidget.cpp \
     $$PWD/listfieldwidget.cpp \
     $$PWD/rangefieldwidget.cpp \
-    $$PWD/conditionalitem.cpp
+    $$PWD/conditionalitem.cpp \
+    $$PWD/logicitem.cpp \
+    $$PWD/filterview.cpp \
+    $$PWD/filtermodel.cpp \
+    $$PWD/filterdelegate.cpp

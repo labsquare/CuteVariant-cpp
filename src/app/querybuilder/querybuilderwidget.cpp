@@ -32,16 +32,16 @@ QueryBuilderWidget::QueryBuilderWidget(QWidget *parent)
     //    addWidget(new ColumnView(prj));
 
 
+    mFilterView = new FilterView();
+    addWidget(mFilterView);
+
+
+
     mSelectionView = new SelectionView();
     addWidget(mSelectionView);
 
     mColumnView = new ColumnView();
     addWidget(mColumnView);
-
-    mLogicView = new LogicView();
-    addWidget(mLogicView);
-
-
 
     //    // add table model
     //    QTableView * tableView = new QTableView;
@@ -69,7 +69,7 @@ cvar::VariantQuery QueryBuilderWidget::query() const
     cvar::VariantQuery q;
     q.setColumns(mColumnView->selectedColumns());
     q.setTable(mSelectionView->tableName());
-    q.setCondition(mLogicView->query());
+    q.setCondition(mFilterView->query());
 
     return q;
 }

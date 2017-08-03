@@ -2,7 +2,7 @@
 #define QUERYBUILDERWIDGET_H
 #include <QtWidgets>
 #include "project.h"
-#include "logicview.h"
+#include "filterview.h"
 #include "columnview.h"
 #include "selectionview.h"
 #include "variantquery.h"
@@ -32,7 +32,7 @@ private:
     QHash<QAction*, QWidget*> mWidgets;
 
     ColumnView * mColumnView;
-    LogicView * mLogicView;
+    FilterView * mFilterView;
     SelectionView * mSelectionView;
 
 

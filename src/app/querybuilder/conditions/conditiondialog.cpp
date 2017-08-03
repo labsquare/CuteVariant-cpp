@@ -15,6 +15,8 @@ ConditionDialog::ConditionDialog(QWidget *parent)
     addWidget(new GenotypeConditionPage());
 
 
+    connect(mBox,SIGNAL(accepted()),this,SLOT(accept()));
+    connect(mBox,SIGNAL(rejected()),this,SLOT(reject()));
 
 
 
@@ -32,4 +34,10 @@ void ConditionDialog::addWidget(QWidget *w)
 ConditionalItem *ConditionDialog::toItem()
 {
     return qobject_cast<AnnotationConditionPage*>(mTabWidget->widget(0))->toItem();
+}
+
+void ConditionDialog::fromItem(ConditionalItem *item)
+{
+   qobject_cast<AnnotationConditionPage*>(mTabWidget->widget(0))->fromItem(item);
+
 }
