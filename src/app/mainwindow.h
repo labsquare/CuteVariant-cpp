@@ -6,11 +6,13 @@
 #include "project.h"
 
 #include "resultsview.h"
-#include "queryeditor.h"
+#include "vqleditor.h"
 #include "querybuilderwidget.h"
 #include "importdialog.h"
 #include "locationlineedit.h"
 #include "resulttreemodel.h"
+
+#include "columndockwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -35,6 +37,7 @@ public Q_SLOTS:
 
 
 protected Q_SLOTS:
+    void execute();
     void refresh();
     void reset();
 
@@ -44,12 +47,12 @@ private:
 
 
     QTreeView * mView;
-    QueryEditor * mEditor;
+    VqlEditor * mEditor;
     ResultsView * mResultsView;
     QueryBuilderWidget * mQueryBuilderWidget;
     LocationLineEdit * mLocLineEdit;
 
-
+    ColumnDockWidget * columnDockWidget;
 
 };
 

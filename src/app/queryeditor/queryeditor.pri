@@ -1,9 +1,9 @@
 INCLUDEPATH += $$PWD
 
 HEADERS += \
-    $$PWD/queryeditor.h \
-    $$PWD/queryhighlighter.h
+    $$PWD/vqlhighlighter.h \
+    $$PWD/vqleditor.h
 
 SOURCES += \
-    $$PWD/queryeditor.cpp \
-    $$PWD/queryhighlighter.cpp
+    $$PWD/vqlhighlighter.cpp \
+    $$PWD/vqleditor.cpp

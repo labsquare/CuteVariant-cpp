@@ -24,9 +24,11 @@ RESOURCES += icons/icons.qrc
 
 HEADERS += \
     mainwindow.h \
-    importdialog.h
+    importdialog.h \
+    basedockwidget.h
 
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    importdialog.cpp
+    importdialog.cpp \
+    basedockwidget.cpp

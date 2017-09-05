@@ -30,8 +30,8 @@ void Project::setDatabasePath(const QString &path)
     if (!mSqlDb.open())
         qDebug()<<"cannot open database";
 
-    QFileInfo info(path);
-    mSqliteManager->createProject(info.baseName());
+//    QFileInfo info(path);
+//    mSqliteManager->createProject(info.baseName());
 }
 
 void Project::importFile(const QString &filename)

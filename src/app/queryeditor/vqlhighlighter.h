@@ -3,10 +3,10 @@
 #include <QtCore>
 #include <QSyntaxHighlighter>
 
-class QueryHighlighter : public QSyntaxHighlighter
+class VqlHighlighter : public QSyntaxHighlighter
 {
 public:
-    QueryHighlighter(QTextDocument *parent = 0);
+    VqlHighlighter(QTextDocument *parent = 0);
 
 
 protected:

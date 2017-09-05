@@ -13,7 +13,6 @@ ResultsView::ResultsView(QWidget *parent) : QWidget(parent)
 
 
     mTopToolBar    = new QToolBar;
-    mBottomToolBar = new QToolBar;
     mPageBox       = new QLineEdit;
     mPageValidator = new QIntValidator;
     mCountLabel    = new QLabel;
@@ -25,36 +24,37 @@ ResultsView::ResultsView(QWidget *parent) : QWidget(parent)
     mPageBox->setMaximumWidth(50);
     mPageBox->setStyleSheet("* { background-color: rgba(0, 0, 0, 0); }");
     mPageBox->setAlignment(Qt::AlignHCenter);
-    connect(mPageBox,SIGNAL(returnPressed()),this,SLOT(setQuery()));
+
+
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-    QWidget* spacer = new QWidget();
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    mBottomToolBar->addWidget(mCountLabel);
-    mBottomToolBar->addWidget(spacer);
 
     vLayout->addWidget(mTopToolBar);
     vLayout->addWidget(mView);
-    vLayout->addWidget(mBottomToolBar);
     vLayout->setSpacing(0);
     vLayout->setContentsMargins(0,0,0,0);
     setLayout(vLayout);
 
 
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    mTopToolBar->addAction(QIcon::fromTheme("document-save"), "Save table", this, SLOT(save()));
-    mTopToolBar->addAction(QIcon::fromTheme("document-export"),"Export table", this, SLOT(exportCsv()));
+    mTopToolBar->addAction(QIcon::fromTheme(""), "Save table", this, SLOT(save()));
+    mTopToolBar->addAction(QIcon::fromTheme(""),"Export table", this, SLOT(exportCsv()));
+    mTopToolBar->layout()->setContentsMargins(0,0,0,0);
 
 
+    QWidget * spacer = new QWidget;
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    mTopToolBar->addWidget(spacer);
 
-
-    mBottomToolBar->setIconSize(QSize(16,16));
-    mBottomToolBar->addAction(QIcon::fromTheme("go-first"),"<<", this, SLOT(pageFirst()));
-    mBottomToolBar->addAction(QIcon::fromTheme("go-previous"),"<", this, SLOT(pageDown()));
-    mBottomToolBar->addWidget(mPageBox);
-    mBottomToolBar->addAction(QIcon::fromTheme("go-next"),">", this, SLOT(pageUp()));
-    mBottomToolBar->addAction(QIcon::fromTheme("go-last"),">>", this, SLOT(pageLast()));
+    mTopToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    mTopToolBar->setIconSize(QSize(16,16));
+    mTopToolBar->addAction(QIcon::fromTheme("go-first"),"<<", this, SLOT(pageFirst()));
+    mTopToolBar->addAction(QIcon::fromTheme("go-previous"),"<", this, SLOT(pageDown()));
+    mTopToolBar->addWidget(mPageBox);
+    mTopToolBar->addAction(QIcon::fromTheme("go-next"),">", this, SLOT(pageUp()));
+    mTopToolBar->addAction(QIcon::fromTheme("go-last"),">>", this, SLOT(pageLast()));
+    mTopToolBar->layout()->setContentsMargins(0,0,0,0);
 
 
 

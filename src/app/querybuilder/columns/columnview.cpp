@@ -9,8 +9,6 @@ ColumnView::ColumnView(QWidget *parent)
     viewport()->setAutoFillBackground( false );
     setFrameShape(QFrame::NoFrame);
     header()->hide();
-
-    load();
 }
 
 QStringList ColumnView::selectedColumns() const

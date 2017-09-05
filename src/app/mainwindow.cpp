@@ -1,56 +1,49 @@
 #include "mainwindow.h"
 #include "project.h"
+#include "columndockwidget.h"
 
 using namespace cvar;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
 
-    mEditor                = new QueryEditor;
-    mQueryBuilderWidget    = new QueryBuilderWidget();
+
+    // Variant query editor
+    mEditor                = new VqlEditor();
+
+    // Main result view
     mResultsView           = new ResultsView();
-    mLocLineEdit           = new LocationLineEdit();
 
+    // dock widget
+    columnDockWidget       = new ColumnDockWidget();
+    addDockWidget(Qt::LeftDockWidgetArea,columnDockWidget);
 
-    // setup widgets
+    // setup central widget
     QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
     mainSplitter->addWidget(mResultsView);
-    //mainSplitter->addWidget(mEditor);
-
-    QSplitter * secondSplitter = new QSplitter(Qt::Horizontal);
-    secondSplitter->addWidget(mQueryBuilderWidget);
-    secondSplitter->addWidget(mainSplitter);
-    secondSplitter->setStretchFactor(0, 20);
-    secondSplitter->setStretchFactor(1, 80);
-
-    setCentralWidget(secondSplitter);
-
-
+    mainSplitter->addWidget(mEditor);
+    setCentralWidget(mainSplitter);
 
     // setup toolbox
     QToolBar * bar = addToolBar("main");
     bar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     bar->setFloatable(false);
     bar->setMovable(false);
-
     bar->addAction(QIcon::fromTheme("document-import"),tr("Import"),this, SLOT(importFile()));
     bar->addAction(QIcon::fromTheme("document-open"),tr("Open"),this, SLOT(openFile()));
-    bar->addAction(QIcon::fromTheme("document-save"),tr("Save"),this, SLOT(saveFile()));
+    bar->addAction(QIcon::fromTheme("document-open"),tr("Save"),this, SLOT(saveFile()));
     bar->addAction(QIcon::fromTheme("run-build"),tr("Play"),this,SLOT(refresh()));
 
 
-    // add spacer
-    QWidget* spacer = new QWidget();
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    bar->addWidget(spacer);
-    bar->addWidget(mLocLineEdit);
+    // connection
+    // exec
+    connect(mEditor,&VqlEditor::returnPressed, this, &MainWindow::execute);
 
-    restoreSettings();
 
+    // For Dev testing
     cutevariant->setDatabasePath("/home/sacha/TRIO1.family.vcf.db");
-
-
     reset();
+
 
 }
 //-------------------------------------------------------------------------
@@ -133,6 +126,28 @@ void MainWindow::saveFile()
 {
 
 }
+
+void MainWindow::execute()
+{
+
+    if (mEditor->isValid())
+    {
+
+        QString vql    = mEditor->toVql();
+        VariantQuery q = VariantQuery::fromVql(vql);
+        mResultsView->setQuery(q);
+
+    }
+
+
+
+
+
+
+
+
+
+}
 //-------------------------------------------------------------------------
 void MainWindow::refresh()
 {
@@ -142,5 +157,5 @@ void MainWindow::refresh()
 //-------------------------------------------------------------------------
 void MainWindow::reset()
 {
-        mQueryBuilderWidget->load();
+    columnDockWidget->load();
 }

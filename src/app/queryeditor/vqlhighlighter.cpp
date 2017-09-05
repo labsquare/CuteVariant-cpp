@@ -1,6 +1,6 @@
-#include "queryhighlighter.h"
+#include "vqlhighlighter.h"
 
-QueryHighlighter::QueryHighlighter(QTextDocument *parent)
+VqlHighlighter::VqlHighlighter(QTextDocument *parent)
     :QSyntaxHighlighter(parent)
 {
 
@@ -8,7 +8,7 @@ QueryHighlighter::QueryHighlighter(QTextDocument *parent)
 
 }
 
-void QueryHighlighter::highlightBlock(const QString &text)
+void VqlHighlighter::highlightBlock(const QString &text)
 {
 
     QRegularExpression exp("(SELECT|FROM|WHERE|IN)");

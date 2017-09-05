@@ -17,6 +17,8 @@ public:
                  const QString& table,
                  const QString& conditions);
 
+    bool isValid() const;
+
 
     QStringList columns() const;
     void setColumns(const QStringList &columns);
@@ -40,6 +42,9 @@ public:
 
     QStringList orderBy() const;
     void setOrderBy(const QStringList &orderBy);
+
+
+    static VariantQuery fromVql(const QString& vql);
 
 
     Qt::SortOrder sortOder() const;

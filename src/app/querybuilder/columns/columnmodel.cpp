@@ -17,13 +17,14 @@ ColumnModel::ColumnModel( QObject *parent)
 
 void ColumnModel::load()
 {
+    qDebug()<<Q_FUNC_INFO<<"load ";
     clear();
     setColumnCount(1);
 
     // add common Item
     mVariantItem = createItem("Variants","Based columns");
-    mVariantItem->appendRow(createItem(tr("chromosom"), tr("Chromosome"),"chr"));
-    mVariantItem->appendRow(createItem(tr("position"), tr("genomic position"),"pos"));
+    mVariantItem->appendRow(createItem(tr("chr"), tr("Chromosome"),"chr"));
+    mVariantItem->appendRow(createItem(tr("pos"), tr("genomic position"),"pos"));
 
     //    mVariantItem->child(0)->setCheckState(Qt::Checked);
     //    mVariantItem->child(0)->setEnabled(false);
@@ -34,9 +35,9 @@ void ColumnModel::load()
 
 
 
-    mVariantItem->appendRow(createItem(tr("reference"), tr("reference nucleotid"),"ref"));
-    mVariantItem->appendRow(createItem(tr("alternative"), tr("alternative nucleotid"),"alt"));
-    mVariantItem->appendRow(createItem(tr("quality"), tr("quality score"),"qual"));
+    mVariantItem->appendRow(createItem(tr("ref"), tr("reference nucleotid"),"ref"));
+    mVariantItem->appendRow(createItem(tr("alt"), tr("alternative nucleotid"),"alt"));
+    mVariantItem->appendRow(createItem(tr("qual"), tr("quality score"),"qual"));
     mVariantItem->appendRow(createItem(tr("filter"), tr("filter pass"),"filter"));
 
     appendRow(mVariantItem);

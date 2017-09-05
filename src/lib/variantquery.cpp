@@ -18,6 +18,18 @@ VariantQuery::VariantQuery(const QStringList &columns, const QString &table, con
 
 }
 
+bool VariantQuery::isValid() const
+{
+    //TODO check valid VQL expression
+    QRegularExpression exp1("SELECT .+");
+    QRegularExpression exp2("SELECT .+ FROM .+");
+    QRegularExpression exp3("SELECT .+ FROM .+ WHERE .+");
+
+    return true;
+
+
+}
+
 QStringList VariantQuery::columns() const
 {
     return mColumns;
@@ -187,6 +199,42 @@ QStringList VariantQuery::orderBy() const
 void VariantQuery::setOrderBy(const QStringList &orderBy)
 {
     mOrderBy = orderBy;
+}
+
+VariantQuery VariantQuery::fromVql(const QString &vql)
+{
+    VariantQuery query;
+
+    QRegularExpression exp1("SELECT (?<columns>.+)");
+    QRegularExpression exp2("SELECT (?<columns>.+) FROM (?<table>.+)");
+    QRegularExpression exp3("SELECT (?<columns>.+) FROM (?<table>.+) WHERE (?<condition>.+)");
+
+    QRegularExpressionMatch match;
+
+    match = exp3.match(vql);
+    if (match.hasMatch())
+    {
+        query.setColumns(match.captured("columns").split(","));
+        query.setTable(match.captured("table"));
+        query.setCondition(match.captured("condition"));
+        return query;
+    }
+
+    match = exp2.match(vql);
+    if (match.hasMatch())
+    {
+        query.setColumns(match.captured("columns").split(","));
+        query.setTable(match.captured("table"));
+        return query;
+
+    }
+
+    match = exp1.match(vql);
+    if (match.hasMatch())
+    {
+        query.setColumns(match.captured("columns").split(","));
+        return query;
+    }
 }
 
 
