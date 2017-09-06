@@ -22,10 +22,9 @@ public:
      */
     QString toVql() const;
 
-public Q_SLOTS:
-    void setColumns(const QStringList& columns);
-    void setTable(const QString& table);
-    void setCondition(const QString& condition);
+    void setVql(const QString& raw);
+    void setVql(const QStringList& columns, const QString& table, const QString& condition);
+
 
 
 
@@ -36,8 +35,10 @@ Q_SIGNALS:
 protected:
     void keyPressEvent(QKeyEvent * e);
 
+
 private:
     VqlHighlighter * mHighlighter;
+
 
 
 

@@ -6,9 +6,11 @@ ColumnView::ColumnView(QWidget *parent)
     mModel   = new ColumnModel();
     setModel(mModel);
     setWindowTitle(tr("Fields"));
-    viewport()->setAutoFillBackground( false );
-    setFrameShape(QFrame::NoFrame);
+   // viewport()->setAutoFillBackground( false );
+   // setFrameShape(QFrame::NoFrame);
     header()->hide();
+
+
 }
 
 QStringList ColumnView::selectedColumns() const
@@ -20,3 +22,5 @@ void ColumnView::load()
 {
     mModel->load();
 }
+
+

@@ -6,13 +6,16 @@
 FilterModel::FilterModel(QObject * parent)
     :QStandardItemModel(parent)
 {
-    addLogic(new LogicItem("AND"));
+    appendRow(new LogicItem("AND"));
+
 }
 
 void FilterModel::addLogic(LogicItem *item, QStandardItem *parent)
 {
-    if (parent == nullptr)
-        appendRow(item);
+    if (parent == nullptr){
+        //appendRow(item);
+        // disable append root. Keep only one tree root
+    }
     else
         parent->appendRow(item);
 }
@@ -27,7 +30,7 @@ QString FilterModel::makeQuery()
 
     QString out = recursiveQuery(item(0,0));
 
-    if (out == "(AND)")
+    if (out == "()")
         return QString();
 
     return out;

@@ -5,10 +5,14 @@
 
 class ColumnDockWidget : public BaseDockWidget
 {
+    Q_OBJECT
 public:
     ColumnDockWidget(QWidget * parent = 0);
+     QStringList selectedColumns() const;
 
-    void load();
+public Q_SLOTS:
+     void reset() override;
+
 
 private:
     ColumnView * mView;

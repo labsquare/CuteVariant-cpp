@@ -18,22 +18,27 @@ QString VqlEditor::toVql() const
     return toPlainText().simplified();
 }
 //--------------------------------------------------------
-void VqlEditor::setColumns(const QStringList &columns)
+void VqlEditor::setVql(const QString &raw)
 {
-
+    setPlainText(raw.simplified());
 }
 //--------------------------------------------------------
-void VqlEditor::setTable(const QString &table)
+void VqlEditor::setVql(const QStringList &columns, const QString &table, const QString &condition)
 {
+    QString vql;
+
+    if (!columns.isEmpty())
+        vql+= QString("SELECT %1 ").arg(columns.join(","));
+
+    if (!table.isEmpty())
+        vql+= QString("FROM %2 ").arg(table);
+
+    if (!condition.isEmpty())
+        vql += QString("WHERE %3 ").arg(condition);
+
+    setVql(vql);
 
 }
-//--------------------------------------------------------
-void VqlEditor::setCondition(const QString &condition)
-{
-
-}
-
-
 //--------------------------------------------------------
 void VqlEditor::keyPressEvent(QKeyEvent *e)
 {

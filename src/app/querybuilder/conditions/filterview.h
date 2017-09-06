@@ -10,8 +10,7 @@ class FilterView : public QTreeView
 {
     Q_OBJECT
 public:
-    FilterView(QWidget * parent = Q_NULLPTR);
-    void contextMenuEvent(QContextMenuEvent* event);
+    FilterView(QWidget * parent = 0);
     QString query();
 
 public Q_SLOTS:
@@ -27,13 +26,11 @@ protected Q_SLOTS:
 
 
 
+
 private:
     FilterModel * mModel;
     FilterDelegate * mDelegate;
 
-    QAction * mAddLogicAction;
-    QAction * mAddCondAction;
-    QAction * mRemAction;
 
 
 };

@@ -18,7 +18,8 @@ HEADERS += \
     $$PWD/logicitem.h \
     $$PWD/filterview.h \
     $$PWD/filtermodel.h \
-    $$PWD/filterdelegate.h
+    $$PWD/filterdelegate.h \
+    $$PWD/filterdockwidget.h
 
 SOURCES += \
     $$PWD/conditiondialog.cpp \
@@ -37,4 +38,5 @@ SOURCES += \
     $$PWD/logicitem.cpp \
     $$PWD/filterview.cpp \
     $$PWD/filtermodel.cpp \
-    $$PWD/filterdelegate.cpp
+    $$PWD/filterdelegate.cpp \
+    $$PWD/filterdockwidget.cpp

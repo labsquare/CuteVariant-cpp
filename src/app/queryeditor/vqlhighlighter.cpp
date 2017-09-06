@@ -11,7 +11,7 @@ VqlHighlighter::VqlHighlighter(QTextDocument *parent)
 void VqlHighlighter::highlightBlock(const QString &text)
 {
 
-    QRegularExpression exp("(SELECT|FROM|WHERE|IN)");
+    QRegularExpression exp("(SELECT|FROM|WHERE)");
 
     if (exp.match(text).hasMatch())
     {

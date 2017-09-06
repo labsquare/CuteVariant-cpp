@@ -7,9 +7,19 @@ ColumnDockWidget::ColumnDockWidget(QWidget * parent):
 
     setTitle("Columns");
     setWidget(mView);
-}
 
-void ColumnDockWidget::load()
-{
-    mView->load();
+    // emit changed signal when model changed
+     connect(qobject_cast<ColumnModel*>(mView->model()), &ColumnModel::itemChanged,[this](){emit changed();});
+
+
 }
+ QStringList ColumnDockWidget::selectedColumns() const
+{
+     return mView->selectedColumns();
+ }
+
+ void ColumnDockWidget::reset()
+ {
+     mView->load();
+
+ }

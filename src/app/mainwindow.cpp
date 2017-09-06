@@ -15,8 +15,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mResultsView           = new ResultsView();
 
     // dock widget
-    columnDockWidget       = new ColumnDockWidget();
-    addDockWidget(Qt::LeftDockWidgetArea,columnDockWidget);
+    mColumnDock       = new ColumnDockWidget();
+    mSelectionDock    = new SelectionDockWidget();
+    mConditionDock    = new FilterDockWidget();
+
+    addBaseDock(mColumnDock);
+    addBaseDock(mSelectionDock);
+    addBaseDock(mConditionDock);
+
 
     // setup central widget
     QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
@@ -32,16 +38,22 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     bar->addAction(QIcon::fromTheme("document-import"),tr("Import"),this, SLOT(importFile()));
     bar->addAction(QIcon::fromTheme("document-open"),tr("Open"),this, SLOT(openFile()));
     bar->addAction(QIcon::fromTheme("document-open"),tr("Save"),this, SLOT(saveFile()));
-    bar->addAction(QIcon::fromTheme("run-build"),tr("Play"),this,SLOT(refresh()));
+    bar->addAction(QIcon::fromTheme("run-build"),tr("Play"),this,SLOT(execute()));
 
 
-    // connection
-    // exec
+    //connection
+    //exec
     connect(mEditor,&VqlEditor::returnPressed, this, &MainWindow::execute);
+    //update editor
+    connect(mColumnDock, &ColumnDockWidget::changed, this, &MainWindow::updateEditor);
+    // update selection
+    connect(mResultsView, &ResultsView::tableSaved, mSelectionDock, &SelectionDockWidget::reset);
 
 
     // For Dev testing
     cutevariant->setDatabasePath("/home/sacha/TRIO1.family.vcf.db");
+
+    restoreSettings();
     reset();
 
 
@@ -126,7 +138,7 @@ void MainWindow::saveFile()
 {
 
 }
-
+//-------------------------------------------------------------------------
 void MainWindow::execute()
 {
 
@@ -138,24 +150,30 @@ void MainWindow::execute()
         mResultsView->setQuery(q);
 
     }
-
-
-
-
-
-
-
-
-
 }
 //-------------------------------------------------------------------------
-void MainWindow::refresh()
+void MainWindow::updateEditor()
 {
+    mEditor->setVql(
+                mColumnDock->selectedColumns(),
+                mSelectionDock->tableName(),
+                mConditionDock->condition()
+                );
 
-    mResultsView->setQuery(mQueryBuilderWidget->query());
 }
 //-------------------------------------------------------------------------
 void MainWindow::reset()
 {
-    columnDockWidget->load();
+
+    for (BaseDockWidget * w : mBaseDocks)
+        w->reset();
+
+}
+//-------------------------------------------------------------------------
+
+void MainWindow::addBaseDock(BaseDockWidget *widget)
+{
+    addDockWidget(Qt::LeftDockWidgetArea,widget);
+    connect(widget, &BaseDockWidget::changed, this, &MainWindow::updateEditor);
+    mBaseDocks.append(widget);
 }

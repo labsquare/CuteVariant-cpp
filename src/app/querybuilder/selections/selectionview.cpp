@@ -2,32 +2,31 @@
 
 
 SelectionView::SelectionView(QWidget *parent)
-    :QListView(parent)
+    :QListWidget(parent)
 {
-    mModel = new QStringListModel;
-    setModel(mModel);
+    setEditTriggers(NoEditTriggers);
 
-    viewport()->setAutoFillBackground( false );
-    setFrameShape(QFrame::NoFrame);
+//    viewport()->setAutoFillBackground( false );
+//    setFrameShape(QFrame::NoFrame);
 
     setWindowTitle("Selection");
-
-    load();
+    // select first item
+   // selectionModel()->select(mModel->index(0,0),QItemSelectionModel::Select);
 }
+//---------------------------------------------------------------------------------------------
 
 QString SelectionView::tableName() const
 {
-    return mModel->data(currentIndex(), Qt::DisplayRole).toString();
+    return currentItem()->text();
 }
-
+//---------------------------------------------------------------------------------------------
 void SelectionView::load()
 {
-
-    QStringList list;
+    clear();
     for (cvar::VariantSelection selection : cutevariant->sqliteManager()->variantSelections())
-        list.append(selection.name());
-
-    mModel->setStringList(list);
-
+    {
+      QListWidgetItem * item  = new QListWidgetItem(selection.name());
+      addItem(item);
+    }
 
 }

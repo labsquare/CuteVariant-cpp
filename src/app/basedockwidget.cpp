@@ -4,42 +4,46 @@ BaseDockWidget::BaseDockWidget(QWidget *parent)
     :QDockWidget(parent)
 {
 
-    auto t = new QToolBar;
-    t->setIconSize(QSize(16,16));
-
-    t->layout()->setContentsMargins(0,0,0,0);
-
+    mToolBar     = new QToolBar;
     mTitleWidget = new QLabel();
-    t->addWidget(mTitleWidget);
 
+    mToolBar->setIconSize(QSize(16,16));
+  //  mToolBar->layout()->setContentsMargins(0,0,0,0);
+    mToolBar->addWidget(mTitleWidget);
+
+    // add spacer
     QWidget * spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-
-    t->addWidget(spacer);
-    t->addAction(QIcon::fromTheme("document-save"),"save");
-    t->addAction(QIcon::fromTheme("document-save"),"save");
-    t->addAction(QIcon::fromTheme("document-save"),"save");
+    mToolBar->addWidget(spacer);
 
     layout()->setContentsMargins(0,0,0,0);
-    setTitleBarWidget(t);
+    setTitleBarWidget(mToolBar);
 
 
 }
 
+
+
+
 void BaseDockWidget::setWidget(QWidget *w)
 {
-
     QDockWidget::setWidget(w);
-
+//    w->setStyleSheet("{border:1px solid lightgray}");
 
 }
 
 void BaseDockWidget::setTitle(const QString &name)
 {
     mTitleWidget->setText(name);
+    setWindowTitle(name);
 }
 
 QString BaseDockWidget::title() const
 {
     return mTitleWidget->text();
+}
+
+void BaseDockWidget::addAction(QAction *action)
+{
+    mToolBar->addAction(action);
 }

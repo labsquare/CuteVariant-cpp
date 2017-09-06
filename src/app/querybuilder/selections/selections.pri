@@ -1,7 +1,9 @@
 INCLUDEPATH += $$PWD
 
 HEADERS += \
-    $$PWD/selectionview.h
+    $$PWD/selectionview.h \
+    $$PWD/selectiondockwidget.h
 
 SOURCES += \
-    $$PWD/selectionview.cpp
+    $$PWD/selectionview.cpp \
+    $$PWD/selectiondockwidget.cpp

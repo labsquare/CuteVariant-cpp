@@ -7,89 +7,29 @@ FilterView::FilterView(QWidget * parent)
     mDelegate = new FilterDelegate;
 
     setItemDelegate(mDelegate);
-
-    viewport()->setAutoFillBackground( false );
-    setFrameShape(QFrame::NoFrame);
+    setModel(mModel);
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
+    setDragDropMode(QAbstractItemView::InternalMove);
+    setUniformRowHeights(true);
+
     header()->hide();
 
-    setDragDropMode(QAbstractItemView::InternalMove);
+
+    //    viewport()->setAutoFillBackground( false );
+    //    setFrameShape(QFrame::NoFrame);
     //setDragDropMode(QAbstractItemView::DragDrop);
-
-    setModel(mModel);
-
-
-    setUniformRowHeights(true);
 
     setWindowTitle("Filter");
 
-
-    mAddLogicAction = new QAction("Add logic",this);
-    mAddCondAction  = new QAction("Add condition",this);
-    mRemAction      = new QAction("Remove",this);
-
-
-    connect(mAddLogicAction,&QAction::triggered, [this](){addLogic();});
-    connect(mAddCondAction, &QAction::triggered, [this](){addCondition();});
-    connect(mRemAction, &QAction::triggered, [this](){removeSelections();});
-
-
-    connect(selectionModel(),SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),this,SLOT(updateActionAvaible()));
-    connect(this,SIGNAL(doubleClicked(QModelIndex)),this, SLOT(editCondition(QModelIndex)));
-
-    addAction(mAddLogicAction);
-    addAction(mAddCondAction);
-    addAction(mRemAction);
-
-    setWindowTitle(tr("Conditions"));
-
-
+    // select first tree item
+   // selectionModel()->select(mModel->index(0,0,QModelIndex()),QItemSelectionModel::Select);
 
 
 }
 
-void FilterView::contextMenuEvent(QContextMenuEvent *event)
-{
-
-    //    QStandardItem * item = mModel->itemFromIndex(currentIndex());
-
-    //    if (item)
-    //    {
-    //        QMenu menu;
-    //        QAction * groupAction = menu.addAction("Create groups");
-    //        QAction * condiAction = menu.addAction("Create Condition");
-    //        menu.addSeparator();
-    //        QAction * delAction = menu.addAction("Remove");
-
-
-    //        if ( item->type() == FilterModel::ConditionType)
-    //        {
-    //            menu.removeAction(groupAction);
-    //            menu.removeAction(condiAction);
-    //        }
-
-
-    //        QAction * choice = menu.exec(event->globalPos());
-
-    //        if (choice == groupAction)
-    //            mModel->createGroup(item);
-
-    //        if (choice == condiAction)
-    //            mModel->createCondition(item);
-
-    //        if (choice == delAction)
-    //        {
-    //            if (item->parent())
-    //            {
-    //                item->parent()->removeRow(item->row());
-    //            }
-
-    //        }
-    //    }
-}
-
+//----------------------------------------------------------------
 QString FilterView::query()
 {
     return mModel->makeQuery();
@@ -101,7 +41,7 @@ void FilterView::addLogic()
     mModel->addLogic(new LogicItem("AND"), parent);
 
 }
-
+//----------------------------------------------------------------
 void FilterView::addCondition()
 {
 
@@ -117,9 +57,8 @@ void FilterView::addCondition()
 
     }
 
-
 }
-
+//----------------------------------------------------------------
 void FilterView::editCondition(const QModelIndex &index)
 {
 
@@ -132,11 +71,9 @@ void FilterView::editCondition(const QModelIndex &index)
 
             *item = *dialog.toItem();
         }
-
     }
-
-
 }
+//----------------------------------------------------------------
 void FilterView::removeSelections()
 {
 
@@ -147,7 +84,7 @@ void FilterView::removeSelections()
     }
 
 }
-
+//----------------------------------------------------------------
 void FilterView::updateActionAvaible()
 {
     QStandardItem * parent = mModel->itemFromIndex(currentIndex());
@@ -156,14 +93,14 @@ void FilterView::updateActionAvaible()
 
     if (parent->type() == FilterModel::LogicType)
     {
-        mAddCondAction->setEnabled(true);
-        mAddLogicAction->setEnabled(true);
+//        mAddCondAction->setEnabled(true);
+//        mAddLogicAction->setEnabled(true);
     }
 
     if (parent->type() == FilterModel::ConditionalType)
     {
-        mAddCondAction->setEnabled(false);
-        mAddLogicAction->setEnabled(false);
+//        mAddCondAction->setEnabled(false);
+//        mAddLogicAction->setEnabled(false);
     }
 }
 

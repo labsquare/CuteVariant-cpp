@@ -25,6 +25,9 @@ protected Q_SLOTS:
     void save();
     void exportCsv();
 
+Q_SIGNALS:
+    void tableSaved();
+
 protected:
     void contextMenuEvent(QContextMenuEvent * event);
 

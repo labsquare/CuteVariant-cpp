@@ -135,7 +135,8 @@ void ResultsView::save()
         if (!cutevariant->sqliteManager()->variantsTo(mModel->currentQuery(), nameEdit->text()))
             QMessageBox::warning(this,"error", "cannot create table");
 
-
+        else
+            emit tableSaved();
     }
 
 

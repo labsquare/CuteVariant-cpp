@@ -5,7 +5,7 @@
 #include <QStandardItemModel>
 #include "project.h"
 
-class SelectionView : public QListView
+class SelectionView : public QListWidget
 {
     Q_OBJECT
 public:
@@ -13,11 +13,9 @@ public:
     QString tableName() const;
 
 
-public Q_SLOTS:
     void load();
 
-private:
-    QStringListModel * mModel;
+
 };
 
 #endif // SELECTIONVIEW_H

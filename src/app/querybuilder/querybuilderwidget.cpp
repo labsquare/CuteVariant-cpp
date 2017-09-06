@@ -85,8 +85,8 @@ void QueryBuilderWidget::updateQuery()
 void QueryBuilderWidget::load()
 {
 
-    mColumnView->load();
-    mSelectionView->load();
+//    mColumnView->load();
+//    mSelectionView->load();
 
 }
 

@@ -11,7 +11,6 @@ public:
     ColumnView(QWidget * parent = nullptr);
     QStringList selectedColumns() const;
 
-public Q_SLOTS:
     void load();
 
 
