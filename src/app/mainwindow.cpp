@@ -44,10 +44,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     //connection
     //exec
     connect(mEditor,&VqlEditor::returnPressed, this, &MainWindow::execute);
-    //update editor
-    connect(mColumnDock, &ColumnDockWidget::changed, this, &MainWindow::updateEditor);
+
     // update selection
     connect(mResultsView, &ResultsView::tableSaved, mSelectionDock, &SelectionDockWidget::reset);
+
 
 
     // For Dev testing

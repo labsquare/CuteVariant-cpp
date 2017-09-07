@@ -17,6 +17,9 @@ SelectionView::SelectionView(QWidget *parent)
 
 QString SelectionView::tableName() const
 {
+    if (selectedItems().isEmpty())
+        return "";
+
     return currentItem()->text();
 }
 //---------------------------------------------------------------------------------------------
@@ -28,5 +31,7 @@ void SelectionView::load()
       QListWidgetItem * item  = new QListWidgetItem(selection.name());
       addItem(item);
     }
+
+    setCurrentRow(0);
 
 }
