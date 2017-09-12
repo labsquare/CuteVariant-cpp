@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // update selection
     connect(mResultsView, &ResultsView::tableSaved, mSelectionDock, &SelectionDockWidget::reset);
 
-
+    setStatusBar(new QStatusBar());
 
     // For Dev testing
     cutevariant->setDatabasePath("/home/sacha/TRIO1.family.vcf.db");

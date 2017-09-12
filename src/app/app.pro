@@ -10,9 +10,9 @@ include(resultsview/resultsview.pri)
 include(querybuilder/querybuilder.pri)
 
 
-
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../lib/release/ -lcutevariantcore
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../lib/debug/ -lcutevariantcore
+
 else:unix: LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
 
 INCLUDEPATH += $$PWD/../lib
@@ -32,3 +32,7 @@ SOURCES += \
     mainwindow.cpp \
     importdialog.cpp \
     basedockwidget.cpp
+
+
+INCLUDEPATH += $$PWD/../lib
+DEPENDPATH += $$PWD/../lib
