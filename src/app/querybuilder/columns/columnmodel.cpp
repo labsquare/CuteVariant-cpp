@@ -20,54 +20,35 @@ void ColumnModel::load()
     qDebug()<<Q_FUNC_INFO<<"load ";
     clear();
     setColumnCount(1);
-
-    // add common Item
-    mVariantItem = createItem("Variants","Based columns");
-    mVariantItem->appendRow(createItem(tr("chr"), tr("Chromosome"),"chr"));
-    mVariantItem->appendRow(createItem(tr("pos"), tr("genomic position"),"pos"));
-
-    //    mVariantItem->child(0)->setCheckState(Qt::Checked);
-    //    mVariantItem->child(0)->setEnabled(false);
-
-
-    //    mVariantItem->child(1)->setCheckState(Qt::Checked);
-    //    mVariantItem->child(1)->setEnabled(false);
-
-
-
-    mVariantItem->appendRow(createItem(tr("ref"), tr("reference nucleotid"),"ref"));
-    mVariantItem->appendRow(createItem(tr("alt"), tr("alternative nucleotid"),"alt"));
-    mVariantItem->appendRow(createItem(tr("qual"), tr("quality score"),"qual"));
-    mVariantItem->appendRow(createItem(tr("filter"), tr("filter pass"),"filter"));
-
-    appendRow(mVariantItem);
-
-    // Add extra
-
-    mExtraItem = createItem("Extra", "Automatics fields");
-    mExtraItem->appendRow(createItem("igv", "Integrative genomics link","igv"));
-    mExtraItem->appendRow(createItem("varsome", "Varsome","varsome"));
-    appendRow(mExtraItem);
-
-
-    // add annotation
-    mAnnotationItem = createItem("Annotation","Annotation fields");
+    mCategoriesItems.clear();
     for (cvar::Field f : cutevariant->sqliteManager()->fields())
     {
-        QStandardItem * c1 = createItem(f.name(),f.description(),f.colname());
-        mAnnotationItem->appendRow(c1);
+        // create category
+        if (!mCategoriesItems.contains(f.category())){
+            mCategoriesItems[f.category()] = new QStandardItem(f.category().toLower());
+            mCategoriesItems[f.category()]->setCheckable(true);
+        }
+
+        // append item to category
+        mCategoriesItems[f.category()]->appendRow(createItem(f.name(),f.description(),f.colname()));
     }
-    appendRow(mAnnotationItem);
+
+
+    // insert all annotation (variant first)
+    QStringList keys = mCategoriesItems.keys();
+    std::reverse(keys.begin(), keys.end());
+    for (QString key : keys)
+        appendRow(mCategoriesItems[key]);
+
+
 
     // add Samples
-    mSampleItem = createItem("Samples", "fields of samples");
+    mSampleItem = createItem("samples", "fields of samples");
 
     if (!cutevariant->sqliteManager()->samples().isEmpty())
     {
-
         for (cvar::Sample s : cutevariant->sqliteManager()->samples())
         {
-
             QStandardItem * c1 = createItem(s.name(), "Sample name", s.name());
             mSampleItem->appendRow(c1);
 
@@ -87,18 +68,20 @@ QStringList ColumnModel::selectedColumns() const
     // get columns variants
     QStringList columns;
 
-    for (int i=0; i< mVariantItem->rowCount(); ++i)
+    // Get selected items
+    QStringList keys = mCategoriesItems.keys();
+    std::reverse(keys.begin(), keys.end());
+    for (QString key : keys)
     {
-        if (mVariantItem->child(i)->checkState() == Qt::Checked)
-            columns.append(mVariantItem->child(i)->data().toString());
+        QStandardItem * item = mCategoriesItems[key];
+        for (int i=0; i< item->rowCount(); ++i)
+        {
+            if (item->child(i)->checkState() == Qt::Checked)
+                columns.append(item->child(i)->data().toString());
+        }
     }
 
-    for (int i=0; i< mAnnotationItem->rowCount(); ++i)
-    {
-        if (mAnnotationItem->child(i)->checkState() == Qt::Checked)
-            columns.append(mAnnotationItem->child(i)->data().toString());
-    }
-
+    // Get selected sampled
     for (int i=0; i<mSampleItem->rowCount(); ++i)
     {
         QString sample = mSampleItem->child(i)->data().toString();

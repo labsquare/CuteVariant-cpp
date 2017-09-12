@@ -32,6 +32,7 @@ public:
     QList<Field> genotypeFields() const;
     QList<Field> genotype(const Sample& sample) const;
     QList<VariantSelection> variantSelections();
+    bool removeSelection(const QString& name);
 
 
     QSqlQuery variants(const VariantQuery & query) const;

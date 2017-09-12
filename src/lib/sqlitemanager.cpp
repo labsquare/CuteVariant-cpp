@@ -132,7 +132,6 @@ QList<VariantSelection> SqliteManager::variantSelections()
 {
 
     QList<VariantSelection> list;
-    list.append(VariantSelection("variants","all variants", -1));
     QSqlQuery query("SELECT * FROM sqlite_master WHERE type = 'view'");
     while (query.next())
     {
@@ -145,6 +144,19 @@ QList<VariantSelection> SqliteManager::variantSelections()
 
     return list;
 
+}
+//-------------------------------------------------------------------------------
+bool SqliteManager::removeSelection(const QString &name)
+{
+    QSqlQuery query;
+    if (!query.exec(QString("DROP VIEW IF EXISTS %1").arg(name)))
+    {
+        qDebug()<<query.lastQuery();
+        qDebug()<<query.lastError().text();
+        return false;
+    }
+
+    return true;
 }
 //-------------------------------------------------------------------------------
 QSqlQuery SqliteManager::variants(const VariantQuery &query) const
@@ -354,6 +366,16 @@ void SqliteManager::createFields(AbstractVariantReader *reader)
 
     QSqlDatabase::database().transaction();
 
+    // import default fields
+    qDebug()<<"import default";
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('chr','chr','Chromosome name','VARIANT','TEXT') "));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('pos','pos','Position 1-based','VARIANT','INTEGER')"));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('ref','ref','Reference allele','VARIANT','TEXT') "));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('alt','alt','Alternative allele','VARIANT','TEXT')"));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('qual','alt','Quality Phred','VARIANT','REAL')"));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('filter','alt','Filter','VARIANT','TEXT')"));
+
+    qDebug()<<query.lastError().text();
 
     QList<Field> fields = reader->fields();
     emit importRangeChanged(0,fields.count());

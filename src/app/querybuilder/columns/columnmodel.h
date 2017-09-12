@@ -24,13 +24,8 @@ protected:
 
 
 private:
-
-QStandardItem * mVariantItem;
-QStandardItem * mAnnotationItem;
+QMap<QString, QStandardItem*> mCategoriesItems;
 QStandardItem * mSampleItem;
-QStandardItem * mExtraItem;
-
-
 
 
 };

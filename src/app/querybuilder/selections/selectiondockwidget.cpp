@@ -7,8 +7,11 @@ SelectionDockWidget::SelectionDockWidget(QWidget *parent)
     mView = new SelectionView;
     setTitle("selection");
     setWidget(mView);
-    addAction(new QAction(QIcon::fromTheme("list-remove"),"delete"));
 
+    QAction * remAction = new QAction(QIcon::fromTheme("list-remove"),"delete");
+    addAction(remAction);
+
+    connect(remAction,SIGNAL(triggered(bool)), mView, SLOT(removeSelection()));
     connect(mView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SIGNAL(changed()));
 
 }
