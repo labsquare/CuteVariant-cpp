@@ -372,8 +372,8 @@ void SqliteManager::createFields(AbstractVariantReader *reader)
     query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('pos','pos','Position 1-based','VARIANT','INTEGER')"));
     query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('ref','ref','Reference allele','VARIANT','TEXT') "));
     query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('alt','alt','Alternative allele','VARIANT','TEXT')"));
-    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('qual','alt','Quality Phred','VARIANT','REAL')"));
-    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('filter','alt','Filter','VARIANT','TEXT')"));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('qual','qual','Quality Phred','VARIANT','REAL')"));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('filter','filter','Filter','VARIANT','TEXT')"));
 
     qDebug()<<query.lastError().text();
 
