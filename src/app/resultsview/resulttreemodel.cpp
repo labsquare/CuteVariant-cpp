@@ -193,6 +193,57 @@ const cvar::VariantQuery &ResultTreeModel::currentQuery() const
 {
     return mCurrentQuery;
 }
+//---------------------------------------------------------------------------
+bool ResultTreeModel::exportCsv(const QString &filename) const
+{
+
+    QFile file(filename);
+    if (file.open(QIODevice::WriteOnly))
+    {
+            QTextStream stream(&file);
+
+            cvar::VariantQuery vquery = mCurrentQuery;
+            vquery.setNoLimit();
+            QSqlQuery query = cutevariant->sqliteManager()->variants(vquery);
+            qDebug()<<query.lastError().text();
+            qDebug()<<query.lastQuery();
+
+            bool header = false;
+
+            // save query ( -2 ) to avoid count and childs
+            while (query.next()){
+
+                // save header
+                if (!header)
+                {
+                    stream <<"#";
+                    for (int col = 0; col < query.record().count() - 2; ++col)
+                    {
+                        stream <<query.record().fieldName(col)<<"\t";
+                    }
+                    stream <<"\n";
+                    header = true;
+                }
+
+                // save record
+                for (int col = 0; col < query.record().count() -2 ; ++col)
+                {
+                    stream << query.record().value(col).toString() <<"\t";
+                }
+                stream <<"\n";
+
+
+            }
+            qDebug()<<Q_FUNC_INFO<<" export completed";
+            return true;
+    }
+    return false;
+}
+//---------------------------------------------------------------------------
+bool ResultTreeModel::isEmpty() const
+{
+    return mRecords.isEmpty();
+}
 
 //---------------------------------------------------------------------------
 void ResultTreeModel::load()

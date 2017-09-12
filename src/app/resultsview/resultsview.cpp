@@ -116,6 +116,9 @@ void ResultsView::setPage(int page)
 
 void ResultsView::save()
 {
+    if (mModel->isEmpty())
+        return;
+
     QDialog dialog(this);
     QLineEdit * nameEdit = new QLineEdit(&dialog);
     QTextEdit * descEdit = new QTextEdit(&dialog);
@@ -146,6 +149,18 @@ void ResultsView::save()
 void ResultsView::exportCsv()
 {
 
+    if (mModel->isEmpty())
+        return;
+
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), "",  tr("TSV (*.tsv)"));
+
+    if (!fileName.isEmpty())
+    {
+        if (!mModel->exportCsv(fileName))
+        {
+            qDebug()<<Q_FUNC_INFO<<"cannot save file";
+        }
+    }
 }
 
 void ResultsView::contextMenuEvent(QContextMenuEvent *event)

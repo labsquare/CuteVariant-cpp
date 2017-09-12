@@ -3,6 +3,7 @@
 #include <QAbstractItemModel>
 #include <QtSql>
 #include <QSqlRecord>
+#include <QTextStream>
 #include "project.h"
 #include "variantquery.h"
 
@@ -28,6 +29,10 @@ public:
     QSqlRecord record(const QModelIndex& index);
 
     const cvar::VariantQuery& currentQuery() const;
+
+    bool exportCsv(const QString& filename) const;
+
+    bool isEmpty() const;
 
 
 public Q_SLOTS:
