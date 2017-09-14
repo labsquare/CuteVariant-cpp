@@ -30,7 +30,7 @@ void ColumnModel::load()
         }
 
         // append item to category
-        mCategoriesItems[f.category()]->appendRow(createItem(f.name(),f.description(),f.colname()));
+        mCategoriesItems[f.category()]->appendRow(createItem(f.name().toLower(),f.description(),f.colname()));
     }
 
 
@@ -76,8 +76,10 @@ QStringList ColumnModel::selectedColumns() const
         QStandardItem * item = mCategoriesItems[key];
         for (int i=0; i< item->rowCount(); ++i)
         {
-            if (item->child(i)->checkState() == Qt::Checked)
-                columns.append(item->child(i)->data().toString());
+            if (item->child(i)->checkState() == Qt::Checked){
+                columns.append(QString("%1.%2").arg(item->text(),item->child(i)->text()));
+
+            }
         }
     }
 
@@ -88,7 +90,7 @@ QStringList ColumnModel::selectedColumns() const
         for (int j=0; j < mSampleItem->child(i)->rowCount(); ++j)
         {
             if (mSampleItem->child(i)->child(j)->checkState() == Qt::Checked)
-                columns.append(QString("gt_%1.%2").arg(sample).arg(mSampleItem->child(i)->child(j)->data().toString()));
+                columns.append(QString("sample[\"%1\"].%2").arg(sample).arg(mSampleItem->child(i)->child(j)->data().toString()));
         }
     }
 

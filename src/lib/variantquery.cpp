@@ -35,6 +35,29 @@ QStringList VariantQuery::columns() const
     return mColumns;
 }
 
+QStringList VariantQuery::rawColumns() const
+{
+    QStringList raw;
+    for (QString col : columns())
+    {
+        col = col.remove("variant.");
+        col = col.replace(".","_");
+
+        // if col is a sample fields ...
+        if (col.contains("["))
+            replaceSampleFields(col);
+        else
+            col = QString("variants.`%1`").arg(col);
+
+
+        qDebug()<<col;
+
+        raw.append(col);
+    }
+    return raw;
+}
+
+
 void VariantQuery::setColumns(const QStringList &columns)
 {
     mColumns = columns;
@@ -45,6 +68,14 @@ QString VariantQuery::table() const
     return mTable;
 }
 
+QString VariantQuery::rawTable() const
+{
+    if (table().isEmpty())
+        return QString();
+
+    return QString("`%1`").arg(table());
+}
+
 void VariantQuery::setTable(const QString &table)
 {
     mTable = table;
@@ -53,6 +84,14 @@ void VariantQuery::setTable(const QString &table)
 QString VariantQuery::condition() const
 {
     return mCondition;
+}
+
+QString VariantQuery::rawCondition() const
+{
+    QString raw = condition();
+    replaceSampleFields(raw);
+
+    return raw;
 }
 
 void VariantQuery::setCondition(const QString &condition)
@@ -94,9 +133,9 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
 {
     QString query;
 
-    QString select     = table()+".id, "+columns().join(",");
-    QString tableName  = table().isEmpty() ? "variants" : table();
-    QString where      = condition();
+    QString select     = "variants.id, "+rawColumns().join(",");
+    QString tableName  = rawTable().isEmpty() ? "variants" : rawTable();
+    QString where      = rawCondition();
 
     QStringList joinSamples;
     QStringList whereSamples;
@@ -105,16 +144,14 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
     // get samples Ids
     QHash<QString, int> samplesIds;
     for (Sample s : sql->samples()){
-        qDebug()<<s.name();
         samplesIds[s.name()] = s.id();
     }
 
     // Create join
     for (QString sample : detectSamplesFields())
     {
-
-        joinSamples.append(QString(" LEFT JOIN genotypes as gt_%1 ON %2.id = gt_%1.variant_id ").arg(sample).arg(tableName));
-        whereSamples.append(QString(" gt_%1.sample_id = %2 ").arg(sample).arg(samplesIds[sample]));
+        joinSamples.append(QString(" LEFT JOIN genotypes as `gt_%1` ON `%2`.id = `gt_%1`.variant_id ").arg(sample).arg(tableName));
+        whereSamples.append(QString(" `gt_%1`.sample_id = %2 ").arg(sample).arg(samplesIds[sample]));
     }
 
     if (!joinSamples.isEmpty())
@@ -128,7 +165,7 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
 
     // add extra fields for group by
     if (!groupBy().isEmpty())
-        select += QString(" ,COUNT(`%1`.id) as 'count', group_concat(`%1`.id) as 'childs' ").arg(tableName);
+        select += QString(" ,COUNT(%1.id) as 'count', group_concat(%1.id) as 'childs' ").arg(tableName);
 
 
     // SELECT columns FROM table
@@ -159,11 +196,10 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
 QStringList VariantQuery::detectSamplesFields() const
 {
     QSet<QString> sampleName;
-    QRegularExpression exp (QStringLiteral("gt_(?<sample>\\w+).(?<field>\\w+)"));
+    QRegularExpression re("sample\\[\\\"(?<sample>.+)\\\"\\]_(?<arg>.+)");
     QString source = columns().join(" ") +" "+ condition();
 
-    QRegularExpressionMatchIterator it = exp.globalMatch(source);
-
+    QRegularExpressionMatchIterator it = re.globalMatch(source);
     while(it.hasNext())
     {
         QRegularExpressionMatch match = it.next();
@@ -171,6 +207,20 @@ QStringList VariantQuery::detectSamplesFields() const
     }
 
     return sampleName.toList();
+}
+
+void VariantQuery::replaceSampleFields(QString &text) const
+{
+    // rename genotype fields
+    QRegularExpression re("sample\\[\\\"(?<sample>.+)\\\"\\]_(?<arg>.+)");
+    QRegularExpressionMatchIterator it = re.globalMatch(text);
+
+    while (it.hasNext())
+    {
+        QRegularExpressionMatch match = it.next();
+        text.replace(match.captured(), QString("`gt_%1`.`%2`").arg(match.captured("sample"), match.captured("arg")));
+    }
+
 }
 
 Qt::SortOrder VariantQuery::sortOder() const

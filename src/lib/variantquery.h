@@ -21,12 +21,15 @@ public:
 
 
     QStringList columns() const;
+    QStringList rawColumns() const;
     void setColumns(const QStringList &columns);
 
     QString table() const;
+    QString rawTable() const;
     void setTable(const QString &table);
 
     QString condition() const;
+    QString rawCondition() const;
     void setCondition(const QString &condition);
 
     int offset() const;
@@ -54,6 +57,7 @@ public:
 
 protected:
     QStringList detectSamplesFields() const;
+    void replaceSampleFields(QString& text) const;
 
 private:
     QStringList mColumns;

@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setStatusBar(new QStatusBar());
 
     // For Dev testing
-    cutevariant->setDatabasePath("/home/sacha/TRIO1.family.vcf.db");
+    cutevariant->setDatabasePath("/tmp/test.vcf.db");
 
     restoreSettings();
     reset();
