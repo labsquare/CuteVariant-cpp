@@ -7,7 +7,7 @@ INCLUDEPATH += ../lib
 
 include(queryeditor/queryeditor.pri)
 include(resultsview/resultsview.pri)
-include(querybuilder/querybuilder.pri)
+include(docks/docks.pri)
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../lib/release/ -lcutevariantcore
@@ -25,13 +25,15 @@ RESOURCES += icons/icons.qrc
 HEADERS += \
     mainwindow.h \
     importdialog.h \
-    basedockwidget.h
+    basedockwidget.h \
+    linkdialog.h
 
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
     importdialog.cpp \
-    basedockwidget.cpp
+    basedockwidget.cpp \
+    linkdialog.cpp
 
 
 INCLUDEPATH += $$PWD/../lib
