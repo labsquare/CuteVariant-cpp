@@ -148,9 +148,11 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
     }
 
     // Create join
+    qDebug()<<"DETECT SAMPLES "<<detectSamplesFields();
+
     for (QString sample : detectSamplesFields())
     {
-        joinSamples.append(QString(" LEFT JOIN genotypes as `gt_%1` ON `%2`.id = `gt_%1`.variant_id ").arg(sample).arg(tableName));
+        joinSamples.append(QString(" LEFT JOIN genotypes as `gt_%1` ON %2.id = `gt_%1`.variant_id ").arg(sample).arg(tableName));
         whereSamples.append(QString(" `gt_%1`.sample_id = %2 ").arg(sample).arg(samplesIds[sample]));
     }
 
@@ -196,14 +198,14 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
 QStringList VariantQuery::detectSamplesFields() const
 {
     QSet<QString> sampleName;
-    QRegularExpression re("sample\\[\\\"(?<sample>.+)\\\"\\]_(?<arg>.+)");
+    QRegularExpression re("sample\\[(?<sample>[^.]+)\\]");
     QString source = columns().join(" ") +" "+ condition();
 
     QRegularExpressionMatchIterator it = re.globalMatch(source);
     while(it.hasNext())
     {
         QRegularExpressionMatch match = it.next();
-        sampleName.insert(match.captured("sample"));
+        sampleName.insert(match.captured("sample").remove("\""));
     }
 
     return sampleName.toList();

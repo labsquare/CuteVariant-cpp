@@ -295,7 +295,7 @@ QList<Field> VCFVariantReader::parseAnnotationHeaderLine(const QString& line)
         for (QString a : ann.split("|"))
         {
             fields.append(Field(id+"_"+a,a,"See Annotation specification"));
-            fields.last().setCategory("ANN");
+            fields.last().setCategory(id);
             mSpecialIdMap[id].append(fields.last().colname());
         }
     }
