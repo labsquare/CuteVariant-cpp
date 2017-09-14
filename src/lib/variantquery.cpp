@@ -60,7 +60,11 @@ QStringList VariantQuery::rawColumns() const
 
 void VariantQuery::setColumns(const QStringList &columns)
 {
-    mColumns = columns;
+    mColumns.clear();
+   for (QString col: columns)
+   {
+       mColumns.append(col.simplified());
+   }
 }
 
 QString VariantQuery::table() const
@@ -253,9 +257,10 @@ void VariantQuery::setOrderBy(const QStringList &orderBy)
     mOrderBy = orderBy;
 }
 
-VariantQuery VariantQuery::fromVql(const QString &vql)
+VariantQuery VariantQuery::fromVql(const QString &text)
 {
     VariantQuery query;
+    QString vql = text.simplified();
 
     QRegularExpression exp1("SELECT (?<columns>.+)");
     QRegularExpression exp2("SELECT (?<columns>.+) FROM (?<table>.+)");
@@ -266,7 +271,7 @@ VariantQuery VariantQuery::fromVql(const QString &vql)
     match = exp3.match(vql);
     if (match.hasMatch())
     {
-        query.setColumns(match.captured("columns").split(","));
+        query.setColumns(match.captured("columns").simplified().split(","));
         query.setTable(match.captured("table"));
         query.setCondition(match.captured("condition"));
         return query;

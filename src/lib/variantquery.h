@@ -47,7 +47,7 @@ public:
     void setOrderBy(const QStringList &orderBy);
 
 
-    static VariantQuery fromVql(const QString& vql);
+    static VariantQuery fromVql(const QString& text);
 
 
     Qt::SortOrder sortOder() const;
