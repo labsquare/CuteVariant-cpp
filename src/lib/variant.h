@@ -27,8 +27,8 @@ public:
 
    QString name() const;
    QString coordinate() const;
-   QUrl igvUrl() const;
-   QUrl varsomeUrl() const;
+   QString igvUrl() const;
+   QString varsomeUrl() const;
 
 
     const QString& chromosom() const;

@@ -38,6 +38,7 @@ bool SqliteManager::importFile(const QString &filename)
     timer.start();
 
     createFile(filename);
+    createLinks();
     createSample(reader.data());
     createFields(reader.data());
     createGenotypeFields(reader.data());
@@ -126,6 +127,25 @@ QList<Field> SqliteManager::genotype(const Sample &sample) const
 
 
 }
+//-------------------------------------------------------------------------------
+QList<VariantLink> SqliteManager::links() const
+{
+    QList<VariantLink> links;
+    QSqlQuery query(QStringLiteral("SELECT * FROM `links`"));
+    while(query.next())
+    {
+        VariantLink link;
+        link.setId(query.value("id").toInt());
+        link.setName(query.value("name").toString());
+        link.setUrl(query.value("url").toString());
+
+        QPixmap pix;
+        pix.loadFromData(query.value("icon").toByteArray());
+        link.setIcon(QIcon(pix));
+        links.append(link);
+    }
+    return links;
+}
 
 //-------------------------------------------------------------------------------
 QList<VariantSelection> SqliteManager::variantSelections()
@@ -155,6 +175,50 @@ bool SqliteManager::removeSelection(const QString &name)
         qDebug()<<query.lastError().text();
         return false;
     }
+
+    return true;
+}
+//-------------------------------------------------------------------------------
+bool SqliteManager::removeLink(const VariantLink &link)
+{
+    if (!link.exists())
+        return false;
+
+    QSqlQuery query;
+    if (!query.exec(QString("DELETE FROM `links` WHERE id=%1").arg(link.id())))
+    {
+        qDebug()<<query.lastQuery();
+        qDebug()<<query.lastError().text();
+        return false;
+    }
+
+    return true;
+}
+//-------------------------------------------------------------------------------
+bool SqliteManager::saveLink(VariantLink &link)
+{
+    QSqlQuery query;
+    if (!link.exists())
+        query.prepare( "INSERT INTO `links` (name, url, icon) VALUES (:name, :url, :icon)" );
+    else
+        query.prepare(QStringLiteral("UPDATE `links` SET name = :name , url = :url , icon = :icon WHERE id =%1").arg(link.id()));
+
+
+    query.bindValue(":name", link.name());
+    query.bindValue(":url", link.url());
+    query.bindValue(":icon", iconToData(link.icon()));
+
+
+
+    if (!query.exec())
+    {
+        qDebug()<<Q_FUNC_INFO<<" cannot save/update link "<<query.lastError().text();
+        qDebug()<<query.lastQuery();
+        return false;
+    }
+
+    if (!link.exists())
+        link.setId(query.lastInsertId().toInt());
 
     return true;
 }
@@ -303,6 +367,26 @@ void SqliteManager::createFile(const QString &filename)
         qWarning()<<Q_FUNC_INFO<<query.lastQuery();
         qWarning()<<Q_FUNC_INFO<<query.lastError().text();
     }
+}
+//-------------------------------------------------------------------------------
+void SqliteManager::createLinks()
+{
+    qInfo()<<"Import Links";
+    emit importProgressChanged(0,QString("Create defaults Links"));
+
+    QSqlQuery query;
+    query.exec(QStringLiteral("DROP TABLE IF EXISTS `links`"));
+    query.exec(QStringLiteral("CREATE TABLE `links` ("
+                              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                              "name TEXT NOT NULL,"
+                              "url TEXT NOT NULL,"
+                              "icon BLOB"
+                              ")"));
+
+
+    VariantLink demo("IGV",QString("http://www.google.fr"),QIcon(":/on.png"));
+    saveLink(demo);
+
 }
 
 //-------------------------------------------------------------------------------
@@ -639,6 +723,18 @@ QByteArray SqliteManager::md5sum(const QString &filename)
     }
     file.close();
     return out.toHex();
+
+}
+//-------------------------------------------------------------------------------
+QByteArray SqliteManager::iconToData(const QIcon &icon)
+{
+    QByteArray inByteArray;
+    QBuffer inBuffer(&inByteArray);
+    inBuffer.open(QIODevice::WriteOnly);
+    icon.pixmap(32,32).save(&inBuffer,"PNG");
+    inBuffer.close();
+
+    return inByteArray;
 
 }
 //-------------------------------------------------------------------------------

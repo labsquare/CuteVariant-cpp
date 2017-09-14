@@ -18,7 +18,8 @@ SOURCES += \
     fieldsmodel.cpp \
     samplemodel.cpp \
     variantquery.cpp \
-    selection.cpp
+    selection.cpp \
+    variantlink.cpp
 
 HEADERS += \
     field.h \
@@ -34,6 +35,7 @@ HEADERS += \
     fieldsmodel.h \
     samplemodel.h \
     variantquery.h \
-    selection.h
+    selection.h \
+    variantlink.h
 
 TARGET = cutevariantcore

@@ -33,6 +33,11 @@ QString Resource::normalize(const QString &string)
     return out;
 }
 
+bool Resource::exists() const
+{
+    return id() != -1;
+}
+
 void Resource::setTableName(const QString &name)
 {
     mTableName = name;

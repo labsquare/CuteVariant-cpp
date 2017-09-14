@@ -3,11 +3,13 @@
 #include <QSqlDatabase>
 #include <QtSql>
 #include <QObject>
+#include <QtGui>
 #include <QtConcurrent>
 #include "abstractvariantreader.h"
 #include "vcfvariantreader.h"
 #include "variantquery.h"
 #include "selection.h"
+#include "variantlink.h"
 
 namespace cvar {
 
@@ -27,12 +29,21 @@ public:
     ~SqliteManager();
     void createProject(const QString& name);
 
+    // getter
     QList<Sample> samples() const;
     QList<Field> fields() const;
     QList<Field> genotypeFields() const;
     QList<Field> genotype(const Sample& sample) const;
+    QList<VariantLink> links() const;
     QList<VariantSelection> variantSelections();
+
+
+    // saver
+    bool saveLink(VariantLink& link);
+
+    // deleter
     bool removeSelection(const QString& name);
+    bool removeLink(const VariantLink& link);
 
 
     QSqlQuery variants(const VariantQuery & query) const;
@@ -48,6 +59,7 @@ public:
 
 protected:
     void createFile(const QString& filename);
+    void createLinks();
     void createSample(AbstractVariantReader * reader);
     void createFields(AbstractVariantReader * reader);
     void createGenotypeFields(AbstractVariantReader * reader);
@@ -55,6 +67,7 @@ protected:
     void createGenotypes(AbstractVariantReader * reader);
 
     static QByteArray md5sum(const QString& filename);
+    static QByteArray iconToData(const QIcon& icon);
 
 
 Q_SIGNALS:

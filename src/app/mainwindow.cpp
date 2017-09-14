@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "project.h"
 #include "columndockwidget.h"
-#include "linkdialog.h"
+#include "linklistdialog.h"
 using namespace cvar;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -56,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     restoreSettings();
     reset();
 
-    LinkDialog d;
+    LinkListDialog d;
     d.exec();
 
 

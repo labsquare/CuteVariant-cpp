@@ -17,6 +17,8 @@ public:
      */
     static QString normalize(const QString& string);
 
+    bool exists() const;
+
 
 protected:
     void setTableName(const QString& name);

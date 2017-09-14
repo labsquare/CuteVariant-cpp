@@ -82,14 +82,14 @@ QString Variant::coordinate() const
     return QString("%1:%2").arg(mChr).arg(mPos);
 }
 
-QUrl Variant::igvUrl() const
+QString Variant::igvUrl() const
 {
-    return QUrl(QString("http://localhost:60151/locus?%1:%2").arg(chromosom()).arg(position()));
+    return QString(QString("http://localhost:60151/locus?%1:%2").arg(chromosom()).arg(position()));
 }
 
-QUrl Variant::varsomeUrl() const
+QString Variant::varsomeUrl() const
 {
-    return QUrl(QString("https://varsome.com/variant/hg19/%2").arg(name()));
+    return QString(QString("https://varsome.com/variant/hg19/%2").arg(name()));
 
 }
 
