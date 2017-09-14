@@ -104,7 +104,7 @@ void LinkListDialog::load()
         QTreeWidgetItem * item = new QTreeWidgetItem;
         item->setIcon(0, link.icon());
         item->setText(0, link.name());
-        item->setText(1, link.url());
+        item->setText(1, link.rawUrl());
 
         mView->addTopLevelItem(item);
 

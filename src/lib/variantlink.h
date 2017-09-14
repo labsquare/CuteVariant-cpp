@@ -3,26 +3,29 @@
 #include <QtCore>
 #include <QtGui>
 #include "resource.h"
+#include "variant.h"
 
 namespace cvar {
 class VariantLink : public Resource
 {
 public:
     VariantLink();
-    VariantLink(const QString& name, const QString& url, const QIcon& icon);
+    VariantLink(const QString& name, const QString& rawUrl, const QIcon& icon);
 
     QString name() const;
     void setName(const QString &name);
 
-    QString url() const;
-    void setUrl(const QString &url);
+    QString rawUrl() const;
+    void setRawUrl(const QString &rawUrl);
 
     QIcon icon() const;
     void setIcon(const QIcon &icon);
 
+    QUrl toUrl(const Variant& variant) const;
+
 private:
     QString mName;
-    QString mUrl;
+    QString mRawUrl;
     QIcon mIcon;
 };
 }

@@ -56,10 +56,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     restoreSettings();
     reset();
 
-    LinkListDialog d;
-    d.exec();
-
-
 }
 //-------------------------------------------------------------------------
 MainWindow::~MainWindow()

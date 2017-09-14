@@ -9,7 +9,7 @@ VariantLink::VariantLink()
 
 VariantLink::VariantLink(const QString &name, const QString &url, const QIcon &icon)
     :Resource(),
-    mName(name), mUrl(url), mIcon(icon)
+    mName(name), mRawUrl(url), mIcon(icon)
 {
 
 }
@@ -24,14 +24,14 @@ void VariantLink::setName(const QString &name)
     mName = name;
 }
 
-QString VariantLink::url() const
+QString VariantLink::rawUrl() const
 {
-    return mUrl;
+    return mRawUrl;
 }
 
-void VariantLink::setUrl(const QString &url)
+void VariantLink::setRawUrl(const QString &url)
 {
-    mUrl = url;
+    mRawUrl = url;
 }
 
 QIcon VariantLink::icon() const
@@ -42,6 +42,16 @@ QIcon VariantLink::icon() const
 void VariantLink::setIcon(const QIcon &icon)
 {
     mIcon = icon;
+}
+
+QUrl VariantLink::toUrl(const Variant &variant) const
+{
+    QString raw = mRawUrl;
+    raw = raw.replace("$CHROM", variant.chromosom());
+    raw = raw.replace("$POS", QString::number(variant.position()));
+    raw = raw.replace("$REF", variant.ref());
+    raw = raw.replace("$ALT", variant.alt());
+    return QUrl(raw);
 }
 
 }

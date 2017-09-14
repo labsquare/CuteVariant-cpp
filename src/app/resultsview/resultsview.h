@@ -5,6 +5,7 @@
 #include "resulttreemodel.h"
 #include "project.h"
 #include "variantquery.h"
+#include "linklistdialog.h"
 
 class ResultsView : public QWidget
 {

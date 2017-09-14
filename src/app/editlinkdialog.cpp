@@ -34,14 +34,14 @@ void EditLinkDialog::setLink(const cvar::VariantLink &link)
 {
     mCurrentLink = link;
     mNameEdit->setText(link.name());
-    mUrlEdit->setText(link.url());
+    mUrlEdit->setText(link.rawUrl());
     miconButton->setIcon(link.icon());
 }
 
 const cvar::VariantLink &EditLinkDialog::link()
 {
     mCurrentLink.setName(mNameEdit->text());
-    mCurrentLink.setUrl(mUrlEdit->text());
+    mCurrentLink.setRawUrl(mUrlEdit->text());
     mCurrentLink.setIcon(miconButton->icon());
 
     return mCurrentLink;

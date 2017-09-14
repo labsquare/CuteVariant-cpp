@@ -137,7 +137,7 @@ QList<VariantLink> SqliteManager::links() const
         VariantLink link;
         link.setId(query.value("id").toInt());
         link.setName(query.value("name").toString());
-        link.setUrl(query.value("url").toString());
+        link.setRawUrl(query.value("url").toString());
 
         QPixmap pix;
         pix.loadFromData(query.value("icon").toByteArray());
@@ -205,7 +205,7 @@ bool SqliteManager::saveLink(VariantLink &link)
 
 
     query.bindValue(":name", link.name());
-    query.bindValue(":url", link.url());
+    query.bindValue(":url", link.rawUrl());
     query.bindValue(":icon", iconToData(link.icon()));
 
 

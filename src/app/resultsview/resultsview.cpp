@@ -58,6 +58,7 @@ ResultsView::ResultsView(QWidget *parent) : QWidget(parent)
 
 
 
+
 }
 
 void ResultsView::setQuery(const cvar::VariantQuery &query)
@@ -172,30 +173,40 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
 
     if (index.isValid())
     {
+        quint64 variantID = mModel->record(index).value("id").toInt();
+        cvar::Variant var = cutevariant->sqliteManager()->variant(variantID);
 
-        qDebug()<<mModel->record(index).value("id");
-        //        int variantID = mModel->item(index.row())->data().toInt();
-        //        qDebug()<<variantID;
-        //        cvar::Variant var = cutevariant->sqliteManager()->variant(variantID);
 
-        //        QMenu menu(this);
-        //        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
-        //            qApp->clipboard()->setText(var.coordinate());
-        //        });
+        QMenu menu(this);
+        menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
+            qApp->clipboard()->setText(var.coordinate());
+        });
 
-        //        menu.addAction(QIcon::fromTheme("edit-copy"), var.name(),[&var](){
-        //            qApp->clipboard()->setText(var.name());
-        //        });
+        menu.addSeparator();
 
-        //        menu.addAction(QIcon::fromTheme("edit-link"), "IGV",[&var](){
-        //            QDesktopServices::openUrl(var.igvUrl());
-        //        });
+        // show links
 
-        //        menu.addAction(QIcon::fromTheme("edit-link"), "Varsome",[&var](){
-        //            QDesktopServices::openUrl(var.varsomeUrl());
-        //        });
+        for (cvar::VariantLink link : cutevariant->sqliteManager()->links())
+        {
+            QUrl varurl = link.toUrl(var);
+            menu.addAction(link.icon(), link.name(),[varurl](){
+                QDesktopServices::openUrl(varurl);
 
-        //        menu.exec(event->globalPos());
+            });
+        }
+
+        menu.addSeparator();
+
+
+        menu.addAction(QIcon::fromTheme("document-add"),"edit link ...",[&var](){
+
+            LinkListDialog dialog;
+            dialog.exec();
+
+        });
+
+
+        menu.exec(event->globalPos());
 
     }
 }
