@@ -7,7 +7,7 @@ ResultsView::ResultsView(QWidget *parent) : QWidget(parent)
     mModel = new ResultTreeModel();
     mView->setModel(mModel);
     mView->setSortingEnabled(true);
-
+    mView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     QVBoxLayout * vLayout = new QVBoxLayout;
 
@@ -180,6 +180,10 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
         QMenu menu(this);
         menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
             qApp->clipboard()->setText(var.coordinate());
+        });
+
+        menu.addAction(QIcon::fromTheme("edit-copy"), var.name(),[&var](){
+            qApp->clipboard()->setText(var.name());
         });
 
         menu.addSeparator();

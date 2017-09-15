@@ -148,7 +148,7 @@ QList<VariantLink> SqliteManager::links() const
 }
 
 //-------------------------------------------------------------------------------
-QList<VariantSelection> SqliteManager::variantSelections()
+QList<VariantSelection> SqliteManager::variantSelections() const
 {
 
     QList<VariantSelection> list;
@@ -163,6 +163,60 @@ QList<VariantSelection> SqliteManager::variantSelections()
     }
 
     return list;
+
+}
+//-------------------------------------------------------------------------------
+QStringList SqliteManager::variantSelectionNames() const
+{
+    QStringList out;
+    for (const VariantSelection& s : variantSelections())
+        out.append(s.name());
+    return out;
+}
+//-------------------------------------------------------------------------------
+bool SqliteManager::createSelectionFromExpression(const QString &newtable, const QString &rawExpression, CompareMode mode)
+{
+    qDebug()<<Q_FUNC_INFO<<" create expression ";
+
+    QRegularExpression exp("[^\\-+&\\(\\)\\s&]+");
+    QRegularExpressionMatchIterator it = exp.globalMatch(rawExpression);
+    QStringList tables = variantSelectionNames();
+
+    QString raw = rawExpression.simplified();
+    while (it.hasNext())
+    {
+        QRegularExpressionMatch match = it.next();
+        QString table = match.captured();
+
+        if (!tables.contains(table))
+        {
+            qDebug()<<Q_FUNC_INFO<<" wrong expression, unknown table "+table;
+            return false;
+        }
+
+        raw = raw.replace(table, QString("SELECT chr, pos FROM `%1`").arg(table));
+    }
+
+    raw = raw.replace("+", " UNION ");
+    raw = raw.replace("-", " EXCEPT ");
+    raw = raw.replace("&", " INTERSECT ");
+
+    QSqlQuery query;
+    query.exec(QString("DROP VIEW IF EXISTS %1").arg(newtable));
+
+
+    query.prepare(QString("CREATE VIEW %1 AS SELECT variants.* FROM variants, (%2) as t WHERE t.chr=variants.chr AND t.pos = variants.pos").arg(newtable,raw));
+
+    if (!query.exec())
+    {
+        qDebug()<<query.lastError().text();
+        qDebug()<<query.lastQuery();
+    }
+
+    qDebug()<<query.lastQuery();
+
+
+    return true;
 
 }
 //-------------------------------------------------------------------------------

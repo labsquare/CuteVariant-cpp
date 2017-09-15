@@ -11,6 +11,9 @@ public:
     QString title() const;
 
     void addAction(QAction * action);
+
+    QAction *addAction(const QIcon &actionIcon, const QString &text, QObject * receiver, const char *member);
+
     void setWidget(QWidget * w);
 
     virtual void reset(){}

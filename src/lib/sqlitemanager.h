@@ -25,6 +25,10 @@ class SqliteManager : public QObject
 {
     Q_OBJECT
 public:
+    enum CompareMode {
+        SiteMode ,
+        VariantMode
+    };
     SqliteManager(QObject * parent = 0);
     ~SqliteManager();
     void createProject(const QString& name);
@@ -35,7 +39,10 @@ public:
     QList<Field> genotypeFields() const;
     QList<Field> genotype(const Sample& sample) const;
     QList<VariantLink> links() const;
-    QList<VariantSelection> variantSelections();
+    QList<VariantSelection> variantSelections() const; //TODO rename better
+    QStringList variantSelectionNames() const;
+
+    bool createSelectionFromExpression(const QString& newtable, const QString& rawExpression, CompareMode mode = SiteMode);
 
 
     // saver

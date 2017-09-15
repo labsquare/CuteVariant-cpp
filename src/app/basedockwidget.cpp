@@ -8,7 +8,7 @@ BaseDockWidget::BaseDockWidget(QWidget *parent)
     mTitleWidget = new QLabel();
 
     mToolBar->setIconSize(QSize(16,16));
-  //  mToolBar->layout()->setContentsMargins(0,0,0,0);
+    //  mToolBar->layout()->setContentsMargins(0,0,0,0);
     mToolBar->addWidget(mTitleWidget);
 
     // add spacer
@@ -28,7 +28,7 @@ BaseDockWidget::BaseDockWidget(QWidget *parent)
 void BaseDockWidget::setWidget(QWidget *w)
 {
     QDockWidget::setWidget(w);
-//    w->setStyleSheet("{border:1px solid lightgray}");
+    //    w->setStyleSheet("{border:1px solid lightgray}");
 
 }
 
@@ -46,4 +46,18 @@ QString BaseDockWidget::title() const
 void BaseDockWidget::addAction(QAction *action)
 {
     mToolBar->addAction(action);
+
+
 }
+
+QAction *BaseDockWidget::addAction(const QIcon &actionIcon, const QString &text, QObject *receiver, const char *member)
+{
+
+    QAction * ret = new QAction (actionIcon, text);
+    connect(ret, SIGNAL(triggered(bool)), receiver, member);
+    addAction(ret);
+    return ret;
+
+}
+
+
