@@ -174,6 +174,7 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
     if (index.isValid())
     {
         quint64 variantID = mModel->record(index).value("id").toInt();
+        qDebug()<<variantID;
         cvar::Variant var = cutevariant->sqliteManager()->variant(variantID);
 
 

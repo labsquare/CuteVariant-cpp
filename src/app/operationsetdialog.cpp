@@ -5,6 +5,7 @@ OperationSetDialog::OperationSetDialog(QWidget *parent)
 {
 
     mModeBox  = new QComboBox;
+    mNewName  = new QLineEdit;
     mExprEdit = new QPlainTextEdit;
 
     QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
@@ -12,6 +13,7 @@ OperationSetDialog::OperationSetDialog(QWidget *parent)
     QFormLayout * formLayout = new QFormLayout;
 
     formLayout->addRow("Mode",mModeBox);
+    formLayout->addRow("Name", mNewName);
     formLayout->addRow("Expression",mExprEdit);
 
     mModeBox->addItem("Site (chr,pos)");
@@ -34,6 +36,23 @@ OperationSetDialog::OperationSetDialog(QWidget *parent)
 QString OperationSetDialog::expression() const
 {
     return mExprEdit->toPlainText();
+}
+
+QString OperationSetDialog::tableName() const
+{
+    return mNewName->text();
+}
+
+cvar::SqliteManager::CompareMode OperationSetDialog::mode() const
+{
+    if (mModeBox->currentIndex() == 0)
+        return cvar::SqliteManager::SiteMode;
+
+    if (mModeBox->currentIndex() == 1)
+        return cvar::SqliteManager::VariantMode;
+
+    return cvar::SqliteManager::SiteMode;
+
 }
 
 

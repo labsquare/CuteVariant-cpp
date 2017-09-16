@@ -181,6 +181,7 @@ bool SqliteManager::createSelectionFromExpression(const QString &newtable, const
     QRegularExpression exp("[^\\-+&\\(\\)\\s&]+");
     QRegularExpressionMatchIterator it = exp.globalMatch(rawExpression);
     QStringList tables = variantSelectionNames();
+    tables.append("variants");
 
     QString raw = rawExpression.simplified();
     while (it.hasNext())
@@ -194,7 +195,11 @@ bool SqliteManager::createSelectionFromExpression(const QString &newtable, const
             return false;
         }
 
-        raw = raw.replace(table, QString("SELECT chr, pos FROM `%1`").arg(table));
+        if (mode == CompareMode::SiteMode)
+            raw = raw.replace(table, QString("SELECT chr, pos FROM `%1`").arg(table));
+
+        if (mode == CompareMode::VariantMode)
+            raw = raw.replace(table, QString("SELECT chr, pos, ref, alt FROM `%1`").arg(table));
     }
 
     raw = raw.replace("+", " UNION ");
@@ -205,7 +210,12 @@ bool SqliteManager::createSelectionFromExpression(const QString &newtable, const
     query.exec(QString("DROP VIEW IF EXISTS %1").arg(newtable));
 
 
-    query.prepare(QString("CREATE VIEW %1 AS SELECT variants.* FROM variants, (%2) as t WHERE t.chr=variants.chr AND t.pos = variants.pos").arg(newtable,raw));
+    if (mode == CompareMode::SiteMode)
+        query.prepare(QString("CREATE VIEW %1 AS SELECT variants.* FROM variants, (%2) as t WHERE t.chr=variants.chr AND t.pos = variants.pos").arg(newtable,raw));
+
+    if (mode == CompareMode::VariantMode)
+        query.prepare(QString("CREATE VIEW %1 AS SELECT variants.* FROM variants, (%2) as t WHERE t.chr=variants.chr AND t.pos = variants.pos AND t.ref = variants.ref AND t.alt = variants.alt").arg(newtable,raw));
+
 
     if (!query.exec())
     {

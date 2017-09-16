@@ -142,7 +142,7 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
 {
     QString query;
 
-    QString select     = rawTable()+".id, "+rawColumns().join(",");
+    QString select     = rawTable()+".id as id, "+rawColumns().join(",");
     QString tableName  = rawTable().isEmpty() ? "variants" : rawTable();
     QString where      = rawCondition();
 
