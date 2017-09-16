@@ -8,7 +8,7 @@ before_install:
   - sudo apt-get update
 
 install:
-  - sudo apt-get install qt59base
+  - sudo apt-get install qt59-meta-full
   - source /opt/qt59/bin/qt59-env.sh
 
 script:
