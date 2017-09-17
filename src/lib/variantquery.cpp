@@ -45,7 +45,7 @@ QStringList VariantQuery::rawColumns() const
 
     for (QString col : columns())
     {
-        col = col.remove("variant.");
+        col = col.remove("variants.");
 
         // if col is a sample fields ...
         if (col.contains("["))

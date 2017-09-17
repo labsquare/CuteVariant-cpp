@@ -16,6 +16,7 @@ public:
 protected Q_SLOTS:
     void addCondition();
     void addLogic();
+    void remove();
 
 
 private:

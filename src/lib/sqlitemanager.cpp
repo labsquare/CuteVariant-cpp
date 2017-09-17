@@ -82,7 +82,7 @@ QList<Field> SqliteManager::fields() const
         field.setDescription(query.value("description").toString());
         field.setType(query.value("type").toString());
         field.setCategory(query.value("category").toString());
-        field.setExpression(QString("%1.%2").arg(field.category().toLower(),field.colname().toLower()));
+        field.setExpression(QString("%2").arg(field.colname().toLower()));
 
         fields.append(field);
     }
@@ -499,12 +499,12 @@ void SqliteManager::createFields(AbstractVariantReader *reader)
 
     // import default fields
     qDebug()<<"import default";
-    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('chr','chr','Chromosome name','VARIANT','TEXT') "));
-    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('pos','pos','Position 1-based','VARIANT','INTEGER')"));
-    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('ref','ref','Reference allele','VARIANT','TEXT') "));
-    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('alt','alt','Alternative allele','VARIANT','TEXT')"));
-    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('qual','qual','Quality Phred','VARIANT','REAL')"));
-    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('filter','filter','Filter','VARIANT','TEXT')"));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('chr','chr','Chromosome name','VARIANTS','TEXT') "));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('pos','pos','Position 1-based','VARIANTS','INTEGER')"));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('ref','ref','Reference allele','VARIANTS','TEXT') "));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('alt','alt','Alternative allele','VARIANTS','TEXT')"));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('qual','qual','Quality Phred','VARIANTS','REAL')"));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('filter','filter','Filter','VARIANTS','TEXT')"));
 
     qDebug()<<query.lastError().text();
 

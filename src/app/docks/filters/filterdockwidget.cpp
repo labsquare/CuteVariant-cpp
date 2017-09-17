@@ -10,6 +10,7 @@ FilterDockWidget::FilterDockWidget(QWidget *parent)
 
     addAction(QIcon::fromTheme("list-add"), "add logic", this, SLOT(addLogic()));
     addAction(QIcon::fromTheme("list-add"), "add condition", this, SLOT(addCondition()));
+    addAction(QIcon::fromTheme("list-remove"), "remove", this, SLOT(addCondition()));
 
 
     QAction * saveAction = new QAction(QIcon::fromTheme("folder-open"),"open");
@@ -65,6 +66,16 @@ void FilterDockWidget::addCondition()
 
 void FilterDockWidget::addLogic()
 {
+    mView->addLogic();
+    emit changed();
+
+
+}
+
+void FilterDockWidget::remove()
+{
+    mView->removeSelections();
+    emit changed();
 
 }
 
