@@ -65,10 +65,10 @@ QStringList VariantQuery::rawColumns() const
 void VariantQuery::setColumns(const QStringList &columns)
 {
     mColumns.clear();
-   for (QString col: columns)
-   {
-       mColumns.append(col.simplified());
-   }
+    for (QString col: columns)
+    {
+        mColumns.append(col.simplified());
+    }
 }
 
 QString VariantQuery::table() const
@@ -96,7 +96,15 @@ QString VariantQuery::condition() const
 
 QString VariantQuery::rawCondition() const
 {
+    // HUGE HACK... VERRRRRY UGLY
     QString raw = condition();
+
+    for (QString t : raw.split("sample"))
+    {
+        QString a = t;
+        replaceSampleFields(a);
+    }
+
     replaceSampleFields(raw);
     return raw;
 }
@@ -221,7 +229,7 @@ QStringList VariantQuery::detectSamplesFields() const
 void VariantQuery::replaceSampleFields(QString &text) const
 {
     // rename genotype fields
-    QRegularExpression re("sample\\[\\\"(?<sample>.+)\\\"\\]\\.(?<arg>.+)");
+    QRegularExpression re("sample\\[\\\"(?<sample>[^\\s]+)\\\"\\]\\.(?<arg>[^\\s]+)");
     QRegularExpressionMatchIterator it = re.globalMatch(text);
 
     while (it.hasNext())
