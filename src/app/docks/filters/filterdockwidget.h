@@ -19,7 +19,7 @@ protected Q_SLOTS:
 
 
 private:
-//    FilterView * mView;
+    FilterView * mView;
 };
 
 #endif // CONDITIONDOCKWIDGET_H

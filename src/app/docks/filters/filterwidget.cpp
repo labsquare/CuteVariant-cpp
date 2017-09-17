@@ -50,6 +50,19 @@ void FilterWidget::setField(const cvar::Field &field)
     operatorChanged();
 }
 //----------------------------------------------------------------------------
+const cvar::Field &FilterWidget::field() const
+{
+    return mField;
+}
+//----------------------------------------------------------------------------
+QVariant FilterWidget::value() const
+{
+    if (mFormLayout)
+        return mFieldWidget->value();
+
+    return QVariant();
+}
+//----------------------------------------------------------------------------
 Operator::Type FilterWidget::currentOperator() const
 {
     return Operator::Type(mOperatorBox->currentData().toInt());
@@ -63,18 +76,22 @@ void FilterWidget::operatorChanged()
 
     mFormLayout->removeRow(1);
 
+
+
     if (currentOperator() == Operator::Between){
-        mFormLayout->insertRow(1,"value", new RangeFieldWidget);
+        mFieldWidget = new RangeFieldWidget;
+        mFormLayout->insertRow(1,"value", mFieldWidget);
         return;
     }
 
     if (currentOperator() == Operator::In){
-        mFormLayout->insertRow(1,"value", new ListFieldWidget);
+        mFieldWidget = new ListFieldWidget;
+        mFormLayout->insertRow(1,"value", mFieldWidget);
         return;
     }
 
-    mFormLayout->insertRow(1,"value", FilterFieldFactory::widget(mField));
-
+    mFieldWidget = FilterFieldFactory::widget(mField);
+    mFormLayout->insertRow(1,"value",mFieldWidget);
 
 
 }

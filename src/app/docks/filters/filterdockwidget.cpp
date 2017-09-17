@@ -3,14 +3,28 @@
 FilterDockWidget::FilterDockWidget(QWidget *parent)
     :BaseDockWidget(parent)
 {
-    //mView = new FilterView;
+    mView = new FilterView;
     setTitle("Filter");
-    setWidget(new QListWidget);
+    setWidget(mView);
 
 
+    addAction(QIcon::fromTheme("list-add"), "add logic", this, SLOT(addLogic()));
+    addAction(QIcon::fromTheme("list-add"), "add condition", this, SLOT(addCondition()));
 
-    addAction(QIcon(),"add Logic",this,SLOT(addLogic()));
-    addAction(QIcon(),"add condtion", this, SLOT(addCondition()));
+
+    QAction * saveAction = new QAction(QIcon::fromTheme("folder-open"),"open");
+    saveAction->setMenu(new QMenu);
+    saveAction->menu()->addAction("Preset1");
+    saveAction->menu()->addAction("Preset2");
+    saveAction->menu()->addAction("Preset3");
+    saveAction->menu()->addSeparator();
+    saveAction->menu()->addAction("Save");
+    saveAction->menu()->addAction("Edit ...");
+
+
+    addAction(saveAction);
+
+
 
     // create actions
  //   QAction *logicAction = new QAction(QIcon::fromTheme("list-add"), "add logic",this);
@@ -32,16 +46,19 @@ FilterDockWidget::FilterDockWidget(QWidget *parent)
 
 QString FilterDockWidget::condition() const
 {
-    return "test";
-    //   return mView->query();
+    return mView->query();
 }
 
 void FilterDockWidget::addCondition()
 {
-
     AllFilterDIalog dialog(this);
+    if (dialog.exec())
+    {
 
-    dialog.exec();
+        mView->addCondition(dialog.filterItem());
+
+        emit changed();
+    }
 
 
 }

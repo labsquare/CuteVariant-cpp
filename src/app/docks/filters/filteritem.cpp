@@ -4,7 +4,7 @@ FilterItem::FilterItem(const cvar::Field &field, Operator::Type op, const QVaria
     :QStandardItem(), mField(field)
 {
 
-    setData(field.name(), FieldRole);
+    setData(field.expression(), FieldRole);
     setData(op, OperatorRole);
     setData(value, ValueRole);
     updateText();
@@ -16,7 +16,7 @@ FilterItem::FilterItem(const cvar::Field &field, Operator::Type op, const QVaria
 
 void FilterItem::setField(const cvar::Field &f)
 {
-    setData(f.name(),FieldRole);
+    setData(f.expression(),FieldRole);
     mField = f;
     updateText();
 }
@@ -60,7 +60,7 @@ QVariant FilterItem::value() const
 
 void FilterItem::updateText()
 {
-    setText(QString("%1 %2 %3").arg(field().name()).arg(operatorName()).arg(value().toString()));
-    setData(QString("%1 %2 '%3'").arg(field().colname()).arg(operatorName()).arg(value().toString()), ConditionRole);
+    setText(QString("%1 %2 %3").arg(field().expression()).arg(operatorName()).arg(value().toString()));
+    setData(QString("%1 %2 '%3'").arg(field().expression()).arg(operatorName()).arg(value().toString()), ConditionRole);
 
 }

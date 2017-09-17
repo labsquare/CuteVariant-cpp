@@ -14,6 +14,8 @@ class FilterWidget : public QWidget
 public:
     explicit FilterWidget(QWidget *parent = nullptr);
     void setField(const cvar::Field& field);
+    const cvar::Field& field() const;
+    QVariant value() const;
 
     Operator::Type currentOperator() const;
 
@@ -26,6 +28,7 @@ private:
     QLabel * mDescLabel;
     QComboBox * mOperatorBox;
     QFormLayout * mFormLayout;
+    AbstractFieldWidget * mFieldWidget = nullptr;
 
 
 

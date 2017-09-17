@@ -29,15 +29,22 @@ AllFilterDIalog::AllFilterDIalog(QWidget *parent)
     mModel->load();
 
     connect(mView,SIGNAL(clicked(QModelIndex)),this,SLOT(fieldSelected()));
+    connect(buttons,SIGNAL(accepted()),this,SLOT(accept()));
+    connect(buttons, SIGNAL(rejected()),this,SLOT(reject()));
 
+}
+
+FilterItem *AllFilterDIalog::filterItem() const
+{
+    FilterItem * item = new FilterItem(mWidget->field(), mWidget->currentOperator(), mWidget->value());
+    return item;
 }
 
 void AllFilterDIalog::fieldSelected()
 {
     const cvar::Field field = mModel->field(mView->currentIndex());
-    if (!field.name().isEmpty())
+    if (!field.isNull())
     {
-        qDebug()<<field.name();
         mWidget->setField(field);
     }
 

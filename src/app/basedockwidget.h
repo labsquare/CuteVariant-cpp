@@ -13,6 +13,7 @@ public:
     void addAction(QAction * action);
 
     QAction *addAction(const QIcon &actionIcon, const QString &text, QObject * receiver, const char *member);
+    void addToolWidget(QWidget * widget);
 
     void setWidget(QWidget * w);
 

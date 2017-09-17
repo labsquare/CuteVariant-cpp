@@ -13,6 +13,7 @@ public:
 
 private:
     FilterWidget * mWidget;
+    cvar::Field mField;
 };
 
 #endif // FILTERDIALOG_H

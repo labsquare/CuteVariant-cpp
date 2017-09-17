@@ -14,6 +14,7 @@ ColumnModel::ColumnModel( QObject *parent)
 void ColumnModel::load()
 {
     qDebug()<<Q_FUNC_INFO<<"load ";
+    mFieldItems.clear();
     clear();
     setColumnCount(1);
     for (cvar::Field f : cutevariant->sqliteManager()->fields())
@@ -23,7 +24,7 @@ void ColumnModel::load()
             mCategoriesItems[f.category()] = createCategory(f.category().toLower());
 
         // append item to category
-        mCategoriesItems[f.category()]->appendRow(createField(f, QString("%1.%2").arg(f.category().toLower(),f.name())));
+        mCategoriesItems[f.category()]->appendRow(createField(f));
     }
 
 
@@ -44,10 +45,10 @@ void ColumnModel::load()
             QStandardItem * c1 = createCategory(s.name().toUpper());
             mSampleItem->appendRow(c1);
 
-            for (cvar::Field f : cutevariant->sqliteManager()->genotypeFields())
+            for (cvar::Field f : cutevariant->sqliteManager()->genotypeFields(s))
             {
                 // TODO : check how colname are saved ...
-                QStandardItem * g = createField(f, QString("sample[\"%1\"].%2").arg(s.name(), f.name()));
+                QStandardItem * g = createField(f);
                 c1->appendRow(g);
             }
         }
@@ -62,30 +63,26 @@ QStringList ColumnModel::selectedColumns() const
 
     QStringList columns;
 
-    for ( QStandardItem * item : mFieldItems.keys())
+    for ( auto it : mFieldItems)
     {
-        if (item->checkState() == Qt::Checked)
+        if (it.first->checkState() == Qt::Checked)
         {
-            columns.append(item->data().toString());
+            columns.append(it.second.expression());
         }
 
     }
-
     return columns;
-
-
 }
 //---------------------------------------------------------
 QList<cvar::Field> ColumnModel::selectedFields() const
 {
     QList<cvar::Field> fields;
-    for ( QStandardItem * item : mFieldItems.keys())
+    for (auto it : mFieldItems)
     {
-        if (item->checkState() == Qt::Checked)
+        if (it.first->checkState() == Qt::Checked)
         {
-            fields.append(mFieldItems[item]);
+            fields.append(it.second);
         }
-
     }
     return fields;
 }
@@ -96,10 +93,14 @@ const cvar::Field ColumnModel::field(const QModelIndex &index) const
     if (!item)
         return cvar::Field();
 
-    if (!mFieldItems.contains(item))
-        return cvar::Field();
 
-    return mFieldItems[item];
+    for (auto it : mFieldItems)
+    {
+        if (it.first == item)
+          return it.second;
+    }
+
+    return cvar::Field();
 
 }
 //---------------------------------------------------------
@@ -129,14 +130,13 @@ QStandardItem *ColumnModel::createCategory(const QString &name, const QString &d
     return item;
 }
 //---------------------------------------------------------
-QStandardItem *ColumnModel::createField(const cvar::Field &field, const QString &vql)
+QStandardItem *ColumnModel::createField(const cvar::Field &field)
 {
     QStandardItem * item = new QStandardItem(field.name());
     item->setToolTip(field.description());
     item->setCheckable(mHasCheckbox);
     item->setEditable(false);
-    item->setData(vql);
-    mFieldItems[item] = field;
+    mFieldItems.append(qMakePair(item,field));
     return item;
 }
 //---------------------------------------------------------

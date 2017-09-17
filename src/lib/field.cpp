@@ -3,12 +3,6 @@ namespace cvar {
 Field::Field()
     :Resource()
 {
-
-}
-
-const QString &Field::colname() const
-{
-    return mColname;
 }
 
 Field::Field(const QString& colname,const QString &name, const QString &description, const Type& type)
@@ -18,8 +12,12 @@ Field::Field(const QString& colname,const QString &name, const QString &descript
     setName(name);
     setDescription(description);
     setType(type);
-}
 
+}
+const QString &Field::colname() const
+{
+    return mColname;
+}
 const QString &Field::name() const
 {
     return mName;
@@ -139,6 +137,22 @@ bool Field::operator ==(const Field &other)
 {
     return colname() == other.colname();
 }
+
+bool Field::isNull() const
+{
+    return colname().isNull();
+}
+
+QString Field::expression() const
+{
+    return mExpression;
+}
+
+void Field::setExpression(const QString &expression)
+{
+    mExpression = expression;
+}
+
 
 
 

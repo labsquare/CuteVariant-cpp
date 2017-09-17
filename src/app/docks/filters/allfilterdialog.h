@@ -3,11 +3,15 @@
 #include <QtWidgets>
 #include "columnmodel.h"
 #include "filterwidget.h"
+#include "filteritem.h"
+
 class AllFilterDIalog : public QDialog
 {
 Q_OBJECT
 public:
     AllFilterDIalog(QWidget * parent = nullptr);
+
+    FilterItem * filterItem() const;
 
 
 protected Q_SLOTS:

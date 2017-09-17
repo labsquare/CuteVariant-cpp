@@ -2,6 +2,7 @@
 #define FIELD_H
 #include <QtCore>
 #include "resource.h"
+#include "sample.h"
 
 namespace cvar {
 
@@ -47,13 +48,20 @@ public:
     void setCategory(const QString& category);
 
     bool operator ==(const Field& other);
+    bool isNull() const;
+
+    QString expression() const;
+    void setExpression(const QString &expression);
+
+
 
 private:
     QString mColname;
     QString mName;
     QString mDescription;
     QString mCategory;
-    Type mType = Field::TEXT;
+    QString mExpression;
+    Type mType    = Field::TEXT;
 
 
 

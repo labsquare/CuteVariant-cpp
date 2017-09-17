@@ -60,4 +60,10 @@ QAction *BaseDockWidget::addAction(const QIcon &actionIcon, const QString &text,
 
 }
 
+void BaseDockWidget::addToolWidget(QWidget *widget)
+{
+
+    mToolBar->addWidget(widget);
+}
+
 

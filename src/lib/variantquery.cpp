@@ -46,7 +46,6 @@ QStringList VariantQuery::rawColumns() const
     for (QString col : columns())
     {
         col = col.remove("variant.");
-        col = col.replace(".","_");
 
         // if col is a sample fields ...
         if (col.contains("["))
@@ -99,7 +98,6 @@ QString VariantQuery::rawCondition() const
 {
     QString raw = condition();
     replaceSampleFields(raw);
-
     return raw;
 }
 
@@ -223,13 +221,13 @@ QStringList VariantQuery::detectSamplesFields() const
 void VariantQuery::replaceSampleFields(QString &text) const
 {
     // rename genotype fields
-    QRegularExpression re("sample\\[\\\"(?<sample>.+)\\\"\\]_(?<arg>.+)");
+    QRegularExpression re("sample\\[\\\"(?<sample>.+)\\\"\\]\\.(?<arg>.+)");
     QRegularExpressionMatchIterator it = re.globalMatch(text);
 
     while (it.hasNext())
     {
         QRegularExpressionMatch match = it.next();
-        text.replace(match.captured(), QString("`gt_%1`.`%2`").arg(match.captured("sample"), match.captured("arg")));
+        text.replace(match.captured(), QString("`gt_%1`.%2").arg(match.captured("sample"), match.captured("arg")));
     }
 
 }

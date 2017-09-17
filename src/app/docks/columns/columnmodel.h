@@ -22,13 +22,13 @@ protected Q_SLOTS:
 
 protected:
     QStandardItem *createCategory(const QString& name, const QString& description = QString());
-    QStandardItem *createField(const cvar::Field& field, const QString& vql);
+    QStandardItem *createField(const cvar::Field& field);
 
 
 private:
 QHash<QString, QStandardItem*> mCategoriesItems;
 QStandardItem * mSampleItem;
-QHash<QStandardItem*,cvar::Field> mFieldItems;
+QList<QPair<QStandardItem*,cvar::Field>> mFieldItems;
 bool mHasCheckbox = true; // Columns and filter use this model
 
 

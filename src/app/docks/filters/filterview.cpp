@@ -24,7 +24,7 @@ FilterView::FilterView(QWidget * parent)
     setWindowTitle("Filter");
 
     // select first tree item
-   // selectionModel()->select(mModel->index(0,0,QModelIndex()),QItemSelectionModel::Select);
+    // selectionModel()->select(mModel->index(0,0,QModelIndex()),QItemSelectionModel::Select);
 
 
 }
@@ -37,41 +37,34 @@ QString FilterView::query()
 
 void FilterView::addLogic()
 {
-//    QStandardItem * parent = mModel->itemFromIndex(currentIndex());
-//    mModel->addLogic(new LogicItem("AND"), parent);
+    QStandardItem * parent = mModel->itemFromIndex(currentIndex());
+    mModel->addLogic(new LogicItem("AND"), parent);
 
 }
-//----------------------------------------------------------------
-void FilterView::addCondition()
+
+void FilterView::addCondition(FilterItem *item)
 {
 
-//    FilterDialog dialog(this);
-
-//    if (dialog.exec())
-//    {
-//        QStandardItem * parent = mModel->itemFromIndex(currentIndex());
-//        if (parent){
-//            FilterItem * item = dialog.toItem();
-//            mModel->addCondition(item, parent);
-//        }
-
-//    }
+    QStandardItem * parent = mModel->itemFromIndex(currentIndex());
+    if (parent)
+        mModel->addCondition(item, parent);
 
 }
+
 //----------------------------------------------------------------
 void FilterView::editCondition(const QModelIndex &index)
 {
 
-//    if (mModel->itemFromIndex(index)->type() == FilterModel::ConditionalType)
-//    {
-//        FilterItem * item = dynamic_cast<FilterItem*>(mModel->itemFromIndex(index));
-//        FilterDialog dialog(this);
-//        dialog.fromItem(item);
-//        if (dialog.exec()){
+    //    if (mModel->itemFromIndex(index)->type() == FilterModel::ConditionalType)
+    //    {
+    //        FilterItem * item = dynamic_cast<FilterItem*>(mModel->itemFromIndex(index));
+    //        FilterDialog dialog(this);
+    //        dialog.fromItem(item);
+    //        if (dialog.exec()){
 
-//            *item = *dialog.toItem();
-//        }
-//    }
+    //            *item = *dialog.toItem();
+    //        }
+    //    }
 }
 //----------------------------------------------------------------
 void FilterView::removeSelections()
@@ -93,14 +86,14 @@ void FilterView::updateActionAvaible()
 
     if (parent->type() == FilterModel::LogicType)
     {
-//        mAddCondAction->setEnabled(true);
-//        mAddLogicAction->setEnabled(true);
+        //        mAddCondAction->setEnabled(true);
+        //        mAddLogicAction->setEnabled(true);
     }
 
     if (parent->type() == FilterModel::ConditionalType)
     {
-//        mAddCondAction->setEnabled(false);
-//        mAddLogicAction->setEnabled(false);
+        //        mAddCondAction->setEnabled(false);
+        //        mAddLogicAction->setEnabled(false);
     }
 }
 

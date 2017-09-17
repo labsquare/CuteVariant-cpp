@@ -15,7 +15,7 @@ public:
 
 public Q_SLOTS:
     void addLogic();
-    void addCondition();
+    void addCondition(FilterItem * item);
     void editCondition(const QModelIndex& index);
     void removeSelections();
 

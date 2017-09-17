@@ -82,6 +82,7 @@ QList<Field> SqliteManager::fields() const
         field.setDescription(query.value("description").toString());
         field.setType(query.value("type").toString());
         field.setCategory(query.value("category").toString());
+        field.setExpression(QString("%1.%2").arg(field.category().toLower(),field.colname().toLower()));
 
         fields.append(field);
     }
@@ -89,7 +90,7 @@ QList<Field> SqliteManager::fields() const
 }
 //-------------------------------------------------------------------------------
 
-QList<Field> SqliteManager::genotypeFields() const
+QList<Field> SqliteManager::genotypeFields(const Sample& sample) const
 {
     QList<Field> fields;
     QSqlQuery query(QStringLiteral("SELECT * FROM `genotype_fields`"));
@@ -102,31 +103,13 @@ QList<Field> SqliteManager::genotypeFields() const
         field.setDescription(query.value("description").toString());
         field.setType(query.value("type").toString());
         field.setCategory(query.value("category").toString());
+        field.setExpression(QString("sample[\"%1\"].%2").arg(sample.name(),field.name().toLower()));
 
         fields.append(field);
     }
     return fields;
 }
-//-------------------------------------------------------------------------------
-QList<Field> SqliteManager::genotype(const Sample &sample) const
-{
-    QList<Field> fields;
-    QSqlQuery query(QStringLiteral("SELECT * FROM `genotypes` WHERE sample_id = %1").arg(sample.id()));
-    while(query.next())
-    {
 
-        Field field;
-        //field.setId(query.value("id").toInt());
-        //field.setColname(query.value("colname").toString());
-        field.setName(query.value("name").toString());
-        field.setDescription(query.value("description").toString());
-        field.setType(query.value("type").toString());
-        fields.append(field);
-    }
-    return fields;
-
-
-}
 //-------------------------------------------------------------------------------
 QList<VariantLink> SqliteManager::links() const
 {

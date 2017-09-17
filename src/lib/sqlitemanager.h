@@ -36,8 +36,7 @@ public:
     // getter
     QList<Sample> samples() const;
     QList<Field> fields() const;
-    QList<Field> genotypeFields() const;
-    QList<Field> genotype(const Sample& sample) const;
+    QList<Field> genotypeFields(const Sample& sample) const;
     QList<VariantLink> links() const;
     QList<VariantSelection> variantSelections() const; //TODO rename better
     QStringList variantSelectionNames() const;
