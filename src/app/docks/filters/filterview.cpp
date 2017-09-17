@@ -37,41 +37,41 @@ QString FilterView::query()
 
 void FilterView::addLogic()
 {
-    QStandardItem * parent = mModel->itemFromIndex(currentIndex());
-    mModel->addLogic(new LogicItem("AND"), parent);
+//    QStandardItem * parent = mModel->itemFromIndex(currentIndex());
+//    mModel->addLogic(new LogicItem("AND"), parent);
 
 }
 //----------------------------------------------------------------
 void FilterView::addCondition()
 {
 
-    FilterDialog dialog(this);
+//    FilterDialog dialog(this);
 
-    if (dialog.exec())
-    {
-        QStandardItem * parent = mModel->itemFromIndex(currentIndex());
-        if (parent){
-            FilterItem * item = dialog.toItem();
-            mModel->addCondition(item, parent);
-        }
+//    if (dialog.exec())
+//    {
+//        QStandardItem * parent = mModel->itemFromIndex(currentIndex());
+//        if (parent){
+//            FilterItem * item = dialog.toItem();
+//            mModel->addCondition(item, parent);
+//        }
 
-    }
+//    }
 
 }
 //----------------------------------------------------------------
 void FilterView::editCondition(const QModelIndex &index)
 {
 
-    if (mModel->itemFromIndex(index)->type() == FilterModel::ConditionalType)
-    {
-        FilterItem * item = dynamic_cast<FilterItem*>(mModel->itemFromIndex(index));
-        FilterDialog dialog(this);
-        dialog.fromItem(item);
-        if (dialog.exec()){
+//    if (mModel->itemFromIndex(index)->type() == FilterModel::ConditionalType)
+//    {
+//        FilterItem * item = dynamic_cast<FilterItem*>(mModel->itemFromIndex(index));
+//        FilterDialog dialog(this);
+//        dialog.fromItem(item);
+//        if (dialog.exec()){
 
-            *item = *dialog.toItem();
-        }
-    }
+//            *item = *dialog.toItem();
+//        }
+//    }
 }
 //----------------------------------------------------------------
 void FilterView::removeSelections()

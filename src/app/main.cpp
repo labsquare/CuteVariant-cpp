@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include "project.h"
 #include "genotype.h"
+#include "filterdialog.h"
 
 
 using namespace cvar;
@@ -29,7 +30,6 @@ int main(int argc, char **argv)
 
     MainWindow win;
     win.show();
-
 
 
 

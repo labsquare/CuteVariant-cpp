@@ -2,6 +2,7 @@
 #include "project.h"
 #include "columndockwidget.h"
 #include "linklistdialog.h"
+#include "filterwidget.h"
 using namespace cvar;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -55,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     restoreSettings();
     reset();
+
 
 }
 //-------------------------------------------------------------------------

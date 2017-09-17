@@ -13,19 +13,23 @@ public:
     void load();
 
     QStringList selectedColumns() const;
+    QList<cvar::Field> selectedFields() const;
+    const cvar::Field field(const QModelIndex& index) const;
+    void setCheckBox(bool enabled);
 
 protected Q_SLOTS:
     void itemCheckChanged(QStandardItem *item);
 
 protected:
-    QStandardItem *createItem(const QString& name,
-                              const QString& description,
-                              const QString& colname = QString());
+    QStandardItem *createCategory(const QString& name, const QString& description = QString());
+    QStandardItem *createField(const cvar::Field& field, const QString& vql);
 
 
 private:
-QMap<QString, QStandardItem*> mCategoriesItems;
+QHash<QString, QStandardItem*> mCategoriesItems;
 QStandardItem * mSampleItem;
+QHash<QStandardItem*,cvar::Field> mFieldItems;
+bool mHasCheckbox = true; // Columns and filter use this model
 
 
 };

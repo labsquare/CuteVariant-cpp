@@ -9,10 +9,6 @@ ColumnModel::ColumnModel( QObject *parent)
     connect(this,SIGNAL(itemChanged(QStandardItem*)),
             this,SLOT(itemCheckChanged(QStandardItem*)));
 
-
-
-
-
 }
 
 void ColumnModel::load()
@@ -20,42 +16,38 @@ void ColumnModel::load()
     qDebug()<<Q_FUNC_INFO<<"load ";
     clear();
     setColumnCount(1);
-    mCategoriesItems.clear();
     for (cvar::Field f : cutevariant->sqliteManager()->fields())
     {
-        // create category
-        if (!mCategoriesItems.contains(f.category())){
-            mCategoriesItems[f.category()] = new QStandardItem(f.category().toLower());
-            mCategoriesItems[f.category()]->setCheckable(true);
-        }
+        // create category if not exists
+        if (!mCategoriesItems.contains(f.category()))
+            mCategoriesItems[f.category()] = createCategory(f.category().toLower());
 
         // append item to category
-        mCategoriesItems[f.category()]->appendRow(createItem(f.name().toLower(),f.description(),f.colname()));
+        mCategoriesItems[f.category()]->appendRow(createField(f, QString("%1.%2").arg(f.category().toLower(),f.name())));
     }
 
 
-    // insert all annotation (variant first)
+    // ODERING insert all annotation (variant first)
     QStringList keys = mCategoriesItems.keys();
     std::reverse(keys.begin(), keys.end());
     for (QString key : keys)
         appendRow(mCategoriesItems[key]);
 
 
-
     // add Samples
-    mSampleItem = createItem("samples", "fields of samples");
+    mSampleItem = createCategory("Samples", "All samples avaibles");
 
     if (!cutevariant->sqliteManager()->samples().isEmpty())
     {
         for (cvar::Sample s : cutevariant->sqliteManager()->samples())
         {
-            QStandardItem * c1 = createItem(s.name(), "Sample name", s.name());
+            QStandardItem * c1 = createCategory(s.name().toUpper());
             mSampleItem->appendRow(c1);
 
             for (cvar::Field f : cutevariant->sqliteManager()->genotypeFields())
             {
                 // TODO : check how colname are saved ...
-                QStandardItem * g = createItem(f.name(), f.description(),f.name());
+                QStandardItem * g = createField(f, QString("sample[\"%1\"].%2").arg(s.name(), f.name()));
                 c1->appendRow(g);
             }
         }
@@ -66,38 +58,54 @@ void ColumnModel::load()
 QStringList ColumnModel::selectedColumns() const
 {
     // get columns variants
+    // TODO Make it better, this is useless ....
+
     QStringList columns;
 
-    // Get selected items
-    QStringList keys = mCategoriesItems.keys();
-    std::reverse(keys.begin(), keys.end());
-    for (QString key : keys)
+    for ( QStandardItem * item : mFieldItems.keys())
     {
-        QStandardItem * item = mCategoriesItems[key];
-        for (int i=0; i< item->rowCount(); ++i)
+        if (item->checkState() == Qt::Checked)
         {
-            if (item->child(i)->checkState() == Qt::Checked){
-                columns.append(QString("%1.%2").arg(item->text(),item->child(i)->text()));
-
-            }
+            columns.append(item->data().toString());
         }
-    }
 
-    // Get selected sampled
-    for (int i=0; i<mSampleItem->rowCount(); ++i)
-    {
-        QString sample = mSampleItem->child(i)->data().toString();
-        for (int j=0; j < mSampleItem->child(i)->rowCount(); ++j)
-        {
-            if (mSampleItem->child(i)->child(j)->checkState() == Qt::Checked)
-                columns.append(QString("sample[\"%1\"].%2").arg(sample).arg(mSampleItem->child(i)->child(j)->data().toString()));
-        }
     }
-
 
     return columns;
 
 
+}
+//---------------------------------------------------------
+QList<cvar::Field> ColumnModel::selectedFields() const
+{
+    QList<cvar::Field> fields;
+    for ( QStandardItem * item : mFieldItems.keys())
+    {
+        if (item->checkState() == Qt::Checked)
+        {
+            fields.append(mFieldItems[item]);
+        }
+
+    }
+    return fields;
+}
+//---------------------------------------------------------
+const cvar::Field ColumnModel::field(const QModelIndex &index) const
+{
+    QStandardItem * item = itemFromIndex(index);
+    if (!item)
+        return cvar::Field();
+
+    if (!mFieldItems.contains(item))
+        return cvar::Field();
+
+    return mFieldItems[item];
+
+}
+//---------------------------------------------------------
+void ColumnModel::setCheckBox(bool enabled)
+{
+        mHasCheckbox = enabled;
 
 }
 //---------------------------------------------------------
@@ -112,19 +120,25 @@ void ColumnModel::itemCheckChanged(QStandardItem *item)
 
 }
 //---------------------------------------------------------
-QStandardItem *ColumnModel::createItem(const QString &name, const QString &description, const QString &colname)
+QStandardItem *ColumnModel::createCategory(const QString &name, const QString &description)
 {
     QStandardItem * item = new QStandardItem(name);
     item->setToolTip(description);
-    item->setCheckable(true);
+    item->setCheckable(mHasCheckbox);
     item->setEditable(false);
-
-
-
-    item->setData(colname);
-
-
     return item;
 }
 //---------------------------------------------------------
+QStandardItem *ColumnModel::createField(const cvar::Field &field, const QString &vql)
+{
+    QStandardItem * item = new QStandardItem(field.name());
+    item->setToolTip(field.description());
+    item->setCheckable(mHasCheckbox);
+    item->setEditable(false);
+    item->setData(vql);
+    mFieldItems[item] = field;
+    return item;
+}
+//---------------------------------------------------------
+
 

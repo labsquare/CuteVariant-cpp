@@ -1,43 +1,26 @@
 #include "filterdialog.h"
 
-FilterDialog::FilterDialog(QWidget *parent)
+FilterDialog::FilterDialog(QWidget * parent)
+    :QDialog(parent)
 {
 
-    mBox = new QDialogButtonBox(QDialogButtonBox::Save|QDialogButtonBox::Cancel, Qt::Horizontal, this);
-    mTabWidget = new QTabWidget(this);
+    mWidget  = new FilterWidget;
+    QDialogButtonBox * buttons = new QDialogButtonBox(QDialogButtonBox::Cancel|QDialogButtonBox::Save);
+    resize(400,200);
 
-    QVBoxLayout * vLayout = new QVBoxLayout;
-    vLayout->addWidget(mTabWidget);
-    vLayout->addWidget(mBox);
-    setLayout(vLayout);
+    QVBoxLayout * mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(mWidget);
+    mainLayout->addWidget(buttons);
 
-    addWidget(new AnnotationConditionPage());
-    addWidget(new GenotypeConditionPage());
+    mWidget->layout()->setContentsMargins(0,0,0,0);
 
-
-    connect(mBox,SIGNAL(accepted()),this,SLOT(accept()));
-    connect(mBox,SIGNAL(rejected()),this,SLOT(reject()));
-
-
+    setLayout(mainLayout);
 
 }
 
-
-void FilterDialog::addWidget(QWidget *w)
+void FilterDialog::setField(const cvar::Field &field)
 {
 
-    mTabWidget->addTab(w, w->windowIcon(), w->windowTitle());
-
-
-}
-
-FilterItem *FilterDialog::toItem()
-{
-    return qobject_cast<AnnotationConditionPage*>(mTabWidget->widget(0))->toItem();
-}
-
-void FilterDialog::fromItem(FilterItem *item)
-{
-   qobject_cast<AnnotationConditionPage*>(mTabWidget->widget(0))->fromItem(item);
+    mWidget->setField(field);
 
 }

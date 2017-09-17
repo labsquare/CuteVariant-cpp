@@ -2,8 +2,8 @@ INCLUDEPATH += $$PWD
 
 
 HEADERS += \
-    $$PWD/genotypeconditionpage.h \
-    $$PWD/annotationconditionpage.h \
+#    $$PWD/genotypeconditionpage.h \
+#    $$PWD/annotationconditionpage.h \
     $$PWD/boolfield.h \
     $$PWD/operator.h \
     $$PWD/abstractfieldwidget.h \
@@ -17,13 +17,15 @@ HEADERS += \
     $$PWD/filtermodel.h \
     $$PWD/filterdelegate.h \
     $$PWD/filterdockwidget.h \
-    $$PWD/filterdialog.h \
     $$PWD/filteritem.h \
-    $$PWD/filterfieldfactory.h
+    $$PWD/filterfieldfactory.h \
+    $$PWD/filterdialog.h \
+    $$PWD/filterwidget.h \
+    $$PWD/allfilterdialog.h
 
 SOURCES += \
-    $$PWD/genotypeconditionpage.cpp \
-    $$PWD/annotationconditionpage.cpp \
+#    $$PWD/genotypeconditionpage.cpp \
+#    $$PWD/annotationconditionpage.cpp \
     $$PWD/boolfield.cpp \
     $$PWD/operator.cpp \
     $$PWD/abstractfieldwidget.cpp \
@@ -37,6 +39,8 @@ SOURCES += \
     $$PWD/filtermodel.cpp \
     $$PWD/filterdelegate.cpp \
     $$PWD/filterdockwidget.cpp \
-    $$PWD/filterdialog.cpp \
     $$PWD/filteritem.cpp \
-    $$PWD/filterfieldfactory.cpp
+    $$PWD/filterfieldfactory.cpp \
+    $$PWD/filterdialog.cpp \
+    $$PWD/filterwidget.cpp \
+    $$PWD/allfilterdialog.cpp

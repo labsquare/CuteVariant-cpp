@@ -2,7 +2,7 @@
 #define CONDITIONDOCKWIDGET_H
 #include "basedockwidget.h"
 #include "filterview.h"
-
+#include "allfilterdialog.h"
 //TODO : rename everything as FilterDockWidget
 
 class FilterDockWidget : public BaseDockWidget
@@ -13,9 +13,13 @@ public:
     QString condition() const;
 
 
+protected Q_SLOTS:
+    void addCondition();
+    void addLogic();
+
 
 private:
-    FilterView * mView;
+//    FilterView * mView;
 };
 
 #endif // CONDITIONDOCKWIDGET_H
