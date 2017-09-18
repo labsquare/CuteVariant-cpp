@@ -25,6 +25,6 @@ ColumnDockWidget::ColumnDockWidget(QWidget * parent):
 
  void ColumnDockWidget::reset()
  {
-     mView->load();
+    mView->load();
 
  }

@@ -28,7 +28,6 @@ protected:
 private:
 QHash<QString, QStandardItem*> mCategoriesItems;
 QStringList mOrderCategories;
-QStandardItem * mSampleItem;
 QList<QPair<QStandardItem*,cvar::Field>> mFieldItems;
 bool mHasCheckbox = true; // Columns and filter use this model
 

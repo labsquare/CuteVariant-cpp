@@ -15,8 +15,13 @@ void ColumnModel::load()
 {
     qDebug()<<Q_FUNC_INFO<<"load ";
     mFieldItems.clear();
+    mOrderCategories.clear();
+    mCategoriesItems.clear();
+
     clear();
     setColumnCount(1);
+
+    // Create categories
     for (cvar::Field f : cutevariant->sqliteManager()->fields())
     {
         // create category if not exists
@@ -28,31 +33,33 @@ void ColumnModel::load()
         mCategoriesItems[f.category()]->appendRow(createField(f));
     }
 
+
+    // append categories
     for (QString key : mOrderCategories)
         appendRow(mCategoriesItems[key]);
 
 
 
-    // add Samples
-    mSampleItem = createCategory("Samples", "All samples avaibles");
+        // add Samples
+        QStandardItem * sampleCategorie = createCategory("Samples", "All samples avaibles");
 
-    if (!cutevariant->sqliteManager()->samples().isEmpty())
-    {
-        for (cvar::Sample s : cutevariant->sqliteManager()->samples())
+        if (!cutevariant->sqliteManager()->samples().isEmpty())
         {
-            QStandardItem * c1 = createCategory(s.name().toUpper());
-            mSampleItem->appendRow(c1);
-
-            for (cvar::Field f : cutevariant->sqliteManager()->genotypeFields(s))
+            for (cvar::Sample s : cutevariant->sqliteManager()->samples())
             {
-                // TODO : check how colname are saved ...
-                QStandardItem * g = createField(f);
-                c1->appendRow(g);
+                QStandardItem * c1 = createCategory(s.name().toUpper());
+                sampleCategorie->appendRow(c1);
+
+                for (cvar::Field f : cutevariant->sqliteManager()->genotypeFields(s))
+                {
+                    // TODO : check how colname are saved ...
+                    QStandardItem * g = createField(f);
+                    c1->appendRow(g);
+                }
             }
+            appendRow(sampleCategorie);
         }
-        appendRow(mSampleItem);
     }
-}
 //---------------------------------------------------------
 QStringList ColumnModel::selectedColumns() const
 {
@@ -95,7 +102,7 @@ const cvar::Field ColumnModel::field(const QModelIndex &index) const
     for (auto it : mFieldItems)
     {
         if (it.first == item)
-          return it.second;
+            return it.second;
     }
 
     return cvar::Field();
@@ -104,7 +111,7 @@ const cvar::Field ColumnModel::field(const QModelIndex &index) const
 //---------------------------------------------------------
 void ColumnModel::setCheckBox(bool enabled)
 {
-        mHasCheckbox = enabled;
+    mHasCheckbox = enabled;
 
 }
 
