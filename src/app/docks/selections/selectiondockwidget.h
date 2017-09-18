@@ -16,6 +16,9 @@ public Q_SLOTS:
     void reset() override;
     void compare();
 
+Q_SIGNALS:
+    void selectionDoubleClicked(const QString& name);
+
 private:
     SelectionView * mView;
 };

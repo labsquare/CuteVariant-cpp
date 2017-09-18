@@ -28,6 +28,7 @@ protected Q_SLOTS:
     void setPage(int page);
     void save();
     void exportCsv();
+    void showVql();
 
 Q_SIGNALS:
     void tableSaved();
@@ -46,6 +47,7 @@ private:
     QLabel * mCountLabel;
     QIntValidator * mPageValidator;
     QString mName = "variants";
+    cvar::VariantQuery mQuery;
 
 };
 

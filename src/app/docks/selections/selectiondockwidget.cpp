@@ -17,6 +17,7 @@ SelectionDockWidget::SelectionDockWidget(QWidget *parent)
 
     //    connect(remAction,SIGNAL(triggered(bool)), mView, SLOT(removeSelection()));
     connect(mView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SIGNAL(changed()));
+    connect(mView, &SelectionView::doubleClicked, [this](){emit selectionDoubleClicked(mView->currentItem()->text(0));});
 
 }
 

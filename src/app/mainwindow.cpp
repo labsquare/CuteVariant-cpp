@@ -36,7 +36,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // add defaut view
     addResultView(new ResultsView("variants"));
-    addResultView(new ResultsView("listA"));
 
 
     // setup toolbox
@@ -57,10 +56,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // columns create filter => to filter
     connect(mColumnDock,SIGNAL(filterItemCreated(FilterItem*)),mFilterDock, SLOT(addCondition(FilterItem*)));
-    connect(mResultTab, &QTabWidget::tabCloseRequested, [this](int index){
-        mResultTab->removeTab(index);
-
-    });
+    connect(mResultTab, &QTabWidget::tabCloseRequested, [this](int index){  mResultTab->removeTab(index); });
+    connect(mSelectionDock,SIGNAL(selectionDoubleClicked(QString)), this,SLOT(executeSelection(QString)));
 
     setStatusBar(new QStatusBar());
 
@@ -156,25 +153,23 @@ void MainWindow::saveFile()
 void MainWindow::addResultView(ResultsView *view)
 {
     mResultTab->addTab(view, view->windowIcon(), view->name());
+    mResultTab->setCurrentWidget(view);
     connect(view, &ResultsView::tableSaved, mSelectionDock, &SelectionDockWidget::reset);
 
 }
 //-------------------------------------------------------------------------
 
-ResultsView *MainWindow::currentResultView() const
+ResultsView *MainWindow::currentResultView()
 {
+    if (mResultTab->count() == 0)
+        addResultView(new ResultsView("variants"));
+
     ResultsView * view = qobject_cast<ResultsView*>(mResultTab->currentWidget());
     return view;
 }
 //-------------------------------------------------------------------------
 void MainWindow::execute()
 {
-
-    if (mResultTab->count() == 0)
-    {
-        addResultView(new ResultsView("variants"));
-    }
-
     if (mEditor->isValid())
     {
 
@@ -183,6 +178,19 @@ void MainWindow::execute()
         currentResultView()->setQuery(q);
 
     }
+}
+//-------------------------------------------------------------------------
+void MainWindow::executeSelection(const QString &name)
+{
+
+    addResultView(new ResultsView(name));
+
+    VariantQuery q;
+    q.setColumns(mColumnDock->selectedColumns());
+    q.setTable(name);
+    q.setCondition(mFilterDock->condition());
+    currentResultView()->setQuery(q);
+
 }
 //-------------------------------------------------------------------------
 void MainWindow::updateEditor()
@@ -200,6 +208,8 @@ void MainWindow::reset()
 
     for (BaseDockWidget * w : mBaseDocks)
         w->reset();
+
+    mEditor->reset();
 
 }
 //-------------------------------------------------------------------------

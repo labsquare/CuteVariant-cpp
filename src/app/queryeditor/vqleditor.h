@@ -6,6 +6,7 @@
 #include "variantquery.h"
 #include <Qsci/qsciscintilla.h>
 #include <Qsci/qscilexersql.h>
+#include <Qsci/qsciapis.h>
 
 class VqlEditor : public QsciScintilla
 {
@@ -28,6 +29,7 @@ public:
     void setVql(const QStringList& columns, const QString& table, const QString& condition);
 
 
+    void reset();
 
 
 
@@ -36,6 +38,7 @@ Q_SIGNALS:
 
 protected:
     void keyPressEvent(QKeyEvent * e);
+    void registerKeywords();
 
 
 private:

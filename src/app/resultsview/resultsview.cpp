@@ -9,12 +9,13 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
     mView->setModel(mModel);
     mView->setSortingEnabled(true);
     mView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-   // mView->setFrameStyle(QFrame::HLine);
+    // mView->setFrameStyle(QFrame::HLine);
     mView->setFrameShape(QFrame::NoFrame);
     QVBoxLayout * vLayout = new QVBoxLayout;
 
 
     mTopToolBar    = new QToolBar;
+    mBottomToolBar = new QToolBar;
     mPageBox       = new QLineEdit;
     mPageValidator = new QIntValidator;
     mCountLabel    = new QLabel;
@@ -25,17 +26,19 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
     mPageBox->setFrame(false);
     //mPageBox->setInputMask("9999999");
     mPageBox->setMaximumWidth(50);
-    mPageBox->setStyleSheet("* { background-color: rgba(0, 0, 0, 0); }");
+    // mPageBox->setStyleSheet("* { background-color: rgba(0, 0, 0, 0); }");
     mPageBox->setAlignment(Qt::AlignHCenter);
 
 
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
     mTopToolBar->setStyleSheet("QToolBar{border-bottom: 1px solid lightgray}");
+    mBottomToolBar->setStyleSheet("QToolBar{border-top: 1px solid lightgray}");
 
 
     vLayout->addWidget(mTopToolBar);
     vLayout->addWidget(mView);
+    vLayout->addWidget(mBottomToolBar);
     vLayout->setSpacing(0);
     vLayout->setContentsMargins(0,0,0,0);
     setLayout(vLayout);
@@ -46,19 +49,21 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
     mTopToolBar->addAction(QIcon::fromTheme(""),"Export table", this, SLOT(exportCsv()));
     mTopToolBar->layout()->setContentsMargins(0,0,0,0);
 
+    mBottomToolBar->addAction("sql", this, SLOT(showVql()));
+    mBottomToolBar->addWidget(mCountLabel);
 
     QWidget * spacer = new QWidget;
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    mTopToolBar->addWidget(spacer);
+    mBottomToolBar->addWidget(spacer);
 
-    mTopToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    mTopToolBar->setIconSize(QSize(16,16));
-    mTopToolBar->addAction(QIcon::fromTheme("go-first"),"<<", this, SLOT(pageFirst()));
-    mTopToolBar->addAction(QIcon::fromTheme("go-previous"),"<", this, SLOT(pageDown()));
-    mTopToolBar->addWidget(mPageBox);
-    mTopToolBar->addAction(QIcon::fromTheme("go-next"),">", this, SLOT(pageUp()));
-    mTopToolBar->addAction(QIcon::fromTheme("go-last"),">>", this, SLOT(pageLast()));
-    mTopToolBar->layout()->setContentsMargins(0,0,0,0);
+    mBottomToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    mBottomToolBar->setIconSize(QSize(16,16));
+    mBottomToolBar->addAction(QIcon::fromTheme("go-first"),"<<", this, SLOT(pageFirst()));
+    mBottomToolBar->addAction(QIcon::fromTheme("go-previous"),"<", this, SLOT(pageDown()));
+    mBottomToolBar->addWidget(mPageBox);
+    mBottomToolBar->addAction(QIcon::fromTheme("go-next"),">", this, SLOT(pageUp()));
+    mBottomToolBar->addAction(QIcon::fromTheme("go-last"),">>", this, SLOT(pageLast()));
+    mBottomToolBar->layout()->setContentsMargins(0,0,0,0);
 
 
 
@@ -68,14 +73,16 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
 void ResultsView::setQuery(const cvar::VariantQuery &query)
 {
 
+    mQuery = query;
     cvar::VariantQuery temp = query;
     temp.setGroupBy({"chr","pos","ref","alt"});
 
     // 100 page constant for now
     int totalCount = cutevariant->sqliteManager()->variantsCount(temp);
-    mPageValidator->setRange(0, totalCount/100);
+    int pageCount  = totalCount / 100;
+    mPageValidator->setRange(0, pageCount);
 
-    mCountLabel->setText(QString("%1 r(s)").arg(totalCount));
+    mCountLabel->setText(QString("%1 variant(s) %2 page(s)").arg(totalCount).arg(pageCount));
 
     setFocus();
 
@@ -84,6 +91,7 @@ void ResultsView::setQuery(const cvar::VariantQuery &query)
 
 
 }
+
 
 void ResultsView::pageUp()
 {
@@ -166,6 +174,19 @@ void ResultsView::exportCsv()
             qDebug()<<Q_FUNC_INFO<<"cannot save file";
         }
     }
+}
+
+void ResultsView::showVql()
+{
+    QDialog infoBox;
+    QPlainTextEdit * edit = new QPlainTextEdit(&infoBox);
+    QVBoxLayout * infoLayout = new QVBoxLayout;
+    infoLayout->addWidget(edit);
+    edit->setPlainText(mQuery.toSql(cutevariant->sqliteManager()));
+    infoBox.setLayout(infoLayout);
+    infoBox.setWindowTitle("raw sql");
+    infoBox.exec();
+
 }
 
 void ResultsView::contextMenuEvent(QContextMenuEvent *event)

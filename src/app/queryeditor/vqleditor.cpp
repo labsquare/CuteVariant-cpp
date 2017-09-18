@@ -5,8 +5,13 @@ VqlEditor::VqlEditor(QWidget * parent)
     :QsciScintilla(parent)
 {
     mLexer = new QsciLexerSQL(this);
-    setLexer(mLexer);
     setMarginLineNumbers(1,true);
+    setAutoCompletionThreshold(1);
+    setAutoCompletionSource(QsciScintilla::AcsAPIs);
+    setAutoCompletionCaseSensitivity(false);
+    registerKeywords();
+    setLexer(mLexer);
+
 
 }
 //--------------------------------------------------------
@@ -45,6 +50,11 @@ void VqlEditor::setVql(const QStringList &columns, const QString &table, const Q
 
 }
 //--------------------------------------------------------
+void VqlEditor::reset()
+{
+    registerKeywords();
+}
+//--------------------------------------------------------
 void VqlEditor::keyPressEvent(QKeyEvent *e)
 {
 
@@ -55,5 +65,24 @@ void VqlEditor::keyPressEvent(QKeyEvent *e)
             emit returnPressed();
     }
     return QsciScintilla::keyPressEvent(e);
+}
+//--------------------------------------------------------
+void VqlEditor::registerKeywords()
+{
+    QsciAPIs * api = new QsciAPIs(mLexer);
+
+    api->add("SELECT");
+    api->add("WHERE");
+    api->add("FROM");
+
+
+    for (const cvar::Field& field : cutevariant->sqliteManager()->fields())
+    {
+        api->add(field.colname().toLower());
+    }
+
+
+
+    api->prepare();
 }
 //--------------------------------------------------------

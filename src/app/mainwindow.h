@@ -29,7 +29,7 @@ public:
     void restoreSettings();
     void writeSettings();
 
-    ResultsView * currentResultView() const;
+    ResultsView * currentResultView();
 
 
 public Q_SLOTS:
@@ -48,6 +48,12 @@ protected Q_SLOTS:
      * execute the VQL query and update the view
      */
     void execute();
+
+    /*!
+     * @brief execute
+     * execute the VQL query from a selection
+     */
+    void executeSelection(const QString& name);
 
     /*!
      * @brief refresh
