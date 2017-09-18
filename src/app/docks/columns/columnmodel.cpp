@@ -20,19 +20,17 @@ void ColumnModel::load()
     for (cvar::Field f : cutevariant->sqliteManager()->fields())
     {
         // create category if not exists
-        if (!mCategoriesItems.contains(f.category()))
+        if (!mCategoriesItems.contains(f.category())){
             mCategoriesItems[f.category()] = createCategory(f.category().toLower());
-
+            mOrderCategories.append(f.category());
+        }
         // append item to category
         mCategoriesItems[f.category()]->appendRow(createField(f));
     }
 
-
-    // ODERING insert all annotation (variant first)
-    QStringList keys = mCategoriesItems.keys();
-    std::reverse(keys.begin(), keys.end());
-    for (QString key : keys)
+    for (QString key : mOrderCategories)
         appendRow(mCategoriesItems[key]);
+
 
 
     // add Samples

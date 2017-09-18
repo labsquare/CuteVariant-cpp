@@ -37,7 +37,7 @@ QVariant ListFieldWidget::value() const
         list.append(mView->item(i)->text());
     }
 
-    return list;
+    return QString("(\"%1\")").arg(list.join(","));
 }
 
 void ListFieldWidget::setValue(const QVariant &value)

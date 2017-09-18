@@ -23,4 +23,46 @@ void ColumnView::load()
     mModel->load();
 }
 
+void ColumnView::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu menu(this);
+    QModelIndex index = indexAt(event->pos());
+    cvar::Field field = mModel->field(index);
+
+    if (!field.isNull())
+    {
+        qDebug()<<"hello";
+
+        menu.addAction("show Description", [field](){
+
+        QMessageBox::information(nullptr,field.name(), field.description());
+
+        });
+
+
+        menu.addAction("add Filter ...", [field,this](){
+
+              FilterDialog dialog;
+              dialog.setField(field);
+              if (dialog.exec())
+              {
+                  emit filterItemCreated(dialog.createFilter());
+              }
+
+
+        });
+
+        menu.exec(event->globalPos());
+
+
+
+
+    }
+
+
+
+
+}
+
+
 

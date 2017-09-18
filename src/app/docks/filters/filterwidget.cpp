@@ -70,6 +70,14 @@ Operator::Type FilterWidget::currentOperator() const
 }
 //----------------------------------------------------------------------------
 
+FilterItem *FilterWidget::filterItem() const
+{
+    FilterItem * item = new FilterItem(field(), currentOperator(), value());
+    return item;
+
+}
+//----------------------------------------------------------------------------
+
 void FilterWidget::operatorChanged()
 {
     qDebug()<<"operator changed";

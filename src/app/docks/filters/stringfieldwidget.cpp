@@ -20,7 +20,7 @@ StringFieldWidget::StringFieldWidget(QWidget *parent)
 
 QVariant StringFieldWidget::value() const
 {
-    return mEdit->text();
+    return QString("\"%1\"").arg(mEdit->text());
 }
 
 void StringFieldWidget::setValue(const QVariant &value)

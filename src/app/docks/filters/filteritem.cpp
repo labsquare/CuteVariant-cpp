@@ -61,6 +61,6 @@ QVariant FilterItem::value() const
 void FilterItem::updateText()
 {
     setText(QString("%1 %2 %3").arg(field().expression()).arg(operatorName()).arg(value().toString()));
-    setData(QString("%1 %2 '%3'").arg(field().expression()).arg(operatorName()).arg(value().toString()), ConditionRole);
+    setData(QString("%1 %2 %3").arg(field().expression()).arg(operatorName()).arg(value().toString()), ConditionRole);
 
 }

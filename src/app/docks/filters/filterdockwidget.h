@@ -13,7 +13,8 @@ public:
     QString condition() const;
 
 
-protected Q_SLOTS:
+public Q_SLOTS:
+    void addCondition(FilterItem * item);
     void addCondition();
     void addLogic();
     void remove();

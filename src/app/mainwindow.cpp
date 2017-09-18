@@ -18,11 +18,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // dock widget
     mColumnDock       = new ColumnDockWidget();
     mSelectionDock    = new SelectionDockWidget();
-    mConditionDock    = new FilterDockWidget();
+    mFilterDock       = new FilterDockWidget();
 
     addBaseDock(mColumnDock);
     addBaseDock(mSelectionDock);
-    addBaseDock(mConditionDock);
+    addBaseDock(mFilterDock);
 
 
     // setup central widget
@@ -48,6 +48,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // update selection
     connect(mResultsView, &ResultsView::tableSaved, mSelectionDock, &SelectionDockWidget::reset);
+
+    // columns create filter => to filter
+    connect(mColumnDock,SIGNAL(filterItemCreated(FilterItem*)),mFilterDock, SLOT(addCondition(FilterItem*)));
 
     setStatusBar(new QStatusBar());
 
@@ -158,7 +161,7 @@ void MainWindow::updateEditor()
     mEditor->setVql(
                 mColumnDock->selectedColumns(),
                 mSelectionDock->tableName(),
-                mConditionDock->condition()
+                mFilterDock->condition()
                 );
 
 }

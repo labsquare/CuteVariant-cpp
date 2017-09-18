@@ -16,6 +16,10 @@ FilterDialog::FilterDialog(QWidget * parent)
 
     setLayout(mainLayout);
 
+    connect(buttons,SIGNAL(accepted()),this,SLOT(accept()));
+    connect(buttons,SIGNAL(rejected()),this,SLOT(reject()));
+
+
 }
 
 void FilterDialog::setField(const cvar::Field &field)
@@ -23,4 +27,9 @@ void FilterDialog::setField(const cvar::Field &field)
 
     mWidget->setField(field);
 
+}
+
+FilterItem *FilterDialog::createFilter() const
+{
+    return mWidget->filterItem();
 }

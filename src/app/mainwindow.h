@@ -71,7 +71,7 @@ private:
     // dock widgets
     SelectionDockWidget * mSelectionDock;
     ColumnDockWidget * mColumnDock;
-    FilterDockWidget * mConditionDock;
+    FilterDockWidget * mFilterDock;
 
     QList<BaseDockWidget*> mBaseDocks;
 

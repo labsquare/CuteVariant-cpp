@@ -13,6 +13,9 @@ public:
 public Q_SLOTS:
      void reset() override;
 
+Q_SIGNALS:
+     void filterItemCreated(FilterItem * item);
+
 
 private:
     ColumnView * mView;

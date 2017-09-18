@@ -10,7 +10,7 @@ FilterDockWidget::FilterDockWidget(QWidget *parent)
 
     addAction(QIcon::fromTheme("list-add"), "add logic", this, SLOT(addLogic()));
     addAction(QIcon::fromTheme("list-add"), "add condition", this, SLOT(addCondition()));
-    addAction(QIcon::fromTheme("list-remove"), "remove", this, SLOT(addCondition()));
+    addAction(QIcon::fromTheme("list-remove"), "remove", this, SLOT(remove()));
 
 
     QAction * saveAction = new QAction(QIcon::fromTheme("folder-open"),"open");
@@ -28,18 +28,18 @@ FilterDockWidget::FilterDockWidget(QWidget *parent)
 
 
     // create actions
- //   QAction *logicAction = new QAction(QIcon::fromTheme("list-add"), "add logic",this);
- //   QAction *condAction  = new QAction(QIcon::fromTheme("list-add"), "add condition",this);
-//    QAction *delAction   = new QAction(QIcon::fromTheme("list-remove"), "remove(s)",this);
+    //   QAction *logicAction = new QAction(QIcon::fromTheme("list-add"), "add logic",this);
+    //   QAction *condAction  = new QAction(QIcon::fromTheme("list-add"), "add condition",this);
+    //    QAction *delAction   = new QAction(QIcon::fromTheme("list-remove"), "remove(s)",this);
 
-//    addAction(logicAction);
-//    addAction(condAction);
-//    addAction(delAction);
+    //    addAction(logicAction);
+    //    addAction(condAction);
+    //    addAction(delAction);
 
-//    // connect actions
-//    connect(logicAction,&QAction::triggered, [this](){mView->addLogic(); emit changed(); });
-//    connect(condAction,&QAction::triggered,[this](){mView->addCondition();emit changed();});
-//    connect(delAction,&QAction::triggered, [this](){mView->removeSelections();emit changed();});
+    //    // connect actions
+    //    connect(logicAction,&QAction::triggered, [this](){mView->addLogic(); emit changed(); });
+    //    connect(condAction,&QAction::triggered,[this](){mView->addCondition();emit changed();});
+    //    connect(delAction,&QAction::triggered, [this](){mView->removeSelections();emit changed();});
 
 
 
@@ -50,18 +50,19 @@ QString FilterDockWidget::condition() const
     return mView->query();
 }
 
+void FilterDockWidget::addCondition(FilterItem *item)
+{
+    mView->addCondition(item);
+    emit changed();
+
+
+}
+
 void FilterDockWidget::addCondition()
 {
     AllFilterDIalog dialog(this);
     if (dialog.exec())
-    {
-
-        mView->addCondition(dialog.filterItem());
-
-        emit changed();
-    }
-
-
+        addCondition(dialog.filterItem());
 }
 
 void FilterDockWidget::addLogic()
@@ -74,8 +75,15 @@ void FilterDockWidget::addLogic()
 
 void FilterDockWidget::remove()
 {
-    mView->removeSelections();
-    emit changed();
+
+    int ret = QMessageBox::information(this,"supression","Are you sure you want to delete the table ? ", QMessageBox::Ok|QMessageBox::Cancel);
+
+    if (ret == QMessageBox::Ok)
+    {
+        mView->removeSelections();
+        emit changed();
+    }
+
 
 }
 

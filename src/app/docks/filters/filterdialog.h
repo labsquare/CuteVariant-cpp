@@ -3,12 +3,15 @@
 #include <QtWidgets>
 #include "project.h"
 #include "filterwidget.h"
+#include "filteritem.h"
 
 class FilterDialog : public QDialog
 {
 public:
     FilterDialog(QWidget * parent = nullptr);
     void setField(const cvar::Field& field);
+
+    FilterItem * createFilter() const;
 
 
 private:

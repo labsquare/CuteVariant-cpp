@@ -7,6 +7,7 @@
 #include "filterfieldfactory.h"
 #include "rangefieldwidget.h"
 #include "listfieldwidget.h"
+#include "filteritem.h"
 
 class FilterWidget : public QWidget
 {
@@ -18,6 +19,8 @@ public:
     QVariant value() const;
 
     Operator::Type currentOperator() const;
+
+    FilterItem * filterItem() const;
 
 protected Q_SLOTS:
     void operatorChanged();

@@ -36,8 +36,7 @@ AllFilterDIalog::AllFilterDIalog(QWidget *parent)
 
 FilterItem *AllFilterDIalog::filterItem() const
 {
-    FilterItem * item = new FilterItem(mWidget->field(), mWidget->currentOperator(), mWidget->value());
-    return item;
+    return mWidget->filterItem();
 }
 
 void AllFilterDIalog::fieldSelected()

@@ -57,7 +57,7 @@ public:
 
 protected:
     QStringList detectSamplesFields() const;
-    void replaceSampleFields(QString& text) const;
+    void replaceSampleFields(QString& text, bool setAS = false) const;
 
 private:
     QStringList mColumns;
