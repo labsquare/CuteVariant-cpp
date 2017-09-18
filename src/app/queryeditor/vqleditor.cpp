@@ -1,9 +1,13 @@
 #include "vqleditor.h"
+#include <QFontDatabase>
 
 VqlEditor::VqlEditor(QWidget * parent)
-    :QPlainTextEdit(parent)
+    :QsciScintilla(parent)
 {
-    mHighlighter = new VqlHighlighter(document());
+    mLexer = new QsciLexerSQL(this);
+    setLexer(mLexer);
+    setMarginLineNumbers(1,true);
+
 }
 //--------------------------------------------------------
 bool VqlEditor::isValid() const
@@ -15,12 +19,13 @@ bool VqlEditor::isValid() const
 
 QString VqlEditor::toVql() const
 {
-    return toPlainText().simplified();
+
+    return text().simplified();
 }
 //--------------------------------------------------------
 void VqlEditor::setVql(const QString &raw)
 {
-    setPlainText(raw.simplified());
+    setText(raw.simplified());
 }
 //--------------------------------------------------------
 void VqlEditor::setVql(const QStringList &columns, const QString &table, const QString &condition)
@@ -49,6 +54,6 @@ void VqlEditor::keyPressEvent(QKeyEvent *e)
         if (e->key() == Qt::Key_Return)
             emit returnPressed();
     }
-    return QPlainTextEdit::keyPressEvent(e);
+    return QsciScintilla::keyPressEvent(e);
 }
 //--------------------------------------------------------

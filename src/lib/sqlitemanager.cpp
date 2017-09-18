@@ -449,7 +449,7 @@ void SqliteManager::createLinks()
                               ")"));
 
 
-    VariantLink demo("IGV",QString("http://www.google.fr"),QIcon(":/on.png"));
+    VariantLink demo("IGV",QString("http://localhost:60151/goto?locus=$CHROM:$POS"),QIcon(":/on.png"));
     saveLink(demo);
 
 }

@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 SUBDIRS = src/lib \
-            src/app
+          src/qscintilla/Qt4Qt5/qscintilla.pro \
+          src/app
 
 CONFIG += ordered
 

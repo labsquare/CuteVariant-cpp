@@ -13,10 +13,16 @@ include(docks/docks.pri)
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../lib/release/ -lcutevariantcore
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../lib/debug/ -lcutevariantcore
 
-else:unix: LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
-
+# My Lib
+unix: LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
 INCLUDEPATH += $$PWD/../lib
 DEPENDPATH += $$PWD/../lib
+
+# QScintilla
+unix: LIBS += -L$$OUT_PWD/../qscintilla/Qt4Qt5/ -lqscintilla2
+INCLUDEPATH += $$PWD/../qscintilla/Qt4Qt5/
+DEPENDPATH += $$PWD/../qscintilla/Qt4Qt5/
+
 
 
 

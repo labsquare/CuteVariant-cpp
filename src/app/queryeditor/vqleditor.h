@@ -4,8 +4,10 @@
 #include <QtWidgets>
 #include "vqlhighlighter.h"
 #include "variantquery.h"
+#include <Qsci/qsciscintilla.h>
+#include <Qsci/qscilexersql.h>
 
-class VqlEditor : public QPlainTextEdit
+class VqlEditor : public QsciScintilla
 {
     Q_OBJECT
 public:
@@ -37,8 +39,7 @@ protected:
 
 
 private:
-    VqlHighlighter * mHighlighter;
-
+    QsciLexerSQL * mLexer;
 
 
 

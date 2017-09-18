@@ -18,6 +18,7 @@ int main(int argc, char **argv)
     app.setApplicationVersion("0.0.1");
 
 
+
 //    Project prj("/tmp/variant.db");
 //    prj.importFile("/tmp/TRIO1.family.vcf");
 
