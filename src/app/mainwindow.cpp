@@ -48,6 +48,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     bar->addAction(QIcon::fromTheme("document-open"),tr("Save"),this, SLOT(saveFile()));
     bar->addAction(QIcon::fromTheme("run-build"),tr("Play"),this,SLOT(execute()));
 
+    QAction * showConsole = new QAction(QIcon::fromTheme("console"),tr("Show console"),this);
+    showConsole->setCheckable(true);
+    showConsole->setChecked(true);
+    connect(showConsole,SIGNAL(triggered(bool)), mEditor, SLOT(setVisible(bool)));
+    bar->addAction(showConsole);
+
 
     //connection
     //exec
