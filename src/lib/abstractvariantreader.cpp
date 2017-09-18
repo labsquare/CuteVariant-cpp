@@ -6,11 +6,15 @@ AbstractVariantReader::AbstractVariantReader(const QString &filename)
     mFilename = filename;
 }
 
+AbstractVariantReader::AbstractVariantReader(QIODevice *device)
+{
+    mDevice = device;
+    mFilename.clear();
+}
+
 bool AbstractVariantReader::open()
 {
     return device()->open(QIODevice::ReadOnly);
-
-
 
 }
 
@@ -23,8 +27,6 @@ bool AbstractVariantReader::atEnd()
 {
     return device()->atEnd();
 }
-
-
 
 const QString &AbstractVariantReader::filename() const
 {

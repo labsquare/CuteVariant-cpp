@@ -33,12 +33,14 @@ ImportDialog::ImportDialog()
 void ImportDialog::setFilename(const QString &file)
 {
     mFilename = file;
+    setWindowTitle(file);
 }
 
 int ImportDialog::exec()
 {
     QFuture<bool> future = cutevariant->sqliteManager()->asyncImportFile(mFilename);
     mWatcher.setFuture(future);
+
 
     if (QDialog::exec() == QDialog::Rejected)
     {
@@ -65,6 +67,13 @@ void ImportDialog::updateStep(int progress, const QString &message)
 void ImportDialog::importFinished()
 {
 
+    if (!mWatcher.future().result())
+    {
+        QMessageBox::warning(this,"erreur","cannot import the file");
+        close();
+    }
+
     mButtonBox->addButton(QDialogButtonBox::Ok);
+
 
 }

@@ -9,6 +9,8 @@ class VCFVariantReader : public AbstractVariantReader
 {
 public:
     VCFVariantReader(const QString& filename);
+    VCFVariantReader(QIODevice *device);
+
 
     /*!
      * \brief extract fields

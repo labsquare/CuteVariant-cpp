@@ -92,7 +92,7 @@ void MainWindow::restoreSettings()
 void MainWindow::importFile()
 {
 
-    QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),QDir::homePath(),tr("Images (*.vcf)"));
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),QDir::homePath(),tr("Images (*.vcf *.vcf.gz)"));
     if (filename.isEmpty())
         return;
 

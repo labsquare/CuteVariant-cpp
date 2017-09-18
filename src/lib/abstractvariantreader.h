@@ -12,6 +12,8 @@ class AbstractVariantReader
 {
 public:
     AbstractVariantReader(const QString& filename);
+    AbstractVariantReader(QIODevice * device);
+
 
     /*!
      * \brief extract fields

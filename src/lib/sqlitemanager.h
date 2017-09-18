@@ -84,6 +84,8 @@ private:
     QHash<QString, QVector<int>> mVariantIds;
     QHash<QString, int> mSamplesIds;
 
+    QIODevice * mProgressDevice;
+
 
 };
 

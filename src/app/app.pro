@@ -25,7 +25,6 @@ DEPENDPATH += $$PWD/../qscintilla/Qt4Qt5/
 
 
 
-
 RESOURCES += icons/icons.qrc
 
 HEADERS += \

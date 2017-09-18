@@ -4,6 +4,12 @@ VCFVariantReader::VCFVariantReader(const QString &filename)
     :AbstractVariantReader(filename)
 {
 }
+
+VCFVariantReader::VCFVariantReader(QIODevice *device)
+    :AbstractVariantReader(device)
+{
+
+}
 //------------------------------------------------------------------
 QList<Field> VCFVariantReader::fields()
 {

@@ -1,4 +1,5 @@
 #include "sqlitemanager.h"
+#include <KCompressionDevice> // keep this in cpp..
 
 namespace cvar{
 
@@ -14,22 +15,32 @@ SqliteManager::~SqliteManager()
 //-------------------------------------------------------------------------------
 bool SqliteManager::importFile(const QString &filename)
 {
-    QScopedPointer<AbstractVariantReader> reader;
     if (!QFile::exists(filename))
     {
         qDebug()<<"file doesn't exists";
         return false;
     }
 
+    QStringList suffixes = {"vcf","gz"};
     QFileInfo info(filename);
-    if (info.suffix().toLower() == "vcf")
-        reader.reset(new VCFVariantReader(filename));
 
-    else
+    if (!suffixes.contains(info.suffix().toLower()))
     {
-        qWarning()<<Q_FUNC_INFO<<info.suffix()<<" format is not supported";
+        qDebug()<<"file suffix not suported";
         return false;
     }
+
+    mProgressDevice = new QFile(filename);
+    QScopedPointer<AbstractVariantReader> reader;
+
+    if (info.suffix().toLower() == "vcf")
+        reader.reset(new VCFVariantReader(mProgressDevice));
+
+    if (info.suffix() == "gz")
+        reader.reset(new VCFVariantReader(new KCompressionDevice(mProgressDevice,false, KCompressionDevice::GZip)));
+
+    if (reader.isNull())
+        return false;
 
     // Start import
     qInfo()<<"Start Importing "<<filename <<"";
@@ -642,7 +653,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 
     if (reader->open())
     {
-        emit importRangeChanged(0, reader->device()->size());
+        emit importRangeChanged(0, mProgressDevice->size());
         emit importProgressChanged(0,QString("Import Variants"));
 
         while (!reader->atEnd())
@@ -654,7 +665,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
             QString placeHolders = QString(",?").repeated(fields.size() + 8);
 
             if (reader->device()->pos() % 100 == 0)
-                emit importProgressChanged(reader->device()->pos(),QString());
+                emit importProgressChanged(mProgressDevice->pos(),QString());
 
 
             query.prepare(QStringLiteral("INSERT INTO variants VALUES (NULL%1)").arg(placeHolders));
@@ -732,7 +743,7 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
     QSqlDatabase::database().transaction();
     if (reader->open())
     {
-        emit importRangeChanged(0, reader->device()->size());
+        emit importRangeChanged(0, mProgressDevice->size());
         emit importProgressChanged(0,QString("Import Genotype"));
 
         while (!reader->atEnd())
@@ -743,7 +754,7 @@ void SqliteManager::createGenotypes(AbstractVariantReader *reader)
                 continue;
 
             if (reader->device()->pos() % 100 == 0)
-                emit importProgressChanged(reader->device()->pos(),QString());
+                emit importProgressChanged(mProgressDevice->pos(),QString());
 
 
             int sample_id = mSamplesIds[geno.sample().name()];
