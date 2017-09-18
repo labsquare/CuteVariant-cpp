@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // Main result view
     mResultsView           = new ResultsView();
-
+    mResultTab             = new QTabWidget();
     // dock widget
     mColumnDock       = new ColumnDockWidget();
     mSelectionDock    = new SelectionDockWidget();
@@ -27,9 +27,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     // setup central widget
     QSplitter * mainSplitter = new QSplitter(Qt::Vertical);
-    mainSplitter->addWidget(mResultsView);
+    mainSplitter->addWidget(mResultTab);
     mainSplitter->addWidget(mEditor);
     setCentralWidget(mainSplitter);
+    mResultTab->setTabsClosable(true);
+    mResultTab->setTabPosition(QTabWidget::North);
+
+
+    // add defaut view
+    addResultView(new ResultsView("variants"));
+    addResultView(new ResultsView("listA"));
+
 
     // setup toolbox
     QToolBar * bar = addToolBar("main");
@@ -46,11 +54,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     //exec
     connect(mEditor,&VqlEditor::returnPressed, this, &MainWindow::execute);
 
-    // update selection
-    connect(mResultsView, &ResultsView::tableSaved, mSelectionDock, &SelectionDockWidget::reset);
 
     // columns create filter => to filter
     connect(mColumnDock,SIGNAL(filterItemCreated(FilterItem*)),mFilterDock, SLOT(addCondition(FilterItem*)));
+    connect(mResultTab, &QTabWidget::tabCloseRequested, [this](int index){
+        mResultTab->removeTab(index);
+
+    });
 
     setStatusBar(new QStatusBar());
 
@@ -143,15 +153,34 @@ void MainWindow::saveFile()
 
 }
 //-------------------------------------------------------------------------
+void MainWindow::addResultView(ResultsView *view)
+{
+    mResultTab->addTab(view, view->windowIcon(), view->name());
+    connect(view, &ResultsView::tableSaved, mSelectionDock, &SelectionDockWidget::reset);
+
+}
+//-------------------------------------------------------------------------
+
+ResultsView *MainWindow::currentResultView() const
+{
+    ResultsView * view = qobject_cast<ResultsView*>(mResultTab->currentWidget());
+    return view;
+}
+//-------------------------------------------------------------------------
 void MainWindow::execute()
 {
+
+    if (mResultTab->count() == 0)
+    {
+        addResultView(new ResultsView("variants"));
+    }
 
     if (mEditor->isValid())
     {
 
         QString vql    = mEditor->toVql();
         VariantQuery q = VariantQuery::fromVql(vql);
-        mResultsView->setQuery(q);
+        currentResultView()->setQuery(q);
 
     }
 }

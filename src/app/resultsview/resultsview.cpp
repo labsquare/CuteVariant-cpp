@@ -1,6 +1,7 @@
 #include "resultsview.h"
 
-ResultsView::ResultsView(QWidget *parent) : QWidget(parent)
+ResultsView::ResultsView(const QString &name, QWidget *parent)
+    :QWidget(parent), mName(name)
 {
 
     mView = new QTreeView(this);
@@ -8,7 +9,8 @@ ResultsView::ResultsView(QWidget *parent) : QWidget(parent)
     mView->setModel(mModel);
     mView->setSortingEnabled(true);
     mView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
+   // mView->setFrameStyle(QFrame::HLine);
+    mView->setFrameShape(QFrame::NoFrame);
     QVBoxLayout * vLayout = new QVBoxLayout;
 
 
@@ -16,6 +18,7 @@ ResultsView::ResultsView(QWidget *parent) : QWidget(parent)
     mPageBox       = new QLineEdit;
     mPageValidator = new QIntValidator;
     mCountLabel    = new QLabel;
+
 
 
     mPageBox->setValidator(mPageValidator);
@@ -28,6 +31,7 @@ ResultsView::ResultsView(QWidget *parent) : QWidget(parent)
 
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    mTopToolBar->setStyleSheet("QToolBar{border-bottom: 1px solid lightgray}");
 
 
     vLayout->addWidget(mTopToolBar);
@@ -214,6 +218,16 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
         menu.exec(event->globalPos());
 
     }
+}
+
+QString ResultsView::name() const
+{
+    return mName;
+}
+
+void ResultsView::setName(const QString &name)
+{
+    mName = name;
 }
 
 

@@ -29,11 +29,16 @@ public:
     void restoreSettings();
     void writeSettings();
 
+    ResultsView * currentResultView() const;
+
+
 public Q_SLOTS:
     // main tool bar actions
     void importFile();
     void openFile();
     void saveFile();
+    void addResultView(ResultsView * view);
+
 
 
 protected Q_SLOTS:
@@ -67,6 +72,7 @@ private:
     // central widgets
     VqlEditor * mEditor;
     ResultsView * mResultsView;
+    QTabWidget * mResultTab;
 
     // dock widgets
     SelectionDockWidget * mSelectionDock;

@@ -11,7 +11,10 @@ class ResultsView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ResultsView( QWidget *parent = nullptr);
+    explicit ResultsView(const QString& name = "variants", QWidget *parent = nullptr);
+
+    QString name() const;
+    void setName(const QString &name);
 
 public Q_SLOTS:
     void setQuery(const cvar::VariantQuery& query);
@@ -42,6 +45,7 @@ private:
     QLineEdit * mPageBox;
     QLabel * mCountLabel;
     QIntValidator * mPageValidator;
+    QString mName = "variants";
 
 };
 
