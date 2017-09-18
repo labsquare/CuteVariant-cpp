@@ -211,11 +211,12 @@ void MainWindow::updateEditor()
 //-------------------------------------------------------------------------
 void MainWindow::reset()
 {
+    mEditor->reset();
 
     for (BaseDockWidget * w : mBaseDocks)
         w->reset();
 
-    mEditor->reset();
+    execute();
 
 }
 //-------------------------------------------------------------------------

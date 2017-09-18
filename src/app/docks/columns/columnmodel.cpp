@@ -38,6 +38,10 @@ void ColumnModel::load()
     for (QString key : mOrderCategories)
         appendRow(mCategoriesItems[key]);
 
+    // check default variants
+    if (mCategoriesItems.contains("VARIANTS"))
+        mCategoriesItems["VARIANTS"]->setCheckState(Qt::Checked);
+
 
 
         // add Samples
