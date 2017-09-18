@@ -145,6 +145,24 @@ QList<VariantSelection> SqliteManager::variantSelections() const
 
     }
 
+    for (VariantSelection &s : list)
+    {
+        if (query.exec(QString("SELECT COUNT(*) FROM %1 ").arg(s.name()))){
+            query.next();
+            s.setCount(query.record().value(0).toInt());
+        }
+
+        else {
+            qDebug()<<query.lastError().text();
+            qDebug()<<query.lastQuery();
+        }
+
+    }
+
+
+
+
+
     return list;
 
 }

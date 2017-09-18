@@ -107,6 +107,8 @@ void ColumnModel::setCheckBox(bool enabled)
         mHasCheckbox = enabled;
 
 }
+
+
 //---------------------------------------------------------
 void ColumnModel::itemCheckChanged(QStandardItem *item)
 {
