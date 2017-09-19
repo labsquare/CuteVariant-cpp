@@ -32,6 +32,8 @@ public:
     virtual QList<Sample> samples() override;
 
 
+     QHash<QString, quint64> contigs();
+
     /*!
      * \brief readVariant
      * \param use it in a while loop : while (readVariant)...
@@ -51,7 +53,9 @@ public:
 
 
 
-//protected:
+
+
+    //protected:
     /*!
      * \brief parse Vcf Header according ID.
      * For exemple, with id equal 'INFO', 3 fields will be extract:
@@ -105,6 +109,7 @@ private:
     QHash<QString, QString> mFieldColMap;
 
     QList<Sample> mSamples;
+    QHash<QString, quint64> mContigs;
 
     // used to to generate Genotype per sample in genotype read parser
     int mCurrentSampleId = 0;
@@ -115,6 +120,7 @@ private:
     // We decide to store one annotation by row in variant table.
     // That's means duplicate variant with different annotation
     QList<Variant> mDuplicateVariant;
+
 
 
 

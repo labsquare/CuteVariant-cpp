@@ -669,6 +669,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 
     // First : Get Fields saved previously to construct the table
     QList<Field> fields =  reader->fields();
+    fields.prepend(Field("bin","bin"));
     QStringList fieldColumns;
 
     for (Field f : fields){
@@ -723,7 +724,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 
 
             query.prepare(QStringLiteral("INSERT INTO variants VALUES (NULL%1)").arg(placeHolders));
-            query.addBindValue("-1");
+            query.addBindValue(v.bin());
             query.addBindValue(v.rsId());
             query.addBindValue(v.chromosom());
             query.addBindValue(v.position());

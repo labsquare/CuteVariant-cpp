@@ -40,11 +40,11 @@ public:
     double qual() const;
 
 
-
-
-
+    quint64 bin() const;
+    void setBin(const quint64 &bin);
 
 private:
+    quint64 mBin = 0;
     QString mChr;
     quint64 mPos;
     QString mRef;

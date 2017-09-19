@@ -123,6 +123,16 @@ double Variant::qual() const
     return mQual;
 }
 
+quint64 Variant::bin() const
+{
+    return mBin;
+}
+
+void Variant::setBin(const quint64 &bin)
+{
+    mBin = bin;
+}
+
 const QString &Variant::ref() const
 {
     return mRef;
