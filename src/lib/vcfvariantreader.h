@@ -83,7 +83,12 @@ public:
     QList<Field> parseAnnotationHeaderLine(const QString& line);
 
 
-
+    /*!
+     * \brief metas
+     * return file meta data key value
+     * \return
+     */
+    QHash<QString, QVariant> metadatas() const;
 
 
 

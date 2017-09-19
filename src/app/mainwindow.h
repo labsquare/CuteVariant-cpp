@@ -12,6 +12,7 @@
 #include "columndockwidget.h"
 #include "selectiondockwidget.h"
 #include "filterdockwidget.h"
+#include "metadatadockwidget.h"
 
 class MainWindow : public QMainWindow
 {

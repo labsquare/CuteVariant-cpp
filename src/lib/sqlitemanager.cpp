@@ -48,8 +48,10 @@ bool SqliteManager::importFile(const QString &filename)
     QElapsedTimer timer;
     timer.start();
 
-    createFile(filename);
+    createProject(info.baseName());
     createLinks();
+    createFile(filename);
+    createMetadatas(reader.data());
     createSample(reader.data());
     createFields(reader.data());
     createGenotypeFields(reader.data());
@@ -184,6 +186,18 @@ QStringList SqliteManager::variantSelectionNames() const
     for (const VariantSelection& s : variantSelections())
         out.append(s.name());
     return out;
+}
+//-------------------------------------------------------------------------------
+QHash<QString, QVariant> SqliteManager::metadatas() const
+{
+    QHash<QString, QVariant> hash;
+
+    QSqlQuery query("SELECT * FROM filemetas");
+    while (query.next())
+        hash.insert(query.record().value("key").toString(), query.record().value("value"));
+
+    return hash;
+
 }
 //-------------------------------------------------------------------------------
 bool SqliteManager::createSelectionFromExpression(const QString &newtable, const QString &rawExpression, CompareMode mode)
@@ -443,6 +457,46 @@ void SqliteManager::createFile(const QString &filename)
         qWarning()<<Q_FUNC_INFO<<query.lastQuery();
         qWarning()<<Q_FUNC_INFO<<query.lastError().text();
     }
+}
+//-------------------------------------------------------------------------------
+void SqliteManager::createMetadatas(AbstractVariantReader *reader)
+{
+    qInfo() <<"Create meta datas";
+    emit importProgressChanged(0,QString("Create metadatas"));
+
+    QSqlQuery query;
+    query.exec(QStringLiteral("DROP TABLE IF EXISTS `filemetas`"));
+    query.exec(QStringLiteral("CREATE TABLE `filemetas` ("
+                              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                              "key TEXT NOT NULL,"
+                              "value TEXT"
+                              ")"));
+
+    QHash<QString, QVariant> hash = reader->metadatas();
+
+    emit importRangeChanged(0,hash.size());
+    emit importProgressChanged(0,QString("Import file metadatas"));
+
+    QSqlDatabase::database().transaction();
+
+    int index = 0;
+    for (auto it = hash.begin(); it != hash.end(); ++it, ++index)
+    {
+        query.prepare(QStringLiteral("INSERT into `filemetas` VALUES (NULL,?,?)"));
+        query.bindValue(0, it.key());
+        query.bindValue(1, it.value());
+
+        emit importProgressChanged(index,QString("Import metadata %1").arg(it.key()));
+
+        if (!query.exec())
+        {
+            qWarning()<<Q_FUNC_INFO<<query.lastQuery();
+            qWarning()<<Q_FUNC_INFO<<query.lastError().text();
+        }
+    }
+
+    QSqlDatabase::database().commit();
+
 }
 //-------------------------------------------------------------------------------
 void SqliteManager::createLinks()

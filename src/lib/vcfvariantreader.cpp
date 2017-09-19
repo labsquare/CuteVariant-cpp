@@ -310,5 +310,44 @@ QList<Field> VCFVariantReader::parseAnnotationHeaderLine(const QString& line)
     return fields;
 }
 //------------------------------------------------------------------
+QHash<QString, QVariant> VCFVariantReader::metadatas() const
+{
+    QHash<QString, QVariant> meta;
+
+    QStringList ignoreKey = {"INFO","FORMAT","FILTER"};
+
+    if ( device()->open(QIODevice::ReadOnly))
+    {
+        QTextStream stream(device());
+        QString line;
+        do
+        {
+            line = stream.readLine();
+            // Parse Header line
+            if (line.startsWith("##"))
+            {
+                QRegularExpression ex(QStringLiteral("^##(?<key>[^=]+)=(?<value>[^<]+)"));
+                ex.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
+                QRegularExpressionMatch match = ex.match(line);
+
+                QString key     = match.captured("key").toLower().simplified();
+                QVariant val    = match.captured("value").simplified();
+
+                if (!ignoreKey.contains(key.toUpper()))
+                {
+                    if (!key.isEmpty())
+                        meta[key] = val;
+
+                }
+            }
+
+        } while (line.startsWith("##"));
+    }
+
+    device()->close();
+
+    return meta;
+}
+//------------------------------------------------------------------
 
 }

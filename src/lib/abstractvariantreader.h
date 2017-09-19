@@ -51,6 +51,9 @@ public:
     virtual Genotype readGenotype() = 0;
 
 
+    virtual QHash<QString, QVariant> metadatas() const {return QHash<QString, QVariant>();}
+
+
     virtual bool open();
     virtual void close();
     bool atEnd();

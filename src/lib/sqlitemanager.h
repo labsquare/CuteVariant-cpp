@@ -40,6 +40,7 @@ public:
     QList<VariantLink> links() const;
     QList<VariantSelection> variantSelections() const; //TODO rename better
     QStringList variantSelectionNames() const;
+    QHash<QString, QVariant> metadatas() const;
 
     bool createSelectionFromExpression(const QString& newtable, const QString& rawExpression, CompareMode mode = SiteMode);
 
@@ -64,13 +65,16 @@ public:
 
 
 protected:
-    void createFile(const QString& filename);
     void createLinks();
+
+    void createFile(const QString& filename);
+    void createMetadatas(AbstractVariantReader * reader);
     void createSample(AbstractVariantReader * reader);
     void createFields(AbstractVariantReader * reader);
     void createGenotypeFields(AbstractVariantReader * reader);
     void createVariants(AbstractVariantReader * reader);
     void createGenotypes(AbstractVariantReader * reader);
+
 
     static QByteArray md5sum(const QString& filename);
     static QByteArray iconToData(const QIcon& icon);

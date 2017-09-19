@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     addBaseDock(mColumnDock);
     addBaseDock(mSelectionDock);
     addBaseDock(mFilterDock);
+    addBaseDock(new MetadataDockWidget);
 
 
     // setup central widget
