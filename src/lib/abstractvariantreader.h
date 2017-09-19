@@ -63,8 +63,6 @@ public:
 
     QIODevice * device() const;
 
-    quint64 maxUcsBin(quint64 start, quint64 end);
-
 
 
 
@@ -73,7 +71,9 @@ private:
     QString mFilename;
 
 
+
 };
+
 
 }
 #endif // ABSTRACTVARIANTREADER_H

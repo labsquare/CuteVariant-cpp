@@ -41,7 +41,14 @@ public:
 
 
     quint64 bin() const;
-    void setBin(const quint64 &bin);
+    void setBin(quint64 bin);
+
+//    static int binFromRangeStandard(int start, int end);
+//    static int binFromRangeExtended(int start, int end);
+
+    static QList<int> ucscBins(int start, int end);
+    static int maxUcscBin(int start, int end);
+
 
 private:
     quint64 mBin = 0;

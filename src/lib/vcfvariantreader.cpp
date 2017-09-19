@@ -65,25 +65,22 @@ QHash<QString, quint64> VCFVariantReader::contigs()
             QString line = stream.readLine().toLower();
             if (line.startsWith(QStringLiteral("##contig")))
             {
-                qDebug()<<"start with countig "<<line;
                 QRegularExpression exp("##contig=<id=(.+),length=(\\d+)");
+                exp.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
                 QRegularExpressionMatch match = exp.match(line);
-
-                qDebug()<<match;
 
                 if (match.hasMatch())
                 {
-                    QString chr    = match.captured("chr");
-                    quint64 length = match.captured("length").toInt();
+                    QString chr    = match.captured(1);
+                    quint64 length = match.captured(2).toInt();
 
-                    contigList.insert(chr,length);
-
+                    contigList.insert(chr.toLower(),length);
                 }
 
             }
         }
-        device()->close();
     }
+    device()->close();
     return contigList;
 }
 //------------------------------------------------------------------
@@ -121,12 +118,7 @@ Variant VCFVariantReader::readVariant()
     variant.setRsId(rsid);
     variant.setQual(qual.toDouble());
     variant.setFilter(filter);
-
-    // compute bin
-    if (mContigs.contains(chrom))
-        variant.setBin(maxUcsBin(0, mContigs[chrom]));
-
-
+    variant.setBin(Variant::maxUcscBin(pos-1, pos));
 
     // pre-fill annotation . Usefull for Flag values. Missing key means False
     for (QString colnames : mFieldColMap.values())
@@ -247,6 +239,8 @@ bool VCFVariantReader::open()
 
     if (!AbstractVariantReader::open())
         return false;
+
+    device()->reset();
 
     // Avoid comment when reading
     QString line;

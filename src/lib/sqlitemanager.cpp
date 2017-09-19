@@ -669,7 +669,6 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 
     // First : Get Fields saved previously to construct the table
     QList<Field> fields =  reader->fields();
-    fields.prepend(Field("bin","bin"));
     QStringList fieldColumns;
 
     for (Field f : fields){
@@ -695,12 +694,15 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 
     if (query.lastError().isValid())
     {
+        qWarning()<<Q_FUNC_INFO<<"cannot create variant table";
         qWarning()<<Q_FUNC_INFO<<query.lastQuery();
         qWarning()<<Q_FUNC_INFO<<query.lastError().text();
     }
 
     query.exec(QStringLiteral("CREATE INDEX variants_idx ON variants (chr,pos,ref,alt);"));
     query.exec(QStringLiteral("CREATE INDEX variants_idx2 ON variants (id);"));
+    query.exec(QStringLiteral("CREATE INDEX variants_idx3 ON variants (bin);"));
+
 
     // Third : Parse all file and get Variant
 
@@ -721,7 +723,6 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 
             if (reader->device()->pos() % 100 == 0)
                 emit importProgressChanged(mProgressDevice->pos(),QString());
-
 
             query.prepare(QStringLiteral("INSERT INTO variants VALUES (NULL%1)").arg(placeHolders));
             query.addBindValue(v.bin());
