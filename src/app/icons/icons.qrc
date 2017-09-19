@@ -5,5 +5,11 @@
         <file alias="fontawesome">fontawesome.ttf</file>
         <file>off.png</file>
         <file>on.png</file>
+        <file>exclude.png</file>
+        <file>intersection.png</file>
+        <file>minus-front.png</file>
+        <file>rgb.png</file>
+        <file>eye-on.png</file>
+        <file>eye-off.png</file>
     </qresource>
 </RCC>

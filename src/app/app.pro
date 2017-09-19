@@ -8,6 +8,7 @@ INCLUDEPATH += ../lib
 include(queryeditor/queryeditor.pri)
 include(resultsview/resultsview.pri)
 include(docks/docks.pri)
+include(qfonticon/qfonticon.pri)
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../lib/release/ -lcutevariantcore

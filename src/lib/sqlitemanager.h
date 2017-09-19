@@ -55,6 +55,7 @@ public:
 
     QSqlQuery variants(const VariantQuery & query) const;
     int variantsCount(const VariantQuery& query) const;
+    int variantsCount(const QString& table = "variants") const;
     bool variantsTo(const VariantQuery& query, const QString& tablename, const QString& description = QString());
 
 

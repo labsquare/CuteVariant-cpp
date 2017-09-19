@@ -3,9 +3,7 @@
 LogicItem::LogicItem(const QString& op)
     :QStandardItem()
 {
-
         setText(op);
-
 }
 
 int LogicItem::type() const

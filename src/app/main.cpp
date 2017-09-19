@@ -4,7 +4,7 @@
 #include "project.h"
 #include "genotype.h"
 #include "filterdialog.h"
-
+#include "qfonticon.h"
 
 using namespace cvar;
 
@@ -17,7 +17,7 @@ int main(int argc, char **argv)
     app.setOrganizationDomain("labsquare.org");
     app.setApplicationVersion("0.0.1");
 
-
+    QFontIcon::addFont(":/fontawesome");
 
 //    Project prj("/tmp/variant.db");
 //    prj.importFile("/tmp/TRIO1.family.vcf");

@@ -1,7 +1,7 @@
 #ifndef BASEDOCKWIDGET_H
 #define BASEDOCKWIDGET_H
 #include <QtWidgets>
-
+#include "qfonticon.h"
 class BaseDockWidget : public QDockWidget
 {
     Q_OBJECT
@@ -15,9 +15,12 @@ public:
     QAction *addAction(const QIcon &actionIcon, const QString &text, QObject * receiver, const char *member);
     void addToolWidget(QWidget * widget);
 
+
     void setWidget(QWidget * w);
 
     virtual void reset(){}
+
+    const QList<QAction *>& actions() const;
 
 Q_SIGNALS:
     void changed();

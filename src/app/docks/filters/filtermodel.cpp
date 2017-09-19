@@ -8,6 +8,7 @@ FilterModel::FilterModel(QObject * parent)
 {
     appendRow(new LogicItem("AND"));
 
+
 }
 
 void FilterModel::addLogic(LogicItem *item, QStandardItem *parent)
@@ -66,6 +67,11 @@ QString FilterModel::recursiveQuery(QStandardItem *item)
     return "("+out+")";
 
 
+}
+
+QVariant FilterModel::data(const QModelIndex &index, int role) const
+{
+    return QStandardItemModel::data(index,role);
 }
 
 

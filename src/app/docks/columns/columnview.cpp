@@ -10,7 +10,16 @@ ColumnView::ColumnView(QWidget *parent)
    // setFrameShape(QFrame::NoFrame);
     header()->hide();
 
+//    setStyleSheet(R"(
 
+//                  QTreeView::indicator:checked {
+//                  image: url(:/eye-on.png);
+//                  }
+//                  QTreeView::indicator:unchecked {
+//                  image: url(:/eye-off.png);
+//                  }
+
+//                  )");
 }
 
 QStringList ColumnView::selectedColumns() const

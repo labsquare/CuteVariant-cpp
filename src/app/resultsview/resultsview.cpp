@@ -45,8 +45,8 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
 
 
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    mTopToolBar->addAction(QIcon::fromTheme(""), "Save table", this, SLOT(save()));
-    mTopToolBar->addAction(QIcon::fromTheme(""),"Export table", this, SLOT(exportCsv()));
+    mTopToolBar->addAction(FIcon(0xf0c7), "Save table", this, SLOT(save()));
+    mTopToolBar->addAction(FIcon(0xf093),"Export table", this, SLOT(exportCsv()));
     mTopToolBar->layout()->setContentsMargins(0,0,0,0);
 
     mBottomToolBar->addAction("sql", this, SLOT(showVql()));
@@ -58,11 +58,11 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
 
     mBottomToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
     mBottomToolBar->setIconSize(QSize(16,16));
-    mBottomToolBar->addAction(QIcon::fromTheme("go-first"),"<<", this, SLOT(pageFirst()));
-    mBottomToolBar->addAction(QIcon::fromTheme("go-previous"),"<", this, SLOT(pageDown()));
+    mBottomToolBar->addAction(FIcon(0xf049),"<<", this, SLOT(pageFirst()));
+    mBottomToolBar->addAction(FIcon(0xf048),"<", this, SLOT(pageDown()));
     mBottomToolBar->addWidget(mPageBox);
-    mBottomToolBar->addAction(QIcon::fromTheme("go-next"),">", this, SLOT(pageUp()));
-    mBottomToolBar->addAction(QIcon::fromTheme("go-last"),">>", this, SLOT(pageLast()));
+    mBottomToolBar->addAction(FIcon(0xf051),">", this, SLOT(pageUp()));
+    mBottomToolBar->addAction(FIcon(0xf050),">>", this, SLOT(pageLast()));
     mBottomToolBar->layout()->setContentsMargins(0,0,0,0);
 
 

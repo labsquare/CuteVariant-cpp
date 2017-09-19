@@ -8,12 +8,12 @@ FilterDockWidget::FilterDockWidget(QWidget *parent)
     setWidget(mView);
 
 
-    addAction(QIcon::fromTheme("list-add"), "add logic", this, SLOT(addLogic()));
-    addAction(QIcon::fromTheme("list-add"), "add condition", this, SLOT(addCondition()));
-    addAction(QIcon::fromTheme("list-remove"), "remove", this, SLOT(remove()));
+    addAction(QFontIcon::icon(0xf067, Qt::darkBlue), "add logic", this, SLOT(addLogic()));
+    addAction(QFontIcon::icon(0xf067, Qt::darkGreen), "add condition", this, SLOT(addCondition()));
+    addAction(FIcon(0xf1f8), "remove", this, SLOT(remove()));
 
 
-    QAction * saveAction = new QAction(QIcon::fromTheme("folder-open"),"open");
+    QAction * saveAction = new QAction(FIcon(0xf115),"open");
     saveAction->setMenu(new QMenu);
     saveAction->menu()->addAction("Preset1");
     saveAction->menu()->addAction("Preset2");

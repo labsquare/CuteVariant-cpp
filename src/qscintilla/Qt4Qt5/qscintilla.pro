@@ -85,7 +85,7 @@ HEADERS = \
 	./Qsci/qscidocument.h \
 	./Qsci/qscilexer.h \
 	./Qsci/qscilexercustom.h \
-	./Qsci/qscilexersql.h \
+        ./Qsci/qscilexersql.h \
 	./Qsci/qscimacro.h \
 	./Qsci/qsciprinter.h \
 	./Qsci/qscistyle.h \

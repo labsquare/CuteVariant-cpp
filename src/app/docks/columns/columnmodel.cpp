@@ -39,7 +39,7 @@ void ColumnModel::load()
         appendRow(mCategoriesItems[key]);
 
     // check default variants
-    if (mCategoriesItems.contains("VARIANTS"))
+    if (mCategoriesItems.contains("VARIANTS") && mHasCheckbox)
         mCategoriesItems["VARIANTS"]->setCheckState(Qt::Checked);
 
 

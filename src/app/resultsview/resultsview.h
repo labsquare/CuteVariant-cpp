@@ -6,7 +6,7 @@
 #include "project.h"
 #include "variantquery.h"
 #include "linklistdialog.h"
-
+#include "qfonticon.h"
 class ResultsView : public QWidget
 {
     Q_OBJECT

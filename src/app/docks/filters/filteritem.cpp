@@ -8,7 +8,6 @@ FilterItem::FilterItem(const cvar::Field &field, Operator::Type op, const QVaria
     setData(op, OperatorRole);
     setData(value, ValueRole);
     updateText();
-
     setEditable(false);
 }
 

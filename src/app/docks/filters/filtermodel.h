@@ -32,6 +32,7 @@ public:
     QString recursiveQuery(QStandardItem * item);
 
 
+    QVariant data(const QModelIndex &index, int role) const override;
 protected:
 
 

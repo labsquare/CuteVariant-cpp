@@ -7,8 +7,13 @@ BaseDockWidget::BaseDockWidget(QWidget *parent)
     mToolBar     = new QToolBar;
     mTitleWidget = new QLabel();
 
+    QLabel * grapLabel =  new QLabel;
+    grapLabel->setPixmap(FIcon(0xf047).pixmap(16));
+
     mToolBar->setIconSize(QSize(16,16));
     //  mToolBar->layout()->setContentsMargins(0,0,0,0);
+
+    mToolBar->addWidget(grapLabel);
     mToolBar->addWidget(mTitleWidget);
 
     // add spacer
@@ -32,6 +37,11 @@ void BaseDockWidget::setWidget(QWidget *w)
 
 }
 
+const QList<QAction *> &BaseDockWidget::actions() const
+{
+    return mActions;
+}
+
 void BaseDockWidget::setTitle(const QString &name)
 {
     mTitleWidget->setText(name);
@@ -46,8 +56,7 @@ QString BaseDockWidget::title() const
 void BaseDockWidget::addAction(QAction *action)
 {
     mToolBar->addAction(action);
-
-
+    mActions.append(action);
 }
 
 QAction *BaseDockWidget::addAction(const QIcon &actionIcon, const QString &text, QObject *receiver, const char *member)

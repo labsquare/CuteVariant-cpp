@@ -5,7 +5,7 @@ Resource::Resource()
 
 }
 
-quint64 Resource::id() const
+qint64 Resource::id() const
 {
     return mId;
 }
@@ -15,7 +15,7 @@ const QString &Resource::tableName() const
     return mTableName;
 }
 
-void Resource::setId(quint64 id)
+void Resource::setId(qint64 id)
 {
     mId = id;
 }

@@ -34,7 +34,11 @@ void SelectionView::load()
     clear();
     QTreeWidgetItem * rootItem = new QTreeWidgetItem;
     rootItem->setText(0,"variants");
-    rootItem->setText(1, 0);
+    rootItem->setText(1, QString::number(cutevariant->sqliteManager()->variantsCount()));
+    rootItem->setIcon(0,FIcon(0xf0ce));
+    rootItem->setTextAlignment(1,Qt::AlignRight);
+    addTopLevelItem(rootItem);
+
 
     for (cvar::VariantSelection selection : cutevariant->sqliteManager()->variantSelections())
     {
@@ -43,15 +47,14 @@ void SelectionView::load()
         item->setText(1,QString::number(selection.count()));
         item->setToolTip(0, selection.description());
         item->setTextAlignment(1,Qt::AlignRight);
+        item->setIcon(0,FIcon(0xf0ce));
 
-        rootItem->addChild(item);
+        addTopLevelItem(item);
     }
 
     header()->setSectionResizeMode(0,QHeaderView::Stretch);
     header()->setSectionResizeMode(1,QHeaderView::ResizeToContents);
 
-    addTopLevelItem(rootItem);
-    expand(indexFromItem(rootItem));
     setCurrentItem(rootItem);
 }
 //---------------------------------------------------------------------------------------------

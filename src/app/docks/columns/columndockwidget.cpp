@@ -9,8 +9,8 @@ ColumnDockWidget::ColumnDockWidget(QWidget * parent):
     setWidget(mView);
 
 
-    addAction(QIcon(),"Expand", mView, SLOT(expandAll()));
-    addAction(QIcon(),"Collapse", mView, SLOT(collapseAll()));
+    addAction(FIcon(0xf065),"Expand", mView, SLOT(expandAll()));
+    addAction(FIcon(0xf066),"Collapse", mView, SLOT(collapseAll()));
 
     // emit changed signal when model changed
      connect(qobject_cast<ColumnModel*>(mView->model()), &ColumnModel::itemChanged,[this](){emit changed();});

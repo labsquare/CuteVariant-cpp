@@ -159,21 +159,7 @@ QList<VariantSelection> SqliteManager::variantSelections() const
     }
 
     for (VariantSelection &s : list)
-    {
-        if (query.exec(QString("SELECT COUNT(*) FROM %1 ").arg(s.name()))){
-            query.next();
-            s.setCount(query.record().value(0).toInt());
-        }
-
-        else {
-            qDebug()<<query.lastError().text();
-            qDebug()<<query.lastQuery();
-        }
-
-    }
-
-
-
+        s.setCount(variantsCount(s.name()));
 
 
     return list;
@@ -341,9 +327,18 @@ int SqliteManager::variantsCount(const VariantQuery &query) const
 
 }
 //-------------------------------------------------------------------------------
+int SqliteManager::variantsCount(const QString &table) const
+{
+    VariantQuery query;
+    query.setTable(table);
+    query.setGroupBy({"chr","pos","ref","alt"});
+    return variantsCount(query);
+}
+//-------------------------------------------------------------------------------
 
 bool SqliteManager::variantsTo(const VariantQuery &query, const QString &tablename, const QString &description)
 {
+    Q_UNUSED(description)
     VariantQuery q = query;
     q.setLimit(0);
     q.setGroupBy({});

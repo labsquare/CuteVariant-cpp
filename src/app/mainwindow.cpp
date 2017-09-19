@@ -38,28 +38,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // add defaut view
     addResultView(new ResultsView("variants"));
 
-
     // setup toolbox
-    QToolBar * bar = addToolBar("main");
-    bar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    bar->setFloatable(false);
-    bar->setMovable(false);
-    bar->addAction(QIcon::fromTheme("document-import"),tr("Import"),this, SLOT(importFile()));
-    bar->addAction(QIcon::fromTheme("document-open"),tr("Open"),this, SLOT(openFile()));
-    bar->addAction(QIcon::fromTheme("document-open"),tr("Save"),this, SLOT(saveFile()));
-    bar->addAction(QIcon::fromTheme("run-build"),tr("Play"),this,SLOT(execute()));
+    mToolBar = addToolBar("main");
+    mToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    mToolBar->setFloatable(false);
+    mToolBar->setMovable(false);
 
-    QAction * showConsole = new QAction(QIcon::fromTheme("console"),tr("Show console"),this);
-    showConsole->setCheckable(true);
-    showConsole->setChecked(true);
-    connect(showConsole,SIGNAL(triggered(bool)), mEditor, SLOT(setVisible(bool)));
-    bar->addAction(showConsole);
+
+    // install actions
+    setupActions();
 
 
     //connection
     //exec
     connect(mEditor,&VqlEditor::returnPressed, this, &MainWindow::execute);
-
 
     // columns create filter => to filter
     connect(mColumnDock,SIGNAL(filterItemCreated(FilterItem*)),mFilterDock, SLOT(addCondition(FilterItem*)));
@@ -227,4 +219,51 @@ void MainWindow::addBaseDock(BaseDockWidget *widget)
     addDockWidget(Qt::LeftDockWidgetArea,widget);
     connect(widget, &BaseDockWidget::changed, this, &MainWindow::updateEditor);
     mBaseDocks.append(widget);
+}
+//-------------------------------------------------------------------------
+void MainWindow::setupActions()
+{
+
+//    QAction * importAction = mToolBar->addAction(QIcon::fromTheme("document-import"),tr("Import"),this, SLOT(importFile()));
+//    QAction * openAction   = mToolBar->addAction(QIcon::fromTheme("document-open"),tr("Open"),this, SLOT(openFile()));
+//   // QAction * saveAction   = bar->addAction(QIcon::fromTheme("document-open"),tr("Save"),this, SLOT(saveFile()));
+//    QAction * runAction    = mToolBar->addAction(QIcon::fromTheme("run-build"),tr("Run"),this,SLOT(execute()));
+
+//    QAction * showConsole = new QAction(QIcon::fromTheme("console"),tr("Show console"),this);
+//    showConsole->setCheckable(true);
+//    showConsole->setChecked(true);
+//    connect(showConsole,SIGNAL(triggered(bool)), mEditor, SLOT(setVisible(bool)));
+//    mToolBar->addAction(showConsole);
+
+
+    // setup menu bar
+    setMenuBar(new QMenuBar);
+    QMenu * fileMenu = menuBar()->addMenu("&File");
+    QAction * openAction   = fileMenu->addAction(FIcon(0xf115), "&Open ...", this, SLOT(openFile()), QKeySequence::Open);
+    QAction * importAction = fileMenu->addAction(FIcon(0xf016), "&New ...", this, SLOT(importFile()), QKeySequence::New);
+    fileMenu->addSeparator();
+    fileMenu->addAction(FIcon(0xf08b),"&Quit");
+
+    QMenu * queryMenu = menuBar()->addMenu("&Query");
+    QAction * runAction = queryMenu->addAction(FIcon(0xf04b), "&Run", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R));
+
+
+    QMenu * columnMenu = queryMenu->addMenu("&Columns");
+    columnMenu->addActions(mColumnDock->actions());
+
+    QMenu * selectionMenu = queryMenu->addMenu("&Selection");
+    selectionMenu->addActions(mSelectionDock->actions());
+
+    QMenu * filterMenu = queryMenu->addMenu("&Columns");
+    filterMenu->addActions(mFilterDock->actions());
+
+
+
+
+    // setup toolbar
+    mToolBar->addAction(openAction);
+    mToolBar->addAction(importAction);
+    mToolBar->addAction(runAction);
+
+
 }

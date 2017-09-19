@@ -9,8 +9,8 @@ SelectionDockWidget::SelectionDockWidget(QWidget *parent)
     setWidget(mView);
 
 
-    addAction(QIcon::fromTheme("code-class"),"compare",this, SLOT(compare()));
-    addAction(QIcon::fromTheme("list-remove"),"delete",mView, SLOT(removeSelection()));
+    addAction(QIcon(":/rgb.png"),"compare",this, SLOT(compare()));
+    addAction(FIcon(0xf014),"delete",mView, SLOT(removeSelection()));
 
 
 

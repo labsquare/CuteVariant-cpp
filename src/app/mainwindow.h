@@ -14,6 +14,8 @@
 #include "filterdockwidget.h"
 #include "metadatadockwidget.h"
 
+#include "qfonticon.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -71,6 +73,7 @@ protected Q_SLOTS:
 
 protected:
     void addBaseDock(BaseDockWidget * widget);
+    void setupActions();
 
 private:
     QString mCurrentFile;
@@ -85,8 +88,9 @@ private:
     SelectionDockWidget * mSelectionDock;
     ColumnDockWidget * mColumnDock;
     FilterDockWidget * mFilterDock;
-
     QList<BaseDockWidget*> mBaseDocks;
+    QToolBar * mToolBar;
+
 
 
 

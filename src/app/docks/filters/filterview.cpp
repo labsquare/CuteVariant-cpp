@@ -6,6 +6,7 @@ FilterView::FilterView(QWidget * parent)
     mModel    = new FilterModel;
     mDelegate = new FilterDelegate;
 
+
     setItemDelegate(mDelegate);
     setModel(mModel);
     setDragEnabled(true);
@@ -26,6 +27,7 @@ FilterView::FilterView(QWidget * parent)
     // select first tree item
     // selectionModel()->select(mModel->index(0,0,QModelIndex()),QItemSelectionModel::Select);
 
+    selectionModel()->select(mModel->item(0)->index(),QItemSelectionModel::Select);
 
 }
 
