@@ -5,8 +5,9 @@ SelectionDockWidget::SelectionDockWidget(QWidget *parent)
 {
 
     mView = new SelectionView;
+    mSearchView = new SearchItemView(mView);
     setTitle("selection");
-    setWidget(mView);
+    setWidget(mSearchView);
 
 
     addAction(QIcon(":/rgb.png"),"compare",this, SLOT(compare()));

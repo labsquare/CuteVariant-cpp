@@ -34,7 +34,8 @@ HEADERS += \
     basedockwidget.h \
     editlinkdialog.h \
     linklistdialog.h \
-    operationsetdialog.h
+    operationsetdialog.h \
+    searchitemview.h
 
 SOURCES += \
     main.cpp \
@@ -43,7 +44,8 @@ SOURCES += \
     basedockwidget.cpp \
     editlinkdialog.cpp \
     linklistdialog.cpp \
-    operationsetdialog.cpp
+    operationsetdialog.cpp \
+    searchitemview.cpp
 
 
 INCLUDEPATH += $$PWD/../lib

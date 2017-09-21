@@ -4,6 +4,7 @@
 #include "basedockwidget.h"
 #include "selectionview.h"
 #include "operationsetdialog.h"
+#include "searchitemview.h"
 
 class SelectionDockWidget : public BaseDockWidget
 {
@@ -21,6 +22,7 @@ Q_SIGNALS:
 
 private:
     SelectionView * mView;
+    SearchItemView * mSearchView;
 };
 
 #endif // SELECTIONDOCKWIDGET_H
