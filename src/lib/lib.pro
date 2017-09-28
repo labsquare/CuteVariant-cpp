@@ -4,11 +4,6 @@ QT += concurrent
 
 TEMPLATE = lib 
 
-# KArchive
-
-INCLUDEPATH += "/usr/include/KF5/KArchive"
-LIBS +=  -L"/usr/lib"  -lKF5Archive
-
 SOURCES += \
     field.cpp \
     resource.cpp \
@@ -44,3 +39,8 @@ HEADERS += \
     variantlink.h
 
 TARGET = cutevariantcore
+
+
+LIBS += -L$$OUT_PWD/../quazip/quazip/release -lquazip
+INCLUDEPATH += $$PWD/../quazip/quazip
+DEPENDPATH += $$PWD/../quazip/quazip

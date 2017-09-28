@@ -10,9 +10,12 @@ set(CMAKE_AUTOMOC ON)
 
 file(GLOB SOURCES "*.cpp")
 
-add_library(cutevariant SHARED ${SOURCES})
+add_library(cutevariant STATIC ${SOURCES})
 target_link_libraries(cutevariant Qt5::Core)
 target_link_libraries(cutevariant Qt5::Gui)
 target_link_libraries(cutevariant Qt5::Sql)
 target_link_libraries(cutevariant Qt5::Concurrent)
+
+if(UNIX)
 target_link_libraries(cutevariant KF5::Archive)
+endif(UNIX)

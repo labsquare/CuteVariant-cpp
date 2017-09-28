@@ -10,11 +10,15 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
-set(CUTEVARIANT_LINK_LIBS libcutevariant.so)
+message("hello")
+message(${CMAKE_BINARY_DIR})
+set(CUTEVARIANT_LINK_LIBS libcutevariant.a)
 set(QSCINTILLA2_LINK_LIBS libqscintilla2.a)
 
-link_directories(/home/sacha/Dev/CuteVariant/src/build/lib)
-link_directories(/home/sacha/Dev/CuteVariant/src/build/qscintilla/Qt4Qt5)
+
+link_directories(${CMAKE_BINARY_DIR}/qscintilla/Qt4Qt5)
+link_directories(${CMAKE_BINARY_DIR}/lib)
+
 
 
 include_directories(resultsview)

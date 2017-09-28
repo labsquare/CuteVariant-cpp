@@ -1,9 +1,6 @@
 QT += core widgets sql
 QT += concurrent
 
-DEPENDPATH += . ../lib
-INCLUDEPATH += ../lib
-
 
 include(queryeditor/queryeditor.pri)
 include(resultsview/resultsview.pri)
@@ -11,18 +8,16 @@ include(docks/docks.pri)
 include(qfonticon/qfonticon.pri)
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../lib/release/ -lcutevariantcore
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../lib/debug/ -lcutevariantcore
 
 # My Lib
 unix: LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
-INCLUDEPATH += $$PWD/../lib
-DEPENDPATH += $$PWD/../lib
+unix:INCLUDEPATH += $$PWD/../lib
+unix:DEPENDPATH += $$PWD/../lib
 
 # QScintilla
 unix: LIBS += -L$$OUT_PWD/../qscintilla/Qt4Qt5/ -lqscintilla2
-INCLUDEPATH += $$PWD/../qscintilla/Qt4Qt5/
-DEPENDPATH += $$PWD/../qscintilla/Qt4Qt5/
+unix: INCLUDEPATH += $$PWD/../qscintilla/Qt4Qt5/
+unix: DEPENDPATH += $$PWD/../qscintilla/Qt4Qt5/
 
 
 
@@ -48,5 +43,12 @@ SOURCES += \
     searchitemview.cpp
 
 
+
+
+message($$OUT_PWD/../qscintilla/Qt4Qt5/)
+
+LIBS += -L$$OUT_PWD/../qscintilla/Qt4Qt5/release -lqscintilla2
+LIBS += -L$$OUT_PWD/../lib/release -lcutevariantcore
+
 INCLUDEPATH += $$PWD/../lib
-DEPENDPATH += $$PWD/../lib
+INCLUDEPATH += $$PWD/../qscintilla/Qt4Qt5

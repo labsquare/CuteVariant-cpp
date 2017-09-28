@@ -1,6 +1,5 @@
 #include "sqlitemanager.h"
-#include <KCompressionDevice> // keep this in cpp..
-
+#include <quagzipfile.h>
 namespace cvar{
 
 SqliteManager::SqliteManager(QObject * parent)
@@ -15,6 +14,8 @@ SqliteManager::~SqliteManager()
 //-------------------------------------------------------------------------------
 bool SqliteManager::importFile(const QString &filename)
 {
+    qDebug()<<"SERIEUX ??";
+  qDebug()<<"MODIF";
     if (!QFile::exists(filename))
     {
         qDebug()<<"file doesn't exists";
@@ -29,15 +30,19 @@ bool SqliteManager::importFile(const QString &filename)
         qDebug()<<"file suffix not suported";
         return false;
     }
-
-    mProgressDevice = new QFile(filename);
+    mProgressDevice =nullptr;
     QScopedPointer<AbstractVariantReader> reader;
 
-    if (info.suffix().toLower() == "vcf")
+    if (info.suffix().toLower() == "vcf"){
+        mProgressDevice = new QFile(filename);
         reader.reset(new VCFVariantReader(mProgressDevice));
 
+    }
     if (info.suffix() == "gz")
-        reader.reset(new VCFVariantReader(new KCompressionDevice(mProgressDevice,false, KCompressionDevice::GZip)));
+    {
+        mProgressDevice = new QuaGzipFile(filename);
+        reader.reset(new VCFVariantReader(mProgressDevice));
+    }
 
     if (reader.isNull())
         return false;
