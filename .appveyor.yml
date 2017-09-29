@@ -11,7 +11,7 @@ build_script:
   - mingw32-make
 after_build:
   - cmd: mkdir release
-  - cmd : cp app.exe release
+  - cmd : cp src/app/app.exe release
   - windeployqt release/app.exe
   - cmd: cp LICENSE release/LICENSE.txt"
 artifacts:
