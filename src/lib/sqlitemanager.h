@@ -90,6 +90,7 @@ private:
     QHash<QString, int> mSamplesIds;
 
     QIODevice * mProgressDevice;
+    quint64 mFileSize;
 
 
 };

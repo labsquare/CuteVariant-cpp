@@ -3,6 +3,11 @@ QT += sql
 QT += concurrent
 
 TEMPLATE = lib 
+CONFIG += staticlib
+
+
+INCLUDEPATH += $$PWD/../quazip/quazip
+
 
 SOURCES += \
     field.cpp \
@@ -39,8 +44,3 @@ HEADERS += \
     variantlink.h
 
 TARGET = cutevariantcore
-
-
-LIBS += -L$$OUT_PWD/../quazip/quazip/release -lquazip
-INCLUDEPATH += $$PWD/../quazip/quazip
-DEPENDPATH += $$PWD/../quazip/quazip

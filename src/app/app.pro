@@ -7,17 +7,7 @@ include(resultsview/resultsview.pri)
 include(docks/docks.pri)
 include(qfonticon/qfonticon.pri)
 
-
-
-# My Lib
-unix: LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
-unix:INCLUDEPATH += $$PWD/../lib
-unix:DEPENDPATH += $$PWD/../lib
-
-# QScintilla
-unix: LIBS += -L$$OUT_PWD/../qscintilla/Qt4Qt5/ -lqscintilla2
-unix: INCLUDEPATH += $$PWD/../qscintilla/Qt4Qt5/
-unix: DEPENDPATH += $$PWD/../qscintilla/Qt4Qt5/
+TARGET = app
 
 
 
@@ -44,11 +34,21 @@ SOURCES += \
 
 
 
-
-message($$OUT_PWD/../qscintilla/Qt4Qt5/)
-
-LIBS += -L$$OUT_PWD/../qscintilla/Qt4Qt5/release -lqscintilla2
-LIBS += -L$$OUT_PWD/../lib/release -lcutevariantcore
-
+# Cute Variant core
+unix|win32: LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
 INCLUDEPATH += $$PWD/../lib
+DEPENDPATH += $$PWD/../lib
+win32:!win32-g++: PRE_TARGETDEPS += $$OUT_PWD/../lib/cutevariantcore.lib
+else:unix|win32-g++: PRE_TARGETDEPS += $$OUT_PWD/../lib/libcutevariantcore.a
+
+# QScintilla
+unix|win32: LIBS += -L$$OUT_PWD/../qscintilla/Qt4Qt5/ -lqscintilla2
 INCLUDEPATH += $$PWD/../qscintilla/Qt4Qt5
+DEPENDPATH += $$PWD/../qscintilla/Qt4Qt5
+win32:!win32-g++: PRE_TARGETDEPS += $$OUT_PWD/../qscintilla/Qt4Qt5/qscintilla2.lib
+else:unix|win32-g++: PRE_TARGETDEPS += $$OUT_PWD/../qscintilla/Qt4Qt5/libqscintilla2.a
+
+# Quazip
+unix|win32: LIBS += -L$$OUT_PWD/../quazip/quazip/ -lquazip
+INCLUDEPATH += $$PWD/../quazip/quazip
+DEPENDPATH += $$PWD/../quazip/quazip

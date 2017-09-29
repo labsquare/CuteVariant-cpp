@@ -43,3 +43,7 @@ target_link_libraries(app Qt5::Concurrent)
 target_link_libraries(app ${QUAZIP_LIB_TARGET_NAME})
 target_link_libraries(app ${CUTEVARIANT_LINK_LIBS})
 target_link_libraries(app ${QSCINTILLA2_LINK_LIBS})
+
+add_dependencies(app ${CMAKE_BINARY_DIR}/${CUTEVARIANT_LINK_LIBS})
+add_dependencies(app ${CMAKE_BINARY_DIR}/${QUAZIP_LIB_TARGET_NAME})
+add_dependencies(app ${CMAKE_BINARY_DIR}/${QSCINTILLA2_LINK_LIBS})

@@ -1,5 +1,8 @@
 #include "sqlitemanager.h"
 #include <quagzipfile.h>
+#include <quazipfileinfo.h>
+#include <quazip.h>
+
 namespace cvar{
 
 SqliteManager::SqliteManager(QObject * parent)
@@ -24,13 +27,14 @@ bool SqliteManager::importFile(const QString &filename)
 
     QStringList suffixes = {"vcf","gz"};
     QFileInfo info(filename);
+    mFileSize = info.size();
 
     if (!suffixes.contains(info.suffix().toLower()))
     {
         qDebug()<<"file suffix not suported";
         return false;
     }
-    mProgressDevice =nullptr;
+    mProgressDevice = nullptr;
     QScopedPointer<AbstractVariantReader> reader;
 
     if (info.suffix().toLower() == "vcf"){
@@ -710,7 +714,7 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
 
     if (reader->open())
     {
-        emit importRangeChanged(0, mProgressDevice->size());
+        emit importRangeChanged(0, mFileSize);
         emit importProgressChanged(0,QString("Import Variants"));
 
         while (!reader->atEnd())
@@ -719,7 +723,6 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
             if (v.isNull())
                 continue;
 
-            qDebug()<<mProgressDevice->pos();
 
             QString placeHolders = QString(",?").repeated(fields.size() + 8);
 

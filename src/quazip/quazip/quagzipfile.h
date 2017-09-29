@@ -96,6 +96,8 @@ public:
 
   qint64 pos() const override;
 
+  qint64 progress() const;
+
 protected:
   /// Implementation of QIODevice::readData().
   virtual qint64 readData(char *data, qint64 maxSize);

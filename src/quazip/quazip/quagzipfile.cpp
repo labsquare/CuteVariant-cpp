@@ -23,6 +23,7 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 */
 
 #include <QFile>
+#include <QDebug>
 
 #include "quagzipfile.h"
 
@@ -93,12 +94,14 @@ QuaGzipFile::QuaGzipFile(QObject *parent):
 QIODevice(parent),
 d(new QuaGzipFilePrivate())
 {
+
 }
 
 QuaGzipFile::QuaGzipFile(const QString &fileName, QObject *parent):
   QIODevice(parent),
 d(new QuaGzipFilePrivate(fileName))
 {
+
 }
 
 QuaGzipFile::~QuaGzipFile()
@@ -157,7 +160,12 @@ void QuaGzipFile::close()
 
 qint64 QuaGzipFile::pos() const
 {
-    return 1000;
+    return gzoffset(d->gzd);
+}
+
+qint64 QuaGzipFile::progress() const
+{
+    return 42;
 }
 
 qint64 QuaGzipFile::readData(char *data, qint64 maxSize)

@@ -2,6 +2,7 @@ TEMPLATE = lib
 CONFIG += qt warn_on
 QT -= gui
 
+
 INCLUDEPATH+=C:/zlib128/include
 LIBS+=-LC:/Qt/zlib128 -lz
 
