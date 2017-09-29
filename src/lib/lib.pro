@@ -4,6 +4,10 @@ QT += concurrent
 
 TEMPLATE = lib 
 CONFIG += staticlib
+CONFIG -= debug_and_release
+
+Debug:DESTDIR = $$PWD/../bin
+Release:DESTDIR = $$PWD/../bin
 
 
 INCLUDEPATH += $$PWD/../quazip/quazip

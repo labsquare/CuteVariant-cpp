@@ -1,5 +1,7 @@
 QT += core widgets sql
 QT += concurrent
+CONFIG -= debug_and_release
+
 
 
 include(queryeditor/queryeditor.pri)
@@ -32,23 +34,31 @@ SOURCES += \
     operationsetdialog.cpp \
     searchitemview.cpp
 
-
-
-# Cute Variant core
-unix|win32: LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
 INCLUDEPATH += $$PWD/../lib
 DEPENDPATH += $$PWD/../lib
-win32:!win32-g++: PRE_TARGETDEPS += $$OUT_PWD/../lib/cutevariantcore.lib
-else:unix|win32-g++: PRE_TARGETDEPS += $$OUT_PWD/../lib/libcutevariantcore.a
 
-# QScintilla
-unix|win32: LIBS += -L$$OUT_PWD/../qscintilla/Qt4Qt5/ -lqscintilla2
 INCLUDEPATH += $$PWD/../qscintilla/Qt4Qt5
 DEPENDPATH += $$PWD/../qscintilla/Qt4Qt5
-win32:!win32-g++: PRE_TARGETDEPS += $$OUT_PWD/../qscintilla/Qt4Qt5/qscintilla2.lib
-else:unix|win32-g++: PRE_TARGETDEPS += $$OUT_PWD/../qscintilla/Qt4Qt5/libqscintilla2.a
 
-# Quazip
-unix|win32: LIBS += -L$$OUT_PWD/../quazip/quazip/ -lquazip
 INCLUDEPATH += $$PWD/../quazip/quazip
 DEPENDPATH += $$PWD/../quazip/quazip
+
+
+LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
+#PRE_TARGETDEPS += $$OUT_PWD/../lib/cutevariantcore.lib
+PRE_TARGETDEPS += $$OUT_PWD/../lib/libcutevariantcore.a
+
+# Cute Variant core
+LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
+#PRE_TARGETDEPS += $$OUT_PWD/../lib/cutevariantcore.lib
+PRE_TARGETDEPS += $$OUT_PWD/../lib/libcutevariantcore.a
+
+# QScintilla
+LIBS += -L$$OUT_PWD/../qscintilla/Qt4Qt5/ -lqscintilla2
+#PRE_TARGETDEPS += $$OUT_PWD/../qscintilla/Qt4Qt5/qscintilla2.lib
+PRE_TARGETDEPS += $$OUT_PWD/../qscintilla/Qt4Qt5/libqscintilla2.a
+
+# Quazip
+LIBS += -L$$OUT_PWD/../quazip/quazip/ -lquazip
+
+

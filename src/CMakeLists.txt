@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Set Qt prefix : Change it !! 
-set(CMAKE_PREFIX_PATH "/media/sacha/Linux_data/Qt/5.9.1/gcc_64")
+#set(CMAKE_PREFIX_PATH "/media/sacha/Linux_data/Qt/5.9.1/gcc_64")
 
 # Find Qt package 
 find_package(Qt5Core REQUIRED)
