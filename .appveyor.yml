@@ -12,6 +12,7 @@ build_script:
 after_build:
   - cmd: mkdir release
   - cmd : cp src/app/app.exe release
+  - cmd : cp src/quazip/quazip/quazip.dll release
   - windeployqt release/app.exe
   - cmd: cp LICENSE release/LICENSE.txt"
 artifacts:
