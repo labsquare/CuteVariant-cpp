@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
-set(CUTEVARIANT_LINK_LIBS libcutevariant.so)
+set(CUTEVARIANT_LINK_LIBS libcutevariant.a)
 set(QSCINTILLA2_LINK_LIBS libqscintilla2.a)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -40,5 +40,6 @@ target_link_libraries(app Qt5::Widgets)
 target_link_libraries(app Qt5::Sql)
 target_link_libraries(app Qt5::Concurrent)
 
+target_link_libraries(app ${QUAZIP_LIB_TARGET_NAME})
 target_link_libraries(app ${CUTEVARIANT_LINK_LIBS})
 target_link_libraries(app ${QSCINTILLA2_LINK_LIBS})

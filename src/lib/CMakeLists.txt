@@ -19,7 +19,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 include_directories(../quazip/quazip)
 
 
-add_library(cutevariant SHARED ${SOURCES})
+add_library(cutevariant STATIC ${SOURCES})
 target_link_libraries(cutevariant Qt5::Core)
 target_link_libraries(cutevariant Qt5::Gui)
 target_link_libraries(cutevariant Qt5::Sql)
