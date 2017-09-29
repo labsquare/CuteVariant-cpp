@@ -15,4 +15,4 @@ after_build:
 artifacts:
   - path: Output\app*.exe
   - path: release
-type: zip
+    type: zip
