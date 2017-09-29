@@ -93,6 +93,9 @@ public:
   virtual bool flush();
   /// Closes the file.
   virtual void close();
+
+  qint64 pos() const override;
+
 protected:
   /// Implementation of QIODevice::readData().
   virtual qint64 readData(char *data, qint64 maxSize);

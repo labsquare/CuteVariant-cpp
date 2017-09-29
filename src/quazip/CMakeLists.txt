@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 2.6)
 # (introduced in CMake 2.8.12, enabled by default in CMake 3.0,
 # and producing a warning when unset since 3.7.1)
 cmake_policy(SET CMP0042 NEW)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 option(BUILD_WITH_QT4 "Build QuaZip with Qt4 no matter if Qt5 was found" OFF)
 

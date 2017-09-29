@@ -719,6 +719,8 @@ void SqliteManager::createVariants(AbstractVariantReader *reader)
             if (v.isNull())
                 continue;
 
+            qDebug()<<mProgressDevice->pos();
+
             QString placeHolders = QString(",?").repeated(fields.size() + 8);
 
             if (reader->device()->pos() % 100 == 0)

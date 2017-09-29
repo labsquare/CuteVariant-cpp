@@ -155,6 +155,11 @@ void QuaGzipFile::close()
   gzclose(d->gzd);
 }
 
+qint64 QuaGzipFile::pos() const
+{
+    return 1000;
+}
+
 qint64 QuaGzipFile::readData(char *data, qint64 maxSize)
 {
     return gzread(d->gzd, (voidp)data, (unsigned)maxSize);
