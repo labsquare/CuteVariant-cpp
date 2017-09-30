@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=CuteVariant
+Comment=A genetics variant filtering tools
+Exec=cutevariant %F
+Icon=cutevariant
+Terminal=false
+Categories=Science;Biology;Qt;

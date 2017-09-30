@@ -3,7 +3,7 @@ TEMPLATE = subdirs
 
 
 SUBDIRS = src/quazip \
-          src/lib \
+          src/cutevariantcore \
           src/qscintilla/Qt4Qt5/qscintilla.pro \
           src/app
 
@@ -13,4 +13,15 @@ QMAKE_CXXFLAGS  += -Ofast
 
 
 QMAKE_CXXFLAGS += -std=c++14
+
+
+
+# Installation
+
+desktop.path = /usr/share/applications
+desktop.files += cutevariant.desktop
+icons.path = /usr/share/icons/hicolor/48x48/apps
+icons.files += cutevariant.png
+
+INSTALLS += desktop icons
 

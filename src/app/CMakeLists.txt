@@ -21,7 +21,7 @@ include_directories(docks/selections)
 include_directories(${CMAKE_SOURCE_DIR}/qscintilla/Qt4Qt5)
 include_directories(${CMAKE_SOURCE_DIR}/qscintilla/src)
 include_directories(${CMAKE_SOURCE_DIR}/qscintilla/include)
-include_directories(${CMAKE_SOURCE_DIR}/lib)
+include_directories(${CMAKE_SOURCE_DIR}/cutevariantcore)
 
 # Add all c++ files 
 file(GLOB_RECURSE SOURCES "*.cpp")

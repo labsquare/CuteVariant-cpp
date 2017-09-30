@@ -22,7 +22,7 @@ endif()
 
 
 add_subdirectory(quazip)
-add_subdirectory(lib)
+add_subdirectory(cutevariantcore)
 add_subdirectory(qscintilla/Qt4Qt5)
 add_subdirectory(app)
 

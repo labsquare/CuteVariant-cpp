@@ -9,7 +9,7 @@ include(resultsview/resultsview.pri)
 include(docks/docks.pri)
 include(qfonticon/qfonticon.pri)
 
-TARGET = app
+TARGET = cutevariant
 
 
 
@@ -34,8 +34,8 @@ SOURCES += \
     operationsetdialog.cpp \
     searchitemview.cpp
 
-INCLUDEPATH += $$PWD/../lib
-DEPENDPATH += $$PWD/../lib
+INCLUDEPATH += $$PWD/../cutevariantcore
+DEPENDPATH += $$PWD/../cutevariantcore
 
 INCLUDEPATH += $$PWD/../qscintilla/Qt4Qt5
 DEPENDPATH += $$PWD/../qscintilla/Qt4Qt5
@@ -44,14 +44,10 @@ INCLUDEPATH += $$PWD/../quazip/quazip
 DEPENDPATH += $$PWD/../quazip/quazip
 
 
-LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
-#PRE_TARGETDEPS += $$OUT_PWD/../lib/cutevariantcore.lib
-PRE_TARGETDEPS += $$OUT_PWD/../lib/libcutevariantcore.a
-
 # Cute Variant core
-LIBS += -L$$OUT_PWD/../lib/ -lcutevariantcore
-#PRE_TARGETDEPS += $$OUT_PWD/../lib/cutevariantcore.lib
-PRE_TARGETDEPS += $$OUT_PWD/../lib/libcutevariantcore.a
+LIBS += -L$$OUT_PWD/../cutevariantcore/ -lcutevariantcore
+#PRE_TARGETDEPS += $$OUT_PWD/../cutevariantcore/cutevariantcore.lib
+PRE_TARGETDEPS += $$OUT_PWD/../cutevariantcore/libcutevariantcore.a
 
 # QScintilla
 LIBS += -L$$OUT_PWD/../qscintilla/Qt4Qt5/ -lqscintilla2
@@ -61,4 +57,5 @@ PRE_TARGETDEPS += $$OUT_PWD/../qscintilla/Qt4Qt5/libqscintilla2.a
 # Quazip
 LIBS += -L$$OUT_PWD/../quazip/quazip/ -lquazip
 
-
+target.path  = /usr/local/bin
+INSTALLS += target
