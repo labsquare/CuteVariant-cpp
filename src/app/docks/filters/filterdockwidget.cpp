@@ -8,8 +8,8 @@ FilterDockWidget::FilterDockWidget(QWidget *parent)
     setWidget(mView);
 
 
-    addAction(QFontIcon::icon(0xf067, Qt::darkBlue), "add logic", this, SLOT(addLogic()));
-    addAction(QFontIcon::icon(0xf067, Qt::darkGreen), "add condition", this, SLOT(addCondition()));
+    addAction(FIcon(0xf126), "add logic", this, SLOT(addLogic()));
+    addAction(FIcon(0xf067), "add condition", this, SLOT(addCondition()));
     addAction(FIcon(0xf1f8), "remove", this, SLOT(remove()));
 
 

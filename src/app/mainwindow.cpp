@@ -98,7 +98,7 @@ void MainWindow::restoreSettings()
 void MainWindow::importFile()
 {
 
-    QString filename = QFileDialog::getOpenFileName(this, tr("Open File"),QDir::homePath(),tr("Images (*.vcf *.vcf.gz)"));
+    QString filename = QFileDialog::getOpenFileName(this, tr("Import File"),QDir::homePath(),tr("Images (*.vcf *.vcf.gz)"));
     if (filename.isEmpty())
         return;
 
@@ -239,8 +239,8 @@ void MainWindow::setupActions()
     // setup menu bar
     setMenuBar(new QMenuBar);
     QMenu * fileMenu = menuBar()->addMenu("&File");
-    QAction * openAction   = fileMenu->addAction(FIcon(0xf115), "&Open ...", this, SLOT(openFile()), QKeySequence::Open);
-    QAction * importAction = fileMenu->addAction(FIcon(0xf016), "&New ...", this, SLOT(importFile()), QKeySequence::New);
+    QAction * openAction   = fileMenu->addAction(FIcon(0xe808), "&Open ...", this, SLOT(openFile()), QKeySequence::Open);
+    QAction * importAction = fileMenu->addAction(FIcon(0xe843), "&Import ...", this, SLOT(importFile()), QKeySequence::New);
     fileMenu->addSeparator();
     fileMenu->addAction(FIcon(0xf08b),"&Quit");
 
