@@ -11,9 +11,9 @@ build_script:
   - mingw32-make
 after_build:
   - cmd: mkdir release
-  - cmd : cp src/app/app.exe release
+  - cmd : cp src/app/cutevariant.exe release
   - cmd : cp src/quazip/quazip/quazip.dll release
-  - windeployqt release/app.exe
+  - windeployqt release/cutevariant.exe
   - cmd: cp LICENSE release/LICENSE.txt"
 artifacts:
   - path: release\cutevariant*.exe
