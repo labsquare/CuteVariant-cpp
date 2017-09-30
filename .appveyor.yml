@@ -16,6 +16,6 @@ after_build:
   - windeployqt release/app.exe
   - cmd: cp LICENSE release/LICENSE.txt"
 artifacts:
-  - path: release\app*.exe
+  - path: release\cutevariant*.exe
   - path: release
     type: zip
