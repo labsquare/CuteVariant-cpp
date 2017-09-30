@@ -11,6 +11,5 @@
         <file>rgb.png</file>
         <file>eye-on.png</file>
         <file>eye-off.png</file>
-        <file alias="fontello">fontello.ttf</file>
     </qresource>
 </RCC>

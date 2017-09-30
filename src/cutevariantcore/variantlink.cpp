@@ -54,4 +54,9 @@ QUrl VariantLink::toUrl(const Variant &variant) const
     return QUrl(raw);
 }
 
+bool VariantLink::operator==(const VariantLink &a) const
+{
+    return a.name() == this->name();
+}
+
 }

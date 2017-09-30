@@ -216,7 +216,7 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
 
         // show links
 
-        for (cvar::VariantLink link : cutevariant->sqliteManager()->links())
+        for (cvar::VariantLink link : cutevariant->links())
         {
             QUrl varurl = link.toUrl(var);
             menu.addAction(link.icon(), link.name(),[varurl](){

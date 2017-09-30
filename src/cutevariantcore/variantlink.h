@@ -23,6 +23,8 @@ public:
 
     QUrl toUrl(const Variant& variant) const;
 
+    bool operator==(const VariantLink &a) const;
+
 private:
     QString mName;
     QString mRawUrl;

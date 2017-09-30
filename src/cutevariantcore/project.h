@@ -2,6 +2,8 @@
 #define PROJECT_H
 #include <QtCore>
 #include <QtSql>
+#include <QSettings>
+#include "variantlink.h"
 #include "sqlitemanager.h"
 
 #define cutevariant cvar::Project::i()
@@ -20,6 +22,12 @@ public:
     void setDatabasePath(const QString& path);
     void importFile(const QString& filename);
     SqliteManager * sqliteManager();
+
+    QList<VariantLink> links() const;
+    bool removeLink(const VariantLink& link);
+    bool saveLink(VariantLink& link);
+    bool saveLinks(QList<VariantLink>& links);
+
 
 
 private:

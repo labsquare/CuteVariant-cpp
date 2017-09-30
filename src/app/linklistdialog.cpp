@@ -41,7 +41,7 @@ void LinkListDialog::addLink()
     if (dialog.exec())
     {
         cvar::VariantLink link = dialog.link();
-        if (!cutevariant->sqliteManager()->saveLink(link))
+        if (!cutevariant->saveLink(link))
             QMessageBox::warning(this,"error","Cannot save links");
 
         else
@@ -56,7 +56,7 @@ void LinkListDialog::remLink()
     if (mView->selectedItems().isEmpty())
         return;
 
-    if (!cutevariant->sqliteManager()->removeLink(mLinks[mView->currentIndex().row()]))
+    if (!cutevariant->removeLink(mLinks[mView->currentIndex().row()]))
         QMessageBox::warning(this,"error","Cannot delete item");
 
     else
@@ -80,7 +80,7 @@ void LinkListDialog::editLink()
 
         qDebug()<<"MY ID "<<link.id();
 
-        if (!cutevariant->sqliteManager()->saveLink(link))
+        if (!cutevariant->saveLink(link))
             QMessageBox::warning(this,"error","Cannot save links");
 
         else
@@ -97,7 +97,7 @@ void LinkListDialog::load()
     mView->clear();
     mView->setColumnCount(2);
 
-    mLinks = cutevariant->sqliteManager()->links();
+    mLinks = cutevariant->links();
 
     for (cvar::VariantLink link : mLinks)
     {
