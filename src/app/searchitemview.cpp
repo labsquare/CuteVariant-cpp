@@ -17,7 +17,7 @@ SearchItemView::SearchItemView(QAbstractItemView *baseview, QWidget *parent)
 
     QVBoxLayout * mainLayout = new QVBoxLayout;
     mainLayout->addWidget(mBaseView);
-    mainLayout->addWidget(mBar);
+    //mainLayout->addWidget(mBar);
 
     mainLayout->setContentsMargins(0,0,0,0);
     mainLayout->setSpacing(1);

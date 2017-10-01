@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mSelectionDock    = new SelectionDockWidget();
     mFilterDock       = new FilterDockWidget();
 
+    mLocationSearchEdit = new QLineEdit;
+
     addBaseDock(mColumnDock);
     addBaseDock(mSelectionDock);
     addBaseDock(mFilterDock);
@@ -139,6 +141,7 @@ void MainWindow::openFile()
     {
         cutevariant->setDatabasePath(fileName);
         reset();
+        statusBar()->showMessage(fileName);
         return;
 
     }
@@ -224,28 +227,28 @@ void MainWindow::addBaseDock(BaseDockWidget *widget)
 void MainWindow::setupActions()
 {
 
-//    QAction * importAction = mToolBar->addAction(QIcon::fromTheme("document-import"),tr("Import"),this, SLOT(importFile()));
-//    QAction * openAction   = mToolBar->addAction(QIcon::fromTheme("document-open"),tr("Open"),this, SLOT(openFile()));
-//   // QAction * saveAction   = bar->addAction(QIcon::fromTheme("document-open"),tr("Save"),this, SLOT(saveFile()));
-//    QAction * runAction    = mToolBar->addAction(QIcon::fromTheme("run-build"),tr("Run"),this,SLOT(execute()));
+    //    QAction * importAction = mToolBar->addAction(QIcon::fromTheme("document-import"),tr("Import"),this, SLOT(importFile()));
+    //    QAction * openAction   = mToolBar->addAction(QIcon::fromTheme("document-open"),tr("Open"),this, SLOT(openFile()));
+    //   // QAction * saveAction   = bar->addAction(QIcon::fromTheme("document-open"),tr("Save"),this, SLOT(saveFile()));
+    //    QAction * runAction    = mToolBar->addAction(QIcon::fromTheme("run-build"),tr("Run"),this,SLOT(execute()));
 
-//    QAction * showConsole = new QAction(QIcon::fromTheme("console"),tr("Show console"),this);
-//    showConsole->setCheckable(true);
-//    showConsole->setChecked(true);
-//    connect(showConsole,SIGNAL(triggered(bool)), mEditor, SLOT(setVisible(bool)));
-//    mToolBar->addAction(showConsole);
+    //    QAction * showConsole = new QAction(QIcon::fromTheme("console"),tr("Show console"),this);
+    //    showConsole->setCheckable(true);
+    //    showConsole->setChecked(true);
+    //    connect(showConsole,SIGNAL(triggered(bool)), mEditor, SLOT(setVisible(bool)));
+    //    mToolBar->addAction(showConsole);
 
 
     // setup menu bar
     setMenuBar(new QMenuBar);
     QMenu * fileMenu = menuBar()->addMenu("&File");
-    QAction * openAction   = fileMenu->addAction(FIcon(0xe808), "&Open ...", this, SLOT(openFile()), QKeySequence::Open);
-    QAction * importAction = fileMenu->addAction(FIcon(0xe843), "&Import ...", this, SLOT(importFile()), QKeySequence::New);
+    QAction * openAction   = fileMenu->addAction(FIcon(0xf116), "&Open ...", this, SLOT(openFile()), QKeySequence::Open);
+    QAction * importAction = fileMenu->addAction(FIcon(0xf108), "&Import ...", this, SLOT(importFile()), QKeySequence::New);
     fileMenu->addSeparator();
     fileMenu->addAction(FIcon(0xf08b),"&Quit");
 
     QMenu * queryMenu = menuBar()->addMenu("&Query");
-    QAction * runAction = queryMenu->addAction(FIcon(0xf04b), "&Run", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R));
+    QAction * runAction = queryMenu->addAction(FIcon(0xf126), "&Run", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R));
 
 
     QMenu * columnMenu = queryMenu->addMenu("&Columns");
@@ -260,10 +263,27 @@ void MainWindow::setupActions()
 
 
 
+
+
     // setup toolbar
     mToolBar->addAction(openAction);
     mToolBar->addAction(importAction);
     mToolBar->addAction(runAction);
+
+    // TEST
+    mToolBar->addAction(queryMenu->addAction(FIcon(0xf12f), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
+    mToolBar->addAction(queryMenu->addAction(FIcon(0xf134), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
+    mToolBar->addAction(queryMenu->addAction(FIcon(0xf146), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
+
+
+    // add search bar
+    QWidget * spacer = new QWidget;
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    mToolBar->addWidget(spacer);
+    mToolBar->addWidget(mLocationSearchEdit);
+    mLocationSearchEdit->setMinimumWidth(300);
+
+    mLocationSearchEdit->addAction(new QAction(FIcon(0xf118),"search"), QLineEdit::LeadingPosition);
 
 
 }

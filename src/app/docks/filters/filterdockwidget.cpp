@@ -7,13 +7,12 @@ FilterDockWidget::FilterDockWidget(QWidget *parent)
     setTitle("Filter");
     setWidget(mView);
 
+    addAction(FIcon(0xf13b), "add condition", this, SLOT(addCondition()));
+    addAction(FIcon(0xf138), "add logic", this, SLOT(addLogic()));
+    addAction(FIcon(0xf114), "remove", this, SLOT(remove()));
 
-    addAction(FIcon(0xf126), "add logic", this, SLOT(addLogic()));
-    addAction(FIcon(0xf067), "add condition", this, SLOT(addCondition()));
-    addAction(FIcon(0xf1f8), "remove", this, SLOT(remove()));
-
-
-    QAction * saveAction = new QAction(FIcon(0xf115),"open");
+    addActionSpacer();
+    QAction * saveAction = new QAction(FIcon(0xf11e),"open");
     saveAction->setMenu(new QMenu);
     saveAction->menu()->addAction("Preset1");
     saveAction->menu()->addAction("Preset2");

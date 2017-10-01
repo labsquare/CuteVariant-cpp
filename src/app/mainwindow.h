@@ -90,6 +90,7 @@ private:
     FilterDockWidget * mFilterDock;
     QList<BaseDockWidget*> mBaseDocks;
     QToolBar * mToolBar;
+    QLineEdit * mLocationSearchEdit;
 
 
 

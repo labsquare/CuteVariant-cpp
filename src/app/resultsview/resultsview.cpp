@@ -45,11 +45,11 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
 
 
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    mTopToolBar->addAction(FIcon(0xf0c7), "Save table", this, SLOT(save()));
-    mTopToolBar->addAction(FIcon(0xf093),"Export table", this, SLOT(exportCsv()));
+    mTopToolBar->addAction(FIcon(0xf11d), "Save table", this, SLOT(save()));
+    mTopToolBar->addAction(FIcon(0xf102),"Export table", this, SLOT(exportCsv()));
     mTopToolBar->layout()->setContentsMargins(0,0,0,0);
 
-    mBottomToolBar->addAction("sql", this, SLOT(showVql()));
+    mBottomToolBar->addAction(FIcon(0xf12c),"sql",this, SLOT(showVql()));
     mBottomToolBar->addWidget(mCountLabel);
 
     QWidget * spacer = new QWidget;
@@ -57,12 +57,12 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
     mBottomToolBar->addWidget(spacer);
 
     mBottomToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    mBottomToolBar->setIconSize(QSize(16,16));
-    mBottomToolBar->addAction(FIcon(0xf049),"<<", this, SLOT(pageFirst()));
-    mBottomToolBar->addAction(FIcon(0xf048),"<", this, SLOT(pageDown()));
+    mBottomToolBar->setIconSize(QSize(20,20));
+    mBottomToolBar->addAction(FIcon(0xf104),"<<", this, SLOT(pageFirst()));
+    mBottomToolBar->addAction(FIcon(0xf111),"<", this, SLOT(pageDown()));
     mBottomToolBar->addWidget(mPageBox);
-    mBottomToolBar->addAction(FIcon(0xf051),">", this, SLOT(pageUp()));
-    mBottomToolBar->addAction(FIcon(0xf050),">>", this, SLOT(pageLast()));
+    mBottomToolBar->addAction(FIcon(0xf115),">", this, SLOT(pageUp()));
+    mBottomToolBar->addAction(FIcon(0xf117),">>", this, SLOT(pageLast()));
     mBottomToolBar->layout()->setContentsMargins(0,0,0,0);
 
 

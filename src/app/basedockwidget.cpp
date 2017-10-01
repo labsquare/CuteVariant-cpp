@@ -10,19 +10,21 @@ BaseDockWidget::BaseDockWidget(QWidget *parent)
     QLabel * grapLabel =  new QLabel;
     grapLabel->setPixmap(FIcon(0xf047).pixmap(16));
 
-    mToolBar->setIconSize(QSize(16,16));
+    mToolBar->setIconSize(QSize(20,20));
     //  mToolBar->layout()->setContentsMargins(0,0,0,0);
 
-    mToolBar->addWidget(grapLabel);
-    mToolBar->addWidget(mTitleWidget);
+   // mToolBar->addWidget(grapLabel);
+   // mToolBar->addWidget(mTitleWidget);
 
     // add spacer
-    QWidget * spacer = new QWidget();
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    mToolBar->addWidget(spacer);
+//    QWidget * spacer = new QWidget();
+//    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+//    mToolBar->addWidget(spacer);
 
     layout()->setContentsMargins(0,0,0,0);
-    setTitleBarWidget(mToolBar);
+    //setTitleBarWidget(mToolBar);
+
+    setFeatures(QDockWidget::DockWidgetMovable);
 
 
 }
@@ -32,8 +34,17 @@ BaseDockWidget::BaseDockWidget(QWidget *parent)
 
 void BaseDockWidget::setWidget(QWidget *w)
 {
-    QDockWidget::setWidget(w);
-    //    w->setStyleSheet("{border:1px solid lightgray}");
+    QVBoxLayout * vLayout = new QVBoxLayout;
+    vLayout->addWidget(mToolBar);
+    vLayout->addWidget(w);
+
+    vLayout->setSpacing(1);
+    vLayout->setContentsMargins(0,0,0,0);
+
+    QWidget * ww = new QWidget;
+    ww->setLayout(vLayout);
+
+    QDockWidget::setWidget(ww);
 
 }
 
@@ -57,6 +68,13 @@ void BaseDockWidget::addAction(QAction *action)
 {
     mToolBar->addAction(action);
     mActions.append(action);
+}
+
+void BaseDockWidget::addActionSpacer()
+{
+    QWidget * spacer = new QWidget;
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    mToolBar->addWidget(spacer);
 }
 
 QAction *BaseDockWidget::addAction(const QIcon &actionIcon, const QString &text, QObject *receiver, const char *member)

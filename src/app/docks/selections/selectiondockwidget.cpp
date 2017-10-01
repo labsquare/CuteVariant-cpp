@@ -6,13 +6,15 @@ SelectionDockWidget::SelectionDockWidget(QWidget *parent)
 
     mView = new SelectionView;
     mSearchView = new SearchItemView(mView);
-    setTitle("selection");
+    setTitle("Variant Set");
     setWidget(mSearchView);
 
 
-    addAction(QIcon(":/rgb.png"),"compare",this, SLOT(compare()));
-    addAction(FIcon(0xf014),"delete",mView, SLOT(removeSelection()));
+    addAction(FIcon(0xf129),"compare",this, SLOT(compare()));
+    addAction(FIcon(0xf114),"delete",mView, SLOT(removeSelection()));
 
+    addActionSpacer();
+    addAction(FIcon(0xf118),"search", this, SLOT(compare()));
 
 
 

@@ -11,6 +11,7 @@ public:
     QString title() const;
 
     void addAction(QAction * action);
+    void addActionSpacer();
 
     QAction *addAction(const QIcon &actionIcon, const QString &text, QObject * receiver, const char *member);
     void addToolWidget(QWidget * widget);
