@@ -8,23 +8,23 @@ namespace cvar{
 SqliteManager::SqliteManager(QObject * parent)
     :QObject(parent)
 {
-
 }
 //-------------------------------------------------------------------------------
 SqliteManager::~SqliteManager()
 {
+    delete mProgressDevice;
 }
 //-------------------------------------------------------------------------------
 bool SqliteManager::importFile(const QString &filename)
 {
-    qDebug()<<"SERIEUX ??";
-  qDebug()<<"MODIF";
+    // test if file exists
     if (!QFile::exists(filename))
     {
         qDebug()<<"file doesn't exists";
         return false;
     }
 
+    // Actual file support .. Will change in the future .
     QStringList suffixes = {"vcf","gz"};
     QFileInfo info(filename);
     mFileSize = info.size();
@@ -34,13 +34,14 @@ bool SqliteManager::importFile(const QString &filename)
         qDebug()<<"file suffix not suported";
         return false;
     }
+
+    // Keep the raw file to compute pos/total for the progress bar
     mProgressDevice = nullptr;
     QScopedPointer<AbstractVariantReader> reader;
 
     if (info.suffix().toLower() == "vcf"){
         mProgressDevice = new QFile(filename);
         reader.reset(new VCFVariantReader(mProgressDevice));
-
     }
     if (info.suffix() == "gz")
     {
@@ -51,14 +52,12 @@ bool SqliteManager::importFile(const QString &filename)
     if (reader.isNull())
         return false;
 
-    // Start import
     qInfo()<<"Start Importing "<<filename <<"";
 
     QElapsedTimer timer;
     timer.start();
 
     createProject(info.baseName());
-    createLinks();
     createFile(filename);
     createMetadatas(reader.data());
     createSample(reader.data());
@@ -133,55 +132,46 @@ QList<Field> SqliteManager::genotypeFields(const Sample& sample) const
 }
 
 //-------------------------------------------------------------------------------
-QList<VariantLink> SqliteManager::links() const
+QList<VariantSet> SqliteManager::variantSets() const
 {
-    QList<VariantLink> links;
-    QSqlQuery query(QStringLiteral("SELECT * FROM `links`"));
-    while(query.next())
-    {
-        VariantLink link;
-        link.setId(query.value("id").toInt());
-        link.setName(query.value("name").toString());
-        link.setRawUrl(query.value("url").toString());
-
-        QPixmap pix;
-        pix.loadFromData(query.value("icon").toByteArray());
-        link.setIcon(QIcon(pix));
-        links.append(link);
-    }
-    return links;
-}
-
-//-------------------------------------------------------------------------------
-QList<VariantSelection> SqliteManager::variantSelections() const
-{
-
-    QList<VariantSelection> list;
+    QList<VariantSet> list;
     QSqlQuery query("SELECT * FROM sqlite_master WHERE type = 'view'");
     while (query.next())
     {
-        VariantSelection s = VariantSelection();
+        VariantSet s = VariantSet();
         s.setName(query.record().value("tbl_name").toString());
         s.setSql(query.record().value("sql").toString());
         list.append(s);
 
     }
 
-    for (VariantSelection &s : list)
+    for (VariantSet &s : list)
         s.setCount(variantsCount(s.name()));
 
-
     return list;
-
 }
 //-------------------------------------------------------------------------------
-QStringList SqliteManager::variantSelectionNames() const
+QStringList SqliteManager::variantSetNames() const
 {
     QStringList out;
     out += "variants";
-    for (const VariantSelection& s : variantSelections())
+    for (const VariantSet& s : variantSets())
         out.append(s.name());
     return out;
+}
+//-------------------------------------------------------------------------------
+
+bool SqliteManager::removeVariantSet(const QString &setName)
+{
+    QSqlQuery query;
+        if (!query.exec(QString("DROP VIEW IF EXISTS %1").arg(setName)))
+        {
+            qDebug()<<query.lastQuery();
+            qDebug()<<query.lastError().text();
+            return false;
+        }
+
+        return true;
 }
 //-------------------------------------------------------------------------------
 QHash<QString, QVariant> SqliteManager::metadatas() const
@@ -193,19 +183,18 @@ QHash<QString, QVariant> SqliteManager::metadatas() const
         hash.insert(query.record().value("key").toString(), query.record().value("value"));
 
     return hash;
-
 }
 //-------------------------------------------------------------------------------
-bool SqliteManager::createSelectionFromExpression(const QString &newtable, const QString &rawExpression, CompareMode mode)
+bool SqliteManager::createVariantSetFromExpression(const QString &newSetName, const QString &expression, CompareMode mode)
 {
     qDebug()<<Q_FUNC_INFO<<" create expression ";
 
     QRegularExpression exp("[^\\-+&\\(\\)\\s&]+");
-    QRegularExpressionMatchIterator it = exp.globalMatch(rawExpression);
-    QStringList tables = variantSelectionNames();
+    QRegularExpressionMatchIterator it = exp.globalMatch(expression);
+    QStringList tables = variantSetNames();
     tables.append("variants");
 
-    QString raw = rawExpression.simplified();
+    QString raw = expression.simplified();
     while (it.hasNext())
     {
         QRegularExpressionMatch match = it.next();
@@ -229,14 +218,14 @@ bool SqliteManager::createSelectionFromExpression(const QString &newtable, const
     raw = raw.replace("&", " INTERSECT ");
 
     QSqlQuery query;
-    query.exec(QString("DROP VIEW IF EXISTS %1").arg(newtable));
+    query.exec(QString("DROP VIEW IF EXISTS %1").arg(newSetName));
 
 
     if (mode == CompareMode::SiteMode)
-        query.prepare(QString("CREATE VIEW %1 AS SELECT variants.* FROM variants, (%2) as t WHERE t.chr=variants.chr AND t.pos = variants.pos").arg(newtable,raw));
+        query.prepare(QString("CREATE VIEW %1 AS SELECT variants.* FROM variants, (%2) as t WHERE t.chr=variants.chr AND t.pos = variants.pos").arg(newSetName,raw));
 
     if (mode == CompareMode::VariantMode)
-        query.prepare(QString("CREATE VIEW %1 AS SELECT variants.* FROM variants, (%2) as t WHERE t.chr=variants.chr AND t.pos = variants.pos AND t.ref = variants.ref AND t.alt = variants.alt").arg(newtable,raw));
+        query.prepare(QString("CREATE VIEW %1 AS SELECT variants.* FROM variants, (%2) as t WHERE t.chr=variants.chr AND t.pos = variants.pos AND t.ref = variants.ref AND t.alt = variants.alt").arg(newSetName,raw));
 
 
     if (!query.exec())
@@ -244,70 +233,11 @@ bool SqliteManager::createSelectionFromExpression(const QString &newtable, const
         qDebug()<<query.lastError().text();
         qDebug()<<query.lastQuery();
     }
-
     qDebug()<<query.lastQuery();
 
-
-    return true;
-
-}
-//-------------------------------------------------------------------------------
-bool SqliteManager::removeSelection(const QString &name)
-{
-    QSqlQuery query;
-    if (!query.exec(QString("DROP VIEW IF EXISTS %1").arg(name)))
-    {
-        qDebug()<<query.lastQuery();
-        qDebug()<<query.lastError().text();
-        return false;
-    }
-
     return true;
 }
-//-------------------------------------------------------------------------------
-bool SqliteManager::removeLink(const VariantLink &link)
-{
-    if (!link.exists())
-        return false;
 
-    QSqlQuery query;
-    if (!query.exec(QString("DELETE FROM `links` WHERE id=%1").arg(link.id())))
-    {
-        qDebug()<<query.lastQuery();
-        qDebug()<<query.lastError().text();
-        return false;
-    }
-
-    return true;
-}
-//-------------------------------------------------------------------------------
-bool SqliteManager::saveLink(VariantLink &link)
-{
-    QSqlQuery query;
-    if (!link.exists())
-        query.prepare( "INSERT INTO `links` (name, url, icon) VALUES (:name, :url, :icon)" );
-    else
-        query.prepare(QStringLiteral("UPDATE `links` SET name = :name , url = :url , icon = :icon WHERE id =%1").arg(link.id()));
-
-
-    query.bindValue(":name", link.name());
-    query.bindValue(":url", link.rawUrl());
-    query.bindValue(":icon", iconToData(link.icon()));
-
-
-
-    if (!query.exec())
-    {
-        qDebug()<<Q_FUNC_INFO<<" cannot save/update link "<<query.lastError().text();
-        qDebug()<<query.lastQuery();
-        return false;
-    }
-
-    if (!link.exists())
-        link.setId(query.lastInsertId().toInt());
-
-    return true;
-}
 //-------------------------------------------------------------------------------
 QSqlQuery SqliteManager::variants(const VariantQuery &query) const
 {
@@ -337,16 +267,16 @@ int SqliteManager::variantsCount(const VariantQuery &query) const
 
 }
 //-------------------------------------------------------------------------------
-int SqliteManager::variantsCount(const QString &table) const
+int SqliteManager::variantsCount(const QString &setName) const
 {
     VariantQuery query;
-    query.setTable(table);
+    query.setTable(setName);
     query.setGroupBy({"chr","pos","ref","alt"});
     return variantsCount(query);
 }
 //-------------------------------------------------------------------------------
 
-bool SqliteManager::variantsTo(const VariantQuery &query, const QString &tablename, const QString &description)
+bool SqliteManager::createVariantSet(const VariantQuery &query, const QString &setName, const QString &description)
 {
     Q_UNUSED(description)
     VariantQuery q = query;
@@ -359,9 +289,9 @@ bool SqliteManager::variantsTo(const VariantQuery &query, const QString &tablena
     qDebug()<<Q_FUNC_INFO<<"CREATE VIEW";
 
     QSqlQuery viewQuery;
-    viewQuery.exec(QString("DROP VIEW IF EXISTS %1").arg(tablename));
+    viewQuery.exec(QString("DROP VIEW IF EXISTS %1").arg(setName));
 
-    if (!viewQuery.exec(QString("CREATE VIEW %1 AS %2").arg(tablename).arg(q.toSql(this))))
+    if (!viewQuery.exec(QString("CREATE VIEW %1 AS %2").arg(setName).arg(q.toSql(this))))
     {
         qDebug()<<viewQuery.lastQuery();
         qDebug()<<viewQuery.lastError().text();
@@ -402,8 +332,6 @@ Variant SqliteManager::variant(int variantId) const
 
     return v;
 }
-
-
 //-------------------------------------------------------------------------------
 QFuture<bool> SqliteManager::asyncImportFile(const QString &filename)
 {
@@ -508,26 +436,6 @@ void SqliteManager::createMetadatas(AbstractVariantReader *reader)
     }
 
     QSqlDatabase::database().commit();
-
-}
-//-------------------------------------------------------------------------------
-void SqliteManager::createLinks()
-{
-    qInfo()<<"Import Links";
-    emit importProgressChanged(0,QString("Create defaults Links"));
-
-    QSqlQuery query;
-    query.exec(QStringLiteral("DROP TABLE IF EXISTS `links`"));
-    query.exec(QStringLiteral("CREATE TABLE `links` ("
-                              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                              "name TEXT NOT NULL,"
-                              "url TEXT NOT NULL,"
-                              "icon BLOB"
-                              ")"));
-
-
-    VariantLink demo("IGV",QString("http://localhost:60151/goto?locus=$CHROM:$POS"),QIcon(":/on.png"));
-    saveLink(demo);
 
 }
 

@@ -148,7 +148,7 @@ void ResultsView::save()
     if (dialog.exec() == QDialog::Accepted)
     {
 
-        if (!cutevariant->sqliteManager()->variantsTo(mModel->currentQuery(), nameEdit->text()))
+        if (!cutevariant->sqliteManager()->createVariantSet(mModel->currentQuery(), nameEdit->text()))
             QMessageBox::warning(this,"error", "cannot create table");
 
         else

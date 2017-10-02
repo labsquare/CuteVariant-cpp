@@ -2,53 +2,53 @@
 
 namespace cvar{
 
-VariantSelection::VariantSelection()
+VariantSet::VariantSet()
 {
 
 }
 
-VariantSelection::VariantSelection(const QString &name, const QString &description, int count)
+VariantSet::VariantSet(const QString &name, const QString &description, int count)
     :mName(name), mDescription(description), mCount(count)
 {
 
 }
 
-QString VariantSelection::name() const
+QString VariantSet::name() const
 {
     return mName;
 }
 
-void VariantSelection::setName(const QString &name)
+void VariantSet::setName(const QString &name)
 {
     mName = name;
 }
 
-QString VariantSelection::description() const
+QString VariantSet::description() const
 {
     return mDescription;
 }
 
-void VariantSelection::setDescription(const QString &description)
+void VariantSet::setDescription(const QString &description)
 {
     mDescription = description;
 }
 
-int VariantSelection::count() const
+int VariantSet::count() const
 {
     return mCount;
 }
 
-void VariantSelection::setCount(int count)
+void VariantSet::setCount(int count)
 {
     mCount = count;
 }
 
-QString VariantSelection::sql() const
+QString VariantSet::sql() const
 {
     return mSql;
 }
 
-void VariantSelection::setSql(const QString &sql)
+void VariantSet::setSql(const QString &sql)
 {
     mSql = sql;
 }

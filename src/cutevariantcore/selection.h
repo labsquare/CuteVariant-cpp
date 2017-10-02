@@ -3,11 +3,11 @@
 #include <QtCore>
 namespace cvar{
 
-class VariantSelection
+class VariantSet
 {
 public:
-    VariantSelection();
-    VariantSelection(const QString& name, const QString& description, int count);
+    VariantSet();
+    VariantSet(const QString& name, const QString& description, int count);
 
 
     QString name() const;

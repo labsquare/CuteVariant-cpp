@@ -13,8 +13,6 @@
 
 namespace cvar {
 
-
-
 /*!
  * \brief The SqliteManager class
  * This is the interface between raw SQLITE query and C++ POO
@@ -31,43 +29,121 @@ public:
     };
     SqliteManager(QObject * parent = 0);
     ~SqliteManager();
+
+    /*!
+     * \brief createProject
+     * Create sqlite file with default table
+     * \param name
+     */
     void createProject(const QString& name);
 
-    // getter
+    /*!
+     * \brief samples
+     * \return samples list from sqlite
+     */
     QList<Sample> samples() const;
+
+    /*!
+     * \brief fields
+     * \return variant fields from sqlite
+     */
     QList<Field> fields() const;
+    /*!
+     * \brief genotypeFields
+     * \return genotype field from sqlite
+     */
     QList<Field> genotypeFields(const Sample& sample) const;
-    QList<VariantLink> links() const;
-    QList<VariantSelection> variantSelections() const; //TODO rename better
-    QStringList variantSelectionNames() const;
+
+    /*!
+     * \brief metadatas
+     * In VCF file, metadata correspond to header data as key value.
+     * \return metadata from input file
+     */
     QHash<QString, QVariant> metadatas() const;
 
-    bool createSelectionFromExpression(const QString& newtable, const QString& rawExpression, CompareMode mode = SiteMode);
+    /*!
+     * \brief variantSets
+     * A variant set is a sql view of variants. You can see it as a sql table of variant
+     * \return return all variant sets
+     */
+    QList<VariantSet> variantSets() const;
+
+    /*!
+     * \brief variantSetName
+     * \return return names of collections
+     */
+    QStringList variantSetNames() const;
+
+    bool removeVariantSet(const QString& setName);
+
+    /*!
+     * \brief createVariantSetFromExpression
+     * This methods create a new variant set from other set using operator.
+     * ex : newSet = SetA - SetB .
+     * \param newSet : the name of new variant set
+     * \param expression : a Set expression with set operator. (+ - & )
+     * \param mode how to perform set operation
+     * \return true if success
+     */
+    bool createVariantSetFromExpression(const QString& newSetName, const QString& expression, CompareMode mode = SiteMode);
+
+    /*!
+     * \brief createVariantSet
+     * \param query
+     * \param setName
+     * \param description
+     * \return
+     */
+    bool createVariantSet(const VariantQuery& query, const QString& setName, const QString& description = QString());
 
 
-    // saver
-    bool saveLink(VariantLink& link);
-
-    // deleter
-    bool removeSelection(const QString& name);
-    bool removeLink(const VariantLink& link);
-
-
+    /*!
+     * \brief variants
+     * \param query
+     * \return return raw Sql Query from a Variant Query object
+     */
     QSqlQuery variants(const VariantQuery & query) const;
+
+    /*!
+     * \brief variantsCount
+     * \param query
+     * \return how many variant for a specific VariantQuery
+     */
     int variantsCount(const VariantQuery& query) const;
-    int variantsCount(const QString& table = "variants") const;
-    bool variantsTo(const VariantQuery& query, const QString& tablename, const QString& description = QString());
 
 
+    /*!
+     * \brief variantsCount
+     * \param table
+     * \return how many variant from a specific set
+     */
+    int variantsCount(const QString& setName = "variants") const;
+
+    /*!
+     * \brief variant
+     * \param variantId
+     * \return a Variant from sql ID
+     */
     Variant variant(int variantId) const;
 
-    QFuture<bool> asyncImportFile(const QString& filename);
+    /*!
+     * \brief importFile
+     * Import any support file into sql database. Do it synchronously
+     * \param filename
+     * \return true if success
+     */
     bool importFile(const QString& filename);
+
+    /*!
+     * \brief importFile
+     * Import any support file into sql database. Do it asynchronously
+     * \param filename
+     * \return a QFutur to monitor the progression
+     */
+    QFuture<bool> asyncImportFile(const QString& filename);
 
 
 protected:
-    void createLinks();
-
     void createFile(const QString& filename);
     void createMetadatas(AbstractVariantReader * reader);
     void createSample(AbstractVariantReader * reader);
@@ -91,7 +167,6 @@ private:
 
     QIODevice * mProgressDevice;
     quint64 mFileSize;
-
 
 };
 

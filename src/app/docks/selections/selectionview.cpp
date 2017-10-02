@@ -40,7 +40,7 @@ void SelectionView::load()
     addTopLevelItem(rootItem);
 
 
-    for (cvar::VariantSelection selection : cutevariant->sqliteManager()->variantSelections())
+    for (cvar::VariantSet selection : cutevariant->sqliteManager()->variantSets())
     {
         QTreeWidgetItem * item = new QTreeWidgetItem;
         item->setText(0, selection.name());
@@ -63,7 +63,7 @@ void SelectionView::removeSelection()
 
     for (QTreeWidgetItem * item : selectedItems())
     {
-        cutevariant->sqliteManager()->removeSelection(item->text(0));
+        cutevariant->sqliteManager()->removeVariantSet(item->text(0));
     }
 
     load();
