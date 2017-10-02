@@ -40,7 +40,7 @@ QStringList VariantQuery::rawColumns() const
     QStringList raw;
 
     if (columns().join("") =="*")
-        return QStringList({"`variants`.*"});
+        return QStringList({QString("%1.*").arg(rawTable())});
 
 
     for (QString col : columns())
@@ -148,7 +148,7 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
 {
     QString query;
 
-    QString select     = rawTable()+".id as id, "+rawColumns().join(",");
+    QString select     = table()+".id as id, "+rawColumns().join(",");
     QString tableName  = rawTable().isEmpty() ? "variants" : rawTable();
     QString where      = rawCondition();
 

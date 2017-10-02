@@ -14,8 +14,10 @@ FilterView::FilterView(QWidget * parent)
     setDropIndicatorShown(true);
     setDragDropMode(QAbstractItemView::InternalMove);
     setUniformRowHeights(true);
+    setAlternatingRowColors(true);
+    setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    header()->hide();
+    //header()->hide();
 
 
     //    viewport()->setAutoFillBackground( false );

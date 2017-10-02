@@ -6,18 +6,27 @@ OperationSetDialog::OperationSetDialog(QWidget *parent)
 
     mModeBox  = new QComboBox;
     mNewName  = new QLineEdit;
-    mExprEdit = new QPlainTextEdit;
+    mBoxA     = new QComboBox;
+    mBoxB     = new QComboBox;
+    mOperator = new QComboBox;
+
+    mNewName->setPlaceholderText("Name ...");
+
+    mOperator->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 
     QDialogButtonBox * buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
 
-    QFormLayout * formLayout = new QFormLayout;
+    QVBoxLayout * formLayout = new QVBoxLayout;
 
-    formLayout->addRow("Mode",mModeBox);
-    formLayout->addRow("Name", mNewName);
-    formLayout->addRow("Expression",mExprEdit);
+    formLayout->addWidget(mNewName);
+    formLayout->addWidget(mModeBox);
 
-    mModeBox->addItem("Site (chr,pos)");
-    mModeBox->addItem("Variant (chr,pos, ref, alt)");
+    QHBoxLayout * hLayout = new QHBoxLayout;
+    hLayout->addWidget(mBoxA);
+    hLayout->addWidget(mOperator);
+    hLayout->addWidget(mBoxB);
+
+    formLayout->addLayout(hLayout);
 
     QVBoxLayout * mainLayout = new QVBoxLayout;
 
@@ -31,11 +40,13 @@ OperationSetDialog::OperationSetDialog(QWidget *parent)
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
 
+    load();
+
 }
 
 QString OperationSetDialog::expression() const
 {
-    return mExprEdit->toPlainText();
+    return mBoxA->currentText() + mOperator->currentData().toString() + mBoxB->currentText();
 }
 
 QString OperationSetDialog::tableName() const
@@ -52,6 +63,31 @@ cvar::SqliteManager::CompareMode OperationSetDialog::mode() const
         return cvar::SqliteManager::VariantMode;
 
     return cvar::SqliteManager::SiteMode;
+
+}
+
+void OperationSetDialog::load()
+{
+
+    mBoxA->clear();
+    mBoxB->clear();
+    mOperator->clear();
+
+    mModeBox->addItem("By Site chr,pos)", cvar::SqliteManager::SiteMode);
+    mModeBox->addItem("By variant (chr,pos, ref, alt)", cvar::SqliteManager::VariantMode);
+
+    mOperator->addItem(FIcon(0xf147), "Union", "+");
+    mOperator->addItem(FIcon(0xf149),"Intersect","&");
+    mOperator->addItem(FIcon(0xf148),"Subtract","-");
+
+
+    for (const QString& name : cutevariant->sqliteManager()->variantSelectionNames())
+    {
+        mBoxA->addItem(name);
+        mBoxB->addItem(name);
+    }
+
+
 
 }
 

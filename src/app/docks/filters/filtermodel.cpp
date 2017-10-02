@@ -8,6 +8,8 @@ FilterModel::FilterModel(QObject * parent)
 {
     appendRow(new LogicItem("AND"));
 
+    setColumnCount(1);
+
 
 }
 

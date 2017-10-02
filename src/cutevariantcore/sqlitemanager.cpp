@@ -178,6 +178,7 @@ QList<VariantSelection> SqliteManager::variantSelections() const
 QStringList SqliteManager::variantSelectionNames() const
 {
     QStringList out;
+    out += "variants";
     for (const VariantSelection& s : variantSelections())
         out.append(s.name());
     return out;
@@ -349,9 +350,13 @@ bool SqliteManager::variantsTo(const VariantQuery &query, const QString &tablena
 {
     Q_UNUSED(description)
     VariantQuery q = query;
+    qDebug()<<"QUERY "<<q.table()<<" "<<q.rawTable();
     q.setLimit(0);
     q.setGroupBy({});
     q.setColumns({"*"});
+    qDebug()<<"QUERY "<<q.table()<<" "<<q.rawTable();
+
+    qDebug()<<Q_FUNC_INFO<<"CREATE VIEW";
 
     QSqlQuery viewQuery;
     viewQuery.exec(QString("DROP VIEW IF EXISTS %1").arg(tablename));
@@ -362,6 +367,9 @@ bool SqliteManager::variantsTo(const VariantQuery &query, const QString &tablena
         qDebug()<<viewQuery.lastError().text();
         return false;
     }
+
+    qDebug()<<viewQuery.lastQuery();
+    qDebug()<<viewQuery.lastError().text();
 
     return true;
 }
