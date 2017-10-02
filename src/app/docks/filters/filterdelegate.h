@@ -3,9 +3,7 @@
 #include <QStyledItemDelegate>
 #include <QComboBox>
 #include <QPainter>
-#include "filtermodel.h"
-
-
+#include "abstractfieldwidget.h"
 class FilterDelegate : public QStyledItemDelegate
 {
 public:

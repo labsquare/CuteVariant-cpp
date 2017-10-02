@@ -15,7 +15,7 @@ public:
     void load();
 
 Q_SIGNALS:
-    void filterItemCreated(FilterItem * item);
+    void filterItemCreated(ConditionItem * item);
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent * event);

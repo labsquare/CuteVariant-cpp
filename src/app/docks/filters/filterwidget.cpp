@@ -63,6 +63,11 @@ QVariant FilterWidget::value() const
     return QVariant();
 }
 //----------------------------------------------------------------------------
+void FilterWidget::setValue(const QVariant &value)
+{
+    mFieldWidget->setValue(value);
+}
+//----------------------------------------------------------------------------
 Operator::Type FilterWidget::currentOperator() const
 {
     return Operator::Type(mOperatorBox->currentData().toInt());
@@ -70,9 +75,15 @@ Operator::Type FilterWidget::currentOperator() const
 }
 //----------------------------------------------------------------------------
 
-FilterItem *FilterWidget::filterItem() const
+void FilterWidget::setCurrentOperator(Operator::Type type)
 {
-    FilterItem * item = new FilterItem(field(), currentOperator(), value());
+    mOperatorBox->setCurrentText(Operator::name(type));
+}
+//----------------------------------------------------------------------------
+
+ConditionItem *FilterWidget::createCondition() const
+{
+    ConditionItem * item = new ConditionItem(field(), currentOperator(), value());
     return item;
 
 }

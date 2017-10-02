@@ -14,7 +14,6 @@ HEADERS += \
     $$PWD/rangefieldwidget.h \
     $$PWD/logicitem.h \
     $$PWD/filterview.h \
-    $$PWD/filtermodel.h \
     $$PWD/filterdelegate.h \
     $$PWD/filterdockwidget.h \
     $$PWD/filteritem.h \
@@ -36,7 +35,6 @@ SOURCES += \
     $$PWD/rangefieldwidget.cpp \
     $$PWD/logicitem.cpp \
     $$PWD/filterview.cpp \
-    $$PWD/filtermodel.cpp \
     $$PWD/filterdelegate.cpp \
     $$PWD/filterdockwidget.cpp \
     $$PWD/filteritem.cpp \

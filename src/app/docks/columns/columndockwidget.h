@@ -14,7 +14,7 @@ public Q_SLOTS:
      void reset() override;
 
 Q_SIGNALS:
-     void filterItemCreated(FilterItem * item);
+     void filterItemCreated(ConditionItem * item);
 
 
 private:

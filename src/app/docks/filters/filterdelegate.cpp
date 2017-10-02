@@ -1,4 +1,5 @@
 #include "filterdelegate.h"
+#include "filterwidget.h"
 
 FilterDelegate::FilterDelegate(QObject *parent)
     :QStyledItemDelegate(parent)
@@ -10,16 +11,18 @@ FilterDelegate::FilterDelegate(QObject *parent)
 QWidget * FilterDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
 
-    const FilterModel * m = qobject_cast<const FilterModel*>(index.model());
 
-    if (m->itemFromIndex(index)->type() == FilterModel::LogicType)
-    {
-        QComboBox * box = new QComboBox(parent);
-        box->setFrame(false);
-        box->addItems({"AND","OR"});
-        return box;
 
-    }
+//    const FilterModel * m = qobject_cast<const FilterModel*>(index.model());
+
+//    if (m->itemFromIndex(index)->type() == FilterModel::LogicType)
+//    {
+//        QComboBox * box = new QComboBox(parent);
+//        box->setFrame(false);
+//        box->addItems({"AND","OR"});
+//        return box;
+
+//    }
 
 
 
@@ -28,7 +31,7 @@ QWidget * FilterDelegate::createEditor(QWidget *parent, const QStyleOptionViewIt
 
 void FilterDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    const FilterModel * m = qobject_cast<const FilterModel*>(index.model());
+    //const FilterModel * m = qobject_cast<const FilterModel*>(index.model());
 
 //    if (m->itemFromIndex(index)->type() == FilterModel::LogicType)
 //    {

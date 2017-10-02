@@ -23,7 +23,7 @@ void FilterModel::addLogic(LogicItem *item, QStandardItem *parent)
         parent->appendRow(item);
 }
 
-void FilterModel::addCondition(FilterItem *item, QStandardItem *parent)
+void FilterModel::addCondition(ConditionItem *item, QStandardItem *parent)
 {
     parent->appendRow(item);
 }
@@ -45,7 +45,7 @@ QString FilterModel::recursiveQuery(QStandardItem *item)
 {
 
     if (item->rowCount() == 0)
-        return "("+item->data(FilterItem::ConditionRole).toString()+")";
+        return "("+item->data(ConditionItem::ConditionRole).toString()+")";
 
     QStringList list;
     for (int i = 0; i< item->rowCount(); ++i)

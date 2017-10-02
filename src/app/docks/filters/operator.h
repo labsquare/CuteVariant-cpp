@@ -14,7 +14,12 @@ public:
         NotEqual,
         In,
         Between,
-        Like
+        Like,
+        And,
+        Or,
+        Union,
+        Intersect,
+        Except
     };
 
 

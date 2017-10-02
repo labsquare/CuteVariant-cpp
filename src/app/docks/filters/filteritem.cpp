@@ -1,65 +1,64 @@
 #include "filteritem.h"
+#include "filterview.h"
 
-FilterItem::FilterItem(const cvar::Field &field, Operator::Type op, const QVariant &value)
-    :QStandardItem(), mField(field)
+ConditionItem::ConditionItem(const cvar::Field &field, Operator::Type op, const QVariant &value)
+    :QTreeWidgetItem(FilterView::ConditionType), mField(field), mOperator(op), mValue(value)
 {
+    updateItem();
 
-    setData(field.expression(), FieldRole);
-    setData(op, OperatorRole);
-    setData(value, ValueRole);
-    updateText();
-    setEditable(false);
+
 }
 
-
-
-void FilterItem::setField(const cvar::Field &f)
+void ConditionItem::setField(const cvar::Field &f)
 {
-    setData(f.expression(),FieldRole);
     mField = f;
-    updateText();
+    updateItem();
 }
 
-void FilterItem::setOperator(Operator::Type op)
+void ConditionItem::setOperator(Operator::Type op)
 {
-    setData(op, OperatorRole);
-    updateText();
+    mOperator = op;
+    updateItem();
 }
 
-void FilterItem::setValue(const QVariant &value)
+void ConditionItem::setValue(const QVariant &value)
 {
-    setData(value, ValueRole);
-    updateText();
+    mValue = value;
+    updateItem();
 }
 
-int FilterItem::type() const
-{
-    return FilterModel::ConditionalType;
-}
-
-const cvar::Field& FilterItem::field() const
+const cvar::Field& ConditionItem::field() const
 {
     return mField;
 }
 
-QString FilterItem::operatorName() const
+QString ConditionItem::operatorName() const
 {
-    return Operator::symbol(Operator::Type(data(OperatorRole).toInt()));
+    return Operator::symbol(mOperator);
 }
 
-Operator::Type FilterItem::operatorType() const
+Operator::Type ConditionItem::currentOperator() const
 {
-    return Operator::Type(data(OperatorRole).toInt());
+    return mOperator;
 }
 
-QVariant FilterItem::value() const
+QVariant ConditionItem::value() const
 {
-    return data(ValueRole);
+    return mValue;
 }
 
-void FilterItem::updateText()
+QString ConditionItem::expression() const
 {
-    setText(QString("%1 %2 %3").arg(field().expression()).arg(operatorName()).arg(value().toString()));
-    setData(QString("%1 %2 %3").arg(field().expression()).arg(operatorName()).arg(value().toString()), ConditionRole);
+    return QString("%1 %2 %3").arg(mField.expression(), Operator::symbol(mOperator), mValue.toString());
+}
+
+void ConditionItem::updateItem()
+{
+    setText(0, field().name());
+    setText(1, operatorName());
+    setText(2, value().toString());
+
+    setToolTip(0, mField.description());
+
 
 }

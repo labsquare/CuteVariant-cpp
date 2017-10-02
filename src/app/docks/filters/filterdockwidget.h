@@ -14,14 +14,22 @@ public:
 
 
 public Q_SLOTS:
-    void addCondition(FilterItem * item);
+    void addCondition(ConditionItem * item);
     void addCondition();
     void addLogic();
     void remove();
 
+protected Q_SLOTS:
+    void updateActions();
+
 
 private:
     FilterView * mView;
+    QAction * mAddConditionAction;
+    QAction * mAddLogicAction;
+    QAction * mRemAction;
+
+
 };
 
 #endif // CONDITIONDOCKWIDGET_H

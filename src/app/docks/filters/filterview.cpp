@@ -1,14 +1,12 @@
 #include "filterview.h"
 
 FilterView::FilterView(QWidget * parent)
-    :QTreeView(parent)
+    :QTreeWidget(parent)
 {
-    mModel    = new FilterModel;
     mDelegate = new FilterDelegate;
 
-
     setItemDelegate(mDelegate);
-    setModel(mModel);
+
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropIndicatorShown(true);
@@ -16,89 +14,142 @@ FilterView::FilterView(QWidget * parent)
     setUniformRowHeights(true);
     setAlternatingRowColors(true);
     setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    //header()->hide();
-
-
-    //    viewport()->setAutoFillBackground( false );
-    //    setFrameShape(QFrame::NoFrame);
-    //setDragDropMode(QAbstractItemView::DragDrop);
+    //setAnimated(true);
 
     setWindowTitle("Filter");
+    header()->hide();
+    setColumnCount(3);
 
-    // select first tree item
-    // selectionModel()->select(mModel->index(0,0,QModelIndex()),QItemSelectionModel::Select);
+    header()->setSectionResizeMode(0,QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(1,QHeaderView::ResizeToContents);
 
-    selectionModel()->select(mModel->item(0)->index(),QItemSelectionModel::Select);
+
+
+
+    connect(this, &FilterView::doubleClicked, this, &FilterView::editCondition);
+    connect(this,SIGNAL(itemChanged(QTreeWidgetItem*,int)),this, SIGNAL(changed()));
+
+    // add and top level item
+    addTopLevelItem(new LogicItem());
+
+}
+
+
+//----------------------------------------------------------------
+void FilterView::addLogic(LogicItem *item)
+{
+    QTreeWidgetItem * parent = currentItem();
+
+    if (!parent)
+        parent = topLevelItem(0);
+
+    if (parent->type() == FilterView::ConditionType)
+    {
+        qDebug()<<Q_FUNC_INFO<<"cannot append logic to condition";
+        return;
+    }
+
+    if (!parent)
+        parent = topLevelItem(0);
+
+    parent->addChild(item);
+
+    emit changed();
+}
+//----------------------------------------------------------------
+void FilterView::addCondition(ConditionItem *item)
+{
+    QTreeWidgetItem * parent = currentItem();
+
+    if (!parent)
+        parent = topLevelItem(0);
+
+    parent->addChild(item);
+
+    emit changed();
+}
+//----------------------------------------------------------------
+void FilterView::editCondition(const QModelIndex &index)
+{
+
+    if (itemFromIndex(index)->type() == FilterView::ConditionType)
+    {
+        ConditionItem * item = dynamic_cast<ConditionItem*>(itemFromIndex(index));
+        FilterDialog dialog(this);
+        dialog.setField(item->field());
+        dialog.setCurrentOperator(item->currentOperator());
+        dialog.setValue(item->value());
+        if (dialog.exec()){
+            ConditionItem * newItem = dialog.createCondition();
+            *item = *newItem;
+            delete newItem;
+            emit changed();
+        }
+    }
+}
+//----------------------------------------------------------------
+void FilterView::removeSelections()
+{
+    QList<QTreeWidgetItem*> toRemove;
+    for (QTreeWidgetItem * item : selectedItems()){
+        // do not remove first node
+        if (item != topLevelItem(0))
+            toRemove.append(item);
+    }
+
+    qDeleteAll(toRemove);
+
+    emit changed();
 
 }
 
 //----------------------------------------------------------------
 QString FilterView::query()
 {
-    return mModel->makeQuery();
-}
-
-void FilterView::addLogic()
-{
-    QStandardItem * parent = mModel->itemFromIndex(currentIndex());
-    mModel->addLogic(new LogicItem("AND"), parent);
-
-}
-
-void FilterView::addCondition(FilterItem *item)
-{
-
-    QStandardItem * parent = mModel->itemFromIndex(currentIndex());
-    if (parent)
-        mModel->addCondition(item, parent);
-
-}
-
-//----------------------------------------------------------------
-void FilterView::editCondition(const QModelIndex &index)
-{
-
-    //    if (mModel->itemFromIndex(index)->type() == FilterModel::ConditionalType)
-    //    {
-    //        FilterItem * item = dynamic_cast<FilterItem*>(mModel->itemFromIndex(index));
-    //        FilterDialog dialog(this);
-    //        dialog.fromItem(item);
-    //        if (dialog.exec()){
-
-    //            *item = *dialog.toItem();
-    //        }
-    //    }
+    QString q = recursiveQuery(topLevelItem(0));
+    return q;
 }
 //----------------------------------------------------------------
-void FilterView::removeSelections()
+QString FilterView::recursiveQuery(QTreeWidgetItem *item)
 {
 
-    for (QModelIndex index : selectionModel()->selectedIndexes())
+    if (item->type() == FilterView::ConditionType)
+        return dynamic_cast<ConditionItem*>(item)->expression();
+
+    QStringList list;
+
+    if (item->type() == FilterView::LogicType)
     {
-        if (index.parent() != QModelIndex())
-            mModel->removeRow(index.row(), index.parent());
+        for (int i=0; i< item->childCount(); ++i)
+        {
+            QString rec = recursiveQuery(item->child(i));
+            if (!rec.isEmpty())
+                list.append("("+rec+")");
+        }
+
+        return list.join(" "+item->text(0)+" ");
     }
+
 
 }
 //----------------------------------------------------------------
 void FilterView::updateActionAvaible()
 {
-    QStandardItem * parent = mModel->itemFromIndex(currentIndex());
+    //    QStandardItem * parent = mModel->itemFromIndex(currentIndex());
 
-    qDebug()<<parent->type();
+    //    qDebug()<<parent->type();
 
-    if (parent->type() == FilterModel::LogicType)
-    {
-        //        mAddCondAction->setEnabled(true);
-        //        mAddLogicAction->setEnabled(true);
-    }
+    //    if (parent->type() == FilterModel::LogicType)
+    //    {
+    //        //        mAddCondAction->setEnabled(true);
+    //        //        mAddLogicAction->setEnabled(true);
+    //    }
 
-    if (parent->type() == FilterModel::ConditionalType)
-    {
-        //        mAddCondAction->setEnabled(false);
-        //        mAddLogicAction->setEnabled(false);
-    }
+    //    if (parent->type() == FilterModel::ConditionalType)
+    //    {
+    //        //        mAddCondAction->setEnabled(false);
+    //        //        mAddLogicAction->setEnabled(false);
+    //    }
 }
 
 

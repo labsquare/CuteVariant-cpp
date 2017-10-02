@@ -56,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(mEditor,&VqlEditor::returnPressed, this, &MainWindow::execute);
 
     // columns create filter => to filter
-    connect(mColumnDock,SIGNAL(filterItemCreated(FilterItem*)),mFilterDock, SLOT(addCondition(FilterItem*)));
+    connect(mColumnDock,SIGNAL(filterItemCreated(ConditionItem*)),mFilterDock, SLOT(addCondition(ConditionItem*)));
     connect(mResultTab, &QTabWidget::tabCloseRequested, [this](int index){  mResultTab->removeTab(index); });
     connect(mSelectionDock,SIGNAL(selectionDoubleClicked(QString)), this,SLOT(executeSelection(QString)));
 

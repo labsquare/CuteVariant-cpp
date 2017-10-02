@@ -20,7 +20,7 @@ ColumnDockWidget::ColumnDockWidget(QWidget * parent):
     // emit changed signal when model changed
      connect(qobject_cast<ColumnModel*>(mView->model()), &ColumnModel::itemChanged,[this](){emit changed();});
 
-     connect(mView,SIGNAL(filterItemCreated(FilterItem*)),this,SIGNAL(filterItemCreated(FilterItem*)));
+     connect(mView,SIGNAL(filterItemCreated(ConditionItem*)),this,SIGNAL(filterItemCreated(ConditionItem*)));
 
 }
  QStringList ColumnDockWidget::selectedColumns() const

@@ -10,8 +10,16 @@ class FilterDialog : public QDialog
 public:
     FilterDialog(QWidget * parent = nullptr);
     void setField(const cvar::Field& field);
+    const cvar::Field& field() const;
 
-    FilterItem * createFilter() const;
+    void setValue(const QVariant& value);
+    QVariant value() const;
+
+    void setCurrentOperator(Operator::Type type);
+    Operator::Type currentOperator();
+
+    ConditionItem * createCondition() const;
+
 
 
 private:

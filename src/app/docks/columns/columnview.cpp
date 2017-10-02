@@ -55,7 +55,7 @@ void ColumnView::contextMenuEvent(QContextMenuEvent *event)
               dialog.setField(field);
               if (dialog.exec())
               {
-                  emit filterItemCreated(dialog.createFilter());
+                  emit filterItemCreated(dialog.createCondition());
               }
 
 

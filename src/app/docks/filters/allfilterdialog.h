@@ -11,7 +11,7 @@ Q_OBJECT
 public:
     AllFilterDIalog(QWidget * parent = nullptr);
 
-    FilterItem * filterItem() const;
+    ConditionItem * filterItem() const;
 
 
 protected Q_SLOTS:

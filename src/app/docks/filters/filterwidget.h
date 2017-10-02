@@ -17,10 +17,13 @@ public:
     void setField(const cvar::Field& field);
     const cvar::Field& field() const;
     QVariant value() const;
+    void setValue(const QVariant& value);
 
     Operator::Type currentOperator() const;
 
-    FilterItem * filterItem() const;
+    void setCurrentOperator(Operator::Type type);
+
+    ConditionItem * createCondition() const;
 
 protected Q_SLOTS:
     void operatorChanged();

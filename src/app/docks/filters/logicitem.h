@@ -1,15 +1,27 @@
 #ifndef LOGICITEM_H
 #define LOGICITEM_H
-#include <QStandardItem>
-#include "filtermodel.h"
-class FilterModel;
-class LogicItem : public QStandardItem
+#include <QTreeWidgetItem>
+
+class LogicItem : public QTreeWidgetItem
 {
 public:
-    LogicItem(const QString& op);
-    int type() const override;
+    enum LogicOperator {
+      And,
+      Or
+    };
+
+    LogicItem(LogicItem::LogicOperator op = LogicOperator::And);
+
+    QString name() const;
+    LogicOperator logic() const;
+    void setLogic(LogicOperator op);
+
+protected:
+    void updateItem();
 
 
+private:
+    LogicItem::LogicOperator mOperator; // only "and" and "or"
 
 
 

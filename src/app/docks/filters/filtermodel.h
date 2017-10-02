@@ -5,7 +5,7 @@
 #include "filteritem.h"
 #include "logicitem.h"
 
-class FilterItem;
+class ConditionItem;
 class LogicItem;
 class FilterModel : public QStandardItemModel
 {
@@ -19,7 +19,7 @@ public:
     FilterModel(QObject * parent = Q_NULLPTR);
 
     void addLogic(LogicItem * item , QStandardItem * parent = nullptr);
-    void addCondition(FilterItem * item , QStandardItem * parent);
+    void addCondition(ConditionItem * item , QStandardItem * parent);
 
 //    static  QList<OperatorToRemove> conditionOperators() ;
 //    static  QList<OperatorToRemove> logicOperators();

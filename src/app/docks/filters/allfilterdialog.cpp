@@ -34,9 +34,9 @@ AllFilterDIalog::AllFilterDIalog(QWidget *parent)
 
 }
 
-FilterItem *AllFilterDIalog::filterItem() const
+ConditionItem *AllFilterDIalog::filterItem() const
 {
-    return mWidget->filterItem();
+    return mWidget->createCondition();
 }
 
 void AllFilterDIalog::fieldSelected()

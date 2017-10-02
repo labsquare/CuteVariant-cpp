@@ -1,12 +1,11 @@
 #ifndef CONDITIONALITEM_H
 #define CONDITIONALITEM_H
-#include <QStandardItem>
+#include <QTreeWidgetItem>
 #include "operator.h"
 #include "filtermodel.h"
 #include "field.h"
 
-class FilterModel;
-class FilterItem : public QStandardItem
+class ConditionItem : public QTreeWidgetItem
 {
 public:
     enum CustomRole{
@@ -16,25 +15,27 @@ public:
         ConditionRole
     };
 
-    FilterItem(const cvar::Field& field, Operator::Type op, const QVariant& value);
+    ConditionItem(const cvar::Field& field, Operator::Type op, const QVariant& value);
 
     void setField(const cvar::Field& f);
     void setOperator(Operator::Type op);
     void setValue(const QVariant& value);
 
-    int type() const override;
 
     const cvar::Field& field() const;
     QString operatorName() const;
-    Operator::Type operatorType() const;
+    Operator::Type currentOperator() const;
     QVariant value() const;
+    QString expression() const;
 
 
 protected:
-    void updateText();
+    void updateItem();
 
 private:
     cvar::Field mField;
+    Operator::Type mOperator;
+    QVariant mValue;
 
 
 };

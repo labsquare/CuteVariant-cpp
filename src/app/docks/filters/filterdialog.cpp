@@ -18,8 +18,6 @@ FilterDialog::FilterDialog(QWidget * parent)
 
     connect(buttons,SIGNAL(accepted()),this,SLOT(accept()));
     connect(buttons,SIGNAL(rejected()),this,SLOT(reject()));
-
-
 }
 
 void FilterDialog::setField(const cvar::Field &field)
@@ -29,7 +27,32 @@ void FilterDialog::setField(const cvar::Field &field)
 
 }
 
-FilterItem *FilterDialog::createFilter() const
+const cvar::Field &FilterDialog::field() const
 {
-    return mWidget->filterItem();
+    return mWidget->field();
+}
+
+void FilterDialog::setValue(const QVariant &value)
+{
+    mWidget->setValue(value);
+}
+
+QVariant FilterDialog::value() const
+{
+    return mWidget->value();
+}
+
+void FilterDialog::setCurrentOperator(Operator::Type type)
+{
+    mWidget->setCurrentOperator(type);
+}
+
+Operator::Type FilterDialog::currentOperator()
+{
+    return mWidget->currentOperator();
+}
+
+ConditionItem *FilterDialog::createCondition() const
+{
+    return mWidget->createCondition();
 }
