@@ -58,6 +58,7 @@ bool SqliteManager::importFile(const QString &filename)
     timer.start();
 
     createProject(info.baseName());
+    createBed();
     createFile(filename);
     createMetadatas(reader.data());
     createSample(reader.data());
@@ -164,14 +165,14 @@ QStringList SqliteManager::variantSetNames() const
 bool SqliteManager::removeVariantSet(const QString &setName)
 {
     QSqlQuery query;
-        if (!query.exec(QString("DROP VIEW IF EXISTS %1").arg(setName)))
-        {
-            qDebug()<<query.lastQuery();
-            qDebug()<<query.lastError().text();
-            return false;
-        }
+    if (!query.exec(QString("DROP VIEW IF EXISTS %1").arg(setName)))
+    {
+        qDebug()<<query.lastQuery();
+        qDebug()<<query.lastError().text();
+        return false;
+    }
 
-        return true;
+    return true;
 }
 //-------------------------------------------------------------------------------
 QHash<QString, QVariant> SqliteManager::metadatas() const
@@ -340,6 +341,20 @@ QFuture<bool> SqliteManager::asyncImportFile(const QString &filename)
 
 }
 //-------------------------------------------------------------------------------
+bool SqliteManager::importBedfile(const QString &filename)
+{
+    QFile file(filename);
+
+    if ( file.open(QIODevice::ReadOnly))
+    {
+
+    }
+
+
+
+
+}
+//-------------------------------------------------------------------------------
 void SqliteManager::createProject(const QString &name)
 {
     QSqlQuery query;
@@ -397,6 +412,28 @@ void SqliteManager::createFile(const QString &filename)
         qWarning()<<Q_FUNC_INFO<<query.lastQuery();
         qWarning()<<Q_FUNC_INFO<<query.lastError().text();
     }
+}
+//-------------------------------------------------------------------------------
+void SqliteManager::createBed()
+{
+    QSqlQuery query;
+    query.exec(QStringLiteral("DROP TABLE IF EXISTS `regions`"));
+    query.exec(QStringLiteral("DROP TABLE IF EXISTS `bedfiles`"));
+
+    query.exec(QStringLiteral("CREATE TABLE `bedfiles` ("
+                              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                              "filename TEXT NOT NULL,"
+                              "md5 TEXT NOT NULL"
+                              ")"));
+
+    query.exec(QStringLiteral("CREATE TABLE `regions` ("
+                              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                              "bedfile_id INTEGER NOT NULL"
+                              "bin INTEGER,"
+                              "chr TEXT,"
+                              "start INTEGER,"
+                              "end INTEGER"
+                              ")"));
 }
 //-------------------------------------------------------------------------------
 void SqliteManager::createMetadatas(AbstractVariantReader *reader)

@@ -1,0 +1,14 @@
+##fileformat=VCFv4.1
+##INFO=<ID=EMPTY_1,Number=1,Type=Float,Description="A floating point value">
+##INFO=<ID=EMPTY_3,Number=3,Type=Float,Description="Floating point values">
+##INFO=<ID=EMPTY_N,Number=.,Type=Float,Description="Floating point values">
+##INFO=<ID=DOT_1,Number=1,Type=Character,Description="A character value">
+##INFO=<ID=DOT_3,Number=3,Type=Character,Description="Character values">
+##INFO=<ID=DOT_N,Number=.,Type=Character,Description="Character values">
+##INFO=<ID=NOTEMPTY_1,Number=1,Type=Float,Description="A floating point value">
+##INFO=<ID=NOTEMPTY_3,Number=3,Type=Float,Description="Floating point values">
+##INFO=<ID=NOTEMPTY_N,Number=.,Type=Float,Description="Floating point values">
+##INFO=<ID=FLAG,Number=0,Type=Flag,Description="HapMap2 membership">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	Sample
+chr1	100	id1	G	A	.	.	FLAG;EMPTY_1=;EMPTY_3=;EMPTY_N=;DOT_1=.;DOT_3=.,.,.;DOT_N=.;NOTEMPTY_1=1;NOTEMPTY_3=1,2,3;NOTEMPTY_N=1	GT	0/1

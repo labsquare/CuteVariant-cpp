@@ -1,0 +1,9 @@
+##fileformat=VCFv4.1
+##fileDate=20090805
+##source=myImputationProgramV3.1
+##reference=1000GenomesPilot-NCBI36
+##phasing=partial
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=AO,Number=A,Type=Integer,Description="Alternate allele observation count">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	NA00001	NA00002	NA00003
+21	4242421	.	T	A	30	.	.	GT:AO	0|0:0.1	0|1:0.2	0/0:0.3

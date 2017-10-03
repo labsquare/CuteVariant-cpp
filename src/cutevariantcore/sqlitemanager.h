@@ -96,7 +96,6 @@ public:
      */
     bool createVariantSet(const VariantQuery& query, const QString& setName, const QString& description = QString());
 
-
     /*!
      * \brief variants
      * \param query
@@ -143,8 +142,13 @@ public:
     QFuture<bool> asyncImportFile(const QString& filename);
 
 
+    bool importBedfile(const QString& filename);
+
+
+
 protected:
     void createFile(const QString& filename);
+    void createBed();
     void createMetadatas(AbstractVariantReader * reader);
     void createSample(AbstractVariantReader * reader);
     void createFields(AbstractVariantReader * reader);
