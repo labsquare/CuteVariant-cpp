@@ -2,6 +2,7 @@
 #define VARIANTQUERY_H
 #include <QtCore>
 #include "project.h"
+#include "region.h"
 
 namespace cvar {
 
@@ -55,6 +56,9 @@ public:
 
     void setNoLimit();
 
+    const QString &region() const;
+    void setRegion(const QString& region);
+
 protected:
     QStringList detectSamplesFields() const;
     void replaceSampleFields(QString& text, bool setAS = false) const;
@@ -68,6 +72,7 @@ private:
     int mOffset = 0;
     int mLimit  = 100;
     Qt::SortOrder mSortOder = Qt::AscendingOrder;
+    QString mRegion;
 
 
 };

@@ -39,7 +39,7 @@ void BedDockWidget::addBedFile()
 
     qDebug()<<cutevariant->sqliteManager()->importBedfile(filename);
 
-
+    reset();
 
 
 }

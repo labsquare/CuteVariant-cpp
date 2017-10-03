@@ -186,7 +186,11 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
 
 
     // SELECT columns FROM table
-    query = QString("SELECT %1 FROM %2").arg(select).arg(tableName);
+    if (region().isEmpty())
+        query = QString("SELECT %1 FROM %2").arg(select).arg(tableName);
+    else
+        query = QString("SELECT %1 FROM %2, regions").arg(select).arg(tableName);
+
 
     // SELECT columns FROM table LEFT JOIN ON ..
     if (!joinSamples.isEmpty())
@@ -196,9 +200,27 @@ QString VariantQuery::toSql(const SqliteManager *sql) const
     if (!where.isEmpty())
         query.append(QString(" WHERE %1 ").arg(where));
 
+
+    // check region
+    // TODO check if region exists
+    if (!mRegion.isEmpty())
+    {
+        if (where.isEmpty())
+            query.append(QString(" WHERE %1.pos BETWEEN regions.start AND regions.end AND %1.chr = regions.chr").arg(tableName));
+        else
+            query.append(QString(" AND %1.pos BETWEEN regions.start AND regions.end AND %1.chr = regions.chr").arg(tableName));
+    }
+
+
+
     // SELECT columns FROM table WHERE condition GROUP BY
+    // TODO ugly
+    QStringList gp = groupBy();
+    for (QString& i : gp )
+        i.prepend(tableName+".");
+
     if (!groupBy().isEmpty())
-        query.append(QString(" GROUP BY %1 ").arg(groupBy().join(",")));
+        query.append(QString(" GROUP BY %1 ").arg(gp.join(",")));
 
     if (!orderBy().isEmpty())
         query.append(QString( " ORDER BY %1 %2 ").arg(orderBy().join(",")).arg(mSortOder==Qt::AscendingOrder ? "ASC" : "DESC"));
@@ -243,6 +265,8 @@ void VariantQuery::replaceSampleFields(QString &text, bool setAS) const
 
 }
 
+
+
 Qt::SortOrder VariantQuery::sortOder() const
 {
     return mSortOder;
@@ -259,7 +283,15 @@ void VariantQuery::setNoLimit()
     setOffset(0);
 }
 
+const QString &VariantQuery::region() const
+{
+    return mRegion;
+}
 
+void VariantQuery::setRegion(const QString &region)
+{
+    mRegion = region;
+}
 
 QStringList VariantQuery::orderBy() const
 {
@@ -279,8 +311,21 @@ VariantQuery VariantQuery::fromVql(const QString &text)
     QRegularExpression exp1("SELECT (?<columns>.+)");
     QRegularExpression exp2("SELECT (?<columns>.+) FROM (?<table>.+)");
     QRegularExpression exp3("SELECT (?<columns>.+) FROM (?<table>.+) WHERE (?<condition>.+)");
+    QRegularExpression exp4("SELECT (?<columns>.+) FROM (?<table>.+) REGION (?<region>.+)");
 
     QRegularExpressionMatch match;
+
+    match = exp4.match(vql);
+    if (match.hasMatch())
+    {
+
+        query.setColumns(match.captured("columns").simplified().split(","));
+        query.setTable(match.captured("table"));
+        //        query.setCondition(match.captured("condition"));
+        query.setRegion(match.captured("region"));
+        return query;
+    }
+
 
     match = exp3.match(vql);
     if (match.hasMatch())
