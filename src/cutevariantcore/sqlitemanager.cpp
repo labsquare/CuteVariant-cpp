@@ -347,6 +347,19 @@ bool SqliteManager::importBedfile(const QString &filename)
 
     if ( file.open(QIODevice::ReadOnly))
     {
+        QTextStream stream(&file);
+        QString line;
+        while (stream.readLineInto(&line))
+        {
+            if (line.startsWith("#") || line.startsWith("track"))
+                continue;
+
+            QStringList row = line.split(QChar::Tabulation);
+
+
+        }
+
+
 
     }
 
@@ -428,7 +441,7 @@ void SqliteManager::createBed()
 
     query.exec(QStringLiteral("CREATE TABLE `regions` ("
                               "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                              "bedfile_id INTEGER NOT NULL"
+                              "bedfile_id INTEGER NOT NULL,"
                               "bin INTEGER,"
                               "chr TEXT,"
                               "start INTEGER,"
