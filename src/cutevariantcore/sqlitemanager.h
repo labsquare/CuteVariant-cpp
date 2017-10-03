@@ -10,6 +10,8 @@
 #include "variantquery.h"
 #include "selection.h"
 #include "variantlink.h"
+#include "region.h"
+#include "bedfile.h"
 
 namespace cvar {
 
@@ -42,6 +44,15 @@ public:
      * \return samples list from sqlite
      */
     QList<Sample> samples() const;
+
+    /*!
+     * \brief regions
+     * \param bedId
+     * \return regions from a specific bed file id
+     */
+    QList<Region> regions(int bedId) const;
+
+    QList<BedFile> bedFiles() const;
 
     /*!
      * \brief fields

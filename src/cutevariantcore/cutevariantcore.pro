@@ -28,7 +28,8 @@ SOURCES += \
     samplemodel.cpp \
     variantquery.cpp \
     selection.cpp \
-    variantlink.cpp
+    variantlink.cpp \
+    bedfile.cpp
 
 HEADERS += \
     field.h \
@@ -45,6 +46,7 @@ HEADERS += \
     samplemodel.h \
     variantquery.h \
     selection.h \
-    variantlink.h
+    variantlink.h \
+    bedfile.h
 
 TARGET = cutevariantcore

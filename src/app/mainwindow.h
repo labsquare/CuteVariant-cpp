@@ -13,6 +13,7 @@
 #include "selectiondockwidget.h"
 #include "filterdockwidget.h"
 #include "metadatadockwidget.h"
+#include "beddockwidget.h"
 
 #include "qfonticon.h"
 
@@ -88,6 +89,7 @@ private:
     SelectionDockWidget * mSelectionDock;
     ColumnDockWidget * mColumnDock;
     FilterDockWidget * mFilterDock;
+    BedDockWidget * mBedDock;
     QList<BaseDockWidget*> mBaseDocks;
     QToolBar * mToolBar;
     QLineEdit * mLocationSearchEdit;

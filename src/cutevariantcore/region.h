@@ -1,7 +1,7 @@
 #ifndef REGION_H
 #define REGION_H
 #include <QtCore>
-
+#include "resource.h"
 namespace cvar {
 /*!
  * \brief The Region class
@@ -9,7 +9,7 @@ namespace cvar {
  * start = zero based starting position
  * end   = one based ending position
  */
-class Region
+class Region : public Resource
 {
 public:
     Region();

@@ -24,7 +24,7 @@ BaseDockWidget::BaseDockWidget(QWidget *parent)
     layout()->setContentsMargins(0,0,0,0);
     //setTitleBarWidget(mToolBar);
 
-    setFeatures(QDockWidget::DockWidgetMovable);
+    setFeatures(QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable);
 
 
 }

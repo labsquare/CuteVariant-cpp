@@ -91,6 +91,40 @@ QList<Sample> SqliteManager::samples() const
     return samples;
 }
 //-------------------------------------------------------------------------------
+QList<Region> SqliteManager::regions(int bedId) const
+{
+
+    QList<Region> regions;
+    QSqlQuery query(QStringLiteral("SELECT * FROM `regions` WHERE bedfile_id = %1").arg(bedId));
+    while(query.next())
+    {
+        Region region;
+        region.setId(query.value("id").toInt());
+        region.setChromosom(query.value("chr").toString());
+        region.setStart(query.value("start").toInt());
+        region.setEnd(query.value("end").toInt());
+        regions.append(region);
+    }
+    return regions;
+
+
+}
+//-------------------------------------------------------------------------------
+QList<BedFile> SqliteManager::bedFiles() const
+{
+    QList<BedFile> files;
+    QSqlQuery query(QStringLiteral("SELECT * FROM `bedfiles`"));
+    while(query.next())
+    {
+        BedFile file;
+        file.setId(query.value("id").toInt());
+        file.setFilename(query.value("filename").toString());
+        file.setCount(query.value("count").toInt());
+        files.append(file);
+    }
+    return files;
+}
+//-------------------------------------------------------------------------------
 QList<Field> SqliteManager::fields() const
 {
     QList<Field> fields;
@@ -344,28 +378,75 @@ QFuture<bool> SqliteManager::asyncImportFile(const QString &filename)
 bool SqliteManager::importBedfile(const QString &filename)
 {
     QFile file(filename);
+    QFileInfo fileInfo(filename);
+    qDebug()<<Q_FUNC_INFO<<" import bed file ";
 
-    if ( file.open(QIODevice::ReadOnly))
+    if (file.open(QIODevice::ReadOnly))
     {
         QTextStream stream(&file);
         QString line;
+        QSqlDatabase::database().transaction();
+        QSqlQuery bedQuery;
+        QSqlQuery regionQuery;
+
+        // count how many lines
+        int count = 0;
+        while (!stream.atEnd()){stream.readLine();++count;}
+
+        // Create bed file record
+        bedQuery.prepare(QStringLiteral("INSERT INTO bedfiles (filename,md5, count) VALUES (:name, :md5, :count)"));
+
+        bedQuery.bindValue(0, fileInfo.baseName());
+        bedQuery.bindValue(1, md5sum(filename));
+        bedQuery.bindValue(2, count);
+
+        if (!bedQuery.exec())
+        {
+            qWarning()<<Q_FUNC_INFO<<bedQuery.lastQuery();
+            qWarning()<<Q_FUNC_INFO<<bedQuery.lastError().text();
+            return false;
+        }
+
+        int bedFileId = bedQuery.lastInsertId().toInt();
+        // Create all region record from bed file
+        stream.reset();
+        stream.seek(0);
+
         while (stream.readLineInto(&line))
         {
+
+            qDebug()<<line;
+
             if (line.startsWith("#") || line.startsWith("track"))
                 continue;
 
-            QStringList row = line.split(QChar::Tabulation);
+            QStringList row = line.split('\t');
+            if (row.size() < 3)
+            {
+                qCritical()<<Q_FUNC_INFO<<"not enough columns in bed file";
+                //QSqlQuery::exec(QString("DELETE FROM bedfiles WHERE md5 = `%1`").arg(QString(md5sum(filename))));
+                return false;
+            }
 
+            regionQuery.prepare(QStringLiteral("INSERT INTO regions (bedfile_id,bin,chr,start,end) VALUES (:bedfile_id, :bin, :chr, :start, :end)"));
 
+            regionQuery.bindValue(0, bedFileId);
+            regionQuery.bindValue(1, 333);
+            regionQuery.bindValue(2, row[0]);
+            regionQuery.bindValue(3, row[1].toInt());
+            regionQuery.bindValue(4, row[2].toInt());
+
+            if (!regionQuery.exec())
+            {
+                qWarning()<<Q_FUNC_INFO<<regionQuery.lastQuery();
+                qWarning()<<Q_FUNC_INFO<<regionQuery.lastError().text();
+                return false;
+            }
         }
-
-
-
+        return QSqlDatabase::database().commit();
     }
 
-
-
-
+    return false;
 }
 //-------------------------------------------------------------------------------
 void SqliteManager::createProject(const QString &name)
@@ -436,7 +517,8 @@ void SqliteManager::createBed()
     query.exec(QStringLiteral("CREATE TABLE `bedfiles` ("
                               "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                               "filename TEXT NOT NULL,"
-                              "md5 TEXT NOT NULL"
+                              "md5 TEXT NOT NULL,"
+                              "count INTEGER DEFAULT 0"
                               ")"));
 
     query.exec(QStringLiteral("CREATE TABLE `regions` ("

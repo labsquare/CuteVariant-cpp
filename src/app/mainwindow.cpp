@@ -19,12 +19,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mColumnDock       = new ColumnDockWidget();
     mSelectionDock    = new SelectionDockWidget();
     mFilterDock       = new FilterDockWidget();
+    mBedDock          = new BedDockWidget();
 
     mLocationSearchEdit = new QLineEdit;
 
     addBaseDock(mColumnDock);
     addBaseDock(mSelectionDock);
     addBaseDock(mFilterDock);
+    addBaseDock(mBedDock);
     //addBaseDock(new MetadataDockWidget);
 
 

@@ -1,12 +1,13 @@
 #include "region.h"
 namespace cvar {
 Region::Region()
+    :Resource()
 {
 
 }
 
 Region::Region(const QString &chromosom, quint64 start, quint64 end)
-    : mChromosom(chromosom), mStart(start), mEnd(end)
+    :Resource(),mChromosom(chromosom), mStart(start), mEnd(end)
 {
 
 }
