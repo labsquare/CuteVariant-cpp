@@ -203,6 +203,8 @@ void MainWindow::updateEditor()
                 mFilterDock->condition()
                 );
 
+    execute();
+
 }
 //-------------------------------------------------------------------------
 void MainWindow::reset()

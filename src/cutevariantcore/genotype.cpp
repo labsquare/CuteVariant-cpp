@@ -61,13 +61,13 @@ Genotype::Type Genotype::type() const
         int b = match.captured(3).toInt();
 
         if ( a+b == 0)
-            return Type::Homozygous_ref;
+            return Genotype::Type::Homozygous_ref;
 
         if (a+b == 1)
-            return Type::Heterozygous;
+            return Genotype::Type::Heterozygous;
 
         if (a == b )
-            return Type::Homozygous_alt;
+            return Genotype::Type::Homozygous_alt;
 
         if ( a != b && (a == 0 || b ==0))
             return Type::Heterozygous;
