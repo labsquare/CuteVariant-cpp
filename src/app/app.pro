@@ -1,6 +1,8 @@
 QT += core widgets sql
 QT += concurrent
 CONFIG -= debug_and_release
+CONFIG += c++14
+QMAKE_CXXFLAGS += -std=c++14
 
 
 
@@ -33,6 +35,7 @@ SOURCES += \
     linklistdialog.cpp \
     operationsetdialog.cpp \
     searchitemview.cpp
+
 
 INCLUDEPATH += $$PWD/../cutevariantcore
 DEPENDPATH += $$PWD/../cutevariantcore

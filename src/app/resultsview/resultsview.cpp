@@ -182,7 +182,7 @@ void ResultsView::showVql()
     QPlainTextEdit * edit = new QPlainTextEdit(&infoBox);
     QVBoxLayout * infoLayout = new QVBoxLayout;
     infoLayout->addWidget(edit);
-    edit->setPlainText(mQuery.toSql(cutevariant->sqliteManager()));
+    edit->setPlainText(mQuery.toSql());
     infoBox.setLayout(infoLayout);
     infoBox.setWindowTitle("raw sql");
     infoBox.exec();

@@ -277,7 +277,7 @@ bool SqliteManager::createVariantSetFromExpression(const QString &newSetName, co
 QSqlQuery SqliteManager::variants(const VariantQuery &query) const
 {
 
-    return QSqlQuery(query.toSql(this));
+    return QSqlQuery(query.toSql());
 }
 //-------------------------------------------------------------------------------
 int SqliteManager::variantsCount(const VariantQuery &query) const
@@ -287,7 +287,7 @@ int SqliteManager::variantsCount(const VariantQuery &query) const
     q.setLimit(0);
     q.setColumns({"id"});
 
-    QString sql = QString("SELECT COUNT(*) as 'count' FROM (%1)").arg(q.toSql(this));
+    QString sql = QString("SELECT COUNT(*) as 'count' FROM (%1)").arg(q.toSql());
     qDebug()<<sql;
 
     QSqlQuery countQuery;
@@ -315,18 +315,18 @@ bool SqliteManager::createVariantSet(const VariantQuery &query, const QString &s
 {
     Q_UNUSED(description)
     VariantQuery q = query;
-    qDebug()<<"QUERY "<<q.table()<<" "<<q.rawTable();
+    //qDebug()<<"QUERY "<<q.tableName()<<" "<<q.rawTable();
     q.setLimit(0);
     q.setGroupBy({});
     q.setColumns({"*"});
-    qDebug()<<"QUERY "<<q.table()<<" "<<q.rawTable();
+    //qDebug()<<"QUERY "<<q.tableName()<<" "<<q.rawTable();
 
-    qDebug()<<Q_FUNC_INFO<<"CREATE VIEW";
+    //qDebug()<<Q_FUNC_INFO<<"CREATE VIEW";
 
     QSqlQuery viewQuery;
     viewQuery.exec(QString("DROP VIEW IF EXISTS %1").arg(setName));
 
-    if (!viewQuery.exec(QString("CREATE VIEW %1 AS %2").arg(setName).arg(q.toSql(this))))
+    if (!viewQuery.exec(QString("CREATE VIEW %1 AS %2").arg(setName).arg(q.toSql())))
     {
         qDebug()<<viewQuery.lastQuery();
         qDebug()<<viewQuery.lastError().text();

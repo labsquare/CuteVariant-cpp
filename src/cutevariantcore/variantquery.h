@@ -4,6 +4,9 @@
 #include "project.h"
 #include "region.h"
 
+#include "vqlparser.h"
+
+
 namespace cvar {
 
 class SqliteManager;
@@ -12,26 +15,65 @@ class VariantQuery
 public:
     VariantQuery();
     VariantQuery(const QStringList& columns,
-                 const QString& table);
+                 const QString& tableName);
 
     VariantQuery(const QStringList& columns,
-                 const QString& table,
+                 const QString& tableName,
                  const QString& conditions);
 
+
+    /*!
+     * \brief isValid
+     * \return true is query is valid
+     */
     bool isValid() const;
 
+    /*!
+     * \brief columns
+     * \return return columns selected
+     */
+    const QStringList& columns() const;
 
-    QStringList columns() const;
-    QStringList rawColumns() const;
+    /*!
+     * \brief setColumns
+     * \param columns
+     */
     void setColumns(const QStringList &columns);
 
-    QString table() const;
-    QString rawTable() const;
-    void setTable(const QString &table);
+    /*!
+     * \brief table
+     * \return table name
+     */
+    QString tableName() const;
 
+    /*!
+     * \brief setTable
+     * \param tableName
+     */
+    void setTable(const QString &tableName);
+
+    /*!
+     * \brief condition
+     * \return where condition
+     */
     QString condition() const;
-    QString rawCondition() const;
+
+    /*!
+     * \brief setCondition
+     * \param condition
+     */
     void setCondition(const QString &condition);
+
+    /*!
+     * \brief bed
+     * \return bed name
+     */
+    const QString &bed() const;
+    /*!
+     * \brief setBed
+     * \param bed
+     */
+    void setBed(const QString& bed);
 
     int offset() const;
     void setOffset(int offset);
@@ -42,12 +84,21 @@ public:
     QStringList groupBy() const;
     void setGroupBy(const QStringList &groupBy);
 
-    QString toSql(const SqliteManager * sql) const;
 
     QStringList orderBy() const;
     void setOrderBy(const QStringList &orderBy);
 
+    /*!
+     * \brief toSql
+     * \return raw sql statement
+     */
+    QString toSql() const;
 
+    /*!
+     * \brief fromVql create a VariantQuery from vql statement
+     * \param text
+     * \return
+     */
     static VariantQuery fromVql(const QString& text);
 
 
@@ -56,26 +107,35 @@ public:
 
     void setNoLimit();
 
-    const QString &region() const;
-    void setRegion(const QString& region);
-
 protected:
-    QStringList detectSamplesFields() const;
-    void replaceSampleFields(QString& text, bool setAS = false) const;
+
+     const QStringList rawColumns() const;
+     const QString rawTableName() const;
+     const QString rawCondition() const;
+     const QString rawOrderBy() const;
+     const QString rawGroupBy() const;
+     const QString rawLimitOffset() const;
+
+
+    QStringList extractSamples() const;
+    QString replaceSampleFields(const QString& text, bool label = false) const;
 
 private:
     QStringList mColumns;
     QString mTable = "variants";
-    QStringList mOrderBy;
     QString mCondition;
+    QString mBed;
     QStringList mGroupBy = {};
+    QStringList mOrderBy;
     int mOffset = 0;
     int mLimit  = 100;
     Qt::SortOrder mSortOder = Qt::AscendingOrder;
-    QString mRegion;
 
 
 };
+
+
+QDebug operator<< (QDebug d, const VariantQuery &query);
 
 }
 #endif // VARIANTQUERY_H

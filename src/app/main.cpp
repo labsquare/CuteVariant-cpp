@@ -1,15 +1,16 @@
-#include <QApplication>
+//#include <QApplication>
 #include <QtCore>
-#include "mainwindow.h"
+
 #include "project.h"
 #include "genotype.h"
 #include "filterdialog.h"
 #include "qfonticon.h"
-
+#include "mainwindow.h"
 using namespace cvar;
 
 int main(int argc, char **argv)
 {
+
 
     QApplication app(argc, argv);
     app.setApplicationName("CuteVariant");
@@ -19,8 +20,8 @@ int main(int argc, char **argv)
 
     QFontIcon::addFont(":/Flaticon");
 
-//    Project prj("/tmp/variant.db");
-//    prj.importFile("/tmp/TRIO1.family.vcf");
+    //    Project prj("/tmp/variant.db");
+    //    prj.importFile("/tmp/TRIO1.family.vcf");
 
 
     //    for (Field f : reader->parseHeader("INFO"))
@@ -31,6 +32,12 @@ int main(int argc, char **argv)
 
     MainWindow win;
     win.show();
+
+
+
+
+
+
 
 
 

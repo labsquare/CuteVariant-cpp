@@ -135,7 +135,7 @@ void ResultTreeModel::fetchMore(const QModelIndex &parent)
     mChilds[parentRow].clear();
 
     cvar::VariantQuery temp = mCurrentQuery;
-    temp.setCondition(QString("%2.id IN (%1)").arg(ids.join(",")).arg(mCurrentQuery.table()));
+    temp.setCondition(QString("%2.id IN (%1)").arg(ids.join(",")).arg(mCurrentQuery.tableName()));
     temp.setGroupBy({});
     temp.setNoLimit();
 

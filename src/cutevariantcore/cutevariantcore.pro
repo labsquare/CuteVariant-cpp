@@ -5,6 +5,8 @@ QT += concurrent
 TEMPLATE = lib 
 CONFIG += staticlib
 CONFIG -= debug_and_release
+CONFIG += c++14
+QMAKE_CXXFLAGS += -std=c++14
 
 Debug:DESTDIR = $$PWD/../bin
 Release:DESTDIR = $$PWD/../bin
@@ -29,7 +31,8 @@ SOURCES += \
     variantquery.cpp \
     selection.cpp \
     variantlink.cpp \
-    bedfile.cpp
+    bedfile.cpp \
+    vqlparser.cpp
 
 HEADERS += \
     field.h \
@@ -47,6 +50,7 @@ HEADERS += \
     variantquery.h \
     selection.h \
     variantlink.h \
-    bedfile.h
+    bedfile.h \
+    vqlparser.h
 
 TARGET = cutevariantcore
