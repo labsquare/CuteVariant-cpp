@@ -69,7 +69,7 @@ void VariantQuery::setColumns(const QStringList &columns)
     }
 }
 
-QString VariantQuery::tableName() const
+const QString& VariantQuery::tableName() const
 {
     return mTable;
 }
@@ -79,7 +79,7 @@ void VariantQuery::setTable(const QString &table)
     mTable = table;
 }
 
-QString VariantQuery::condition() const
+const QString &VariantQuery::condition() const
 {
     return mCondition;
 }
@@ -121,6 +121,8 @@ void VariantQuery::setGroupBy(const QStringList &groupBy)
 
 QString VariantQuery::toSql() const
 {
+
+    qDebug()<<*this;
 
     const SqliteManager *sql = cutevariant->sqliteManager();
 
@@ -183,9 +185,16 @@ QString VariantQuery::toSql() const
         s_select += QString(" ,COUNT(%1.id) as 'count', group_concat(%1.id) as 'childs' ").arg(tableName());
 
     // add region
-    if (!bed().isEmpty())
-        s_from += ",regions";
+    if (!bed().isEmpty()){
+        s_from += ","+rawBed();
 
+        if (s_where.isEmpty())
+            s_where.append(QString(" WHERE %1.pos BETWEEN %2.start AND %2.end AND %1.chr = %2.chr").arg(rawTableName(), rawBed()));
+        else
+            s_where.append(QString(" AND %1.pos BETWEEN %2.start AND %2.end AND %1.chr = %2.chr").arg(rawTableName(), rawBed()));
+
+
+    }
     // Create query
 
     qDebug()<<"select:"<<s_select;
@@ -367,16 +376,24 @@ const QStringList VariantQuery::rawColumns() const
     {
         col = col.remove("variants.");
 
-        // if col is a sample fields ...
-        if (col.contains("sample["))
-            col = replaceSampleFields(col,true);
-        else
-        {
-            col = col.replace(".","_");
-            col = QString("%1.`%2` as '%2' ").arg(rawTableName(),col);
+        if (col.contains("bed.") && !rawBed().isEmpty()){
+            col = rawBed()+".value as "+rawBed();
+            raw.append(col);
+            break;
         }
 
+        // if col is a sample fields ...
+        if (col.contains("sample[")){
+            col = replaceSampleFields(col,true);
+            raw.append(col);
+            break;
+        }
+
+        col = col.replace(".","_");
+        col = QString("%1.`%2` as '%2' ").arg(rawTableName(),col);
         raw.append(col);
+
+
     }
 
     return raw;
@@ -427,10 +444,19 @@ const QString VariantQuery::rawLimitOffset() const
 
 }
 
+const QString VariantQuery::rawBed() const
+{
+    if (bed().isEmpty())
+        return QString();
+
+    return "bed_"+bed();
+
+}
+
 
 QDebug operator<< (QDebug d, const VariantQuery &query)
 {
-    d<<"\n";
+    d<<"================================================\n";
     d<<"table\t"<<query.tableName()<<"\n";
     d<<"columns size\t"<<query.columns().size()<<"\n";
     d<<"columns\t"<<query.columns()<<"\n";
@@ -440,7 +466,7 @@ QDebug operator<< (QDebug d, const VariantQuery &query)
     d<<"order by\t"<<query.orderBy()<<"\n";
     d<<"offset \t"<<query.offset()<<"\n";
     d<<"limit \t"<<query.limit()<<"\n";
-
+    d<<"================================================\n";
     return d;
 }
 

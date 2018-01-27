@@ -393,12 +393,16 @@ bool SqliteManager::importBedfile(const QString &filename)
         int count = 0;
         while (!stream.atEnd()){stream.readLine();++count;}
 
+        QString tableName = "bed_"+fileInfo.baseName();
+
+
         // Create bed file record
-        bedQuery.prepare(QStringLiteral("INSERT INTO bedfiles (filename,md5, count) VALUES (:name, :md5, :count)"));
+        bedQuery.prepare(QStringLiteral("INSERT INTO bedfiles (filename, table_name, md5, count) VALUES (:name, :md5, :table_name, :count)"));
 
         bedQuery.bindValue(0, fileInfo.baseName());
-        bedQuery.bindValue(1, md5sum(filename));
-        bedQuery.bindValue(2, count);
+        bedQuery.bindValue(1, tableName);
+        bedQuery.bindValue(2, md5sum(filename));
+        bedQuery.bindValue(3, count);
 
         if (!bedQuery.exec())
         {
@@ -428,13 +432,25 @@ bool SqliteManager::importBedfile(const QString &filename)
                 return false;
             }
 
-            regionQuery.prepare(QStringLiteral("INSERT INTO regions (bedfile_id,bin,chr,start,end) VALUES (:bedfile_id, :bin, :chr, :start, :end)"));
 
-            regionQuery.bindValue(0, bedFileId);
-            regionQuery.bindValue(1, 333);
-            regionQuery.bindValue(2, row[0]);
-            regionQuery.bindValue(3, row[1].toInt());
-            regionQuery.bindValue(4, row[2].toInt());
+            regionQuery.exec(QStringLiteral("CREATE TABLE `%1` ("
+                                            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                                            "bin INTEGER,"
+                                            "chr TEXT,"
+                                            "start INTEGER NOT NULL,"
+                                            "end INTEGER NOT NULL,"
+                                            "value TEXT"
+                                            ")").arg(tableName));
+
+            regionQuery.prepare(QStringLiteral("INSERT INTO `%1` (bin,chr,start,end,value) VALUES (:bin, :chr, :start, :end, :value)").arg(tableName));
+
+            regionQuery.bindValue(0, 333);
+            regionQuery.bindValue(1, row[0]);
+            regionQuery.bindValue(2, row[1].toInt());
+            regionQuery.bindValue(3, row[2].toInt());
+            regionQuery.bindValue(4, row.value(3, QString()));
+
+
 
             if (!regionQuery.exec())
             {
@@ -511,24 +527,23 @@ void SqliteManager::createFile(const QString &filename)
 void SqliteManager::createBed()
 {
     QSqlQuery query;
-    query.exec(QStringLiteral("DROP TABLE IF EXISTS `regions`"));
     query.exec(QStringLiteral("DROP TABLE IF EXISTS `bedfiles`"));
 
     query.exec(QStringLiteral("CREATE TABLE `bedfiles` ("
                               "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                               "filename TEXT NOT NULL,"
+                              "table_name TEXT NOT NULL,"
                               "md5 TEXT NOT NULL,"
                               "count INTEGER DEFAULT 0"
                               ")"));
 
-    query.exec(QStringLiteral("CREATE TABLE `regions` ("
-                              "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                              "bedfile_id INTEGER NOT NULL,"
-                              "bin INTEGER,"
-                              "chr TEXT,"
-                              "start INTEGER,"
-                              "end INTEGER"
-                              ")"));
+    // drop all regions if exists
+    for (const QString& table : QSqlDatabase::database().tables())
+    {
+        if (table.startsWith("bed_"))
+            query.exec(QStringLiteral("DROP TABLE IF EXISTS `%1`").arg(table));
+
+    }
 }
 //-------------------------------------------------------------------------------
 void SqliteManager::createMetadatas(AbstractVariantReader *reader)

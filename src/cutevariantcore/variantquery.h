@@ -44,7 +44,7 @@ public:
      * \brief table
      * \return table name
      */
-    QString tableName() const;
+    const QString& tableName() const;
 
     /*!
      * \brief setTable
@@ -56,7 +56,7 @@ public:
      * \brief condition
      * \return where condition
      */
-    QString condition() const;
+    const QString& condition() const;
 
     /*!
      * \brief setCondition
@@ -115,6 +115,7 @@ protected:
      const QString rawOrderBy() const;
      const QString rawGroupBy() const;
      const QString rawLimitOffset() const;
+     const QString rawBed() const;
 
 
     QStringList extractSamples() const;
