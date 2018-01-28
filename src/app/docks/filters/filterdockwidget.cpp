@@ -20,7 +20,7 @@ FilterDockWidget::FilterDockWidget(QWidget *parent)
     saveAction->menu()->addSeparator();
     saveAction->menu()->addAction("Save");
     saveAction->menu()->addAction("Edit ...");
-    addAction(saveAction);
+   // addAction(saveAction);
     updateActions();
     connect(mView,SIGNAL(activated(QModelIndex)), this, SLOT(updateActions()));
     connect(mView,SIGNAL(changed()),this,SIGNAL(changed()));

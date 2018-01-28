@@ -389,6 +389,12 @@ const QStringList VariantQuery::rawColumns() const
             break;
         }
 
+        if (col.contains("*"))
+        {
+             raw.append("*");
+            break;
+        }
+
         col = col.replace(".","_");
         col = QString("%1.`%2` as '%2' ").arg(rawTableName(),col);
         raw.append(col);

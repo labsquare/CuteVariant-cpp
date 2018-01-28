@@ -11,10 +11,10 @@ ColumnDockWidget::ColumnDockWidget(QWidget * parent):
 
     addAction(FIcon(0xf11c),"Expand", mView, SLOT(expandAll()));
     addAction(FIcon(0xf11b),"Collapse", mView, SLOT(collapseAll()));
-    addAction(FIcon(0xf140),"test", mView, SLOT(collapseAll()));
+  // addAction(FIcon(0xf140),"test", mView, SLOT(collapseAll()));
 
     addActionSpacer();
-    addAction(FIcon(0xf118),"Collapse", mView, SLOT(collapseAll()));
+   // addAction(FIcon(0xf118),"Collapse", mView, SLOT(collapseAll()));
 
 
     // emit changed signal when model changed

@@ -65,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setStatusBar(new QStatusBar());
 
     // For Dev testing
-    cutevariant->setDatabasePath("/tmp/test.vcf.db");
+    //cutevariant->setDatabasePath("/tmp/test.vcf.db");
 
     restoreSettings();
     reset();
@@ -202,7 +202,8 @@ void MainWindow::updateEditor()
     mEditor->setVql(
                 mColumnDock->selectedColumns(),
                 mSelectionDock->tableName(),
-                mFilterDock->condition()
+                mFilterDock->condition(),
+                mBedDock->region()
                 );
 
     execute();
@@ -275,19 +276,19 @@ void MainWindow::setupActions()
     mToolBar->addAction(runAction);
 
     // TEST
-    mToolBar->addAction(queryMenu->addAction(FIcon(0xf12f), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
-    mToolBar->addAction(queryMenu->addAction(FIcon(0xf134), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
-    mToolBar->addAction(queryMenu->addAction(FIcon(0xf146), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
+//    mToolBar->addAction(queryMenu->addAction(FIcon(0xf12f), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
+//    mToolBar->addAction(queryMenu->addAction(FIcon(0xf134), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
+//    mToolBar->addAction(queryMenu->addAction(FIcon(0xf146), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
 
 
     // add search bar
     QWidget * spacer = new QWidget;
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    mToolBar->addWidget(spacer);
-    mToolBar->addWidget(mLocationSearchEdit);
-    mLocationSearchEdit->setMinimumWidth(300);
+   // mToolBar->addWidget(spacer);
+   // mToolBar->addWidget(mLocationSearchEdit);
+  //  mLocationSearchEdit->setMinimumWidth(300);
 
-    mLocationSearchEdit->addAction(new QAction(FIcon(0xf118),"search"), QLineEdit::LeadingPosition);
+  //  mLocationSearchEdit->addAction(new QAction(FIcon(0xf118),"search"), QLineEdit::LeadingPosition);
 
 
 }

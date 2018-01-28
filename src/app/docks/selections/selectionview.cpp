@@ -7,6 +7,8 @@ SelectionView::SelectionView(QWidget *parent)
     setEditTriggers(NoEditTriggers);
     setColumnCount(2);
 
+    header()->hide();
+
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
 

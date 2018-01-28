@@ -26,7 +26,7 @@ public:
     QString toVql() const;
 
     void setVql(const QString& raw);
-    void setVql(const QStringList& columns, const QString& table, const QString& condition);
+    void setVql(const QStringList& columns, const QString& table, const QString& condition, const QString& region = QString());
 
 
     void reset();

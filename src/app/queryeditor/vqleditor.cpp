@@ -33,7 +33,7 @@ void VqlEditor::setVql(const QString &raw)
     setText(raw.simplified());
 }
 //--------------------------------------------------------
-void VqlEditor::setVql(const QStringList &columns, const QString &table, const QString &condition)
+void VqlEditor::setVql(const QStringList &columns, const QString &table, const QString &condition, const QString &region)
 {
     QString vql;
 
@@ -45,6 +45,9 @@ void VqlEditor::setVql(const QStringList &columns, const QString &table, const Q
 
     if (!condition.isEmpty())
         vql += QString("WHERE %3 ").arg(condition);
+
+    if (!region.isEmpty())
+        vql += QString("BED %1").arg(region);
 
     setVql(vql);
 

@@ -11,6 +11,8 @@ public:
 
     virtual void reset() override;
 
+    QString region() const;
+
 public Q_SLOTS:
     void addBedFile();
 
