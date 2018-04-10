@@ -13,6 +13,7 @@ Release:DESTDIR = $$PWD/../bin
 
 
 INCLUDEPATH += $$PWD/../quazip/quazip
+INCLUDEPATH += $$PWD/../boost/
 
 
 SOURCES += \
