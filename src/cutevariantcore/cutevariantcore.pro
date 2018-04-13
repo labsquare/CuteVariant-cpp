@@ -35,7 +35,7 @@ SOURCES += \
     bedfile.cpp \
     vqlparser.cpp \
     genericvcfreader.cpp \
-    SnpEffVCFReader.cpp
+    snpeffvcfteader.cpp
 
 HEADERS += \
     field.h \
@@ -55,6 +55,6 @@ HEADERS += \
     bedfile.h \
     vqlparser.h \
     genericvcfreader.h \
-    SnpEffVCFReader.h
+    snpeffvcfteader.h
 
 TARGET = cutevariantcore

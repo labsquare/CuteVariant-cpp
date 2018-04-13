@@ -29,6 +29,11 @@ void Variant::clearAnnotation()
     mAnnotations.clear();
 }
 
+void Variant::removeAnnotation(const QString &colname)
+{
+    mAnnotations.remove(colname);
+}
+
 QVariant Variant::annotation(const QString &colname) const
 {
     return mAnnotations.value(colname,QVariant());

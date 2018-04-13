@@ -6,6 +6,7 @@
 #include "filterdialog.h"
 #include "qfonticon.h"
 #include "mainwindow.h"
+#include "snpeffvcfteader.h"
 
 
 
@@ -33,31 +34,31 @@ int main(int argc, char **argv)
     //    }
 
 
-    //    MainWindow win;
-    //    win.show();
+        MainWindow win;
+        win.show();
 
 
 
-    GenericVCFReader reader("/home/sacha/test.vcf");
+//    SnpEffVCFReader reader("/home/sacha/test.vcf");
 
 
-    for (auto i : reader.fields())
-        qDebug()<<i.name();
+//    for (auto i : reader.fields())
+//        qDebug()<<i.name();
 
-    qDebug()<<"===";
+//    qDebug()<<"===";
 
-//    for (auto i : reader.metadatas().keys())
-//        qDebug()<<i<<" "<<reader.metadatas()[i];
+////    for (auto i : reader.metadatas().keys())
+////        qDebug()<<i<<" "<<reader.metadatas()[i];
 
-    if (reader.open())
-    {
-        while (!reader.atEnd())
-        {
-            qDebug()<<reader.readVariant().annotation("INFO_ANN");
-            qDebug()<<"====";
-        }
+//    if (reader.open())
+//    {
+//        while (!reader.atEnd())
+//        {
+//            qDebug()<<reader.readVariant().annotation("ANN_GENE");
 
-    }
+//        }
+
+//    }
 
 
 

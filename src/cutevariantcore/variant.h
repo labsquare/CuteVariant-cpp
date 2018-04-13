@@ -10,6 +10,7 @@ public:
     Variant(const QString& chr, quint64 pos, QString& ref, QString& alt);
     void addAnnotation(const QString& colname, const QVariant& value);
     void clearAnnotation();
+    void removeAnnotation(const QString& colname);
     QVariant annotation(const QString& colname) const;
     QVariant& operator[] (const QString& colname);
     bool operator==(const Variant &v1);

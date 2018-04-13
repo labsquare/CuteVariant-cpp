@@ -67,8 +67,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // For Dev testing
     //cutevariant->setDatabasePath("/tmp/test.vcf.db");
 
-    restoreSettings();
-    reset();
+//    restoreSettings();
+//    reset();
 
 
 }
