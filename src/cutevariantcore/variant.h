@@ -50,6 +50,8 @@ public:
     static int maxUcscBin(int start, int end);
 
 
+    QHash<QString, QVariant> annotations() const;
+
 private:
     quint64 mBin = 0;
     QString mChr;

@@ -40,16 +40,24 @@ int main(int argc, char **argv)
 
     GenericVCFReader reader("/home/sacha/test.vcf");
 
-    qDebug()<<reader.samples().size();
+
+    for (auto i : reader.fields())
+        qDebug()<<i.name();
+
+    qDebug()<<"===";
+
+//    for (auto i : reader.metadatas().keys())
+//        qDebug()<<i<<" "<<reader.metadatas()[i];
 
     if (reader.open())
     {
-
+        while (!reader.atEnd())
+        {
+            qDebug()<<reader.readVariant().annotation("INFO_ANN");
+            qDebug()<<"====";
+        }
 
     }
-
-
-
 
 
 

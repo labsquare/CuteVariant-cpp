@@ -8,6 +8,12 @@ namespace cvar {
 class GenericVCFReader : public AbstractVariantReader
 {
 public:
+    enum Format {
+        VEP,
+        SNPEFF,
+        Generic,
+    };
+
     GenericVCFReader(const QString& filename);
     GenericVCFReader(QIODevice *device);
 
@@ -50,6 +56,8 @@ public:
     virtual Genotype readGenotype() override;
 
     virtual bool open() override;
+
+     Format format() const;
 
 
 

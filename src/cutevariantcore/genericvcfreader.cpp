@@ -225,6 +225,18 @@ bool GenericVCFReader::open()
 
     return true;
 }
+
+GenericVCFReader::Format GenericVCFReader::format() const
+{
+
+    if (metadatas().keys().contains("VEP"))
+        return Format::VEP;
+
+    if (metadatas().keys().contains("SnpEffVersion") || metadatas().keys().contains("snpeffversion"))
+        return Format::SNPEFF;
+
+    return Format::Generic;
+}
 //------------------------------------------------------------------
 
 QList<Field> GenericVCFReader::parseHeader(const QString &id)

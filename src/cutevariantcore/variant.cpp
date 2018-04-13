@@ -240,6 +240,11 @@ int Variant::maxUcscBin(int start, int end)
     return bin;
 }
 
+QHash<QString, QVariant> Variant::annotations() const
+{
+    return mAnnotations;
+}
+
 const QString &Variant::ref() const
 {
     return mRef;
