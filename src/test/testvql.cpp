@@ -14,6 +14,7 @@ private slots:
     void testColumns();
     void testCondition();
     void testRegion();
+    void testSample();
 
 
 
@@ -97,6 +98,26 @@ void TestVql::testRegion()
 
     parser.setQuery("SELECT chr FROM variants REGION exonic");
     QVERIFY(parser.region() == "exonic");
+
+}
+
+void TestVql::testSample()
+{
+    VqlParser parser;
+
+    parser.setQuery("SELECT chr, genotype(sacha).gt");
+    QVERIFY(parser.samples().size() == 1);
+    QVERIFY(parser.samples().first() == "sacha");
+
+    parser.setQuery(R"(SELECT chr, genotype("sacha").gt)");
+    QVERIFY(parser.samples().size() == 1);
+    QVERIFY(parser.samples().first() == "sacha");
+
+
+    parser.setQuery(R"(SELECT chr, genotype("sacha").gt FROM variants WHERE genotype("boby").gt = 1)");
+    QVERIFY(parser.samples().size() == 2);
+    QVERIFY(parser.samples().at(0) == "sacha");
+    QVERIFY(parser.samples().at(1) == "boby");
 
 }
 

@@ -25,6 +25,7 @@ public:
     const QStringList columns() const;
     const QString conditions() const;
     const QString region() const;
+    const QStringList samples() const;
 
     void setQuery(const QString& query);
 

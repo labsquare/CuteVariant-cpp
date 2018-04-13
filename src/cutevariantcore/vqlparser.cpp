@@ -60,6 +60,25 @@ const QString VqlParser::region() const
     return QString();
 }
 
+const QStringList VqlParser::samples() const
+{
+    QStringList out;
+    QRegularExpression exp("genotype\\(\"?(\\w+)\"?\\)");
+    QRegularExpressionMatchIterator i = exp.globalMatch(query());
+
+    while (i.hasNext()) {
+        QRegularExpressionMatch match = i.next();
+
+        if (match.hasMatch())
+            out.append(match.captured(1));
+
+
+    }
+
+    return out;
+
+}
+
 void VqlParser::setQuery(const QString &query)
 {
     mQuery = query;
