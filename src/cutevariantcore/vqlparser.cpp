@@ -86,6 +86,8 @@ void VqlParser::setQuery(const QString &query)
 
 bool VqlParser::isValid() const
 {
+    // TODO
+
     return true;
 }
 

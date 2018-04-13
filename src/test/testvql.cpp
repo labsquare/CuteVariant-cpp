@@ -2,8 +2,10 @@
 #include <QtCore>
 #include <iostream>
 #include "vqlparser.h"
+#include "variantquery.h"
 
-using namespace std;
+using namespace cvar;
+
 class TestVql: public QObject
 {
     Q_OBJECT
@@ -16,12 +18,11 @@ private slots:
     void testRegion();
     void testSample();
 
+    void testVariantQuery();
+
 
 
 };
-
-
-
 
 void TestVql::testTableName()
 {
@@ -120,6 +121,16 @@ void TestVql::testSample()
     QVERIFY(parser.samples().at(1) == "boby");
 
 }
+
+void TestVql::testVariantQuery()
+{
+    VariantQuery query = VariantQuery::fromVql("SELECT chr FROM variants");
+    QVERIFY(query.toSql() == "SELECT `variants`.id AS id,`variants`.`chr` as 'chr' FROM `variants` LIMIT 100 OFFSET 0");
+
+}
+
+
+
 
 
 QTEST_MAIN(TestVql)

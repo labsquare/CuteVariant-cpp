@@ -121,9 +121,6 @@ void VariantQuery::setGroupBy(const QStringList &groupBy)
 
 QString VariantQuery::toSql() const
 {
-
-    qDebug()<<*this;
-
     const SqliteManager *sql = cutevariant->sqliteManager();
 
     // the sql query to return
@@ -197,13 +194,13 @@ QString VariantQuery::toSql() const
     }
     // Create query
 
-    qDebug()<<"select:"<<s_select;
-    qDebug()<<"from:"<<s_from;
-    qDebug()<<"leftJoin:"<<s_leftJoin;
-    qDebug()<<"where:"<<s_where;
-    qDebug()<<"groupBy:"<<s_groupBy;
-    qDebug()<<"orderBy:"<<s_orderBy;
-    qDebug()<<"limitOffset:"<<s_limitOffset;
+//    qDebug()<<"select:"<<s_select;
+//    qDebug()<<"from:"<<s_from;
+//    qDebug()<<"leftJoin:"<<s_leftJoin;
+//    qDebug()<<"where:"<<s_where;
+//    qDebug()<<"groupBy:"<<s_groupBy;
+//    qDebug()<<"orderBy:"<<s_orderBy;
+//    qDebug()<<"limitOffset:"<<s_limitOffset;
 
 
     s_query = s_select + s_from + s_leftJoin + s_where + s_groupBy + s_orderBy + s_limitOffset;
@@ -313,12 +310,12 @@ void VariantQuery::setNoLimit()
 
 const QString &VariantQuery::bed() const
 {
-    return mBed;
+    return mRegion;
 }
 
-void VariantQuery::setBed(const QString &region)
+void VariantQuery::setRegion(const QString &region)
 {
-    mBed = region;
+    mRegion = region;
 }
 
 QStringList VariantQuery::orderBy() const
@@ -342,24 +339,22 @@ VariantQuery VariantQuery::fromVql(const QString &text)
         query.setTable(parser.tableName());
 
         // set columns
-        qDebug()<<"parser columns "<<parser.columns().size();
-
 
         query.setColumns(parser.columns());
 
         // set condition
         query.setCondition(parser.conditions());
 
-        // set inside
-        query.setBed(parser.region());
+        // set region
+        query.setRegion(parser.region());
 
+//        //set samples
+//        mSamples = parser.samples();
     }
 
     return query;
 
 }
-
-
 
 //===== PROTECTED
 
@@ -388,7 +383,7 @@ const QStringList VariantQuery::rawColumns() const
 
         if (col.contains("*"))
         {
-             raw.append("*");
+            raw.append("*");
             break;
         }
 

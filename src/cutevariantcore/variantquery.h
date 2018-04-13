@@ -73,7 +73,7 @@ public:
      * \brief setBed
      * \param bed
      */
-    void setBed(const QString& bed);
+    void setRegion(const QString& bed);
 
     int offset() const;
     void setOffset(int offset);
@@ -118,6 +118,7 @@ protected:
      const QString rawBed() const;
 
 
+
     QStringList extractSamples() const;
     QString replaceSampleFields(const QString& text, bool label = false) const;
 
@@ -125,12 +126,13 @@ private:
     QStringList mColumns;
     QString mTable = "variants";
     QString mCondition;
-    QString mBed;
+    QString mRegion;
     QStringList mGroupBy = {};
     QStringList mOrderBy;
     int mOffset = 0;
     int mLimit  = 100;
     Qt::SortOrder mSortOder = Qt::AscendingOrder;
+    QStringList mSamples;
 
 
 };
