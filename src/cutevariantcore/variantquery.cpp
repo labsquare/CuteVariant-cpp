@@ -334,27 +334,24 @@ void VariantQuery::setOrderBy(const QStringList &orderBy)
 VariantQuery VariantQuery::fromVql(const QString &text)
 {
     VariantQuery query;
-    VqlParser parser;
+    VqlParser parser(text.simplified());
 
-    if (parser.parse(text.simplified().toStdString()))
+    if (parser.isValid())
     {
         // set table name
-        query.setTable(QString::fromStdString(parser.tableName()));
+        query.setTable(parser.tableName());
 
         // set columns
-        QStringList columnsTmp;
-
         qDebug()<<"parser columns "<<parser.columns().size();
 
-        for (std::string col : parser.columns())
-            columnsTmp.append(QString::fromStdString(col));
-        query.setColumns(columnsTmp);
+
+        query.setColumns(parser.columns());
 
         // set condition
-        query.setCondition(QString::fromStdString(parser.conditions()));
+        query.setCondition(parser.conditions());
 
         // set inside
-        query.setBed(QString::fromStdString(parser.region()));
+        query.setBed(parser.region());
 
     }
 

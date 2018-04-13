@@ -6,6 +6,9 @@
 #include "filterdialog.h"
 #include "qfonticon.h"
 #include "mainwindow.h"
+
+
+
 using namespace cvar;
 
 int main(int argc, char **argv)

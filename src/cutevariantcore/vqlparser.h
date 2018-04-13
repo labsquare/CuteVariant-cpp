@@ -1,16 +1,7 @@
 #ifndef VQLCOMPILER_H
 #define VQLCOMPILER_H
-#include <string>
-#include <vector>
-#include <iostream>
-#include <map>
-#include "boost/spirit/home/x3.hpp"
-#include "boost/fusion/adapted/struct/adapt_struct.hpp"
-#include "boost/fusion/include/adapt_struct.hpp"
-
-
-
-using namespace boost::spirit;
+#include <QtCore>
+#include <QRegularExpression>
 
 /*
 Exemple of query :
@@ -18,49 +9,38 @@ SELECT chr, pos, ref, ann.gene_name FROM variant
 SELECT chr, pos, ref, sample["boby"].gt FROM variant
 SELECT chr, pos, ref, ann.gene_name FROM variant WHERE pos = 3
 SELECT chr, pos, ref, sample["boby"].gt FROM variant INSIDE bed
+SELECT chr, pos, genotype("TAZR").GT FROM variant
+SELECT chr, pos, phenotype("TAR").malade
 
 */
 
-using namespace std;
 
-
-struct VqlResult {
-   std::vector<std::string> selectData;
-   std::string fromData;
-   std::string whereData;
-   std::string regionData;
-
-};
-
-BOOST_FUSION_ADAPT_STRUCT
-(
-    VqlResult,
-    selectData,
-    fromData,
-    whereData,
-    regionData
-);
 
 class VqlParser
 {
 public:
-    VqlParser();
-    bool parse(const string& source);
+    VqlParser(const QString& query = QString());
+    const QString query() const;
+    const QString tableName() const;
+    const QStringList columns() const;
+    const QString conditions() const;
+    const QString region() const;
 
-    const string& source() const;
-    const string& tableName() const;
-    const vector<string>& columns() const;
-    const string& conditions() const;
-    const string& region() const;
+    void setQuery(const QString& query);
+
+    bool isValid() const;
+
+
+protected:
+
 
 
 private:
-    string mSource;
-    VqlResult mResult;
+    QString mQuery;
 
 };
 
 
-std::ostream &operator<<(std::ostream& os, VqlParser& c);
+
 
 #endif // VQLCOMPILER_H

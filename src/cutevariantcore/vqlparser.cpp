@@ -1,93 +1,72 @@
 #include "vqlparser.h"
 
-VqlParser::VqlParser()
+VqlParser::VqlParser(const QString &query)
+    :mQuery(query)
 {
 
 }
 
-bool VqlParser::parse(const string &source)
+const QString VqlParser::query() const
 {
-    mSource = source;
+    return mQuery;
+}
 
-    // SELECT <colomns...> FROM <tableName> WHERE <condition> BED <region>
+const QString VqlParser::tableName() const
+{
+    QRegularExpression exp("(?<=FROM)\\s(\\w+)");
+    QRegularExpressionMatch match = exp.match(query());
 
+    if ( match.isValid())
+        return match.captured(1).simplified();
 
-    auto varnameRule =  x3::rule<class varname, string>()
-            =  x3::lexeme[(x3::alpha >> *(x3::alnum|'_'|'.'))];
+    return QString();
+}
 
-
-    auto columnsRule =  x3::rule<class varname, string>()
-            =  x3::lexeme[*(x3::char_ - "FROM" - ",")];
-
-    auto conditionRule =  x3::lexeme[*(x3::char_ - "BED")];
-
-    auto selectRule = x3::rule<class fields, vector<string>> ()
-            = "SELECT" >> columnsRule % ",";
-
-    auto fromRule   = "FROM" >> varnameRule;
-
-    auto whereRule  = "WHERE" >> conditionRule;
-
-    auto insideRule = "BED" >> varnameRule;
-
-    auto begin = mSource.begin();
-    auto end   = mSource.end();
+const QStringList VqlParser::columns() const
+{
+    QRegularExpression exp("(?<=SELECT)\\s((.+))\\s(?=FROM)");
+    QRegularExpressionMatch match = exp.match(query());
 
 
-    x3::phrase_parse(begin,end,
-                     selectRule >> fromRule >> -whereRule >> -insideRule,
-                     x3::space, mResult);
+    if (match.isValid()){
+        QStringList out;
 
-    // parse all
-    if (begin != end){
-        cout<<"cannot parse "<<endl;
-        return false;
+        for (QString i : match.captured(1).simplified().split(","))
+            out.append(i.simplified());
+
+        return out;
     }
 
+    return QStringList();
+}
 
+const QString VqlParser::conditions() const
+{
+    QRegularExpression exp("(?<=WHERE)\\s(((?!REGION).)+)");
+    QRegularExpressionMatch match = exp.match(query());
+    if ( match.isValid())
+        return match.captured(1).simplified();
 
+    return QString();
+}
 
+const QString VqlParser::region() const
+{
+    QRegularExpression exp("(?<=REGION)\\s(\\w+)");
+    QRegularExpressionMatch match = exp.match(query());
+    if ( match.isValid())
+        return match.captured(1).simplified();
 
+    return QString();
+}
+
+void VqlParser::setQuery(const QString &query)
+{
+    mQuery = query;
+}
+
+bool VqlParser::isValid() const
+{
     return true;
-
-
 }
 
-const string &VqlParser::source() const
-{
-    return mSource;
-}
-
-const string &VqlParser::tableName() const
-{
-    return mResult.fromData;
-}
-
-const vector<string> &VqlParser::columns() const
-{
-    return mResult.selectData;
-}
-
-const string &VqlParser::conditions() const
-{
-    return mResult.whereData;
-}
-
-const string &VqlParser::region() const
-{
-    return mResult.regionData;
-}
-
-
-std::ostream &operator<<(std::ostream& os, VqlParser& c)
-{
-
-    os<<"table name: "<<c.tableName()<<"\n";
-    os<<"columns: ";
-    std::copy(c.columns().begin(), c.columns().end(), std::ostream_iterator<string>(os," "));
-    os<<"\n";
-    os<<"conditions: "<<c.conditions()<<"\n";
-    os<<"inside: "<<c.region()<<"\n";
-
-    return os;
-}
