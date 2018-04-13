@@ -1,28 +1,28 @@
-#include "vcfvariantreader.h"
+#include "genericvcfreader.h"
 namespace cvar {
-VCFVariantReader::VCFVariantReader(const QString &filename)
+GenericVCFReader::GenericVCFReader(const QString &filename)
     :AbstractVariantReader(filename)
 {
 }
 
-VCFVariantReader::VCFVariantReader(QIODevice *device)
+GenericVCFReader::GenericVCFReader(QIODevice *device)
     :AbstractVariantReader(device)
 {
 
 }
 //------------------------------------------------------------------
-QList<Field> VCFVariantReader::fields()
+QList<Field> GenericVCFReader::fields()
 {
     return parseHeader(QStringLiteral("INFO"));
 }
 
-QList<Field> VCFVariantReader::genotypeFields()
+QList<Field> GenericVCFReader::genotypeFields()
 {
     return parseHeader(QStringLiteral("FORMAT"));
 }
 //------------------------------------------------------------------
 
-QList<Sample> VCFVariantReader::samples()
+QList<Sample> GenericVCFReader::samples()
 {
     QList<Sample> samples;
 
@@ -52,9 +52,12 @@ QList<Sample> VCFVariantReader::samples()
     return samples;
 }
 //------------------------------------------------------------------
-QHash<QString, quint64> VCFVariantReader::contigs()
+QHash<QString, quint64> GenericVCFReader::contigs()
 {
     QHash<QString, quint64> contigList;
+
+    // detect the following pattern
+    // ##contig=<ID=20,length=62435964,assembly=B36,md5=f126cdf8a6e0c7f379d618ff66beb2da,species="Homo sapiens",taxonomy=x>
 
     if ( device()->open(QIODevice::ReadOnly))
     {
@@ -85,15 +88,8 @@ QHash<QString, quint64> VCFVariantReader::contigs()
 }
 //------------------------------------------------------------------
 
-Variant VCFVariantReader::readVariant()
+Variant GenericVCFReader::readVariant()
 {
-    // return dupliate variant before processing next line
-    if (!mDuplicateVariant.isEmpty())
-    {
-        return mDuplicateVariant.takeLast();
-    }
-
-
     QString line = device()->readLine();
 
     if (line.isEmpty())
@@ -105,6 +101,7 @@ Variant VCFVariantReader::readVariant()
         qCritical()<<"Wrong fields number in file";
         return Variant();
     }
+
     QString chrom  = rows[0];
     quint64 pos    = rows[1].toInt();
     QString rsid   = rows[2];
@@ -121,8 +118,8 @@ Variant VCFVariantReader::readVariant()
     variant.setBin(Variant::maxUcscBin(pos-1, pos));
 
     // pre-fill annotation . Usefull for Flag values. Missing key means False
-    for (QString colnames : mFieldColMap.values())
-        variant.addAnnotation(colnames, 0);
+    //    for (QString colnames : mFieldColMap.values())
+    //        variant.addAnnotation(colnames, 0);
 
     // parse annotation info
     for (QString item : info.split(";"))
@@ -132,68 +129,39 @@ Variant VCFVariantReader::readVariant()
             QStringList pair = item.split("=");
             QString key = pair.first();
             QString val = pair.last();
-
-            //
-            // Do not manage special key like ANN
-            //
-            if (mSpecialId.contains(key))
-            {
-                QStringList allAnn = val.split(",");
-
-                // Save first annotation as usual
-                int index = 0;
-                for (QString annValue : allAnn.first().split("|")){
-                    variant[mSpecialIdMap[key].value(index)] = annValue;
-                    ++index;
-                }
-
-                // save duplicate variant if many annotations for this variant
-                if (allAnn.size() > 1)
-                {
-                    mDuplicateVariant.clear();
-                    for (int dupId = 1; dupId<allAnn.size(); ++dupId)
-                    {
-                        Variant dupVariant = variant;
-                        int index = 0;
-                        for (QString annValue : allAnn[dupId].split("|")){
-                            dupVariant[mSpecialIdMap[key].value(index)] = annValue;
-                            ++index;
-                        }
-                        mDuplicateVariant.append(dupVariant);
-                    }
-                }
-            }
-
-            // normal info fields
-            else
-            {
-                variant[mFieldColMap[key]] = val;
-            }
+            variant[mFieldColMap[key]] = val;
         }
-
         // Bool TAGS
         else
         {
             // If key is present, means it's true
+            // by default it's false
             variant[mFieldColMap[item]] = 1;
         }
-
     }
     return variant;
 }
 
-Genotype VCFVariantReader::readGenotype()
+Genotype GenericVCFReader::readGenotype()
 {
-    // read after all sample has been process ...
-    if (mCurrentSampleId == 0)
-        mCurrentGenotypeLine = device()->readLine();
+    if (mGenotypesOfCurrentLine.isEmpty())
+    {
+        mGenotypesOfCurrentLine = readGenotypeLine(device()->readLine());
+        return mGenotypesOfCurrentLine.takeFirst();
+    }
 
-    QStringList rows = mCurrentGenotypeLine.split(QChar::Tabulation);
+    return mGenotypesOfCurrentLine.takeFirst();
+}
 
+QList<Genotype> GenericVCFReader::readGenotypeLine(const QString &line)
+{
+    // return all genotypes find on one line
+
+    QStringList rows = line.split(QChar::Tabulation);
     if (rows.size() < 10)
     {
         qCritical()<<"Cannot read genotype. Wrong fields count";
-        return Genotype();
+        return QList<Genotype>();
     }
 
     QString chrom  = rows[0];
@@ -201,30 +169,32 @@ Genotype VCFVariantReader::readGenotype()
     QString ref    = rows[3];
     QString alt    = rows[4];
 
+    // FORMAT field
     QStringList cols = rows[8].split(":");
-    QStringList vals = rows[9+mCurrentSampleId].split(":");
 
-    Genotype gen =  Genotype(chrom,pos,ref,alt,mSamples[mCurrentSampleId].name());
+    // Loop over all sample Genotype FIELDS
+    QList<Genotype> genotypes;
 
-    if (cols.length() != vals.length())
-        qCritical()<<Q_FUNC_INFO<<"genotypes fields and values have different sizes";
+    for (int i=0; i<mSamples.size(); ++i)
+    {
+        QStringList vals = rows[9+i].split(":");
 
-    // save genotype annotation
-    for (int i=0; i<qMin(cols.length(), vals.length()); ++i)
-        gen.addAnnotation(cols[i], vals[i]);
+        if (cols.length() != vals.length())
+            qCritical()<<Q_FUNC_INFO<<"genotypes fields and values have different sizes";
 
+        // save genotype annotation
+        Genotype gen  =  Genotype(chrom,pos,ref,alt,mSamples[i].name());
 
-    // read next line for the next call
-    if (mCurrentSampleId < mSamples.count() - 1)
-        mCurrentSampleId ++;
-    else
-        mCurrentSampleId = 0;
+        for (int i=0; i<qMin(cols.length(), vals.length()); ++i)
+            gen.addAnnotation(cols[i], vals[i]);
 
-    return gen;
+        genotypes.append(gen);
+    }
 
+    return genotypes;
 }
 
-bool VCFVariantReader::open()
+bool GenericVCFReader::open()
 {
     // Get Header Fields data, to process variant later
     // Store map between fields name in the VCF and colname in sqlite
@@ -257,8 +227,13 @@ bool VCFVariantReader::open()
 }
 //------------------------------------------------------------------
 
-QList<Field> VCFVariantReader::parseHeader(const QString &id)
+QList<Field> GenericVCFReader::parseHeader(const QString &id)
 {  
+    // Get all Fields started with ##ID
+    // For instance
+    // ##INFO=<ID=DP,Number=1,Type=Integer,Description="Total Depth">
+    // ##INFO=<ID=AF,Number=.,Type=Float,Description="Allele Frequency">
+
     QList<Field> fields;
 
     if ( device()->open(QIODevice::ReadOnly))
@@ -279,31 +254,23 @@ QList<Field> VCFVariantReader::parseHeader(const QString &id)
                 QString type   = match.captured(3);
                 QString desc   = match.captured(4);
 
-                if (mSpecialId.contains(name)){
-                    fields += parseAnnotationHeaderLine(line);
-                }
 
-                else
-                {
+                Field::Type fType = Field::TEXT;
 
-                    Field::Type fType = Field::TEXT;
+                if (type == "String" || type == "Character")
+                    fType = Field::TEXT;
 
-                    if (type == "String" || type == "Character")
-                        fType = Field::TEXT;
+                if (type == "Integer")
+                    fType = Field::INTEGER;
 
-                    if (type == "Integer")
-                        fType = Field::INTEGER;
+                if (type == "Float")
+                    fType = Field::REAL;
 
-                    if (type == "Float")
-                        fType = Field::REAL;
+                if (type == "Flag")
+                    fType = Field::BOOL;
 
-                    if (type == "Flag")
-                        fType = Field::BOOL;
-
-                    fields.append(Field("INFO_"+name, name, desc, fType));
-                    fields.last().setCategory(id);
-                }
-
+                fields.append(Field("INFO_"+name, name, desc, fType));
+                fields.last().setCategory(id);
             }
 
         } while (line.startsWith("##"));
@@ -314,7 +281,9 @@ QList<Field> VCFVariantReader::parseHeader(const QString &id)
     return fields;
 }
 
-QList<Field> VCFVariantReader::parseAnnotationHeaderLine(const QString& line)
+
+
+QList<Field> GenericVCFReader::parseAnnotationHeaderLine(const QString& line)
 {
 
     // typical annotation are in the following form. Many fields in one line
@@ -323,32 +292,32 @@ QList<Field> VCFVariantReader::parseAnnotationHeaderLine(const QString& line)
     QList<Field> fields;
 
 
-    QRegularExpression ex(QStringLiteral("^##INFO=<ID=(?<id>.+),Number=(?<number>.+),Type=(?<type>.+),Description=\"(?<desc>.+):(?<ann>.+)\""));
-    QRegularExpressionMatch match = ex.match(line);
+    //    QRegularExpression ex(QStringLiteral("^##INFO=<ID=(?<id>.+),Number=(?<number>.+),Type=(?<type>.+),Description=\"(?<desc>.+):(?<ann>.+)\""));
+    //    QRegularExpressionMatch match = ex.match(line);
 
-    if (match.hasMatch())
-    {
-        QString id   = match.captured("id");
-        QString ann  = match.captured("ann");
-        // remove quote if exists.. ( snpEFF )
-        ann = ann.remove("\'");
-        ann = ann.remove("\"");
-        ann = ann.simplified();
-        ann = ann.remove(QChar::Space);
+    //    if (match.hasMatch())
+    //    {
+    //        QString id   = match.captured("id");
+    //        QString ann  = match.captured("ann");
+    //        // remove quote if exists.. ( snpEFF )
+    //        ann = ann.remove("\'");
+    //        ann = ann.remove("\"");
+    //        ann = ann.simplified();
+    //        ann = ann.remove(QChar::Space);
 
-        for (QString a : ann.split("|"))
-        {
-            fields.append(Field(id+"_"+a,a,"See Annotation specification"));
-            fields.last().setCategory(id);
-            mSpecialIdMap[id].append(fields.last().colname());
-        }
-    }
+    //        for (QString a : ann.split("|"))
+    //        {
+    //            fields.append(Field(id+"_"+a,a,"See Annotation specification"));
+    //            fields.last().setCategory(id);
+    //            mSpecialIdMap[id].append(fields.last().colname());
+    //        }
+    //    }
 
 
     return fields;
 }
 //------------------------------------------------------------------
-QHash<QString, QVariant> VCFVariantReader::metadatas() const
+QHash<QString, QVariant> GenericVCFReader::metadatas() const
 {
     QHash<QString, QVariant> meta;
 

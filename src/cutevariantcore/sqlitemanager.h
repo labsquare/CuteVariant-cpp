@@ -6,7 +6,7 @@
 #include <QtGui>
 #include <QtConcurrent>
 #include "abstractvariantreader.h"
-#include "vcfvariantreader.h"
+#include "genericvcfreader.h"
 #include "variantquery.h"
 #include "selection.h"
 #include "variantlink.h"

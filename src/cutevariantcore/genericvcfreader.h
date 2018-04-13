@@ -5,11 +5,11 @@
 #include "field.h"
 namespace cvar {
 
-class VCFVariantReader : public AbstractVariantReader
+class GenericVCFReader : public AbstractVariantReader
 {
 public:
-    VCFVariantReader(const QString& filename);
-    VCFVariantReader(QIODevice *device);
+    GenericVCFReader(const QString& filename);
+    GenericVCFReader(QIODevice *device);
 
 
     /*!
@@ -68,6 +68,7 @@ public:
     QList<Field> parseHeader(const QString& id);
 
 
+    QList<Genotype> readGenotypeLine(const QString& line);
 
 
     /*!
@@ -105,21 +106,22 @@ private:
     QHash<QString, QStringList> mSpecialIdMap;
 
 
-    // need to parse fields header before read variant
+    // need to store fields header before read variant
     QHash<QString, QString> mFieldColMap;
 
     QList<Sample> mSamples;
     QHash<QString, quint64> mContigs;
 
+    QList<Genotype> mGenotypesOfCurrentLine;
+
     // used to to generate Genotype per sample in genotype read parser
-    int mCurrentSampleId = 0;
-    QString mCurrentGenotypeLine;
+
 
 
     // One Line can have multiple annotation
     // We decide to store one annotation by row in variant table.
     // That's means duplicate variant with different annotation
-    QList<Variant> mDuplicateVariant;
+//    QList<Variant> mDuplicateVariant;
 
 
 

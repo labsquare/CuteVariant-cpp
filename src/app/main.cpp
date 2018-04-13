@@ -33,11 +33,20 @@ int main(int argc, char **argv)
     //    }
 
 
-    MainWindow win;
-    win.show();
+    //    MainWindow win;
+    //    win.show();
 
 
 
+    GenericVCFReader reader("/home/sacha/test.vcf");
+
+    qDebug()<<reader.samples().size();
+
+    if (reader.open())
+    {
+
+
+    }
 
 
 

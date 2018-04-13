@@ -41,12 +41,12 @@ bool SqliteManager::importFile(const QString &filename)
 
     if (info.suffix().toLower() == "vcf"){
         mProgressDevice = new QFile(filename);
-        reader.reset(new VCFVariantReader(mProgressDevice));
+        reader.reset(new GenericVCFReader(mProgressDevice));
     }
     if (info.suffix() == "gz")
     {
         mProgressDevice = new QuaGzipFile(filename);
-        reader.reset(new VCFVariantReader(mProgressDevice));
+        reader.reset(new GenericVCFReader(mProgressDevice));
     }
 
     if (reader.isNull())

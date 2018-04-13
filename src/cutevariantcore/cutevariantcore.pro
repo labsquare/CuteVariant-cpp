@@ -25,7 +25,6 @@ SOURCES += \
     genotype.cpp \
     variant.cpp \
     abstractvariantreader.cpp \
-    vcfvariantreader.cpp \
     project.cpp \
     sqlitemanager.cpp \
     fieldsmodel.cpp \
@@ -34,7 +33,8 @@ SOURCES += \
     selection.cpp \
     variantlink.cpp \
     bedfile.cpp \
-    vqlparser.cpp
+    vqlparser.cpp \
+    genericvcfreader.cpp
 
 HEADERS += \
     field.h \
@@ -44,7 +44,6 @@ HEADERS += \
     genotype.h \
     variant.h \
     abstractvariantreader.h \
-    vcfvariantreader.h \
     project.h \
     sqlitemanager.h \
     fieldsmodel.h \
@@ -53,6 +52,7 @@ HEADERS += \
     selection.h \
     variantlink.h \
     bedfile.h \
-    vqlparser.h
+    vqlparser.h \
+    genericvcfreader.h
 
 TARGET = cutevariantcore
