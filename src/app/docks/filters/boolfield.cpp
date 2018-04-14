@@ -12,6 +12,8 @@ BoolField::BoolField(QWidget *parent)
     vLayout->setContentsMargins(0,0,0,0);
     vLayout->addWidget(mBox);
 
+    setLayout(vLayout);
+
 }
 
 QVariant BoolField::value() const

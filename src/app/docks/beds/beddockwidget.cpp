@@ -21,7 +21,7 @@ void BedDockWidget::reset()
 {
     mView->clear();
 
-    for (cvar::BedFile file : cutevariant->sqliteManager()->bedFiles())
+    for (cvar::BedFile file : cutevariant->sqlite()->bedFiles())
     {
         QTreeWidgetItem * item = new QTreeWidgetItem;
         item->setText(0, file.filename());
@@ -47,7 +47,7 @@ void BedDockWidget::addBedFile()
     if (filename.isEmpty())
         return ;
 
-    qDebug()<<cutevariant->sqliteManager()->importBedfile(filename);
+    qDebug()<<cutevariant->sqlite()->importBedfile(filename);
 
     reset();
 

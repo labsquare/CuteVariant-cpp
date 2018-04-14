@@ -21,7 +21,7 @@ public:
 
     void setDatabasePath(const QString& path);
     void importFile(const QString& filename);
-    SqliteManager * sqliteManager();
+    SqliteManager * sqlite();
 
     QList<VariantLink> links() const;
     bool removeLink(const VariantLink& link);

@@ -139,7 +139,7 @@ void ResultTreeModel::fetchMore(const QModelIndex &parent)
     temp.setGroupBy({});
     temp.setNoLimit();
 
-    QSqlQuery query = cutevariant->sqliteManager()->variants(temp);
+    QSqlQuery query = cutevariant->sqlite()->variants(temp);
 
     while (query.next())
     {
@@ -204,7 +204,7 @@ bool ResultTreeModel::exportCsv(const QString &filename) const
 
             cvar::VariantQuery vquery = mCurrentQuery;
             vquery.setNoLimit();
-            QSqlQuery query = cutevariant->sqliteManager()->variants(vquery);
+            QSqlQuery query = cutevariant->sqlite()->variants(vquery);
             qDebug()<<query.lastError().text();
             qDebug()<<query.lastQuery();
 
@@ -252,7 +252,7 @@ void ResultTreeModel::load()
     mRecords.clear();
     mChilds.clear();
 
-    QSqlQuery query = cutevariant->sqliteManager()->variants(mCurrentQuery);
+    QSqlQuery query = cutevariant->sqlite()->variants(mCurrentQuery);
     qDebug()<<query.lastError().text();
     qDebug()<<query.lastQuery();
 

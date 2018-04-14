@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     //cutevariant->setDatabasePath("/tmp/test.vcf.db");
 
     restoreSettings();
-//    reset();
+    //    reset();
 
     setDockOptions(QMainWindow::VerticalTabs);
 
@@ -178,13 +178,9 @@ ResultsView *MainWindow::currentResultView()
 void MainWindow::execute()
 {
     if (mEditor->isValid())
-    {
+        currentResultView()->setQuery(mEditor->query());
 
-        QString vql    = mEditor->toVql();
-        VariantQuery q = VariantQuery::fromVql(vql);
-        currentResultView()->setQuery(q);
 
-    }
 }
 //-------------------------------------------------------------------------
 void MainWindow::executeSelection(const QString &name)
@@ -202,12 +198,13 @@ void MainWindow::executeSelection(const QString &name)
 //-------------------------------------------------------------------------
 void MainWindow::updateEditor()
 {
-    mEditor->setVql(
-                mColumnDock->selectedColumns(),
-                mSelectionDock->tableName(),
-                mFilterDock->condition(),
-                mBedDock->region()
-                );
+    cvar::VariantQuery query;
+    query.setColumns(mColumnDock->selectedColumns());
+    query.setTable(mSelectionDock->tableName());
+    query.setCondition(mFilterDock->condition());
+    query.setRegion(mBedDock->region());
+
+    mEditor->setQuery(query);
 
     execute();
 
@@ -251,13 +248,13 @@ void MainWindow::setupActions()
     // setup menu bar
     setMenuBar(new QMenuBar);
     QMenu * fileMenu = menuBar()->addMenu("&File");
-    QAction * openAction   = fileMenu->addAction(FIcon(0xf116), "&Open ...", this, SLOT(openFile()), QKeySequence::Open);
-    QAction * importAction = fileMenu->addAction(FIcon(0xf108), "&Import ...", this, SLOT(importFile()), QKeySequence::New);
+    QAction * openAction   = fileMenu->addAction(FIcon(0xf76f), "&Open ...", this, SLOT(openFile()), QKeySequence::Open);
+    QAction * importAction = fileMenu->addAction(FIcon(0xf220), "&Import ...", this, SLOT(importFile()), QKeySequence::New);
     fileMenu->addSeparator();
-    fileMenu->addAction(FIcon(0xf08b),"&Quit");
+    fileMenu->addAction(FIcon(0xf206),"&Quit");
 
     QMenu * queryMenu = menuBar()->addMenu("&Query");
-    QAction * runAction = queryMenu->addAction(FIcon(0xf126), "&Run", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R));
+    QAction * runAction = queryMenu->addAction(FIcon(0xf40d), "&Run", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R));
 
 
     QMenu * columnMenu = queryMenu->addMenu("&Columns");
@@ -272,7 +269,7 @@ void MainWindow::setupActions()
 
 
 
-
+    mToolBar->setIconSize(QSize(32,32));
 
     // setup toolbar
     mToolBar->addAction(openAction);
@@ -280,19 +277,19 @@ void MainWindow::setupActions()
     mToolBar->addAction(runAction);
 
     // TEST
-//    mToolBar->addAction(queryMenu->addAction(FIcon(0xf12f), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
-//    mToolBar->addAction(queryMenu->addAction(FIcon(0xf134), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
-//    mToolBar->addAction(queryMenu->addAction(FIcon(0xf146), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
+    //    mToolBar->addAction(queryMenu->addAction(FIcon(0xf12f), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
+    //    mToolBar->addAction(queryMenu->addAction(FIcon(0xf134), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
+    //    mToolBar->addAction(queryMenu->addAction(FIcon(0xf146), "&test", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R)));
 
 
     // add search bar
     QWidget * spacer = new QWidget;
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-   // mToolBar->addWidget(spacer);
-   // mToolBar->addWidget(mLocationSearchEdit);
-  //  mLocationSearchEdit->setMinimumWidth(300);
+    // mToolBar->addWidget(spacer);
+    // mToolBar->addWidget(mLocationSearchEdit);
+    //  mLocationSearchEdit->setMinimumWidth(300);
 
-  //  mLocationSearchEdit->addAction(new QAction(FIcon(0xf118),"search"), QLineEdit::LeadingPosition);
+    //  mLocationSearchEdit->addAction(new QAction(FIcon(0xf118),"search"), QLineEdit::LeadingPosition);
 
 
 }

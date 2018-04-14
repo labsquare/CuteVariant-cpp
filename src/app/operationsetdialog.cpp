@@ -81,7 +81,7 @@ void OperationSetDialog::load()
     mOperator->addItem(FIcon(0xf148),"Subtract","-");
 
 
-    for (const QString& name : cutevariant->sqliteManager()->variantSetNames())
+    for (const QString& name : cutevariant->sqlite()->variantSetNames())
     {
         mBoxA->addItem(name);
         mBoxB->addItem(name);

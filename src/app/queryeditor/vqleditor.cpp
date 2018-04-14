@@ -17,40 +17,18 @@ VqlEditor::VqlEditor(QWidget * parent)
 //--------------------------------------------------------
 bool VqlEditor::isValid() const
 {
-    cvar::VariantQuery q = cvar::VariantQuery::fromVql(toVql());
-    return q.isValid();
+    return query().isValid();
 }
 //--------------------------------------------------------
 
-QString VqlEditor::toVql() const
+cvar::VariantQuery VqlEditor::query() const
 {
-
-    return text().simplified();
+    return cvar::VariantQuery::fromVql(text());
 }
 //--------------------------------------------------------
-void VqlEditor::setVql(const QString &raw)
+void VqlEditor::setQuery(const cvar::VariantQuery &query)
 {
-    setText(raw.simplified());
-}
-//--------------------------------------------------------
-void VqlEditor::setVql(const QStringList &columns, const QString &table, const QString &condition, const QString &region)
-{
-    QString vql;
-
-    if (!columns.isEmpty())
-        vql+= QString("SELECT %1 ").arg(columns.join(","));
-
-    if (!table.isEmpty())
-        vql+= QString("FROM %2 ").arg(table);
-
-    if (!condition.isEmpty())
-        vql += QString("WHERE %3 ").arg(condition);
-
-    if (!region.isEmpty())
-        vql += QString("BED %1").arg(region);
-
-    setVql(vql);
-
+    setText(query.toVql());
 }
 //--------------------------------------------------------
 void VqlEditor::reset()
@@ -79,13 +57,10 @@ void VqlEditor::registerKeywords()
     api->add("FROM");
 
 
-    for (const cvar::Field& field : cutevariant->sqliteManager()->fields())
+    for (const cvar::Field& field : cutevariant->sqlite()->fields())
     {
         api->add(field.colname().toLower());
     }
-
-
-
     api->prepare();
 }
 //--------------------------------------------------------

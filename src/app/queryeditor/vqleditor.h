@@ -23,11 +23,8 @@ public:
      * @brief vql
      * @return the query vql
      */
-    QString toVql() const;
-
-    void setVql(const QString& raw);
-    void setVql(const QStringList& columns, const QString& table, const QString& condition, const QString& region = QString());
-
+    cvar::VariantQuery query() const;
+    void setQuery(const cvar::VariantQuery& query);
 
     void reset();
 
@@ -43,6 +40,7 @@ protected:
 
 private:
     QsciLexerSQL * mLexer;
+
 
 
 

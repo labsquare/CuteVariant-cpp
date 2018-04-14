@@ -15,10 +15,10 @@ SnpEffVCFReader::SnpEffVCFReader(QIODevice *device)
 
 QList<Field> SnpEffVCFReader::fields()
 {
-    QList<Field> f = GenericVCFReader::fields() ;
+    QList<Field> f;
 
     f.append(Field("ANN_GENE","GENE","The gene affected by the variant",Field::TEXT));
-    f.append(Field("ANN_TRANSCRIPT","GENE","The transcript affected by the variant", Field::TEXT));
+    f.append(Field("ANN_TRANSCRIPT","TRANSCRIPT","The transcript affected by the variant", Field::TEXT));
     f.append(Field("ANN_IS_EXONIC","IS_EXONIC","Does the variant affect an exon for this transcript?", Field::BOOL));
     f.append(Field("ANN_IS_CODING","IS_CODING","Does the variant fall in a coding region", Field::BOOL));
     f.append(Field("ANN_IS_LOF","IS_LOF","Based on the value of the impact col, is the variant LOF", Field::BOOL));
@@ -31,7 +31,11 @@ QList<Field> SnpEffVCFReader::fields()
     f.append(Field("ANN_IMPACT_SO","IMPACT_SO","The sequence ontology term for the impact", Field::TEXT));
     f.append(Field("ANN_IMPACT_SEVERITY","IMPACT_SEVERITY","Severity of the impact based on the impact column value (ref.impact category)", Field::TEXT));
 
-    return f;
+    for (Field& item : f )
+        item.setCategory("GENE ANNOTATION");
+
+
+    return GenericVCFReader::fields() + f;
 
 
 }

@@ -45,8 +45,8 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
 
 
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    mTopToolBar->addAction(FIcon(0xf11d), "Save table", this, SLOT(save()));
-    mTopToolBar->addAction(FIcon(0xf102),"Export table", this, SLOT(exportCsv()));
+    mTopToolBar->addAction(FIcon(0xf193), "Save table", this, SLOT(save()));
+    mTopToolBar->addAction(FIcon(0xf21d),"Export table", this, SLOT(exportCsv()));
     mTopToolBar->layout()->setContentsMargins(0,0,0,0);
 
     mBottomToolBar->addAction(FIcon(0xf12c),"sql",this, SLOT(showVql()));
@@ -58,11 +58,11 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
 
     mBottomToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
     mBottomToolBar->setIconSize(QSize(20,20));
-    mBottomToolBar->addAction(FIcon(0xf104),"<<", this, SLOT(pageFirst()));
-    mBottomToolBar->addAction(FIcon(0xf111),"<", this, SLOT(pageDown()));
+    mBottomToolBar->addAction(FIcon(0xf4ab),"<<", this, SLOT(pageFirst()));
+    mBottomToolBar->addAction(FIcon(0xf4ae),"<", this, SLOT(pageDown()));
     mBottomToolBar->addWidget(mPageBox);
-    mBottomToolBar->addAction(FIcon(0xf115),">", this, SLOT(pageUp()));
-    mBottomToolBar->addAction(FIcon(0xf117),">>", this, SLOT(pageLast()));
+    mBottomToolBar->addAction(FIcon(0xf4ad),">", this, SLOT(pageUp()));
+    mBottomToolBar->addAction(FIcon(0xf4ac),">>", this, SLOT(pageLast()));
     mBottomToolBar->layout()->setContentsMargins(0,0,0,0);
 
 
@@ -78,7 +78,7 @@ void ResultsView::setQuery(const cvar::VariantQuery &query)
     temp.setGroupBy({"chr","pos","ref","alt"});
 
     // 100 page constant for now
-    int totalCount = cutevariant->sqliteManager()->variantsCount(temp);
+    int totalCount = cutevariant->sqlite()->variantsCount(temp);
     int pageCount  = totalCount / 100;
     mPageValidator->setRange(0, pageCount);
 
@@ -148,7 +148,7 @@ void ResultsView::save()
     if (dialog.exec() == QDialog::Accepted)
     {
 
-        if (!cutevariant->sqliteManager()->createVariantSet(mModel->currentQuery(), nameEdit->text()))
+        if (!cutevariant->sqlite()->createVariantSet(mModel->currentQuery(), nameEdit->text()))
             QMessageBox::warning(this,"error", "cannot create table");
 
         else
@@ -200,7 +200,7 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
     {
         quint64 variantID = mModel->record(index).value("id").toInt();
         qDebug()<<variantID;
-        cvar::Variant var = cutevariant->sqliteManager()->variant(variantID);
+        cvar::Variant var = cutevariant->sqlite()->variant(variantID);
 
 
         QMenu menu(this);

@@ -121,7 +121,7 @@ void VariantQuery::setGroupBy(const QStringList &groupBy)
 
 QString VariantQuery::toSql() const
 {
-    const SqliteManager *sql = cutevariant->sqliteManager();
+    const SqliteManager *sql = cutevariant->sqlite();
 
     // the sql query to return
     QString s_query;
@@ -182,7 +182,7 @@ QString VariantQuery::toSql() const
         s_select += QString(" ,COUNT(%1.id) as 'count', group_concat(%1.id) as 'childs' ").arg(tableName());
 
     // add region
-    if (!bed().isEmpty()){
+    if (!region().isEmpty()){
         s_from += ","+rawBed();
 
         if (s_where.isEmpty())
@@ -194,13 +194,13 @@ QString VariantQuery::toSql() const
     }
     // Create query
 
-//    qDebug()<<"select:"<<s_select;
-//    qDebug()<<"from:"<<s_from;
-//    qDebug()<<"leftJoin:"<<s_leftJoin;
-//    qDebug()<<"where:"<<s_where;
-//    qDebug()<<"groupBy:"<<s_groupBy;
-//    qDebug()<<"orderBy:"<<s_orderBy;
-//    qDebug()<<"limitOffset:"<<s_limitOffset;
+    //    qDebug()<<"select:"<<s_select;
+    //    qDebug()<<"from:"<<s_from;
+    //    qDebug()<<"leftJoin:"<<s_leftJoin;
+    //    qDebug()<<"where:"<<s_where;
+    //    qDebug()<<"groupBy:"<<s_groupBy;
+    //    qDebug()<<"orderBy:"<<s_orderBy;
+    //    qDebug()<<"limitOffset:"<<s_limitOffset;
 
 
     s_query = s_select + s_from + s_leftJoin + s_where + s_groupBy + s_orderBy + s_limitOffset;
@@ -248,6 +248,25 @@ QString VariantQuery::toSql() const
     //        query.append(QString(" LIMIT %1 OFFSET %2").arg(limit()).arg(offset()));
 
     return s_query.simplified();
+}
+
+QString VariantQuery::toVql() const
+{
+    QString vql;
+
+    if (!columns().isEmpty())
+        vql+= QString("SELECT %1 ").arg(columns().join(","));
+
+    if (!tableName().isEmpty())
+        vql+= QString("FROM %2 ").arg(tableName());
+
+    if (!condition().isEmpty())
+        vql += QString("WHERE %3 ").arg(condition());
+
+    if (!region().isEmpty())
+        vql += QString("BED %1").arg(region());
+
+    return vql;
 }
 
 QStringList VariantQuery::extractSamples() const
@@ -308,7 +327,7 @@ void VariantQuery::setNoLimit()
     setOffset(0);
 }
 
-const QString &VariantQuery::bed() const
+const QString &VariantQuery::region() const
 {
     return mRegion;
 }
@@ -348,8 +367,8 @@ VariantQuery VariantQuery::fromVql(const QString &text)
         // set region
         query.setRegion(parser.region());
 
-//        //set samples
-//        mSamples = parser.samples();
+        //        //set samples
+        //        mSamples = parser.samples();
     }
 
     return query;
@@ -407,10 +426,19 @@ const QString VariantQuery::rawTableName() const
 
 const QString VariantQuery::rawCondition() const
 {
-    if (condition().isEmpty())
+    QString rawCondition = condition();
+
+    if (rawCondition.isEmpty())
         return QString();
     else
-        return replaceSampleFields(condition(), false);
+        rawCondition = replaceSampleFields(condition(), false);
+
+    // replace true by 1 or 0 , because sqlite doesn't support Bool
+
+    rawCondition = rawCondition.replace(QRegularExpression("(>?=\\s*)(true)"),"=1");
+    rawCondition = rawCondition.replace(QRegularExpression("(>?=\\s*)(false)"),"=0");
+
+    return rawCondition;
 }
 
 const QString VariantQuery::rawOrderBy() const
@@ -444,10 +472,10 @@ const QString VariantQuery::rawLimitOffset() const
 
 const QString VariantQuery::rawBed() const
 {
-    if (bed().isEmpty())
+    if (region().isEmpty())
         return QString();
 
-    return "bed_"+bed();
+    return "bed_"+region();
 
 }
 
@@ -459,7 +487,7 @@ QDebug operator<< (QDebug d, const VariantQuery &query)
     d<<"columns size\t"<<query.columns().size()<<"\n";
     d<<"columns\t"<<query.columns()<<"\n";
     d<<"condition\t"<<query.condition()<<"\n";
-    d<<"bed\t"<<query.bed()<<"\n";
+    d<<"bed\t"<<query.region()<<"\n";
     d<<"group by\t"<<query.groupBy()<<"\n";
     d<<"order by\t"<<query.orderBy()<<"\n";
     d<<"offset \t"<<query.offset()<<"\n";

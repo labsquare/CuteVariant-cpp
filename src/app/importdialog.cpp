@@ -16,10 +16,10 @@ ImportDialog::ImportDialog()
     layout->addWidget(mButtonBox);
     setLayout(layout);
 
-    connect(cutevariant->sqliteManager(),SIGNAL(importProgressChanged(int,QString)),
+    connect(cutevariant->sqlite(),SIGNAL(importProgressChanged(int,QString)),
             this,SLOT(updateStep(int,QString)));
 
-    connect(cutevariant->sqliteManager(),SIGNAL(importRangeChanged(int,int)),
+    connect(cutevariant->sqlite(),SIGNAL(importRangeChanged(int,int)),
             mBar,SLOT(setRange(int,int)));
 
     connect(mButtonBox, SIGNAL(rejected()), this,SLOT(reject()));
@@ -38,7 +38,7 @@ void ImportDialog::setFilename(const QString &file)
 
 int ImportDialog::exec()
 {
-    QFuture<bool> future = cutevariant->sqliteManager()->asyncImportFile(mFilename);
+    QFuture<bool> future = cutevariant->sqlite()->asyncImportFile(mFilename);
     mWatcher.setFuture(future);
 
 

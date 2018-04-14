@@ -48,7 +48,7 @@ void FieldsModel::load()
 {
     beginResetModel();
 
-    mDatas = mProject->sqliteManager()->fields();
+    mDatas = mProject->sqlite()->fields();
 
 
     endResetModel();

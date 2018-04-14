@@ -36,13 +36,13 @@ void SelectionView::load()
     clear();
     QTreeWidgetItem * rootItem = new QTreeWidgetItem;
     rootItem->setText(0,"variants");
-    rootItem->setText(1, QString::number(cutevariant->sqliteManager()->variantsCount()));
+    rootItem->setText(1, QString::number(cutevariant->sqlite()->variantsCount()));
     rootItem->setIcon(0,FIcon(0xf0ce));
     rootItem->setTextAlignment(1,Qt::AlignRight);
     addTopLevelItem(rootItem);
 
 
-    for (cvar::VariantSet selection : cutevariant->sqliteManager()->variantSets())
+    for (cvar::VariantSet selection : cutevariant->sqlite()->variantSets())
     {
         QTreeWidgetItem * item = new QTreeWidgetItem;
         item->setText(0, selection.name());
@@ -65,7 +65,7 @@ void SelectionView::removeSelection()
 
     for (QTreeWidgetItem * item : selectedItems())
     {
-        cutevariant->sqliteManager()->removeVariantSet(item->text(0));
+        cutevariant->sqlite()->removeVariantSet(item->text(0));
     }
 
     load();

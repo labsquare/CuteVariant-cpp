@@ -68,12 +68,12 @@ public:
      * \brief bed
      * \return bed name
      */
-    const QString &bed() const;
+    const QString &region() const;
     /*!
      * \brief setBed
      * \param bed
      */
-    void setRegion(const QString& bed);
+    void setRegion(const QString& region);
 
     int offset() const;
     void setOffset(int offset);
@@ -93,13 +93,14 @@ public:
      * \return raw sql statement
      */
     QString toSql() const;
-
+    QString toVql() const;
     /*!
      * \brief fromVql create a VariantQuery from vql statement
      * \param text
      * \return
      */
     static VariantQuery fromVql(const QString& text);
+
 
 
     Qt::SortOrder sortOder() const;

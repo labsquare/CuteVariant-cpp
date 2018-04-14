@@ -2,11 +2,15 @@
 #include "filterview.h"
 
 ConditionItem::ConditionItem(const cvar::Field &field, Operator::Type op, const QVariant &value)
-    :QTreeWidgetItem(FilterView::ConditionType), mField(field), mOperator(op), mValue(value)
+    :QTreeWidgetItem(FilterView::ConditionType)
 {
+    setField(field);
+    setOperator(op);
+    setValue(value);
+
+    setTextAlignment(1, Qt::AlignCenter);
+
     updateItem();
-
-
 }
 
 void ConditionItem::setField(const cvar::Field &f)
@@ -57,7 +61,6 @@ void ConditionItem::updateItem()
     setText(0, field().name());
     setText(1, operatorName());
     setText(2, value().toString());
-
     setToolTip(0, mField.description());
 
 
