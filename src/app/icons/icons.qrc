@@ -12,5 +12,6 @@
         <file>eye-on.png</file>
         <file>eye-off.png</file>
         <file alias="Flaticon">Flaticon.ttf</file>
+        <file alias="materialIcon">materialdesignicons-webfont.ttf</file>
     </qresource>
 </RCC>

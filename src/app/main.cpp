@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     app.setOrganizationDomain("labsquare.org");
     app.setApplicationVersion("0.0.1");
 
-    QFontIcon::addFont(":/Flaticon");
+    QFontIcon::addFont(":/materialIcon");
 
     //    Project prj("/tmp/variant.db");
     //    prj.importFile("/tmp/TRIO1.family.vcf");

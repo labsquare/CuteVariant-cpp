@@ -70,6 +70,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 //    restoreSettings();
 //    reset();
 
+    setDockOptions(QMainWindow::VerticalTabs);
 
 }
 //-------------------------------------------------------------------------
