@@ -67,7 +67,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     // For Dev testing
     //cutevariant->setDatabasePath("/tmp/test.vcf.db");
 
-//    restoreSettings();
+    restoreSettings();
 //    reset();
 
     setDockOptions(QMainWindow::VerticalTabs);
@@ -84,8 +84,9 @@ void MainWindow::writeSettings()
 {
     QSettings settings;
     settings.beginGroup("MainWindow");
-    settings.setValue("size", size());
-    settings.setValue("pos", pos());
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("state", saveState());
+
     settings.endGroup();
 }
 //-------------------------------------------------------------------------
@@ -94,8 +95,9 @@ void MainWindow::restoreSettings()
 {
     QSettings settings;
     settings.beginGroup("MainWindow");
-    resize(settings.value("size", QSize(400, 400)).toSize());
-    move(settings.value("pos", QPoint(200, 200)).toPoint());
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("state").toByteArray());
+
     settings.endGroup();
 }
 //-------------------------------------------------------------------------
@@ -225,6 +227,7 @@ void MainWindow::reset()
 
 void MainWindow::addBaseDock(BaseDockWidget *widget)
 {
+    widget->setObjectName(widget->metaObject()->className());
     addDockWidget(Qt::LeftDockWidgetArea,widget);
     connect(widget, &BaseDockWidget::changed, this, &MainWindow::updateEditor);
     mBaseDocks.append(widget);
