@@ -3,6 +3,7 @@
 
 #include <QtWidgets>
 #include "resulttreemodel.h"
+#include "resultdelegate.h"
 #include "project.h"
 #include "variantquery.h"
 #include "linklistdialog.h"
@@ -29,6 +30,8 @@ protected Q_SLOTS:
     void save();
     void exportCsv();
     void showVql();
+    void changeDelegate();
+
 
 Q_SIGNALS:
     void tableSaved();
@@ -48,6 +51,9 @@ private:
     QIntValidator * mPageValidator;
     QString mName = "variants";
     cvar::VariantQuery mQuery;
+
+    ResultDelegate * mNiceDelegate;
+    QStyledItemDelegate * mRawDelegate;
 
 };
 

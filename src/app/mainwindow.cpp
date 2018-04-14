@@ -72,6 +72,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     setDockOptions(QMainWindow::VerticalTabs);
 
+    openFile("/home/sacha/TRIO1.family.vcf.db");
+
 }
 //-------------------------------------------------------------------------
 MainWindow::~MainWindow()
@@ -139,14 +141,18 @@ void MainWindow::closeEvent(QCloseEvent *)
 }
 //-------------------------------------------------------------------------
 
-void MainWindow::openFile()
+void MainWindow::openFile(const QString &filename)
 {
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Open DB file"), QDir::homePath(), tr("DB Extension (*.db)"));
-    if (!fileName.isEmpty())
+    QString file = filename;
+
+    if (file.isEmpty())
+        file = QFileDialog::getOpenFileName(this,tr("Open DB file"), QDir::homePath(), tr("DB Extension (*.db)"));
+
+    if (!file.isEmpty())
     {
-        cutevariant->setDatabasePath(fileName);
+        cutevariant->setDatabasePath(file);
         reset();
-        statusBar()->showMessage(fileName);
+        statusBar()->showMessage(file);
         return;
 
     }

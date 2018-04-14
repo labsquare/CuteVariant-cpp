@@ -39,7 +39,7 @@ public:
 public Q_SLOTS:
     // main tool bar actions
     void importFile();
-    void openFile();
+    void openFile(const QString& filename = QString());
     void saveFile();
     void addResultView(ResultsView * view);
 

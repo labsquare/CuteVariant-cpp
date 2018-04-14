@@ -75,6 +75,7 @@ QVariant ResultTreeModel::data(const QModelIndex &index, int role) const
             return rec.value(index.column()+1);
         }
     }
+
     return QVariant() ;
 }
 //---------------------------------------------------------------------------

@@ -4,21 +4,26 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
     :QWidget(parent), mName(name)
 {
 
-    mView = new QTreeView(this);
-    mModel = new ResultTreeModel();
+    mView            = new QTreeView(this);
+    mModel           = new ResultTreeModel(this);
+    mTopToolBar      = new QToolBar;
+    mBottomToolBar   = new QToolBar;
+    mPageBox         = new QLineEdit;
+    mPageValidator   = new QIntValidator;
+    mCountLabel      = new QLabel;
+
+    mNiceDelegate    = new ResultDelegate;
+    mRawDelegate     = new QStyledItemDelegate;
+
+
     mView->setModel(mModel);
     mView->setSortingEnabled(true);
+    mView->setItemDelegate(mNiceDelegate);
     mView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     // mView->setFrameStyle(QFrame::HLine);
     mView->setFrameShape(QFrame::NoFrame);
     QVBoxLayout * vLayout = new QVBoxLayout;
 
-
-    mTopToolBar    = new QToolBar;
-    mBottomToolBar = new QToolBar;
-    mPageBox       = new QLineEdit;
-    mPageValidator = new QIntValidator;
-    mCountLabel    = new QLabel;
 
 
 
@@ -47,6 +52,11 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
     mTopToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     mTopToolBar->addAction(FIcon(0xf193), "Save table", this, SLOT(save()));
     mTopToolBar->addAction(FIcon(0xf21d),"Export table", this, SLOT(exportCsv()));
+
+    // setup delegate action
+    mTopToolBar->addAction(FIcon(0xf3d8),"Layout", this, SLOT(changeDelegate()));
+
+
     mTopToolBar->layout()->setContentsMargins(0,0,0,0);
 
     mBottomToolBar->addAction(FIcon(0xf12c),"sql",this, SLOT(showVql()));
@@ -189,6 +199,16 @@ void ResultsView::showVql()
 
 }
 
+void ResultsView::changeDelegate()
+{
+
+    if (mView->itemDelegate() == mNiceDelegate)
+        mView->setItemDelegate(mRawDelegate);
+    else
+        mView->setItemDelegate(mNiceDelegate);
+
+}
+
 void ResultsView::contextMenuEvent(QContextMenuEvent *event)
 {
 
@@ -240,6 +260,8 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
 
     }
 }
+
+
 
 QString ResultsView::name() const
 {

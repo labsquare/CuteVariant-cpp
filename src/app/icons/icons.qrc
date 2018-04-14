@@ -13,5 +13,9 @@
         <file>eye-off.png</file>
         <file alias="Flaticon">Flaticon.ttf</file>
         <file alias="materialIcon">materialdesignicons-webfont.ttf</file>
+        <file alias="gt_hetero">gt_hetero.png</file>
+        <file alias="gt_mut">gt_homo_mut.png</file>
+        <file alias="gt_wt">gt_homo_wt.png</file>
+        <file alias="gt_unknown">gt_unknown.png</file>
     </qresource>
 </RCC>
