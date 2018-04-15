@@ -4,22 +4,29 @@
 SelectionView::SelectionView(QWidget *parent)
     :QTreeWidget(parent)
 {
+
     setEditTriggers(NoEditTriggers);
     setColumnCount(2);
+
+    setIconSize(QSize(22,22));
+
+
 
     header()->hide();
 
     setSelectionBehavior(QAbstractItemView::SelectRows);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
-//    viewport()->setAutoFillBackground( false );
-//    setFrameShape(QFrame::NoFrame);
+    setIndentation(0);
+
+    //    viewport()->setAutoFillBackground( false );
+    //    setFrameShape(QFrame::NoFrame);
 
     setHeaderLabels({"name","count"});
 
     setWindowTitle("Selection");
     // select first item
-   // selectionModel()->select(mModel->index(0,0),QItemSelectionModel::Select);
+    // selectionModel()->select(mModel->index(0,0),QItemSelectionModel::Select);
 }
 //---------------------------------------------------------------------------------------------
 
@@ -34,30 +41,38 @@ QString SelectionView::tableName() const
 void SelectionView::load()
 {
     clear();
-    QTreeWidgetItem * rootItem = new QTreeWidgetItem;
-    rootItem->setText(0,"variants");
-    rootItem->setText(1, QString::number(cutevariant->sqlite()->variantsCount()));
-    rootItem->setIcon(0,FIcon(0xf0ce));
-    rootItem->setTextAlignment(1,Qt::AlignRight);
-    addTopLevelItem(rootItem);
+    // mandatory variant table name
+    QTreeWidgetItem * variantItem = new QTreeWidgetItem;
+    variantItem->setText(0,"variants");
+    variantItem->setText(1, QString::number(cutevariant->sqlite()->variantsCount()));
+    variantItem->setIcon(0,FIcon(0xf24b));
+    variantItem->setTextAlignment(1,Qt::AlignRight);
+    addTopLevelItem(variantItem);
 
+    // mandatory Favoris table name
+    QTreeWidgetItem * favorisItem = new QTreeWidgetItem;
+    favorisItem->setText(0,"Favoris");
+    //favorisItem->setText(1, QString::number(cutevariant->sqlite()->variantsCount()));
+    favorisItem->setIcon(0,FIcon(0xf69c));
+    favorisItem->setTextAlignment(1,Qt::AlignRight);
+    addTopLevelItem(favorisItem);
 
-    for (cvar::VariantSet selection : cutevariant->sqlite()->variantSets())
-    {
-        QTreeWidgetItem * item = new QTreeWidgetItem;
-        item->setText(0, selection.name());
-        item->setText(1,QString::number(selection.count()));
-        item->setToolTip(0, selection.description());
-        item->setTextAlignment(1,Qt::AlignRight);
-        item->setIcon(0,FIcon(0xf0ce));
+        for (cvar::VariantSet selection : cutevariant->sqlite()->variantSets())
+        {
+            QTreeWidgetItem * item = new QTreeWidgetItem;
+            item->setText(0, selection.name());
+            item->setText(1,QString::number(selection.count()));
+            item->setToolTip(0, selection.description());
+            item->setTextAlignment(1,Qt::AlignRight);
+            item->setIcon(0,FIcon(0xf0ce));
 
-        addTopLevelItem(item);
-    }
+            addTopLevelItem(item);
+        }
 
-    header()->setSectionResizeMode(0,QHeaderView::Stretch);
-    header()->setSectionResizeMode(1,QHeaderView::ResizeToContents);
+        header()->setSectionResizeMode(0,QHeaderView::Stretch);
+        header()->setSectionResizeMode(1,QHeaderView::ResizeToContents);
 
-    setCurrentItem(rootItem);
+       setCurrentItem(variantItem);
 }
 //---------------------------------------------------------------------------------------------
 void SelectionView::removeSelection()

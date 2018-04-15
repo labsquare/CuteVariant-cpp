@@ -1,6 +1,7 @@
 #ifndef COLUMNVIEW_H
 #define COLUMNVIEW_H
 #include <QtWidgets>
+#include <QSortFilterProxyModel>
 #include "columnmodel.h"
 #include "project.h"
 #include "filterdialog.h"
@@ -14,14 +15,19 @@ public:
     QStringList selectedColumns() const;
     void load();
 
+public Q_SLOTS:
+    void setFilter(const QString& txt);
+
 Q_SIGNALS:
     void filterItemCreated(ConditionItem * item);
+    void itemChanged();
 
 protected:
     virtual void contextMenuEvent(QContextMenuEvent * event);
 
 private:
     ColumnModel * mModel;
+    QSortFilterProxyModel * mProxyModel;
 };
 
 #endif // COLUMNVIEW_H

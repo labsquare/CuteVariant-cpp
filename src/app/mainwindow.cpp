@@ -19,14 +19,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mColumnDock       = new ColumnDockWidget();
     mSelectionDock    = new SelectionDockWidget();
     mFilterDock       = new FilterDockWidget();
-    mBedDock          = new BedDockWidget();
+    mRegionDock       = new RegionDockWidget();
 
     mLocationSearchEdit = new QLineEdit;
 
     addBaseDock(mColumnDock);
     addBaseDock(mSelectionDock);
     addBaseDock(mFilterDock);
-    addBaseDock(mBedDock);
+    addBaseDock(mRegionDock);
     //addBaseDock(new MetadataDockWidget);
 
 
@@ -208,7 +208,7 @@ void MainWindow::updateEditor()
     query.setColumns(mColumnDock->selectedColumns());
     query.setTable(mSelectionDock->tableName());
     query.setCondition(mFilterDock->condition());
-    query.setRegion(mBedDock->region());
+    query.setRegion(mRegionDock->region());
 
     mEditor->setQuery(query);
 
@@ -251,6 +251,8 @@ void MainWindow::setupActions()
     //    mToolBar->addAction(showConsole);
 
 
+
+
     // setup menu bar
     setMenuBar(new QMenuBar);
     QMenu * fileMenu = menuBar()->addMenu("&File");
@@ -258,6 +260,12 @@ void MainWindow::setupActions()
     QAction * importAction = fileMenu->addAction(FIcon(0xf220), "&Import ...", this, SLOT(importFile()), QKeySequence::New);
     fileMenu->addSeparator();
     fileMenu->addAction(FIcon(0xf206),"&Quit");
+
+
+    QMenu * viewMenu = menuBar()->addMenu("&View");
+    for (auto & dock : mBaseDocks)
+        viewMenu->addAction(dock->toggleViewAction());
+
 
     QMenu * queryMenu = menuBar()->addMenu("&Query");
     QAction * runAction = queryMenu->addAction(FIcon(0xf40d), "&Run", this, SLOT(execute()), QKeySequence(Qt::CTRL + Qt::Key_R));

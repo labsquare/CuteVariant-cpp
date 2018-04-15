@@ -113,7 +113,7 @@ void QFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mo
     QFont font = QFont(mFontFamily);
     int drawSize = qRound(rect.height() * 0.8);
     font.setPixelSize(drawSize);
-
+    font.setStyleStrategy(QFont::PreferAntialias);
     QColor penColor;
     if (!mBaseColor.isValid())
         penColor = QApplication::palette("QWidget").color(QPalette::Normal,QPalette::ButtonText);
@@ -131,7 +131,7 @@ void QFontIconEngine::paint(QPainter *painter, const QRect &rect, QIcon::Mode mo
     painter->save();
     painter->setPen(QPen(penColor));
     painter->setFont(font);
-    painter->setRenderHint(QPainter::HighQualityAntialiasing, true);
+    painter->setRenderHint(QPainter::TextAntialiasing);
     painter->drawText(rect, Qt::AlignCenter|Qt::AlignVCenter, mLetter);
 
     painter->restore();

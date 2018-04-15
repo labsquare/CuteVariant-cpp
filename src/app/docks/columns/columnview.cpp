@@ -3,19 +3,27 @@
 ColumnView::ColumnView(QWidget *parent)
     :QTreeView(parent)
 {
-    mModel   = new ColumnModel();
-    setModel(mModel);
+    mModel       = new ColumnModel();
+    mProxyModel  = new QSortFilterProxyModel();
+
+    mProxyModel->setSourceModel(mModel);
+    mProxyModel->setRecursiveFilteringEnabled(true); // NEW IN Qt 5.10 ! HOURRA
+    mProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+    setModel(mProxyModel);
     setWindowTitle(tr("Fields"));
-    viewport()->setAutoFillBackground( false );
-   // setFrameShape(QFrame::NoFrame);
+    //iewport()->setAutoFillBackground( false );
+    // setFrameShape(QFrame::NoFrame);
     header()->hide();
 
-//    setStyleSheet(
-//        "QTreeView::indicator:unchecked {image: url(:/uncheck.png);}"
-//        "QTreeView::indicator:checked {image: url(:/check.png);}"
-//      );
+    //    setStyleSheet(
+    //        "QTreeView::indicator:unchecked {image: url(:/uncheck.png);}"
+    //        "QTreeView::indicator:checked {image: url(:/check.png);}"
+    //      );
 
     setAlternatingRowColors(true);
+
+    connect(mModel,SIGNAL(itemChanged(QStandardItem*)),this, SIGNAL(itemChanged()));
 
 
 }
@@ -30,6 +38,13 @@ void ColumnView::load()
     mModel->load();
 }
 
+void ColumnView::setFilter(const QString &txt)
+{
+    expandAll();
+    mProxyModel->setFilterFixedString(txt);
+}
+
+
 void ColumnView::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu menu(this);
@@ -42,19 +57,19 @@ void ColumnView::contextMenuEvent(QContextMenuEvent *event)
 
         menu.addAction("show Description", [field](){
 
-        QMessageBox::information(nullptr,field.name(), field.description());
+            QMessageBox::information(nullptr,field.name(), field.description());
 
         });
 
 
         menu.addAction("add Filter ...", [field,this](){
 
-              FilterDialog dialog;
-              dialog.setField(field);
-              if (dialog.exec())
-              {
-                  emit filterItemCreated(dialog.createCondition());
-              }
+            FilterDialog dialog;
+            dialog.setField(field);
+            if (dialog.exec())
+            {
+                emit filterItemCreated(dialog.createCondition());
+            }
 
 
         });

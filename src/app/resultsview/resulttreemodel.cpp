@@ -164,7 +164,7 @@ void ResultTreeModel::sort(int column, Qt::SortOrder order)
         // column + 1 because we hide ID
         // remove "sql 'as name' statement "
         QString col = mCurrentQuery.sqlColumns().at(column+1);
-        col = col.remove(QRegularExpression(R"(as.+)"));
+        col = col.remove(QRegularExpression(R"(\s+as.+)"));
 
         mCurrentQuery.setOrderBy({col});
         mCurrentQuery.setSortOrder(order);

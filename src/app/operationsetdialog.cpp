@@ -76,9 +76,9 @@ void OperationSetDialog::load()
     mModeBox->addItem("By Site chr,pos)", cvar::SqliteManager::SiteMode);
     mModeBox->addItem("By variant (chr,pos, ref, alt)", cvar::SqliteManager::VariantMode);
 
-    mOperator->addItem(FIcon(0xf147), "Union", "+");
-    mOperator->addItem(FIcon(0xf149),"Intersect","&");
-    mOperator->addItem(FIcon(0xf148),"Subtract","-");
+    mOperator->addItem(FIcon(0xf564), "Union", "+");
+    mOperator->addItem(FIcon(0xf55d),"Intersect","&");
+    mOperator->addItem(FIcon(0xf55c),"Subtract","-");
 
 
     for (const QString& name : cutevariant->sqlite()->variantSetNames())

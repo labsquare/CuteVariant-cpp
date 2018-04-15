@@ -21,8 +21,8 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 
     painter->save();
 
-    QItemDelegate::drawBackground(painter,option,index);
 
+    QItemDelegate::drawBackground(painter,option,index);
 
     // Draw selection
 //    if (select) {
@@ -75,6 +75,7 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 
     if (colname.toLower() == "ann_impact_so")
     {
+        painter->setClipRect(option.rect,Qt::IntersectClip);
         QStringList soTerms = index.data().toString().split("&");
         QRect rect;
         QFont font = painter->font();

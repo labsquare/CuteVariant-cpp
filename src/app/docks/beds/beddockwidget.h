@@ -3,11 +3,11 @@
 #include <QtWidgets>
 #include "basedockwidget.h"
 #include "project.h"
-class BedDockWidget : public BaseDockWidget
+class RegionDockWidget : public BaseDockWidget
 {
     Q_OBJECT
 public:
-    BedDockWidget(QWidget * parent = nullptr);
+    RegionDockWidget(QWidget * parent = nullptr);
 
     virtual void reset() override;
 

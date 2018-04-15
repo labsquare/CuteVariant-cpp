@@ -89,7 +89,7 @@ private:
     SelectionDockWidget * mSelectionDock;
     ColumnDockWidget * mColumnDock;
     FilterDockWidget * mFilterDock;
-    BedDockWidget * mBedDock;
+    RegionDockWidget * mRegionDock;
     QList<BaseDockWidget*> mBaseDocks;
     QToolBar * mToolBar;
     QLineEdit * mLocationSearchEdit;

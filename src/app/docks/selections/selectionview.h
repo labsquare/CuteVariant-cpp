@@ -2,6 +2,7 @@
 #define SELECTIONVIEW_H
 
 #include <QtWidgets>
+#include "qfonticon.h"
 #include "project.h"
 #include "qfonticon.h"
 class SelectionView : public QTreeWidget
@@ -14,6 +15,7 @@ public:
 
 public Q_SLOTS:
     void removeSelection();
+
 
 
 };

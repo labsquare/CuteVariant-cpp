@@ -17,8 +17,10 @@ Q_SIGNALS:
      void filterItemCreated(ConditionItem * item);
 
 
+
 private:
     ColumnView * mView;
+    QLineEdit * mSearchEdit;
 
 };
 
