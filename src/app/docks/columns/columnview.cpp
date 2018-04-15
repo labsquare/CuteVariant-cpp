@@ -48,7 +48,7 @@ void ColumnView::setFilter(const QString &txt)
 void ColumnView::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu menu(this);
-    QModelIndex index = indexAt(event->pos());
+    QModelIndex index = mProxyModel->mapToSource(indexAt(event->pos()));
     cvar::Field field = mModel->field(index);
 
     if (!field.isNull())

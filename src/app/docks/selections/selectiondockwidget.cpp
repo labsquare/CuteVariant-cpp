@@ -14,7 +14,6 @@ SelectionDockWidget::SelectionDockWidget(QWidget *parent)
 
     addActionSpacer();
 
-    addAction(FIcon(0xf5e8),"delete",mView, SLOT(removeSelection()));
 
     // addAction(FIcon(0xf118),"search", this, SLOT(compare()));
 
