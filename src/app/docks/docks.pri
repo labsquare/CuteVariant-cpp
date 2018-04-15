@@ -5,6 +5,7 @@ include(filters/filters.pri)
 include(selections/selections.pri)
 include(columns/columns.pri)
 include(beds/beds.pri)
+include(charts/charts.pri)
 
 HEADERS += \
     $$PWD/metadatadockwidget.h

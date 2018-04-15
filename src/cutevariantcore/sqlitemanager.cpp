@@ -302,6 +302,63 @@ int SqliteManager::variantsCount(const VariantQuery &query) const
 
 }
 //-------------------------------------------------------------------------------
+QHash<QString, int> SqliteManager::variantsStats(const VariantQuery &query) const
+{
+
+    VariantQuery newQuery = query;
+    newQuery.setNoLimit();
+
+    QString sql = QString("SELECT ref, alt, count(*) as 'count' FROM (%1) WHERE length(ref) = 1 AND length(alt) = 1 GROUP BY ref,alt").arg(newQuery.toSql());
+
+    QSqlQuery q;
+    if (!q.exec(sql))
+    {
+        qDebug()<<q.lastQuery();
+        qDebug()<<q.lastError().text();
+    }
+
+
+    QHash<QString, int> out =
+    {
+        {"CT",0},
+        {"TA",0},
+        {"CG",0},
+        {"TG",0},
+        {"CA",0},
+        {"TC",0}
+    };
+
+    while (q.next())
+    {
+        QString mutation = q.record().value("ref").toString() + q.record().value("alt").toString();
+        int count        = q.record().value("count").toInt();
+        mutation         = mutation.toUpper();
+
+        if (mutation == "CT" || mutation == "GA")
+            out["CT"] += count;
+
+        if (mutation == "TA" || mutation == "AT")
+            out["TA"] += count;
+
+        if (mutation == "CG" || mutation == "GC")
+            out["CG"] += count;
+
+        if (mutation == "TG" || mutation == "AC")
+            out["TG"] += count;
+
+        if (mutation == "CA" || mutation == "GT")
+            out["CA"] += count;
+
+        if (mutation == "TC" || mutation == "AG")
+            out["TC"] += count;
+    }
+
+    return out;
+
+
+
+}
+//-------------------------------------------------------------------------------
 int SqliteManager::variantsCount(const QString &setName) const
 {
     VariantQuery query;

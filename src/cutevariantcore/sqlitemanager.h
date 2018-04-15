@@ -123,6 +123,10 @@ public:
     int variantsCount(const VariantQuery& query) const;
 
 
+
+    QHash<QString,int> variantsStats(const VariantQuery& query) const;
+
+
     /*!
      * \brief variantsCount
      * \param table

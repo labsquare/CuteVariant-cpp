@@ -1,4 +1,4 @@
-QT += core widgets sql
+QT += core widgets sql charts
 QT += concurrent
 CONFIG -= debug_and_release
 CONFIG += c++14

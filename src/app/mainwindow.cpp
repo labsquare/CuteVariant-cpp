@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     mSelectionDock    = new SelectionDockWidget();
     mFilterDock       = new FilterDockWidget();
     mRegionDock       = new RegionDockWidget();
+    mChartDock        = new ChartDockWidget();
 
     mLocationSearchEdit = new QLineEdit;
 
@@ -27,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     addBaseDock(mSelectionDock);
     addBaseDock(mFilterDock);
     addBaseDock(mRegionDock);
+    addBaseDock(mChartDock);
     //addBaseDock(new MetadataDockWidget);
 
 
@@ -183,9 +185,11 @@ ResultsView *MainWindow::currentResultView()
 //-------------------------------------------------------------------------
 void MainWindow::execute()
 {
-    if (mEditor->isValid())
+    if (mEditor->isValid()){
         currentResultView()->setQuery(mEditor->query());
 
+        mChartDock->setQuery(mEditor->query());
+    }
 
 }
 //-------------------------------------------------------------------------
@@ -198,6 +202,8 @@ void MainWindow::executeSelection(const QString &name)
     q.setColumns(mColumnDock->selectedColumns());
     q.setTable(name);
     q.setCondition(mFilterDock->condition());
+
+
     currentResultView()->setQuery(q);
 
 }
@@ -211,6 +217,7 @@ void MainWindow::updateEditor()
     query.setRegion(mRegionDock->region());
 
     mEditor->setQuery(query);
+
 
     execute();
 

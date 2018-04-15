@@ -14,7 +14,7 @@
 #include "filterdockwidget.h"
 #include "metadatadockwidget.h"
 #include "beddockwidget.h"
-
+#include "chartdockwidget.h"
 #include "qfonticon.h"
 
 class MainWindow : public QMainWindow
@@ -90,6 +90,7 @@ private:
     ColumnDockWidget * mColumnDock;
     FilterDockWidget * mFilterDock;
     RegionDockWidget * mRegionDock;
+    ChartDockWidget * mChartDock;
     QList<BaseDockWidget*> mBaseDocks;
     QToolBar * mToolBar;
     QLineEdit * mLocationSearchEdit;
