@@ -29,7 +29,7 @@ protected Q_SLOTS:
     void setPage(int page);
     void save();
     void exportCsv();
-    void showVql();
+    void showSql();
     void changeDelegate();
 
 

@@ -7,19 +7,24 @@ FilterDockWidget::FilterDockWidget(QWidget *parent)
     setTitle("Filter");
     setWidget(mView);
 
-    mAddConditionAction = addAction(FIcon(0xf13b), "add condition", this, SLOT(addCondition()));
-    mAddLogicAction     = addAction(FIcon(0xf138), "add logic", this, SLOT(addLogic()));
-    mRemAction          = addAction(FIcon(0xf114), "remove", this, SLOT(remove()));
+    mAddConditionAction = addAction(FIcon(0xf418), "add condition", this, SLOT(addCondition()));
+    mAddLogicAction     = addAction(FIcon(0xf419), "add logic", this, SLOT(addLogic()));
+    mRemAction          = addAction(FIcon(0xf413), "remove", this, SLOT(remove()));
+
 
     addActionSpacer();
-    QAction * saveAction = new QAction(FIcon(0xf11e),"open");
-    saveAction->setMenu(new QMenu);
-    saveAction->menu()->addAction("Preset1");
-    saveAction->menu()->addAction("Preset2");
-    saveAction->menu()->addAction("Preset3");
-    saveAction->menu()->addSeparator();
-    saveAction->menu()->addAction("Save");
-    saveAction->menu()->addAction("Edit ...");
+
+    addAction(FIcon(0xf5e8), "remove all", this, SLOT(remove()));
+
+
+//    QAction * saveAction = new QAction(FIcon(0xf11e),"open");
+//    saveAction->setMenu(new QMenu);
+//    saveAction->menu()->addAction("Preset1");
+//    saveAction->menu()->addAction("Preset2");
+//    saveAction->menu()->addAction("Preset3");
+//    saveAction->menu()->addSeparator();
+//    saveAction->menu()->addAction("Save");
+//    saveAction->menu()->addAction("Edit ...");
    // addAction(saveAction);
     updateActions();
     connect(mView,SIGNAL(activated(QModelIndex)), this, SLOT(updateActions()));

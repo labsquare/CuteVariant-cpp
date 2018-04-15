@@ -5,7 +5,7 @@
 
 
 ResultDelegate::ResultDelegate(QObject *parent)
-    :QStyledItemDelegate(parent)
+    :QItemDelegate(parent)
 {
 
     setObjectName("snpEff");
@@ -21,22 +21,44 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 
     painter->save();
 
+    QItemDelegate::drawBackground(painter,option,index);
+
 
     // Draw selection
-    if (select) {
-        QRect selectedRect = option.rect;
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(pal.brush(QPalette::Highlight));
-        painter->drawRect(selectedRect);
-    }
+//    if (select) {
+//        QRect selectedRect = option.rect;
+//        painter->setPen(Qt::NoPen);
+//        painter->setBrush(pal.brush(QPalette::Highlight));
+//        painter->drawRect(selectedRect);
+//    }
 
-    else
+//    else
+//    {
+//        QRect selectedRect = option.rect;
+//        painter->setPen(Qt::NoPen);
+//        painter->setBrush(index.row() % 2 ? pal.color(QPalette::Base):  pal.color(QPalette::AlternateBase));
+//        painter->drawRect(selectedRect);
+
+//    }
+
+    if (colname.toLower() == "ref" || colname.toLower() == "alt")
     {
-        QRect selectedRect = option.rect;
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(index.row() % 2 ? pal.color(QPalette::Base):  pal.color(QPalette::AlternateBase));
-        painter->drawRect(selectedRect);
+        QString value = index.data().toString();
+        int x = option.rect.x();
+        int y = option.rect.center().y();
+        QFontMetrics metrics(painter->font());
 
+
+        for (const QChar& c : value)
+        {
+            painter->setPen(QPen(baseColor.value(c, Qt::lightGray)));
+            painter->drawText(x,y, c);
+
+            x+= metrics.width(c);
+        }
+
+        painter->restore();
+        return;
     }
 
 
@@ -60,7 +82,7 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         painter->setFont(font);
         QFontMetrics metrics(painter->font());
         rect.setX(option.rect.x());
-        rect.setY(option.rect.center().y());
+        rect.setY(option.rect.center().y() - 5);
 
 
         for (QString& so : soTerms )
@@ -141,7 +163,7 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 
 
     painter->setPen(QPen(pal.color(select ? QPalette::HighlightedText : QPalette::Text)));
-    painter->drawText(option.rect, Qt::AlignCenter, index.data().toString());
+    painter->drawText(option.rect, Qt::AlignLeft|Qt::AlignVCenter, index.data().toString());
 
 
 

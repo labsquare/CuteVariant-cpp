@@ -16,15 +16,15 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
     mRawDelegate     = new QStyledItemDelegate;
 
 
+    mView->header()->setStretchLastSection(false);
     mView->setModel(mModel);
     mView->setSortingEnabled(true);
     mView->setItemDelegate(mNiceDelegate);
+    mView->setAlternatingRowColors(true);
     mView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     // mView->setFrameStyle(QFrame::HLine);
     mView->setFrameShape(QFrame::NoFrame);
     QVBoxLayout * vLayout = new QVBoxLayout;
-
-
 
 
     mPageBox->setValidator(mPageValidator);
@@ -59,7 +59,7 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
 
     mTopToolBar->layout()->setContentsMargins(0,0,0,0);
 
-    mBottomToolBar->addAction(FIcon(0xf12c),"sql",this, SLOT(showVql()));
+    mBottomToolBar->addAction(FIcon(0xf12c),"sql",this, SLOT(showSql()));
     mBottomToolBar->addWidget(mCountLabel);
 
     QWidget * spacer = new QWidget;
@@ -186,13 +186,13 @@ void ResultsView::exportCsv()
     }
 }
 
-void ResultsView::showVql()
+void ResultsView::showSql()
 {
     QDialog infoBox;
     QPlainTextEdit * edit = new QPlainTextEdit(&infoBox);
     QVBoxLayout * infoLayout = new QVBoxLayout;
     infoLayout->addWidget(edit);
-    edit->setPlainText(mQuery.toSql());
+    edit->setPlainText(mModel->currentQuery().toSql());
     infoBox.setLayout(infoLayout);
     infoBox.setWindowTitle("raw sql");
     infoBox.exec();

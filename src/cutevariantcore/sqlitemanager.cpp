@@ -159,7 +159,7 @@ QList<Field> SqliteManager::genotypeFields(const Sample& sample) const
         field.setDescription(query.value("description").toString());
         field.setType(query.value("type").toString());
         field.setCategory(query.value("category").toString());
-        field.setExpression(QString("sample[\"%1\"].%2").arg(sample.name(),field.name().toLower()));
+        field.setExpression(QString("genotype(\"%1\").%2").arg(sample.name(),field.name().toLower()));
 
         fields.append(field);
     }

@@ -11,7 +11,7 @@ const QString VqlParser::query() const
     return mQuery;
 }
 
-const QString VqlParser::tableName() const
+const QString VqlParser::table() const
 {
     QRegularExpression exp("(?<=FROM)\\s(\\w+)");
     QRegularExpressionMatch match = exp.match(query());

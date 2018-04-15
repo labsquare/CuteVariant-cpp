@@ -17,5 +17,7 @@
         <file alias="gt_mut">gt_homo_mut.png</file>
         <file alias="gt_wt">gt_homo_wt.png</file>
         <file alias="gt_unknown">gt_unknown.png</file>
+        <file>check.png</file>
+        <file>uncheck.png</file>
     </qresource>
 </RCC>

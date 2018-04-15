@@ -28,6 +28,8 @@ FilterView::FilterView(QWidget * parent)
 
 
 
+
+
     connect(this, &FilterView::doubleClicked, this, &FilterView::editCondition);
     connect(this,SIGNAL(itemChanged(QTreeWidgetItem*,int)),this, SIGNAL(changed()));
 

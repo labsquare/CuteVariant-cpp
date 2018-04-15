@@ -21,7 +21,7 @@ class VqlParser
 public:
     VqlParser(const QString& query = QString());
     const QString query() const;
-    const QString tableName() const;
+    const QString table() const;
     const QStringList columns() const;
     const QString conditions() const;
     const QString region() const;

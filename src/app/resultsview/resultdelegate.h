@@ -1,31 +1,37 @@
 #ifndef RESULTDELEGATE_H
 #define RESULTDELEGATE_H
-#include <QStyledItemDelegate>
+#include <QItemDelegate>
 #include <QPainter>
 #include <QApplication>
 
-class ResultDelegate : public QStyledItemDelegate
+class ResultDelegate : public QItemDelegate
 {
     Q_OBJECT
 public:
     ResultDelegate(QObject * parent = nullptr);
-   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 
-   QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 private:
 
 
-   const QHash<QString,QColor> impactColor {
-       {"LOW", QColor("#71E096")},
-       {"MODERATE", QColor("#F5A26F")},
-       {"HIGH", QColor("#ed6d79")},
-       {"MODIFIER", QColor("#55abe1")}
-   };
+    const QHash<QString,QColor> impactColor {
+        {"LOW",     "#71E096"},
+        {"MODERATE","#F5A26F"},
+        {"HIGH",    "#ed6d79"},
+        {"MODIFIER","#55abe1"}
+    };
 
 
-
+    // TODO  : more color IUPAC
+    const QHash<QString,QColor> baseColor {
+        {"A","#71E096"},
+        {"C" ,"#668DE5"},
+        {"G" ,"#000000"},
+        {"T" ,"#ED6D79"}
+    };
 
 };
 

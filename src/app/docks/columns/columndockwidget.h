@@ -19,6 +19,7 @@ Q_SIGNALS:
 
 private:
     ColumnView * mView;
+
 };
 
 #endif // COLUMNDOCKWIDGET_H

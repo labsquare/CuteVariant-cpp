@@ -6,20 +6,18 @@ ColumnView::ColumnView(QWidget *parent)
     mModel   = new ColumnModel();
     setModel(mModel);
     setWindowTitle(tr("Fields"));
-   // viewport()->setAutoFillBackground( false );
+    viewport()->setAutoFillBackground( false );
    // setFrameShape(QFrame::NoFrame);
     header()->hide();
 
-//    setStyleSheet(R"(
+//    setStyleSheet(
+//        "QTreeView::indicator:unchecked {image: url(:/uncheck.png);}"
+//        "QTreeView::indicator:checked {image: url(:/check.png);}"
+//      );
 
-//                  QTreeView::indicator:checked {
-//                  image: url(:/eye-on.png);
-//                  }
-//                  QTreeView::indicator:unchecked {
-//                  image: url(:/eye-off.png);
-//                  }
+    setAlternatingRowColors(true);
 
-//                  )");
+
 }
 
 QStringList ColumnView::selectedColumns() const

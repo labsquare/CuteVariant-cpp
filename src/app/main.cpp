@@ -37,6 +37,15 @@ int main(int argc, char **argv)
         MainWindow win;
         win.show();
 
+      //  win.hide();
+
+
+//    VariantQuery query = VariantQuery::fromVql(R"(SELECT chr,pos,genotype("saca").gt, genotype("boby").gt FROM variants)");
+
+
+//    qDebug()<<query;
+//    qDebug()<<query.sqlColumns();
+
 
 
 //    SnpEffVCFReader reader("/home/sacha/test.vcf");

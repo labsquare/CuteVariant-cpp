@@ -15,10 +15,10 @@ class VariantQuery
 public:
     VariantQuery();
     VariantQuery(const QStringList& columns,
-                 const QString& tableName);
+                 const QString& table);
 
     VariantQuery(const QStringList& columns,
-                 const QString& tableName,
+                 const QString& table,
                  const QString& conditions);
 
 
@@ -44,13 +44,13 @@ public:
      * \brief table
      * \return table name
      */
-    const QString& tableName() const;
+    const QString& table() const;
 
     /*!
      * \brief setTable
      * \param tableName
      */
-    void setTable(const QString &tableName);
+    void setTable(const QString &table);
 
     /*!
      * \brief condition
@@ -108,15 +108,16 @@ public:
 
     void setNoLimit();
 
-protected:
+//protected:
 
-     const QStringList rawColumns() const;
-     const QString rawTableName() const;
-     const QString rawCondition() const;
-     const QString rawOrderBy() const;
-     const QString rawGroupBy() const;
-     const QString rawLimitOffset() const;
-     const QString rawBed() const;
+     const QStringList sqlColumns() const;
+     const QString sqlTableName() const;
+     const QString sqlCondition() const;
+     const QString sqlOrderBy() const;
+     const QString sqlGroupBy() const;
+     const QString sqlLimitOffset() const;
+     const QString sqlRegion() const;
+
 
 
 

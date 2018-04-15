@@ -136,7 +136,7 @@ void ResultTreeModel::fetchMore(const QModelIndex &parent)
     mChilds[parentRow].clear();
 
     cvar::VariantQuery temp = mCurrentQuery;
-    temp.setCondition(QString("%2.id IN (%1)").arg(ids.join(",")).arg(mCurrentQuery.tableName()));
+    temp.setCondition(QString("%2.id IN (%1)").arg(ids.join(",")).arg(mCurrentQuery.table()));
     temp.setGroupBy({});
     temp.setNoLimit();
 
@@ -158,8 +158,14 @@ void ResultTreeModel::sort(int column, Qt::SortOrder order)
 {
 
     if (column < columnCount()) {
-        QString col = headerData(column, Qt::Horizontal, Qt::DisplayRole).toString();
-        qDebug()<<col;
+
+        //QString col = headerData(column, Qt::Horizontal, Qt::DisplayRole).toString();
+        // TODO: hack remove.. It's hugly
+        // column + 1 because we hide ID
+        // remove "sql 'as name' statement "
+        QString col = mCurrentQuery.sqlColumns().at(column+1);
+        col = col.remove(QRegularExpression(R"(as.+)"));
+
         mCurrentQuery.setOrderBy({col});
         mCurrentQuery.setSortOrder(order);
         load();

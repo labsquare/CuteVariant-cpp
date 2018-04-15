@@ -12,7 +12,13 @@ BedDockWidget::BedDockWidget(QWidget *parent)
     setWidget(mView);
 
 
-    addAction(QIcon(), "Import bed", this, SLOT(addBedFile()));
+    addAction(FIcon(0xf1ba), "Import bed", this, SLOT(addBedFile()));
+
+    addActionSpacer();
+
+    addAction(FIcon(0xf5e8), "Remove all", this, SLOT(addBedFile()));
+
+
     connect(mView, &QTreeWidget::doubleClicked, this, &BedDockWidget::changed);
 
 }

@@ -22,7 +22,6 @@ bool VariantQuery::isValid() const
 {
     //TODO check valid query
 
-
     return true;
 
 
@@ -33,43 +32,16 @@ const QStringList& VariantQuery::columns() const
     return mColumns;
 }
 
-//QStringList VariantQuery::rawColumns() const
-//{
-//    QStringList raw;
-
-//    if (columns().join("") =="*")
-//        return QStringList({QString("%1.*").arg(rawTable())});
-
-
-//    for (QString col : columns())
-//    {
-//        col = col.remove("variants.");
-
-//        // if col is a sample fields ...
-//        if (col.contains("["))
-//            replaceSampleFields(col, true);
-//        else
-//            col = QString("%1.`%2` as '%2' ").arg(rawTable(),col);
-
-
-//        qDebug()<<col;
-
-//        raw.append(col);
-//    }
-//    return raw;
-//}
-
-
 void VariantQuery::setColumns(const QStringList &columns)
 {
     mColumns.clear();
-    for (QString col: columns)
+    for (const QString& col: columns)
     {
         mColumns.append(col.simplified());
     }
 }
 
-const QString& VariantQuery::tableName() const
+const QString& VariantQuery::table() const
 {
     return mTable;
 }
@@ -127,25 +99,25 @@ QString VariantQuery::toSql() const
     QString s_query;
 
     // select statement
-    QString s_select = "SELECT " + rawColumns().join(",");
+    QString s_select = "SELECT " + sqlColumns().join(",");
 
     // where statement
-    QString s_where = !rawCondition().isEmpty() ? " WHERE "+rawCondition() : QString();
+    QString s_where = !sqlCondition().isEmpty() ? " WHERE "+sqlCondition() : QString();
 
     // from statement
-    QString s_from = " FROM "+rawTableName();
+    QString s_from = " FROM "+sqlTableName();
 
     // left join statement
     QString s_leftJoin;
 
     // group by statement
-    QString s_groupBy = rawGroupBy();
+    QString s_groupBy = sqlGroupBy();
 
     // order by statement
-    QString s_orderBy = rawOrderBy();
+    QString s_orderBy = sqlOrderBy();
 
     // limt offset statement
-    QString s_limitOffset = rawLimitOffset();
+    QString s_limitOffset = sqlLimitOffset();
 
     // join variant with genotype : LEFT JOIN genotype as gt_<sample> ON variant.id = gt_<sample>.variant_id
     QStringList joinSamples;
@@ -162,7 +134,7 @@ QString VariantQuery::toSql() const
     // Create sample join relation
     for (QString sample : extractSamples())
     {
-        joinSamples.append(QString(" LEFT JOIN genotypes as `gt_%1` ON %2.id = `gt_%1`.variant_id ").arg(sample).arg(tableName()));
+        joinSamples.append(QString(" LEFT JOIN genotypes as `gt_%1` ON %2.id = `gt_%1`.variant_id ").arg(sample).arg(table()));
         whereSamples.append(QString(" `gt_%1`.sample_id = %2 ").arg(sample).arg(samplesIds[sample]));
     }
 
@@ -179,16 +151,16 @@ QString VariantQuery::toSql() const
 
     // add extra fields for group by
     if (!groupBy().isEmpty())
-        s_select += QString(" ,COUNT(%1.id) as 'count', group_concat(%1.id) as 'childs' ").arg(tableName());
+        s_select += QString(" ,COUNT(%1.id) as 'count', group_concat(%1.id) as 'childs' ").arg(table());
 
     // add region
     if (!region().isEmpty()){
-        s_from += ","+rawBed();
+        s_from += ","+sqlRegion();
 
         if (s_where.isEmpty())
-            s_where.append(QString(" WHERE %1.pos BETWEEN %2.start AND %2.end AND %1.chr = %2.chr").arg(rawTableName(), rawBed()));
+            s_where.append(QString(" WHERE %1.pos BETWEEN %2.start AND %2.end AND %1.chr = %2.chr").arg(sqlTableName(), sqlRegion()));
         else
-            s_where.append(QString(" AND %1.pos BETWEEN %2.start AND %2.end AND %1.chr = %2.chr").arg(rawTableName(), rawBed()));
+            s_where.append(QString(" AND %1.pos BETWEEN %2.start AND %2.end AND %1.chr = %2.chr").arg(sqlTableName(), sqlRegion()));
 
 
     }
@@ -257,14 +229,14 @@ QString VariantQuery::toVql() const
     if (!columns().isEmpty())
         vql+= QString("SELECT %1 ").arg(columns().join(","));
 
-    if (!tableName().isEmpty())
-        vql+= QString("FROM %2 ").arg(tableName());
+    if (!table().isEmpty())
+        vql+= QString("FROM %2 ").arg(table());
 
     if (!condition().isEmpty())
         vql += QString("WHERE %3 ").arg(condition());
 
     if (!region().isEmpty())
-        vql += QString("BED %1").arg(region());
+        vql += QString("REGION %1").arg(region());
 
     return vql;
 }
@@ -272,7 +244,11 @@ QString VariantQuery::toVql() const
 QStringList VariantQuery::extractSamples() const
 {
     QSet<QString> sampleName;
-    QRegularExpression re("sample\\[(?<sample>[^.]+)\\]");
+    // extract genotype("sample")
+
+    QRegularExpression re(R"(genotype\(\"?(?<sample>[^.]+)\"?\))");
+
+    // extract genotype from columns or condition statement
     QString source = columns().join(" ") +" "+ condition();
 
     QRegularExpressionMatchIterator it = re.globalMatch(source);
@@ -288,9 +264,9 @@ QStringList VariantQuery::extractSamples() const
 QString VariantQuery::replaceSampleFields(const QString &text, bool label) const
 {
     //rename genotype fields
-    // ex : sample["CGH1077"].DP   === >  gt_CGH1077`.DP as 'CGH1077.DP'
+    // ex : genotype("CGH1077").DP   === >  gt_CGH1077`.DP as 'CGH1077.DP'
 
-    QRegularExpression re("sample\\[\\\"(?<sample>[^\\s]+)\\\"\\]\\.(?<arg>[^\\s]+)");
+    QRegularExpression re(R"(genotype\(\"?(?<sample>\w+)\"?\)\.(?<arg>\w+))");
     QRegularExpressionMatchIterator it = re.globalMatch(text);
 
     QString tmp = text;
@@ -298,10 +274,13 @@ QString VariantQuery::replaceSampleFields(const QString &text, bool label) const
     while (it.hasNext())
     {
         QRegularExpressionMatch match = it.next();
-        if (label)
-            tmp.replace(match.captured(), QString("`gt_%1`.%2 as '%1.%2'").arg(match.captured("sample"), match.captured("arg")));
-        else
-            tmp.replace(match.captured(), QString("`gt_%1`.%2").arg(match.captured("sample"), match.captured("arg")));
+
+        qDebug()<<"MATCH "<<match.captured("sample")<<" "<<match.captured("arg");
+
+                if (label)
+                    tmp.replace(match.captured(), QString("`gt_%1`.%2 as '%1.%2'").arg(match.captured("sample"), match.captured("arg")));
+                else
+        tmp.replace(match.captured(), QString("`gt_%1`.%2").arg(match.captured("sample"), match.captured("arg")));
 
 
     }
@@ -355,7 +334,7 @@ VariantQuery VariantQuery::fromVql(const QString &text)
     if (parser.isValid())
     {
         // set table name
-        query.setTable(parser.tableName());
+        query.setTable(parser.table());
 
         // set columns
 
@@ -377,37 +356,31 @@ VariantQuery VariantQuery::fromVql(const QString &text)
 
 //===== PROTECTED
 
-const QStringList VariantQuery::rawColumns() const
+const QStringList VariantQuery::sqlColumns() const
 {
     QStringList raw;
 
-    raw.append(QString("%1.id AS id").arg(rawTableName()));
+    raw.append(QString("%1.id AS id").arg(sqlTableName()));
+    qDebug()<<"all col :" <<columns() << columns().size();
 
     for (QString col : columns())
     {
-        col = col.remove("variants.");
-
-        if (col.contains("bed.") && !rawBed().isEmpty()){
-            col = rawBed()+".value as "+rawBed();
-            raw.append(col);
-            break;
+        //genotype("boby").gt == > `gt_boby`.GT
+        if (col.contains("genotype(")){
+            raw.append(replaceSampleFields(col,true));
+            continue;
         }
 
-        // if col is a sample fields ...
-        if (col.contains("sample[")){
-            col = replaceSampleFields(col,true);
-            raw.append(col);
-            break;
-        }
+        //        // TODO : purpose ??
+        //        if (col.contains("*"))
+        //        {
+        //            raw.append("*");
+        //            break;
+        //        }
 
-        if (col.contains("*"))
-        {
-            raw.append("*");
-            break;
-        }
 
         col = col.replace(".","_");
-        col = QString("%1.`%2` as '%2' ").arg(rawTableName(),col);
+        col = QString("%1.`%2` as '%2' ").arg(sqlTableName(),col);
         raw.append(col);
 
 
@@ -416,15 +389,15 @@ const QStringList VariantQuery::rawColumns() const
     return raw;
 }
 
-const QString VariantQuery::rawTableName() const
+const QString VariantQuery::sqlTableName() const
 {
-    if (tableName().isEmpty())
+    if (table().isEmpty())
         return "'variants'";
     else
-        return QString("`%1`").arg(tableName());
+        return QString("`%1`").arg(table());
 }
 
-const QString VariantQuery::rawCondition() const
+const QString VariantQuery::sqlCondition() const
 {
     QString rawCondition = condition();
 
@@ -441,7 +414,7 @@ const QString VariantQuery::rawCondition() const
     return rawCondition;
 }
 
-const QString VariantQuery::rawOrderBy() const
+const QString VariantQuery::sqlOrderBy() const
 {
     if (orderBy().isEmpty())
         return QString();
@@ -449,11 +422,11 @@ const QString VariantQuery::rawOrderBy() const
         return QString( " ORDER BY %1 %2 ").arg(orderBy().join(",")).arg(mSortOder==Qt::AscendingOrder ? "ASC" : "DESC");
 }
 
-const QString VariantQuery::rawGroupBy() const
+const QString VariantQuery::sqlGroupBy() const
 {
     QStringList gp = groupBy();
     for (QString& i : gp )
-        i.prepend(rawTableName()+".");
+        i.prepend(sqlTableName()+".");
 
     if (!groupBy().isEmpty())
         return QString(" GROUP BY %1 ").arg(gp.join(","));
@@ -461,7 +434,7 @@ const QString VariantQuery::rawGroupBy() const
         return QString();
 }
 
-const QString VariantQuery::rawLimitOffset() const
+const QString VariantQuery::sqlLimitOffset() const
 {
     if (limit() == 0)
         return QString();
@@ -470,7 +443,7 @@ const QString VariantQuery::rawLimitOffset() const
 
 }
 
-const QString VariantQuery::rawBed() const
+const QString VariantQuery::sqlRegion() const
 {
     if (region().isEmpty())
         return QString();
@@ -483,7 +456,7 @@ const QString VariantQuery::rawBed() const
 QDebug operator<< (QDebug d, const VariantQuery &query)
 {
     d<<"================================================\n";
-    d<<"table\t"<<query.tableName()<<"\n";
+    d<<"table\t"<<query.table()<<"\n";
     d<<"columns size\t"<<query.columns().size()<<"\n";
     d<<"columns\t"<<query.columns()<<"\n";
     d<<"condition\t"<<query.condition()<<"\n";
@@ -493,6 +466,10 @@ QDebug operator<< (QDebug d, const VariantQuery &query)
     d<<"offset \t"<<query.offset()<<"\n";
     d<<"limit \t"<<query.limit()<<"\n";
     d<<"================================================\n";
+
+
+
+
     return d;
 }
 
