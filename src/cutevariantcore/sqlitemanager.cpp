@@ -41,12 +41,12 @@ bool SqliteManager::importFile(const QString &filename)
 
     if (info.suffix().toLower() == "vcf"){
         mProgressDevice = new QFile(filename);
-        reader.reset(new SnpEffVCFReader(mProgressDevice));
+        reader.reset(new GenericVCFReader(mProgressDevice));
     }
     if (info.suffix() == "gz")
     {
         mProgressDevice = new QuaGzipFile(filename);
-        reader.reset(new SnpEffVCFReader(mProgressDevice));
+        reader.reset(new GenericVCFReader(mProgressDevice));
     }
 
     if (reader.isNull())
@@ -181,7 +181,7 @@ QList<VariantSet> SqliteManager::variantSets() const
     }
 
     for (VariantSet &s : list)
-        s.setCount(variantsCount(s.name()));
+        s.setCount(-1);
 
     return list;
 }
@@ -280,15 +280,19 @@ QSqlQuery SqliteManager::variants(const VariantQuery &query) const
     return QSqlQuery(query.toSql());
 }
 //-------------------------------------------------------------------------------
-int SqliteManager::variantsCount(const VariantQuery &query) const
+int SqliteManager::variantsCount(const VariantQuery &query)
 {
     VariantQuery q = query;
     // set no limit ..
     q.setLimit(0);
     q.setColumns({"id"});
 
+    QString cacheKey = q.condition() + q.table() + q.region();
+
+    if (mVariantCountCache.contains(cacheKey))
+        return *mVariantCountCache.object(cacheKey);
+
     QString sql = QString("SELECT COUNT(*) as 'count' FROM (%1)").arg(q.toSql());
-    qDebug()<<sql;
 
     QSqlQuery countQuery;
     if (!countQuery.exec(sql))
@@ -298,7 +302,10 @@ int SqliteManager::variantsCount(const VariantQuery &query) const
     }
 
     countQuery.next();
-    return countQuery.record().value("count").toInt();
+
+    int * count = new int(countQuery.record().value("count").toInt());
+    mVariantCountCache.insert(cacheKey,count);
+    return *count;
 
 }
 //-------------------------------------------------------------------------------
@@ -359,8 +366,9 @@ QHash<QString, int> SqliteManager::variantsStats(const VariantQuery &query) cons
 
 }
 //-------------------------------------------------------------------------------
-int SqliteManager::variantsCount(const QString &setName) const
+int SqliteManager::variantsCount(const QString &setName)
 {
+    // TODO :: to slow ...
     VariantQuery query;
     query.setTable(setName);
     query.setGroupBy({"chr","pos","ref","alt"});

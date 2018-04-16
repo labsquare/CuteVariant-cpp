@@ -120,7 +120,7 @@ public:
      * \param query
      * \return how many variant for a specific VariantQuery
      */
-    int variantsCount(const VariantQuery& query) const;
+    int variantsCount(const VariantQuery& query) ;
 
 
 
@@ -132,7 +132,7 @@ public:
      * \param table
      * \return how many variant from a specific set
      */
-    int variantsCount(const QString& setName = "variants") const;
+    int variantsCount(const QString& setName = "variants");
 
     /*!
      * \brief variant
@@ -187,6 +187,8 @@ private:
 
     QIODevice * mProgressDevice;
     quint64 mFileSize;
+
+    QCache<QString, int> mVariantCountCache;
 
 };
 

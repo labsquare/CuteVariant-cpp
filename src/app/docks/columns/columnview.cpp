@@ -7,7 +7,8 @@ ColumnView::ColumnView(QWidget *parent)
     mProxyModel  = new QSortFilterProxyModel();
 
     mProxyModel->setSourceModel(mModel);
-    mProxyModel->setRecursiveFilteringEnabled(true); // NEW IN Qt 5.10 ! HOURRA
+    //#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+    //mProxyModel->setRecursiveFilteringEnabled(true); // NEW IN Qt 5.10 ! HOURRA
     mProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
     setModel(mProxyModel);

@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     setDockOptions(QMainWindow::VerticalTabs);
 
-    openFile("/home/sacha/TRIO1.family.vcf.db");
+    // openFile("/home/sacha/TRIO1.family.vcf.db");
 
 }
 //-------------------------------------------------------------------------
@@ -219,7 +219,7 @@ void MainWindow::updateEditor()
     mEditor->setQuery(query);
 
 
-    execute();
+    //execute();
 
 }
 //-------------------------------------------------------------------------
@@ -227,8 +227,9 @@ void MainWindow::reset()
 {
     mEditor->reset();
 
-    for (BaseDockWidget * w : mBaseDocks)
+    for (BaseDockWidget * w : mBaseDocks){
         w->reset();
+    }
 
     execute();
 
