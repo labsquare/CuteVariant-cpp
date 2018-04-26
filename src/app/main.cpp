@@ -9,7 +9,6 @@
 #include "snpeffvcfteader.h"
 
 
-
 using namespace cvar;
 
 int main(int argc, char **argv)
@@ -24,6 +23,23 @@ int main(int argc, char **argv)
 
     QFontIcon::addFont(":/materialIcon");
 
+
+    cvar::GenericVCFReader reader("/home/sacha/test.vep.vcf");
+
+    for (auto& f : reader.fields())
+        qDebug()<<f.name();
+
+   reader.open();
+
+    while (!reader.atEnd())
+    {
+        auto variant  = reader.readVariant();
+
+        qDebug()<<variant.chromosom()<<" "<<variant.ref()<<" "<<variant.alt();
+    }
+
+
+
     //    Project prj("/tmp/variant.db");
     //    prj.importFile("/tmp/TRIO1.family.vcf");
 
@@ -34,40 +50,40 @@ int main(int argc, char **argv)
     //    }
 
 
-        MainWindow win;
-        win.show();
+    //        MainWindow win;
+    //        win.show();
 
-      //  win.hide();
-
-
-//    VariantQuery query = VariantQuery::fromVql(R"(SELECT chr,pos,genotype("saca").gt, genotype("boby").gt FROM variants)");
+    //  win.hide();
 
 
-//    qDebug()<<query;
-//    qDebug()<<query.sqlColumns();
+    //    VariantQuery query = VariantQuery::fromVql(R"(SELECT chr,pos,genotype("saca").gt, genotype("boby").gt FROM variants)");
+
+
+    //    qDebug()<<query;
+    //    qDebug()<<query.sqlColumns();
 
 
 
-//    SnpEffVCFReader reader("/home/sacha/test.vcf");
+    //    SnpEffVCFReader reader("/home/sacha/test.vcf");
 
 
-//    for (auto i : reader.fields())
-//        qDebug()<<i.name();
+    //    for (auto i : reader.fields())
+    //        qDebug()<<i.name();
 
-//    qDebug()<<"===";
+    //    qDebug()<<"===";
 
-////    for (auto i : reader.metadatas().keys())
-////        qDebug()<<i<<" "<<reader.metadatas()[i];
+    ////    for (auto i : reader.metadatas().keys())
+    ////        qDebug()<<i<<" "<<reader.metadatas()[i];
 
-//    if (reader.open())
-//    {
-//        while (!reader.atEnd())
-//        {
-//            qDebug()<<reader.readVariant().annotation("ANN_GENE");
+    //    if (reader.open())
+    //    {
+    //        while (!reader.atEnd())
+    //        {
+    //            qDebug()<<reader.readVariant().annotation("ANN_GENE");
 
-//        }
+    //        }
 
-//    }
+    //    }
 
 
 

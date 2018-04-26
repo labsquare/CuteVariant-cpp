@@ -3,6 +3,10 @@
 #include "abstractvariantreader.h"
 #include "vcfreader.h"
 #include "field.h"
+#include "abstractannotationparser.h"
+#include "vepannotationparser.h"
+
+
 namespace cvar {
 
 class GenericVCFReader : public AbstractVariantReader
@@ -74,6 +78,7 @@ public:
      * \return
      */
     QList<Field> parseHeader(const QString& id);
+    Variant parseVariant(const QString & line);
 
 
     QList<Genotype> readGenotypeLine(const QString& line);
@@ -93,7 +98,6 @@ public:
      * \param id
      * \return
      */
-    QList<Field> parseAnnotationHeaderLine(const QString& line);
 
 
     /*!
@@ -106,12 +110,14 @@ public:
 
 
 
+
+
 private:
     // special INFO field id like ANN, SnpEff..
     // dot not manage them
-    const QStringList mSpecialId = {"ANN","NMD","LOF","CSQ"};
 
-    QHash<QString, QStringList> mSpecialIdMap;
+
+   // QHash<QString, QStringList> mSpecialIdMap;
 
 
     // need to store fields header before read variant
@@ -125,6 +131,8 @@ private:
     // used to to generate Genotype per sample in genotype read parser
 
 
+    QList<Variant> mVariantBuffer;
+
 
     // One Line can have multiple annotation
     // We decide to store one annotation by row in variant table.
@@ -132,6 +140,12 @@ private:
 //    QList<Variant> mDuplicateVariant;
 
 
+
+    QList<AbstractAnnotationParser*> mAnnParser = {
+
+        new VepAnnotationParser()
+
+    };
 
 
 

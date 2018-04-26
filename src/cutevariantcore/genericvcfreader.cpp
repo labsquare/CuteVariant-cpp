@@ -13,9 +13,27 @@ GenericVCFReader::GenericVCFReader(QIODevice *device)
 //------------------------------------------------------------------
 QList<Field> GenericVCFReader::fields()
 {
-    return parseHeader(QStringLiteral("INFO"));
+    QList<Field> fields;
+
+    for (const Field& f :  parseHeader(QStringLiteral("INFO")))
+    {
+        bool parseSuccess = false;
+        for (auto * parser : mAnnParser)
+        {
+            if (parser->isParsable(f.name())){
+                fields.append(parser->parseFields(f));
+                parseSuccess = true;
+            }
+        }
+        if (!parseSuccess)
+            fields.append(f);
+    }
+
+
+    return fields;
 }
 
+//------------------------------------------------------------------
 QList<Field> GenericVCFReader::genotypeFields()
 {
     return parseHeader(QStringLiteral("FORMAT"));
@@ -86,12 +104,28 @@ QHash<QString, quint64> GenericVCFReader::contigs()
     device()->close();
     return contigList;
 }
-//------------------------------------------------------------------
 
 Variant GenericVCFReader::readVariant()
 {
-    QString line = device()->readLine();
 
+    if (!mVariantBuffer.isEmpty())
+        return mVariantBuffer.takeLast();
+
+    Variant variant = parseVariant(device()->readLine());
+
+    for (auto * parser : mAnnParser)
+        mVariantBuffer.append(parser->parseVariant(variant));
+
+    return mVariantBuffer.takeLast();
+
+
+
+
+}
+//------------------------------------------------------------------
+
+Variant GenericVCFReader::parseVariant(const QString& line)
+{
     if (line.isEmpty())
         return Variant();
 
@@ -117,10 +151,6 @@ Variant GenericVCFReader::readVariant()
     variant.setFilter(filter);
     variant.setBin(Variant::maxUcscBin(pos-1, pos));
 
-    // pre-fill annotation . Usefull for Flag values. Missing key means False
-    //    for (QString colnames : mFieldColMap.values())
-    //        variant.addAnnotation(colnames, 0);
-
     // parse annotation info
     for (QString item : info.split(";"))
     {
@@ -139,6 +169,7 @@ Variant GenericVCFReader::readVariant()
             variant[mFieldColMap[item]] = 1;
         }
     }
+
     return variant;
 }
 
@@ -294,40 +325,6 @@ QList<Field> GenericVCFReader::parseHeader(const QString &id)
 }
 
 
-
-QList<Field> GenericVCFReader::parseAnnotationHeaderLine(const QString& line)
-{
-
-    // typical annotation are in the following form. Many fields in one line
-    //##INFO=<ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|DISTANCE|STRAND|FLAGS|SYMBOL_SOURCE|HGNC_ID|TSL|APPRIS|SIFT|PolyPhen|AF|AFR_AF|AMR_AF|EAS_AF|EUR_AF|SAS_AF|AA_AF|EA_AF|ExAC_AF|ExAC_Adj_AF|ExAC_AFR_AF|ExAC_AMR_AF|ExAC_EAS_AF|ExAC_FIN_AF|ExAC_NFE_AF|ExAC_OTH_AF|ExAC_SAS_AF|CLIN_SIG|SOMATIC|PHENO|PUBMED|MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE|MetaSVM_pred|MetaSVM_score">
-
-    QList<Field> fields;
-
-
-    //    QRegularExpression ex(QStringLiteral("^##INFO=<ID=(?<id>.+),Number=(?<number>.+),Type=(?<type>.+),Description=\"(?<desc>.+):(?<ann>.+)\""));
-    //    QRegularExpressionMatch match = ex.match(line);
-
-    //    if (match.hasMatch())
-    //    {
-    //        QString id   = match.captured("id");
-    //        QString ann  = match.captured("ann");
-    //        // remove quote if exists.. ( snpEFF )
-    //        ann = ann.remove("\'");
-    //        ann = ann.remove("\"");
-    //        ann = ann.simplified();
-    //        ann = ann.remove(QChar::Space);
-
-    //        for (QString a : ann.split("|"))
-    //        {
-    //            fields.append(Field(id+"_"+a,a,"See Annotation specification"));
-    //            fields.last().setCategory(id);
-    //            mSpecialIdMap[id].append(fields.last().colname());
-    //        }
-    //    }
-
-
-    return fields;
-}
 //------------------------------------------------------------------
 QHash<QString, QVariant> GenericVCFReader::metadatas() const
 {
@@ -367,6 +364,7 @@ QHash<QString, QVariant> GenericVCFReader::metadatas() const
 
     return meta;
 }
-//------------------------------------------------------------------
+
+
 
 }

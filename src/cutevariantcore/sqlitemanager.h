@@ -8,6 +8,7 @@
 #include "abstractvariantreader.h"
 #include "genericvcfreader.h"
 #include "snpeffvcfteader.h"
+#include "vepvcfreader.h"
 #include "variantquery.h"
 #include "selection.h"
 #include "variantlink.h"

@@ -54,6 +54,9 @@ public:
     virtual QHash<QString, QVariant> metadatas() const {return QHash<QString, QVariant>();}
 
 
+
+
+
     virtual bool open();
     virtual void close();
     bool atEnd();

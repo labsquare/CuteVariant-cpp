@@ -219,7 +219,7 @@ void MainWindow::updateEditor()
     mEditor->setQuery(query);
 
 
-    //execute();
+    execute();
 
 }
 //-------------------------------------------------------------------------
