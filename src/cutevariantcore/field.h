@@ -22,7 +22,7 @@ public:
     };
 
     Field();
-    Field(const QString& colname, const QString& name, const QString& description = QString(), const Type& type = Field::TEXT);
+    Field(const QString& name,const QString& category, const QString& description = QString(), const Type& type = Field::TEXT);
 
     const QString& colname() const;
     const QString &name() const;

@@ -5,11 +5,12 @@ Field::Field()
 {
 }
 
-Field::Field(const QString& colname,const QString &name, const QString &description, const Type& type)
+Field::Field(const QString &name, const QString& category, const QString &description, const Type& type)
     :Resource()
 {
-    setColname(colname);
     setName(name);
+    setCategory(category);
+    setColname(this->category()+"_"+this->name());
     setDescription(description);
     setType(type);
 

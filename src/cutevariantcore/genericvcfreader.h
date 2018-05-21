@@ -68,6 +68,7 @@ public:
 
 
 
+
     //protected:
     /*!
      * \brief parse Vcf Header according ID.

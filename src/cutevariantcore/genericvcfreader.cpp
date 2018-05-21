@@ -15,7 +15,7 @@ QList<Field> GenericVCFReader::fields()
 {
     QList<Field> fields;
 
-    for (const Field& f :  parseHeader(QStringLiteral("INFO")))
+    for (const Field& f : parseHeader(QStringLiteral("INFO")))
     {
         bool parseSuccess = false;
         for (auto * parser : mAnnParser)
@@ -320,8 +320,8 @@ QList<Field> GenericVCFReader::parseHeader(const QString &id)
                 if (type == "Flag")
                     fType = Field::BOOL;
 
-                fields.append(Field("INFO_"+name, name, desc, fType));
-                fields.last().setCategory(id);
+                fields.append(Field(name,id,desc, fType));
+
             }
 
         } while (line.startsWith("##"));

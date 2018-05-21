@@ -24,19 +24,19 @@ int main(int argc, char **argv)
     QFontIcon::addFont(":/materialIcon");
 
 
-    cvar::GenericVCFReader reader("/home/sacha/Dev/CuteVariant/exemples/vcf/snpeff.example.vcf");
+//    cvar::GenericVCFReader reader("/home/sacha/Dev/CuteVariant/exemples/vcf/snpeff.example.vcf");
 
-    for (auto& f : reader.fields())
-        qDebug()<<f.name();
+//    for (auto& f : reader.fields())
+//        qDebug()<<f.name();
 
-   reader.open();
+//   reader.open();
 
-    while (!reader.atEnd())
-    {
-        auto variant  = reader.readVariant();
-        qDebug()<<variant.chromosom()<<" "<<variant.ref()<<" "<<variant.alt()<<" "<<variant.position()<<" "<<variant["hgvs_c"];
+//    while (!reader.atEnd())
+//    {
+//        auto variant  = reader.readVariant();
+//        qDebug()<<variant.chromosom()<<" "<<variant.ref()<<" "<<variant.alt()<<" "<<variant.position()<<" "<<variant["hgvs_c"];
 
-    }
+//    }
 
 
 
@@ -50,8 +50,8 @@ int main(int argc, char **argv)
     //    }
 
 
-    //        MainWindow win;
-    //        win.show();
+            MainWindow win;
+            win.show();
 
     //  win.hide();
 

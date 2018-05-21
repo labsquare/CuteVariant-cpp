@@ -20,9 +20,10 @@ QList<Field> SnpEffAnnotationParser::parseFields(const Field &field)
             name = name.simplified().toLower();
 
             // rename
-            name =nameMap.value(name,name);
-
-            mAnnFields.append(Field("ANN_"+name, name));
+            if (standardField.contains(name))
+                mAnnFields.append(standardField[name]);
+            else
+                mAnnFields.append(Field(name,"ANN",name));
         }
     }
 

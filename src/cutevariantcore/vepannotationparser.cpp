@@ -21,9 +21,10 @@ QList<Field> VepAnnotationParser::parseFields(const Field &field)
             name = name.simplified().toLower();
 
             // rename standard
-            name = nameMap.value(name, name);
-
-            mAnnFields.append(Field("ANN_"+name, name));
+            if (standardField.contains(name))
+                mAnnFields.append(standardField[name]);
+            else
+                mAnnFields.append(Field(name,"ANN",name));
         }
     }
 
@@ -54,23 +55,17 @@ QList<Variant> VepAnnotationParser::parseVariant(Variant &variant)
         for (int i=0; i< qMin(annValues.size(), mAnnFields.size()); ++i)
         {
 
-            QString fname = mAnnFields[i].name();
+            QString fname = mAnnFields[i].colname();
             QString value = annValues[i];
+
 
             // remove hgvs prefix
             if (fname.startsWith("hgvs"))
                 value.remove(QRegularExpression(".+:"));
 
-
-
-
             newVariant[fname] = value;
 
-
         }
-
-
-
 
         variants.append(newVariant);
     }

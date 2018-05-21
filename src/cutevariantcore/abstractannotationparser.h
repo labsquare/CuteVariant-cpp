@@ -8,6 +8,8 @@ namespace cvar {
 class AbstractAnnotationParser
 {
 public:
+
+
     AbstractAnnotationParser(const QString& infoName);
 
 
@@ -24,9 +26,16 @@ public:
 
     QString infoName() const;
 
+
+protected:
+
+    void setupStandardFieldType(QList<Field>& fields);
+
 private:
 
     QString mInfoName;
+
+
 
 
 };

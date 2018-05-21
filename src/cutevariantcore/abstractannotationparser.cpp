@@ -20,6 +20,4 @@ QString AbstractAnnotationParser::infoName() const
     return mInfoName;
 }
 
-
-
 }
