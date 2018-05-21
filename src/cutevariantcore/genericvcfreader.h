@@ -5,6 +5,7 @@
 #include "field.h"
 #include "abstractannotationparser.h"
 #include "vepannotationparser.h"
+#include "snpeffannotationparser.h"
 
 
 namespace cvar {
@@ -121,7 +122,6 @@ private:
 
 
     // need to store fields header before read variant
-    QHash<QString, QString> mFieldColMap;
 
     QList<Sample> mSamples;
     QHash<QString, quint64> mContigs;
@@ -143,7 +143,9 @@ private:
 
     QList<AbstractAnnotationParser*> mAnnParser = {
 
-        new VepAnnotationParser()
+        new VepAnnotationParser(),
+        new SnpEffAnnotationParser()
+
 
     };
 

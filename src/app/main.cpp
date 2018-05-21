@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     QFontIcon::addFont(":/materialIcon");
 
 
-    cvar::GenericVCFReader reader("/home/sacha/test.vep.vcf");
+    cvar::GenericVCFReader reader("/home/sacha/Dev/CuteVariant/exemples/vcf/snpeff.example.vcf");
 
     for (auto& f : reader.fields())
         qDebug()<<f.name();
@@ -34,8 +34,8 @@ int main(int argc, char **argv)
     while (!reader.atEnd())
     {
         auto variant  = reader.readVariant();
+        qDebug()<<variant.chromosom()<<" "<<variant.ref()<<" "<<variant.alt()<<" "<<variant.position()<<" "<<variant["hgvs_c"];
 
-        qDebug()<<variant.chromosom()<<" "<<variant.ref()<<" "<<variant.alt();
     }
 
 

@@ -15,6 +15,11 @@ bool AbstractAnnotationParser::isParsable(const QString &infoName)
     return false;
 }
 
+QString AbstractAnnotationParser::infoName() const
+{
+    return mInfoName;
+}
+
 
 
 }

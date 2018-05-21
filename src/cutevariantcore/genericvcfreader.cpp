@@ -113,8 +113,19 @@ Variant GenericVCFReader::readVariant()
 
     Variant variant = parseVariant(device()->readLine());
 
+    bool parseSuccess = false;
+    // try to parse annotation
     for (auto * parser : mAnnParser)
-        mVariantBuffer.append(parser->parseVariant(variant));
+    {
+        if (variant.annotations().contains(parser->infoName())){
+            mVariantBuffer.append(parser->parseVariant(variant));
+            parseSuccess = true;
+        }
+    }
+
+    // if no annotation
+    if (!parseSuccess)
+        mVariantBuffer.append(variant);
 
     return mVariantBuffer.takeLast();
 
@@ -159,14 +170,14 @@ Variant GenericVCFReader::parseVariant(const QString& line)
             QStringList pair = item.split("=");
             QString key = pair.first();
             QString val = pair.last();
-            variant[mFieldColMap[key]] = val;
+            variant[key] = val;
         }
         // Bool TAGS
         else
         {
             // If key is present, means it's true
             // by default it's false
-            variant[mFieldColMap[item]] = 1;
+            variant[item] = 1;
         }
     }
 
@@ -227,10 +238,7 @@ QList<Genotype> GenericVCFReader::readGenotypeLine(const QString &line)
 
 bool GenericVCFReader::open()
 {
-    // Get Header Fields data, to process variant later
-    // Store map between fields name in the VCF and colname in sqlite
-    for (Field f : fields())
-        mFieldColMap[f.name()] = f.colname();
+
 
     // Get samples to process genotype later
     mSamples = samples();
@@ -271,7 +279,7 @@ GenericVCFReader::Format GenericVCFReader::format() const
 //------------------------------------------------------------------
 
 QList<Field> GenericVCFReader::parseHeader(const QString &id)
-{  
+{
     // Get all Fields started with ##ID
     // For instance
     // ##INFO=<ID=DP,Number=1,Type=Integer,Description="Total Depth">

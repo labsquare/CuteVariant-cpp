@@ -39,7 +39,8 @@ SOURCES += \
     variantreaderfactory.cpp \
     vepvcfreader.cpp \
     abstractannotationparser.cpp \
-    vepannotationparser.cpp
+    vepannotationparser.cpp \
+    snpeffannotationparser.cpp
 
 HEADERS += \
     field.h \
@@ -63,6 +64,7 @@ HEADERS += \
     variantreaderfactory.h \
     vepvcfreader.h \
     abstractannotationparser.h \
-    vepannotationparser.h
+    vepannotationparser.h \
+    snpeffannotationparser.h
 
 TARGET = cutevariantcore

@@ -20,6 +20,10 @@ public:
 
     bool isParsable(const QString& infoName);
 
+
+
+    QString infoName() const;
+
 private:
 
     QString mInfoName;
