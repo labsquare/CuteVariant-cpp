@@ -56,7 +56,7 @@ QList<Variant> SnpEffAnnotationParser::parseVariant(Variant &variant)
 
         // avoid memory leak => use qMin index
         for (int i=0; i< qMin(annValues.size(), mAnnFields.size()); ++i)
-            newVariant[mAnnFields[i].name()] = annValues[i];
+            newVariant[mAnnFields[i].colname()] = annValues[i];
 
         variants.append(newVariant);
     }

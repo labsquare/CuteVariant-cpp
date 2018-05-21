@@ -73,7 +73,7 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 
     }
 
-    if (colname.toLower() == "ann_impact_so")
+    if (colname.toLower() == "ann_biotype")
     {
         painter->setClipRect(option.rect,Qt::IntersectClip);
         QStringList soTerms = index.data().toString().split("&");
@@ -128,7 +128,7 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         return;
     }
 
-    if (colname.toLower() == "ann_gene")
+    if (colname.toLower() == "ann_gene_name")
     {
 
         QColor col = QColor("#55abe1");
