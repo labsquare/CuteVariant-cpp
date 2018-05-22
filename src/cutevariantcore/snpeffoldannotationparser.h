@@ -1,15 +1,15 @@
-#ifndef SNPEFFANNOTATIONPARSER_H
-#define SNPEFFANNOTATIONPARSER_H
+#ifndef SNPEFFOLDANNOTATIONPARSER_H
+#define SNPEFFOLDANNOTATIONPARSER_H
+
 #include "abstractannotationparser.h"
 #include "field.h"
 #include "variant.h"
 
 namespace cvar{
-
-class SnpEffAnnotationParser : public AbstractAnnotationParser
+class SnpEffOldAnnotationParser : public AbstractAnnotationParser
 {
 public:
-    SnpEffAnnotationParser(const QString& label = "ANN");
+    SnpEffOldAnnotationParser(const QString& label = "EFF");
 
     virtual QList<Field> parseFields(const Field& field);
     virtual QList<Variant> parseVariant(Variant &variant);
@@ -18,11 +18,12 @@ public:
 private:
     QList<Field> mAnnFields;
 
+    // TODO
     const QHash<QString, Field> standardField =
     {
         {"allele",                 {"allele"        ,"ANN"         ,"reference alllee"            , Field::TEXT}},
         {"annotation",             {"consequence"   ,"ANN"         ,"consequence"                 , Field::TEXT}},
-        {"annotation_impact",      {"impact"        ,"ANN"         ,"name of gene"                , Field::TEXT}},
+        {"effect_impact",          {"impact"        ,"ANN"         ,"name of gene"                , Field::TEXT}},
         {"gene_name",              {"gene_name"     ,"ANN"         ,"gene iD"                     , Field::TEXT}},
         {"gene_id",                {"gene_id"       ,"ANN"         ,"impact"                      , Field::TEXT}},
         {"feature_type",           {"feature_type"  ,"ANN"        ,"impact"                      , Field::TEXT}},
@@ -38,7 +39,6 @@ private:
     };
 
 };
-
-
 }
-#endif // SNPEFFANNOTATIONPARSER_H
+
+#endif // SNPEFFOLDANNOTATIONPARSER_H

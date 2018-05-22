@@ -1,23 +1,15 @@
 #include "abstractannotationparser.h"
 
 namespace cvar {
-AbstractAnnotationParser::AbstractAnnotationParser(const QString &infoName)
-    :mInfoName(infoName)
+AbstractAnnotationParser::AbstractAnnotationParser(const QString &label)
+    :mLabel(label)
 {
 
 }
 
-bool AbstractAnnotationParser::isParsable(const QString &infoName)
+QString AbstractAnnotationParser::label() const
 {
-    if (infoName == mInfoName)
-        return true;
-
-    return false;
-}
-
-QString AbstractAnnotationParser::infoName() const
-{
-    return mInfoName;
+    return mLabel;
 }
 
 }

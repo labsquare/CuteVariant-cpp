@@ -6,6 +6,7 @@
 #include "abstractannotationparser.h"
 #include "vepannotationparser.h"
 #include "snpeffannotationparser.h"
+#include "snpeffoldannotationparser.h"
 
 
 namespace cvar {
@@ -20,6 +21,7 @@ public:
     };
 
     GenericVCFReader(const QString& filename);
+
     GenericVCFReader(QIODevice *device);
 
 
@@ -110,10 +112,6 @@ public:
     QHash<QString, QVariant> metadatas() const;
 
 
-
-
-
-
 private:
     // special INFO field id like ANN, SnpEff..
     // dot not manage them
@@ -141,15 +139,12 @@ private:
 //    QList<Variant> mDuplicateVariant;
 
 
-
-    QList<AbstractAnnotationParser*> mAnnParser = {
-
-        new VepAnnotationParser(),
-        new SnpEffAnnotationParser()
-
-
-    };
-
+   QHash<QString, AbstractAnnotationParser*> mAnnParser =
+   {
+     {"CSQ" , new VepAnnotationParser("CSQ")},
+     {"ANN" , new SnpEffAnnotationParser("ANN")},
+     {"EFF" , new SnpEffOldAnnotationParser("EFF")}
+   };
 
 
 };

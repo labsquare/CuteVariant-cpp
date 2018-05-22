@@ -35,12 +35,11 @@ SOURCES += \
     bedfile.cpp \
     vqlparser.cpp \
     genericvcfreader.cpp \
-    snpeffvcfteader.cpp \
     variantreaderfactory.cpp \
-    vepvcfreader.cpp \
     abstractannotationparser.cpp \
     vepannotationparser.cpp \
-    snpeffannotationparser.cpp
+    snpeffannotationparser.cpp \
+    snpeffoldannotationparser.cpp
 
 HEADERS += \
     field.h \
@@ -60,11 +59,10 @@ HEADERS += \
     bedfile.h \
     vqlparser.h \
     genericvcfreader.h \
-    snpeffvcfteader.h \
     variantreaderfactory.h \
-    vepvcfreader.h \
     abstractannotationparser.h \
     vepannotationparser.h \
-    snpeffannotationparser.h
+    snpeffannotationparser.h \
+    snpeffoldannotationparser.h
 
 TARGET = cutevariantcore

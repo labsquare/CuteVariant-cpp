@@ -1,8 +1,8 @@
 #include "vepannotationparser.h"
 
 namespace cvar{
-VepAnnotationParser::VepAnnotationParser()
-    :AbstractAnnotationParser("CSQ")
+VepAnnotationParser::VepAnnotationParser(const QString& label)
+    :AbstractAnnotationParser(label)
 {
 
 }
@@ -36,13 +36,13 @@ QList<Variant> VepAnnotationParser::parseVariant(Variant &variant)
 {
     QList<Variant> variants;
 
-    QString rawAnn = variant[infoName()].toString();
+    QString rawAnn = variant[label()].toString();
 
     // split by allele
     for (QString alleleAnn : rawAnn.split(","))
     {
         Variant newVariant = variant;
-        newVariant.removeAnnotation(infoName());
+        newVariant.removeAnnotation(label());
 
         // split annotation
         QStringList annValues = alleleAnn.split("|");
@@ -55,7 +55,7 @@ QList<Variant> VepAnnotationParser::parseVariant(Variant &variant)
         for (int i=0; i< qMin(annValues.size(), mAnnFields.size()); ++i)
         {
 
-            QString fname = mAnnFields[i].colname();
+            QString fname = mAnnFields[i].name();
             QString value = annValues[i];
 
 

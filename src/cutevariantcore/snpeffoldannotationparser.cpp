@@ -1,16 +1,16 @@
-#include "snpeffannotationparser.h"
+#include "snpeffoldannotationparser.h"
 
 namespace cvar{
-SnpEffAnnotationParser::SnpEffAnnotationParser(const QString &label)
+SnpEffOldAnnotationParser::SnpEffOldAnnotationParser(const QString& label)
     :AbstractAnnotationParser(label)
 {
 
 }
 
-QList<Field> SnpEffAnnotationParser::parseFields(const Field &field)
+QList<Field> SnpEffOldAnnotationParser::parseFields(const Field &field)
 {
     mAnnFields.clear();
-    QRegularExpression exp("Allele.+");
+    QRegularExpression exp("Effect_Impact.+");
     QRegularExpressionMatch match = exp.match(field.description());
 
     if (match.hasMatch())
@@ -30,7 +30,7 @@ QList<Field> SnpEffAnnotationParser::parseFields(const Field &field)
     return mAnnFields;
 }
 
-QList<Variant> SnpEffAnnotationParser::parseVariant(Variant &variant)
+QList<Variant> SnpEffOldAnnotationParser::parseVariant(Variant &variant)
 {
     QList<Variant> variants;
 
@@ -40,7 +40,7 @@ QList<Variant> SnpEffAnnotationParser::parseVariant(Variant &variant)
     for (QString alleleAnn : rawAnn.split(","))
     {
         Variant newVariant = variant;
-        newVariant.removeAnnotation(label());
+        newVariant.removeAnnotation(this->label());
 
         // split annotation
         QStringList annValues = alleleAnn.split("|");
@@ -48,7 +48,7 @@ QList<Variant> SnpEffAnnotationParser::parseVariant(Variant &variant)
 
         if ( annValues.size() != mAnnFields.size()){
 
-            qCritical()<<Q_FUNC_INFO<<annValues.size()<<" "<<mAnnFields.size();
+            qCritical()<<"ICI "<<annValues.size()<<" "<<mAnnFields.size();
             qCritical()<<"Field and annotation values count mismatch";
 
         }

@@ -10,7 +10,7 @@ class AbstractAnnotationParser
 public:
 
 
-    AbstractAnnotationParser(const QString& infoName);
+    AbstractAnnotationParser(const QString& label);
 
 
     // parse fields into many fields
@@ -20,20 +20,14 @@ public:
     // parse annotation variant into many annotation variant
     virtual QList<Variant> parseVariant(Variant& variant) = 0;
 
-    bool isParsable(const QString& infoName);
 
+    QString label() const;
 
-
-    QString infoName() const;
-
-
-protected:
-
-    void setupStandardFieldType(QList<Field>& fields);
 
 private:
 
-    QString mInfoName;
+    // Label is INFO key from VCF File : ex: CSQ; ANN ; EFF ....
+    QString mLabel;
 
 
 

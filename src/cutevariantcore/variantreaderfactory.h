@@ -2,9 +2,7 @@
 #define VARIANTREADERFACTORY_H
 #include <QtCore>
 #include "abstractvariantreader.h"
-#include "snpeffvcfteader.h"
 #include "genericvcfreader.h"
-#include "vepvcfreader.h"
 
 namespace cvar {
 class VariantReaderFactory

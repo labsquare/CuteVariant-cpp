@@ -6,7 +6,6 @@
 #include "filterdialog.h"
 #include "qfonticon.h"
 #include "mainwindow.h"
-#include "snpeffvcfteader.h"
 
 
 using namespace cvar;

@@ -17,18 +17,13 @@ QList<Field> GenericVCFReader::fields()
 
     for (const Field& f : parseHeader(QStringLiteral("INFO")))
     {
-        bool parseSuccess = false;
-        for (auto * parser : mAnnParser)
-        {
-            if (parser->isParsable(f.name())){
-                fields.append(parser->parseFields(f));
-                parseSuccess = true;
-            }
-        }
-        if (!parseSuccess)
+
+        if (mAnnParser.keys().contains(f.name()))
+            fields.append(mAnnParser[f.name()]->parseFields(f));
+
+        else
             fields.append(f);
     }
-
 
     return fields;
 }
@@ -104,33 +99,26 @@ QHash<QString, quint64> GenericVCFReader::contigs()
     device()->close();
     return contigList;
 }
-
+//------------------------------------------------------------------
 Variant GenericVCFReader::readVariant()
 {
-
     if (!mVariantBuffer.isEmpty())
         return mVariantBuffer.takeLast();
 
     Variant variant = parseVariant(device()->readLine());
 
-    bool parseSuccess = false;
-    // try to parse annotation
-    for (auto * parser : mAnnParser)
+    // create duplicate variant per annotation
+    for (const QString& key : mAnnParser.keys())
     {
-        if (variant.annotations().contains(parser->infoName())){
-            mVariantBuffer.append(parser->parseVariant(variant));
-            parseSuccess = true;
-        }
+        // ex : ANN=C|...
+        if (variant.annotations().contains(key))
+            mVariantBuffer.append(mAnnParser[key]->parseVariant(variant));
     }
 
-    // if no annotation
-    if (!parseSuccess)
+    if (mVariantBuffer.isEmpty())
         mVariantBuffer.append(variant);
 
     return mVariantBuffer.takeLast();
-
-
-
 
 }
 //------------------------------------------------------------------
@@ -372,6 +360,7 @@ QHash<QString, QVariant> GenericVCFReader::metadatas() const
 
     return meta;
 }
+
 
 
 

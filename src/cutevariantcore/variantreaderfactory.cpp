@@ -14,10 +14,10 @@ AbstractVariantReader *VariantReaderFactory::createVariantReader(const QString &
         if (isVcf(&file))
         {
             if (isVep(&file))
-                return new VepVcfReader(filename);
+                return new GenericVCFReader(filename);
 
             if (isSnpEff(&file))
-                return new SnpEffVCFReader(filename);
+                return new GenericVCFReader(filename);
 
             return new GenericVCFReader(filename);
         }

@@ -7,7 +7,7 @@ namespace cvar{
 class VepAnnotationParser : public AbstractAnnotationParser
 {
 public:
-    VepAnnotationParser();
+    VepAnnotationParser(const QString& label = "CSQ");
 
     virtual QList<Field> parseFields(const Field& field);
     virtual QList<Variant> parseVariant(Variant &variant);
