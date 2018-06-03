@@ -137,6 +137,8 @@ private:
     QStringList mSamples;
 
 
+
+
 };
 
 

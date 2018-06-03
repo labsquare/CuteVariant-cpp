@@ -4,7 +4,10 @@ CONFIG += c++14
 INCLUDEPATH += $$PWD/../cutevariantcore
 DEPENDPATH += $$PWD/../cutevariantcore
 
-SOURCES =  testvql.cpp
+SOURCES = \ 
+    testcutevariant.cpp
+
+DEFINES += EXEMPLE_PATH=\\\"$$PWD/../../exemples/vcf/\\\"
 
 # Cute Variant core
 LIBS += -L$$OUT_PWD/../cutevariantcore/ -lcutevariantcore

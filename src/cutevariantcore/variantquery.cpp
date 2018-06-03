@@ -360,8 +360,17 @@ const QStringList VariantQuery::sqlColumns() const
 {
     QStringList raw;
 
+    // special case : select all columns
+    // used by @SqliteManager::createVariantSet(
+    if (columns().contains("*"))
+    {
+        return {"*"};
+    }
+
+
     raw.append(QString("%1.id AS id").arg(sqlTableName()));
     qDebug()<<"all col :" <<columns() << columns().size();
+
 
     for (QString col : columns())
     {

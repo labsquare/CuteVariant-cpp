@@ -34,12 +34,14 @@ void Project::setDatabasePath(const QString &path)
     //    mSqliteManager->createProject(info.baseName());
 }
 
-void Project::importFile(const QString &filename)
+bool Project::importFile(const QString &filename)
 {
     if (mSqlDb.isOpen())
-        mSqliteManager->importFile(filename);
-    else
+        return mSqliteManager->importFile(filename);
+    else{
         qDebug()<<"Cannot import. Database is not open";
+        return false;
+    }
 
 }
 

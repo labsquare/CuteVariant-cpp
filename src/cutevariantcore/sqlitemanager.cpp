@@ -180,6 +180,7 @@ QList<VariantSet> SqliteManager::variantSets() const
 
     }
 
+    // count is slow !
     for (VariantSet &s : list)
         s.setCount(-1);
 
@@ -287,12 +288,7 @@ int SqliteManager::variantsCount(const VariantQuery &query)
     q.setLimit(0);
     q.setColumns({"id"});
 
-    QString cacheKey = q.condition() + q.table() + q.region();
-
-    if (mVariantCountCache.contains(cacheKey))
-        return *mVariantCountCache.object(cacheKey);
-
-    QString sql = QString("SELECT COUNT(*) as 'count' FROM (%1)").arg(q.toSql());
+    QString sql = QString("SELECT COUNT(1) as 'count' FROM (%1)").arg(q.toSql());
 
     QSqlQuery countQuery;
     if (!countQuery.exec(sql))
@@ -303,9 +299,8 @@ int SqliteManager::variantsCount(const VariantQuery &query)
 
     countQuery.next();
 
-    int * count = new int(countQuery.record().value("count").toInt());
-    mVariantCountCache.insert(cacheKey,count);
-    return *count;
+    return (countQuery.record().value("count").toInt());
+
 
 }
 //-------------------------------------------------------------------------------
@@ -315,7 +310,7 @@ QHash<QString, int> SqliteManager::variantsStats(const VariantQuery &query) cons
     VariantQuery newQuery = query;
     newQuery.setNoLimit();
 
-    QString sql = QString("SELECT ref, alt, count(*) as 'count' FROM (%1) WHERE length(ref) = 1 AND length(alt) = 1 GROUP BY ref,alt").arg(newQuery.toSql());
+    QString sql = QString("SELECT ref, alt, count(1) as 'count' FROM (%1) WHERE length(ref) = 1 AND length(alt) = 1 GROUP BY ref,alt").arg(newQuery.toSql());
 
     QSqlQuery q;
     if (!q.exec(sql))
@@ -387,6 +382,8 @@ bool SqliteManager::createVariantSet(const VariantQuery &query, const QString &s
     //qDebug()<<"QUERY "<<q.tableName()<<" "<<q.rawTable();
 
     //qDebug()<<Q_FUNC_INFO<<"CREATE VIEW";
+
+
 
     QSqlQuery viewQuery;
     viewQuery.exec(QString("DROP VIEW IF EXISTS %1").arg(setName));
@@ -579,7 +576,7 @@ void SqliteManager::createFile(const QString &filename)
     query.bindValue(0, info.fileName());
     query.bindValue(1, info.size());
     query.bindValue(2, info.created().toString(Qt::ISODate));
-    query.bindValue(3, SqliteManager::md5sum(filename));
+   // query.bindValue(3, SqliteManager::md5sum(filename));
 
 
     if (!query.exec())

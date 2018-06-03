@@ -1,47 +1,76 @@
 #include <QtTest/QtTest>
 #include <QtCore>
 #include <iostream>
+#include "project.h"
 #include "vqlparser.h"
 #include "variantquery.h"
 
 using namespace cvar;
 
-class TestVql: public QObject
+class TestCuteVariant: public QObject
 {
     Q_OBJECT
 private slots:
 
+    void initTestCase();
+    void cleanupTestCase();
 
+    // test VQL
     void testTableName();
     void testColumns();
     void testCondition();
     void testRegion();
     void testSample();
-
     void testVariantQuery();
 
+    // test VCF
+    void testVariantCount();
+    void testVariantCondition();
+
+
+
+
+
+private:
+    QString snpeff_vcf = QString(EXEMPLE_PATH)+ "snpeff.example.vcf";
+    QString test_db    = "/tmp/cutevariant_test.db";
 
 
 };
 
-void TestVql::testTableName()
+void TestCuteVariant::initTestCase()
+{
+    QVERIFY(QFile::exists(snpeff_vcf));
+    cutevariant->setDatabasePath(test_db);
+    QVERIFY(cutevariant->importFile(snpeff_vcf));
+
+}
+
+void TestCuteVariant::cleanupTestCase()
+{
+
+}
+
+
+// == VQL TEST
+void TestCuteVariant::testTableName()
 {
     VqlParser parser;
 
     parser.setQuery("SELECT chr FROM variants");
-    QVERIFY(parser.tableName() == "variants");
+    QVERIFY(parser.table() == "variants");
 
     parser.setQuery("SELECT chr FROM variants WHERE chr==3");
-    QVERIFY(parser.tableName() == "variants");
+    QVERIFY(parser.table() == "variants");
 
     parser.setQuery("SELECT chr FROM variants WHERE chr==4 AND a < 3 REGION truc");
-    QVERIFY(parser.tableName() == "variants");
+    QVERIFY(parser.table() == "variants");
 
     parser.setQuery("SELECT chr FROM variants REGION truc");
-    QVERIFY(parser.tableName() == "variants");
+    QVERIFY(parser.table() == "variants");
 }
 
-void TestVql::testColumns()
+void TestCuteVariant::testColumns()
 {
     VqlParser parser;
 
@@ -70,7 +99,7 @@ void TestVql::testColumns()
 
 }
 
-void TestVql::testCondition()
+void TestCuteVariant::testCondition()
 {
     VqlParser parser;
 
@@ -90,7 +119,7 @@ void TestVql::testCondition()
     QVERIFY(parser.conditions() == R"(genotype("sacha").gt=3 AND (chr>4) OR ann.gene_name=name="GJB2")");
 }
 
-void TestVql::testRegion()
+void TestCuteVariant::testRegion()
 {
     VqlParser parser;
 
@@ -102,7 +131,7 @@ void TestVql::testRegion()
 
 }
 
-void TestVql::testSample()
+void TestCuteVariant::testSample()
 {
     VqlParser parser;
 
@@ -122,10 +151,33 @@ void TestVql::testSample()
 
 }
 
-void TestVql::testVariantQuery()
+void TestCuteVariant::testVariantQuery()
 {
     VariantQuery query = VariantQuery::fromVql("SELECT chr FROM variants");
     QVERIFY(query.toSql() == "SELECT `variants`.id AS id,`variants`.`chr` as 'chr' FROM `variants` LIMIT 100 OFFSET 0");
+
+}
+
+void TestCuteVariant::testVariantCount()
+{
+    QVERIFY(cutevariant->sqlite()->variantsCount() == 94);
+}
+
+void TestCuteVariant::testVariantCondition()
+{
+
+    VariantQuery query = VariantQuery::fromVql("SELECT chr,pos,ref FROM variants WHERE pos > 17073134 AND pos < 17451120 ");
+    QVERIFY(query.isValid());
+
+    QSqlQuery q = cutevariant->sqlite()->variants(query);
+
+    int i = 0;
+    while (q.next())
+        ++i;
+
+    QVERIFY(i == 100);
+
+
 
 }
 
@@ -133,5 +185,5 @@ void TestVql::testVariantQuery()
 
 
 
-QTEST_MAIN(TestVql)
-#include "testvql.moc"
+QTEST_MAIN(TestCuteVariant)
+#include "testcutevariant.moc"

@@ -20,7 +20,7 @@ public:
     static Project * i();
 
     void setDatabasePath(const QString& path);
-    void importFile(const QString& filename);
+    bool importFile(const QString& filename);
     SqliteManager * sqlite();
 
     QList<VariantLink> links() const;

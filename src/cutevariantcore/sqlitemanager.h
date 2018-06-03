@@ -187,7 +187,6 @@ private:
     QIODevice * mProgressDevice;
     quint64 mFileSize;
 
-    QCache<QString, int> mVariantCountCache;
 
 };
 
