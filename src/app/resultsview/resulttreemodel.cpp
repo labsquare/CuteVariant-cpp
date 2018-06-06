@@ -259,6 +259,7 @@ void ResultTreeModel::load()
     mRecords.clear();
     mChilds.clear();
 
+
     QSqlQuery query = cutevariant->sqlite()->variants(mCurrentQuery);
     qDebug()<<query.lastError().text();
     qDebug()<<query.lastQuery();
@@ -271,6 +272,6 @@ void ResultTreeModel::load()
 void ResultTreeModel::load(int offset, int limit)
 {
     mCurrentQuery.setOffset(offset);
-    mCurrentQuery.setLimit(limit);
+    mCurrentQuery.setLimit(1000); // TODO: limit);
     load();
 }

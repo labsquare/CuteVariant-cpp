@@ -246,7 +246,7 @@ QStringList VariantQuery::extractSamples() const
     QSet<QString> sampleName;
     // extract genotype("sample")
 
-    QRegularExpression re(R"(genotype\(\"?(?<sample>[^.]+)\"?\))");
+    QRegularExpression re(R"(genotype\(\"?(?<sample>.*?)\"?\))");
 
     // extract genotype from columns or condition statement
     QString source = columns().join(" ") +" "+ condition();
@@ -266,7 +266,7 @@ QString VariantQuery::replaceSampleFields(const QString &text, bool label) const
     //rename genotype fields
     // ex : genotype("CGH1077").DP   === >  gt_CGH1077`.DP as 'CGH1077.DP'
 
-    QRegularExpression re(R"(genotype\(\"?(?<sample>\w+)\"?\)\.(?<arg>\w+))");
+    QRegularExpression re(R"(genotype\(\"(?<sample>.*?)\"\)\.(?<arg>\w+))");
     QRegularExpressionMatchIterator it = re.globalMatch(text);
 
     QString tmp = text;

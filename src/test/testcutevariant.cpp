@@ -135,19 +135,24 @@ void TestCuteVariant::testSample()
 {
     VqlParser parser;
 
-    parser.setQuery("SELECT chr, genotype(sacha).gt");
-    QVERIFY(parser.samples().size() == 1);
-    QVERIFY(parser.samples().first() == "sacha");
-
     parser.setQuery(R"(SELECT chr, genotype("sacha").gt)");
     QVERIFY(parser.samples().size() == 1);
     QVERIFY(parser.samples().first() == "sacha");
 
 
-    parser.setQuery(R"(SELECT chr, genotype("sacha").gt FROM variants WHERE genotype("boby").gt = 1)");
+    parser.setQuery(R"(SELECT chr,pos,ref,alt,qual,filter,genotype("1-sacha").gt FROM variants)");
+
+    qDebug()<<parser.samples();
+    QVERIFY(parser.samples().contains("1-sacha"));
+
+
+    parser.setQuery(R"(SELECT chr, pos, genotype("sacha").gt FROM variants WHERE genotype("boby").gt = 1)");
     QVERIFY(parser.samples().size() == 2);
     QVERIFY(parser.samples().at(0) == "sacha");
     QVERIFY(parser.samples().at(1) == "boby");
+
+
+
 
 }
 
