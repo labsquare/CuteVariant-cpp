@@ -76,6 +76,16 @@ QVariant ResultTreeModel::data(const QModelIndex &index, int role) const
         }
     }
 
+//    if (role == Qt::DecorationRole)
+//    {
+//            if (index.column() == 0 && index.parent() != QModelIndex())
+//           return FIcon(0xf60d);
+
+
+//    }
+
+
+
     return QVariant() ;
 }
 //---------------------------------------------------------------------------

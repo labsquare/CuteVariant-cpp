@@ -17,7 +17,7 @@ script:
 - wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-- export VERSION=$(git rev-parse --short HEAD) # linuxdeployqt uses this for naming the file
+- export VERSION=0.1 # linuxdeployqt uses this for naming the file
 - export LD_LIBRARY_PATH=appdir/lib/ 
 - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -bundle-non-qt-libs
 - ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage
@@ -42,23 +42,13 @@ script:
 
 
 
+deploy:
+  provider: releases
+  api_key:
+    secure: gcpgujKKnFI95PNjf9zOvMFMZHJOTf1LnMjPtDqhR8bAJHtG2COTaTtBi6ekHRsACwP7mIYjd7blzl2P90gPATWc92QvByqs7AoAkPAvWNMjd+lBECTSN4B2wZSB7wxmGC/upxwUmGjbz1ZlD2pozviqHBKWxv2wjYCZXt0ELpsdCkjzefD0W5mxcKJ9g3de68sjsJy5TGi13NumCtRBnluDwLC+guCNnpwIpR1hVMmQ01izzzCcKDBvlEeLvxB5UKt/WEeDFuKCJEDwCbfzV4xjT6djggB0rVkSKWARq9FNisg1sew3Cn3U2UrCLYai+qmUiMpD++xHRcv8gyuxqz4Wa53mV6Wbm3qNWzThCTMYwXgqP23JpWPmW9x+ZPx1Hwcv+HWQrEW7FGMpN/+B9r4jLnLOt2m0r+GSDVofF8IdAROuWiZaGx43GAvS/Xr69e6Kymxel1gQ10nLuUjVZKDaQTt5TngGwlDrQ143LRphi88RP+PJ//G1jUSLeNls+i2YSsY3ihPUcUfHvXWXVgMvVa54q8Si9rzTmY1udWNbJKnMorS2SOk0LIOcJz0O2vVaARcZuG8+n/sOtuBP4fLiJG2VyvpBT3J5I5oFzcUg/qlgh8E2ubAfpJh5LlkLA30Vd58xBYKuomBEpe5ogk6lKv/uT0YxftTBIgJXof4=
+  file: CuteVariant-0.1-x86_64.AppImage
+  skip_cleanup: true
 
-
-
-# notifications:
-#   webhooks:
-#     urls:
-#     - https://webhooks.gitter.im/e/c791f10b1abf61b68f2a
-#     on_success: change
-#     on_failure: always
-#     on_start: never
-# deploy:
-#   provider: releases
-#   api_key:
-#     secure: gcpgujKKnFI95PNjf9zOvMFMZHJOTf1LnMjPtDqhR8bAJHtG2COTaTtBi6ekHRsACwP7mIYjd7blzl2P90gPATWc92QvByqs7AoAkPAvWNMjd+lBECTSN4B2wZSB7wxmGC/upxwUmGjbz1ZlD2pozviqHBKWxv2wjYCZXt0ELpsdCkjzefD0W5mxcKJ9g3de68sjsJy5TGi13NumCtRBnluDwLC+guCNnpwIpR1hVMmQ01izzzCcKDBvlEeLvxB5UKt/WEeDFuKCJEDwCbfzV4xjT6djggB0rVkSKWARq9FNisg1sew3Cn3U2UrCLYai+qmUiMpD++xHRcv8gyuxqz4Wa53mV6Wbm3qNWzThCTMYwXgqP23JpWPmW9x+ZPx1Hwcv+HWQrEW7FGMpN/+B9r4jLnLOt2m0r+GSDVofF8IdAROuWiZaGx43GAvS/Xr69e6Kymxel1gQ10nLuUjVZKDaQTt5TngGwlDrQ143LRphi88RP+PJ//G1jUSLeNls+i2YSsY3ihPUcUfHvXWXVgMvVa54q8Si9rzTmY1udWNbJKnMorS2SOk0LIOcJz0O2vVaARcZuG8+n/sOtuBP4fLiJG2VyvpBT3J5I5oFzcUg/qlgh8E2ubAfpJh5LlkLA30Vd58xBYKuomBEpe5ogk6lKv/uT0YxftTBIgJXof4=
-#   file: CuteVariant-x86_64.AppImage
-#   skip_cleanup: true
-
-#   on:
-#     repo: labsquare/CuteVariant
-#     branch: devel
+  on:
+    repo: labsquare/CuteVariant
+    branch: devel

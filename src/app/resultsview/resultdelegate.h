@@ -3,6 +3,7 @@
 #include <QItemDelegate>
 #include <QPainter>
 #include <QApplication>
+#include "qfonticon.h"
 
 class ResultDelegate : public QItemDelegate
 {

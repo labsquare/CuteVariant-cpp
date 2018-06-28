@@ -6,6 +6,7 @@
 #include <QTextStream>
 #include "project.h"
 #include "variantquery.h"
+#include "qfonticon.h"
 
 class ResultTreeModel : public QAbstractItemModel
 {

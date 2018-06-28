@@ -22,24 +22,40 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     painter->save();
 
 
+
     QItemDelegate::drawBackground(painter,option,index);
 
-    // Draw selection
-//    if (select) {
-//        QRect selectedRect = option.rect;
-//        painter->setPen(Qt::NoPen);
-//        painter->setBrush(pal.brush(QPalette::Highlight));
-//        painter->drawRect(selectedRect);
-//    }
+    if (index.column() == 0 && index.parent() != QModelIndex())
+    {
 
-//    else
-//    {
-//        QRect selectedRect = option.rect;
-//        painter->setPen(Qt::NoPen);
-//        painter->setBrush(index.row() % 2 ? pal.color(QPalette::Base):  pal.color(QPalette::AlternateBase));
-//        painter->drawRect(selectedRect);
+        painter->drawPixmap(QPoint(option.rect.left() - 20, option.rect.center().y()-10), FIcon(0xf60d).pixmap(20,20));
 
-//    }
+    }
+
+
+
+    //    else {
+
+    //        // Draw sub selection
+    //        if (select) {
+    //            QRect selectedRect = option.rect;
+    //            painter->setPen(Qt::NoPen);
+    //            painter->setBrush(pal.brush(QPalette::Highlight));
+    //            painter->drawRect(selectedRect);
+    //        }
+
+    //        else
+    //        {
+    //            QRect selectedRect = option.rect;
+    //            painter->setPen(Qt::NoPen);
+    //            painter->setBrush(index.row() % 2 ? pal.highlight().color().lighter():  pal.highlight().color().darker());
+    //            painter->drawRect(selectedRect);
+
+    //        }
+    //    }
+
+
+
 
     if (colname.toLower() == "ref" || colname.toLower() == "alt")
     {
@@ -142,7 +158,7 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 
     if (colname.toLower().contains(QRegularExpression("gt$")))
     {
-    // TODO regexp
+        // TODO regexp
         QString gt = index.data().toString();
         QIcon icon = QIcon(":/gt_unknown");
 
@@ -152,7 +168,7 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         if (gt == "1/0" || gt == "0/1" || gt == "1|0" || gt == "0|1")
             icon = QIcon(":/gt_hetero");
 
-          if (gt == "0/0" || gt == "0|0")
+        if (gt == "0/0" || gt == "0|0")
             icon = QIcon(":/gt_wt");
 
         painter->drawPixmap(option.rect.center().x(), option.rect.center().y() - 8 ,icon.pixmap(16,16));
@@ -178,7 +194,7 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 
 
     //    else
-    // QStyledItemDelegate::paint(painter, option, index);
+    // QItemDelegate::paint(painter, option, index);
 
 
 }

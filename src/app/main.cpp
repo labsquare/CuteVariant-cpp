@@ -20,6 +20,7 @@ int main(int argc, char **argv)
     app.setOrganizationDomain("labsquare.org");
     app.setApplicationVersion("0.0.1");
 
+    // https://cdn.materialdesignicons.com/2.3.54/
     QFontIcon::addFont(":/materialIcon");
 
     //QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
