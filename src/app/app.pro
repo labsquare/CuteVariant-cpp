@@ -60,5 +60,7 @@ PRE_TARGETDEPS += $$OUT_PWD/../qscintilla/Qt4Qt5/libqscintilla2.a
 # Quazip
 LIBS += -L$$OUT_PWD/../quazip/quazip/ -lquazip
 
-target.path  = /usr/local/bin
+target.path  = /usr/bin
 INSTALLS += target
+
+

@@ -11,39 +11,54 @@ install:
 - sudo apt-get install qt510charts-no-lgpl
 - source /opt/qt510/bin/qt510-env.sh 
 script:
-- "/opt/qt510/bin/qmake"
-- make
-- 
-- sudo apt-get -y install checkinstall
-- sudo checkinstall --pkgname=app --pkgversion="1" --pkgrelease="1" --backup=no --fstrans=no
-  --default --deldoc
-- mkdir -p appdir/usr/bin ; cd appdir
-- dpkg -x ../app_1-1_amd64.deb . ; find .
-- mv ./usr/local/bin/* ./usr/bin/
-- cp ./usr/share/icons/hicolor/48x48/apps/cutevariant.png .
-- cp ./usr/share/applications/cutevariant.desktop .
-- cd ..
-- wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
-- chmod a+x linuxdeployqt*.AppImage
+- "/opt/qt510/bin/qmake PREFIX=/usr CONFIG+=release"
+- make -j$(nproc)
+- make INSTALL_ROOT=$(pwd)/appdir -j$(nproc) install ; find appdir/
+- wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+- chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-- "./linuxdeployqt*.AppImage ./appdir/usr/bin/* -bundle-non-qt-libs"
-- "./linuxdeployqt*.AppImage ./appdir/usr/bin/* -appimage"
-- curl --upload-file ./CuteVariant*.AppImage https://transfer.sh/CuteVariant-git.$(git
-  rev-parse --short HEAD)-x86_64.AppImage
-notifications:
-  webhooks:
-    urls:
-    - https://webhooks.gitter.im/e/c791f10b1abf61b68f2a
-    on_success: change
-    on_failure: always
-    on_start: never
-deploy:
-  provider: releases
-  api_key:
-    secure: gcpgujKKnFI95PNjf9zOvMFMZHJOTf1LnMjPtDqhR8bAJHtG2COTaTtBi6ekHRsACwP7mIYjd7blzl2P90gPATWc92QvByqs7AoAkPAvWNMjd+lBECTSN4B2wZSB7wxmGC/upxwUmGjbz1ZlD2pozviqHBKWxv2wjYCZXt0ELpsdCkjzefD0W5mxcKJ9g3de68sjsJy5TGi13NumCtRBnluDwLC+guCNnpwIpR1hVMmQ01izzzCcKDBvlEeLvxB5UKt/WEeDFuKCJEDwCbfzV4xjT6djggB0rVkSKWARq9FNisg1sew3Cn3U2UrCLYai+qmUiMpD++xHRcv8gyuxqz4Wa53mV6Wbm3qNWzThCTMYwXgqP23JpWPmW9x+ZPx1Hwcv+HWQrEW7FGMpN/+B9r4jLnLOt2m0r+GSDVofF8IdAROuWiZaGx43GAvS/Xr69e6Kymxel1gQ10nLuUjVZKDaQTt5TngGwlDrQ143LRphi88RP+PJ//G1jUSLeNls+i2YSsY3ihPUcUfHvXWXVgMvVa54q8Si9rzTmY1udWNbJKnMorS2SOk0LIOcJz0O2vVaARcZuG8+n/sOtuBP4fLiJG2VyvpBT3J5I5oFzcUg/qlgh8E2ubAfpJh5LlkLA30Vd58xBYKuomBEpe5ogk6lKv/uT0YxftTBIgJXof4=
-  file: CuteVariant-x86_64.AppImage
-  skip_cleanup: true
+- export VERSION=$(git rev-parse --short HEAD) # linuxdeployqt uses this for naming the file
+- export LD_LIBRARY_PATH=appdir/lib/ 
+- ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -bundle-non-qt-libs
+- ./linuxdeployqt-continuous-x86_64.AppImage appdir/usr/share/applications/*.desktop -appimage
 
-  on:
-    repo: labsquare/CuteVariant
-    branch: devel
+
+# - sudo apt-get -y install checkinstall
+# - sudo checkinstall --pkgname=app --pkgversion="1" --pkgrelease="1" --backup=no --fstrans=no
+#   --default --deldoc
+# - mkdir -p appdir/usr/bin ; cd appdir
+# - dpkg -x ../app_1-1_amd64.deb . ; find .
+# - mv ./usr/local/bin/* ./usr/bin/
+# - cp ./usr/share/icons/hicolor/48x48/apps/cutevariant.png .
+# - cp ./usr/share/applications/cutevariant.desktop .
+# - cd ..
+# - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+# - chmod a+x linuxdeployqt*.AppImage
+# - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
+# - "./linuxdeployqt*.AppImage ./appdir/usr/bin/* -bundle-non-qt-libs"
+# - "./linuxdeployqt*.AppImage ./appdir/usr/bin/* -appimage"
+# - curl --upload-file ./CuteVariant*.AppImage https://transfer.sh/CuteVariant-git.$(git
+#   rev-parse --short HEAD)-x86_64.AppImage
+
+
+
+
+
+
+# notifications:
+#   webhooks:
+#     urls:
+#     - https://webhooks.gitter.im/e/c791f10b1abf61b68f2a
+#     on_success: change
+#     on_failure: always
+#     on_start: never
+# deploy:
+#   provider: releases
+#   api_key:
+#     secure: gcpgujKKnFI95PNjf9zOvMFMZHJOTf1LnMjPtDqhR8bAJHtG2COTaTtBi6ekHRsACwP7mIYjd7blzl2P90gPATWc92QvByqs7AoAkPAvWNMjd+lBECTSN4B2wZSB7wxmGC/upxwUmGjbz1ZlD2pozviqHBKWxv2wjYCZXt0ELpsdCkjzefD0W5mxcKJ9g3de68sjsJy5TGi13NumCtRBnluDwLC+guCNnpwIpR1hVMmQ01izzzCcKDBvlEeLvxB5UKt/WEeDFuKCJEDwCbfzV4xjT6djggB0rVkSKWARq9FNisg1sew3Cn3U2UrCLYai+qmUiMpD++xHRcv8gyuxqz4Wa53mV6Wbm3qNWzThCTMYwXgqP23JpWPmW9x+ZPx1Hwcv+HWQrEW7FGMpN/+B9r4jLnLOt2m0r+GSDVofF8IdAROuWiZaGx43GAvS/Xr69e6Kymxel1gQ10nLuUjVZKDaQTt5TngGwlDrQ143LRphi88RP+PJ//G1jUSLeNls+i2YSsY3ihPUcUfHvXWXVgMvVa54q8Si9rzTmY1udWNbJKnMorS2SOk0LIOcJz0O2vVaARcZuG8+n/sOtuBP4fLiJG2VyvpBT3J5I5oFzcUg/qlgh8E2ubAfpJh5LlkLA30Vd58xBYKuomBEpe5ogk6lKv/uT0YxftTBIgJXof4=
+#   file: CuteVariant-x86_64.AppImage
+#   skip_cleanup: true
+
+#   on:
+#     repo: labsquare/CuteVariant
+#     branch: devel
