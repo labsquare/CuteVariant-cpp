@@ -22,6 +22,8 @@ int main(int argc, char **argv)
 
     QFontIcon::addFont(":/materialIcon");
 
+    //QApplication::setAttribute(Qt::AA_DisableHighDpiScaling);
+
 
 //    cvar::GenericVCFReader reader("/home/sacha/Dev/CuteVariant/exemples/vcf/snpeff.example.vcf");
 

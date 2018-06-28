@@ -7,6 +7,7 @@ before_install:
 - sudo apt-get update
 install:
 - sudo apt-get install qt510-meta-full
+- sudo apt-get install libgl-dev
 - source /opt/qt510/bin/qt510-env.sh 
 script:
 - "/opt/qt510/bin/qmake"
