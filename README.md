@@ -4,3 +4,4 @@
 
 A GUI tool to filter genomic variations. 
 
+![](https://github.com/labsquare/CuteVariant/blob/master/cutevariant.png)
