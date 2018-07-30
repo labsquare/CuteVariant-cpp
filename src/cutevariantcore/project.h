@@ -20,21 +20,34 @@ public:
     static Project * i();
 
     void setDatabasePath(const QString& path);
-    bool importFile(const QString& filename);
-    SqliteManager * sqlite();
 
+
+    // samples
+
+    /*!
+     * \brief samples
+     * \return samples list from sqlite
+     */
+    QList<Sample> samples() const;
+
+
+
+    // regions
+    QList<Region> regions(int bedId) const;
+
+
+
+    // Links
     QList<VariantLink> links() const;
+    bool setLinks(QList<VariantLink>& links);
     bool removeLink(const VariantLink& link);
-    bool saveLink(VariantLink& link);
-    bool saveLinks(QList<VariantLink>& links);
+    bool addLink(VariantLink& link);
 
 
 
 private:
     Project();
-
     QSqlDatabase mSqlDb;
-    SqliteManager * mSqliteManager;
     static Project * mInstance;
 
 

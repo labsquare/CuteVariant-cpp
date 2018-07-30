@@ -25,31 +25,34 @@ Project *Project::i()
 void Project::setDatabasePath(const QString &path)
 {
     //TODO Manage multi DB. 1 per project
-    mSqlDb = QSqlDatabase::addDatabase("QSQLITE");
+    mSqlDb = QSqlDatabase::addDatabase("QSQLITE", "project");
     mSqlDb.setDatabaseName(path);
     if (!mSqlDb.open())
-        qDebug()<<"cannot open database";
+        qDebug()<<Q_FUNC_INFO<<"cannot open database";
 
     //    QFileInfo info(path);
     //    mSqliteManager->createProject(info.baseName());
 }
-
-bool Project::importFile(const QString &filename)
+//=================== SAMPLES  =====================
+QList<Sample> Project::samples() const
 {
-    if (mSqlDb.isOpen())
-        return mSqliteManager->importFile(filename);
-    else{
-        qDebug()<<"Cannot import. Database is not open";
-        return false;
+    QList<Sample> samples;
+    QSqlQuery query(QStringLiteral("SELECT * FROM `samples`"));
+    while(query.next())
+    {
+        Sample sample;
+        sample.setId(query.value("id").toInt());
+        sample.setName(query.value("name").toString());
+        samples.append(sample);
     }
 
+    return samples;
 }
 
-SqliteManager *Project::sqlite()
-{
-    return mSqliteManager;
-}
 
+
+
+//=================== LINKS =========================
 QList<VariantLink> Project::links() const
 {
     QList<VariantLink> list;
@@ -71,23 +74,23 @@ QList<VariantLink> Project::links() const
 
     return list;
 }
-
+//----------------------------------------------------
 bool Project::removeLink(const VariantLink &link)
 {
     QList<VariantLink> list = links();
     list.removeOne(link);
-    return saveLinks(list);
+    return setLinks(list);
 
 }
-
-bool Project::saveLink(VariantLink &link)
+//----------------------------------------------------
+bool Project::addLink(VariantLink &link)
 {
     QList<VariantLink> list = links();
     list.append(link);
-    return saveLinks(list);
+    return setLinks(list);
 }
-
-bool Project::saveLinks(QList<VariantLink> &links)
+//----------------------------------------------------
+bool Project::setLinks(QList<VariantLink> &links)
 {
     QSettings settings;
     settings.beginWriteArray("links");
@@ -103,6 +106,6 @@ bool Project::saveLinks(QList<VariantLink> &links)
 
     return true;
 }
-
+//----------------------------------------------------
 
 }
