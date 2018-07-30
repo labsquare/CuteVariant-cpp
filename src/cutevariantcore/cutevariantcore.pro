@@ -13,9 +13,10 @@ Release:DESTDIR = $$PWD/../bin
 
 
 INCLUDEPATH += $$PWD/../quazip/quazip
-INCLUDEPATH += $$PWD/../boost/
 INCLUDEPATH += $$PWD/../
 
+
+include(reader/reader.pri)
 
 SOURCES += \
     field.cpp \
@@ -24,7 +25,6 @@ SOURCES += \
     region.cpp \
     genotype.cpp \
     variant.cpp \
-    abstractvariantreader.cpp \
     project.cpp \
     sqlitemanager.cpp \
     fieldsmodel.cpp \
@@ -34,12 +34,8 @@ SOURCES += \
     variantlink.cpp \
     bedfile.cpp \
     vqlparser.cpp \
-    genericvcfreader.cpp \
     variantreaderfactory.cpp \
-    abstractannotationparser.cpp \
-    vepannotationparser.cpp \
-    snpeffannotationparser.cpp \
-    snpeffoldannotationparser.cpp
+
 
 HEADERS += \
     field.h \
@@ -48,7 +44,6 @@ HEADERS += \
     region.h \
     genotype.h \
     variant.h \
-    abstractvariantreader.h \
     project.h \
     sqlitemanager.h \
     fieldsmodel.h \
@@ -58,11 +53,8 @@ HEADERS += \
     variantlink.h \
     bedfile.h \
     vqlparser.h \
-    genericvcfreader.h \
     variantreaderfactory.h \
-    abstractannotationparser.h \
-    vepannotationparser.h \
-    snpeffannotationparser.h \
-    snpeffoldannotationparser.h
+
+
 
 TARGET = cutevariantcore

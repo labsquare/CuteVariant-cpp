@@ -17,6 +17,8 @@
 #include "chartdockwidget.h"
 #include "qfonticon.h"
 
+#include "importwizard.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

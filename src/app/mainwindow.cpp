@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     setDockOptions(QMainWindow::VerticalTabs);
 
-    // openFile("/home/sacha/TRIO1.family.vcf.db");
+    openFile("/home/sacha/TRIO1.family.vcf.db");
 
 }
 //-------------------------------------------------------------------------
@@ -109,29 +109,18 @@ void MainWindow::restoreSettings()
 void MainWindow::importFile()
 {
 
-    QString filename = QFileDialog::getOpenFileName(this, tr("Import File"),QDir::homePath(),tr("Images (*.vcf *.vcf.gz)"));
-    if (filename.isEmpty())
-        return;
+    ImportWizard wizard;
 
-    QString dbPath = filename + ".db";
-    if (QFile::exists(dbPath))
+    if (wizard.exec())
     {
-        int ret = QMessageBox::warning(this,
-                                       tr("Warning"),
-                                       tr("one database already exists. Do you want to remove it ?"),
-                                       QMessageBox::Ok|QMessageBox::Cancel);
-        if (ret == QMessageBox::Ok)
-            QFile::remove(dbPath);
-        else
-            return;
+
+        QString filename = wizard.field("filename").toString();
+        QString dbPath = filename + ".db";
+
+        openFile(dbPath);
     }
 
-    cutevariant->setDatabasePath(dbPath);
-    ImportDialog dialog;
-    dialog.setFilename(filename);
 
-    if (dialog.exec())
-        reset();
 
 }
 

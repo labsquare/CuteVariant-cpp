@@ -5,13 +5,14 @@
 #include <QObject>
 #include <QtGui>
 #include <QtConcurrent>
-#include "abstractvariantreader.h"
-#include "genericvcfreader.h"
+#include "reader/abstractvariantreader.h"
+#include "reader/genericvcfreader.h"
 #include "variantquery.h"
 #include "selection.h"
 #include "variantlink.h"
 #include "region.h"
 #include "bedfile.h"
+
 
 namespace cvar {
 

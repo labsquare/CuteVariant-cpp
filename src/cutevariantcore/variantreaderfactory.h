@@ -1,15 +1,32 @@
 #ifndef VARIANTREADERFACTORY_H
 #define VARIANTREADERFACTORY_H
 #include <QtCore>
-#include "abstractvariantreader.h"
-#include "genericvcfreader.h"
+#include "reader/abstractvariantreader.h"
+#include "reader/genericvcfreader.h"
 
 namespace cvar {
-class VariantReaderFactory
+class VariantReaderFactory : QObject
 {
+    Q_OBJECT
 public :
 
+    enum Format
+    {
+        Unknown,
+        Vcf,
+        SnpEff,
+        Vep,
+        Annovar,
+        Tabular
+
+    };
+
+    Q_ENUM(Format)
+
+
     static AbstractVariantReader * createVariantReader(const QString& filename);
+
+    static Format fileFormat(const QString& filename);
 
 
 

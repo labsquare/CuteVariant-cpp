@@ -10,6 +10,7 @@ include(queryeditor/queryeditor.pri)
 include(resultsview/resultsview.pri)
 include(docks/docks.pri)
 include(qfonticon/qfonticon.pri)
+include(importwizard/importwizard.pri)
 
 TARGET = cutevariant
 
