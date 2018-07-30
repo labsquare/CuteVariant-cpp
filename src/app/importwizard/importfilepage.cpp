@@ -46,7 +46,7 @@ ImportFilePage::ImportFilePage(QWidget *parent)
 
 
 
- QMetaEnum metaEnum = QMetaEnum::fromType<cvar::VariantReaderFactory::Format>();
+    QMetaEnum metaEnum = QMetaEnum::fromType<cvar::VariantReaderFactory::Format>();
 
     for (int i=0; i< metaEnum.keyCount();  ++i)
     {
@@ -58,9 +58,37 @@ ImportFilePage::ImportFilePage(QWidget *parent)
 void ImportFilePage::browse()
 {
 
-    QString filename = QFileDialog::getOpenFileName(this, tr("Import File"),QDir::homePath());
+    QString filename = QFileDialog::getOpenFileName(this, tr("Import File"),QDir::homePath(),tr("VCF (*.vcf *.vcf.gz)"));
 
     if (!filename.isEmpty()){
+
+        QString dbFile = filename + ".db";
+
+        if (QFile::exists(dbFile))
+        {
+            QMessageBox box;
+            box.setIcon(QMessageBox::Warning);
+            box.setText(tr("There is already a db file with the same name in this location"));
+            box.setInformativeText(tr("Do you want to remove the file ?"));
+            box.setWindowTitle(dbFile);
+            box.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+
+            if (box.exec() == QMessageBox::Yes)
+            {
+                QFile file(dbFile);
+                if (!file.remove())
+                    QMessageBox::warning(this,dbFile,tr("Cannot remove file"));
+
+
+            }
+
+            else
+                return;
+
+
+        }
+
+
         mFileEdit->setText(filename);
         detectFormat();
 

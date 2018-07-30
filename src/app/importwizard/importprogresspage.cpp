@@ -46,8 +46,14 @@ connect(&mWatcher,SIGNAL(finished()), this,SLOT(importFinished()));
 void ImportProgressPage::importFile()
 {
 
+
+
 QString filename = field("filename").toString();
 auto format = cvar::VariantReaderFactory::Format (field("format").toInt());
+
+
+cutevariant->setDatabasePath(filename+".db");
+
 
 QFuture<bool> future = cutevariant->sqlite()->asyncImportFile(filename, format);
 mWatcher.setFuture(future);

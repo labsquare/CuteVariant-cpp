@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     setDockOptions(QMainWindow::VerticalTabs);
 
-    openFile("/home/sacha/TRIO1.family.vcf.db");
+    //openFile("/home/sacha/TRIO1.family.vcf.db");
 
 }
 //-------------------------------------------------------------------------
