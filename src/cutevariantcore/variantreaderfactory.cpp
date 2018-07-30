@@ -1,29 +1,37 @@
 #include "variantreaderfactory.h"
 
 namespace cvar {
-AbstractVariantReader *VariantReaderFactory::createVariantReader(const QString &filename)
+AbstractVariantReader *VariantReaderFactory::createVariantReader(QIODevice * device, cvar::VariantReaderFactory::Format format)
 {
 
-    if (!QFile::exists(filename))
-        return nullptr;
+    auto selectFormat = format;
 
-    auto format = fileFormat(filename);
+    // if unknwown format, try to detect
+    if (selectFormat == VariantReaderFactory::Unknown)
+        selectFormat = detectFormat(device);
 
-
-    if (format == VariantReaderFactory::Vcf)
-        return new GenericVCFReader(new QFile(filename));
-
-    if (format == VariantReaderFactory::SnpEff)
+    // if still no detection, return null
+    if (selectFormat == VariantReaderFactory::Unknown)
     {
-        auto reader = new GenericVCFReader(new QFile(filename));
+        qCritical()<<Q_FUNC_INFO<<"cannot detect format";
+        return nullptr;
+    }
+
+
+    if (selectFormat == VariantReaderFactory::Vcf)
+        return new GenericVCFReader(device);
+
+    if (selectFormat == VariantReaderFactory::SnpEff)
+    {
+        auto reader = new GenericVCFReader(device);
         reader->addAnnotationParser(new SnpEffAnnotationParser());
         return reader;
     }
 
 
-    if (format == VariantReaderFactory::Vep)
+    if (selectFormat == VariantReaderFactory::Vep)
     {
-        auto reader = new GenericVCFReader(new QFile(filename));
+        auto reader = new GenericVCFReader(device);
         reader->addAnnotationParser(new VepAnnotationParser());
         return reader;
 
@@ -32,81 +40,82 @@ AbstractVariantReader *VariantReaderFactory::createVariantReader(const QString &
     return nullptr;
 }
 
-VariantReaderFactory::Format VariantReaderFactory::fileFormat(const QString &filename)
+VariantReaderFactory::Format VariantReaderFactory::detectFormat(QIODevice * device)
 {
 
-    QFile file(filename);
-
-    if (!file.open(QIODevice::ReadOnly))
-    {
-        qCritical()<<Q_FUNC_INFO<<"cannot open file" ;
-        return VariantReaderFactory::Unknown;
-    }
-
-    if (isSnpEff(&file))
+    if (isSnpEff(device))
         return VariantReaderFactory::SnpEff;
 
-    if (isVep(&file))
+    if (isVep(device))
         return VariantReaderFactory::Vep;
 
-
-    if (isVcf(&file))
+    if (isVcf(device))
         return VariantReaderFactory::Vcf;
 
-
-
     return VariantReaderFactory::Unknown;
-
 }
-
 
 bool VariantReaderFactory::isVcf(QIODevice * device)
 {
-    device->reset();
-    QTextStream stream(device);
-    QString line;
+    if (device->open(QIODevice::ReadOnly))
+    {
+        QTextStream stream(device);
+        QString line;
 
-    do {
-        line = stream.readLine().toLower();
-        if (line.startsWith("##fileformat=vcf"))
-            return true;
-    } while (line.startsWith("##"));
-
-
+        do {
+            line = stream.readLine().toLower();
+            if (line.startsWith("##fileformat=vcf"))
+            {
+                device->close();
+                return true;
+            }
+        } while (line.startsWith("##"));
+    }
+    device->close();
     return false;
 
 }
 
 bool VariantReaderFactory::isSnpEff(QIODevice *device)
 {
-    device->reset();
 
-    QTextStream stream(device);
-    QString line;
+    if (device->open(QIODevice::ReadOnly))
+    {
+        QTextStream stream(device);
+        QString line;
 
-    do {
-        line = stream.readLine().toLower();
-        if (line.startsWith("##snpeffversion="))
-            return true;
-    } while (line.startsWith("##"));
-
+        do {
+            line = stream.readLine().toLower();
+            if (line.startsWith("##snpeffversion="))
+            {
+                device->close();
+                return true;
+            }
+        } while (line.startsWith("##"));
+    }
+    device->close();
     return false;
-
-
 }
 
 bool VariantReaderFactory::isVep(QIODevice *device)
 {
-    QTextStream stream(device);
-    QString line;
+    if (device->open(QIODevice::ReadOnly))
+    {
+        QTextStream stream(device);
+        QString line;
+
+        do {
+            line = stream.readLine().toLower();
+            if (line.startsWith("##vep="))
+            {
+                device->close();
+                return true;
 
 
-    do {
-        line = stream.readLine().toLower();
-        if (line.startsWith("##vep="))
-            return true;
-    } while (line.startsWith("##"));
-
+            }
+        } while (line.startsWith("##"));
+    }
+    device->close();
     return false;
 }
 
@@ -120,4 +129,27 @@ VariantReaderFactory::VariantReaderFactory()
 {
 
 }
+
+
+bool VariantReaderFactory::isGzip(QIODevice *device)
+{
+
+    if (device->open(QIODevice::ReadOnly))
+    {
+        QByteArray magic_number = device->read(2);
+        device->close();
+
+        if (magic_number.length() < 2)
+            return false;
+
+        return static_cast<unsigned char>(magic_number.at(0)) == 0x1f && static_cast<unsigned char>(magic_number.at(1)) == 0x8b;
+    }
+    else
+    {
+        return false;
+    }
+
+
+}
+
 }

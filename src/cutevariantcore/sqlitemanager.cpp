@@ -15,7 +15,7 @@ SqliteManager::~SqliteManager()
     delete mProgressDevice;
 }
 //-------------------------------------------------------------------------------
-bool SqliteManager::importFile(const QString &filename)
+bool SqliteManager::importFile(const QString &filename,VariantReaderFactory::Format format)
 {
     // test if file exists
     if (!QFile::exists(filename))
@@ -24,35 +24,35 @@ bool SqliteManager::importFile(const QString &filename)
         return false;
     }
 
+
+
     // Actual file support .. Will change in the future .
-    QStringList suffixes = {"vcf","gz"};
     QFileInfo info(filename);
     mFileSize = info.size();
 
-    if (!suffixes.contains(info.suffix().toLower()))
-    {
-        qDebug()<<"file suffix not suported";
-        return false;
-    }
 
-    // Keep the raw file to compute pos/total for the progress bar
-    mProgressDevice = nullptr;
+    // if gzip file : progressFile is the uncompress file to keep reading tracking
+    // if not : progressFile is the file
+    mProgressDevice = new QFile(filename);
     QScopedPointer<AbstractVariantReader> reader;
 
-    if (info.suffix().toLower() == "vcf"){
-        mProgressDevice = new QFile(filename);
-        reader.reset(new GenericVCFReader(mProgressDevice));
-    }
-    if (info.suffix() == "gz")
-    {
-        mProgressDevice = new QuaGzipFile(filename);
-        reader.reset(new GenericVCFReader(mProgressDevice));
-    }
+
+    if (VariantReaderFactory::isGzip(mProgressDevice))
+        reader.reset(VariantReaderFactory::createVariantReader(new KCompressionDevice(mProgressDevice,true, KCompressionDevice::GZip)));
+
+    else
+        reader.reset(VariantReaderFactory::createVariantReader(mProgressDevice));
+
 
     if (reader.isNull())
+    {
+        qCritical()<<Q_FUNC_INFO<<"cannot create reader";
         return false;
+    }
 
-    qInfo()<<"Start Importing "<<filename <<"";
+
+
+    qInfo()<<"Start Importing "<<filename <<" with format "<<format;
 
     QElapsedTimer timer;
     timer.start();
@@ -430,10 +430,10 @@ Variant SqliteManager::variant(int variantId) const
     return v;
 }
 //-------------------------------------------------------------------------------
-QFuture<bool> SqliteManager::asyncImportFile(const QString &filename)
+QFuture<bool> SqliteManager::asyncImportFile(const QString &filename,VariantReaderFactory::Format format)
 {
 
-    return QtConcurrent::run(this, &SqliteManager::importFile, filename);
+    return QtConcurrent::run(this, &SqliteManager::importFile, filename, format);
 
 }
 //-------------------------------------------------------------------------------

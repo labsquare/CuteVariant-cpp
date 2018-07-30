@@ -12,7 +12,8 @@
 #include "variantlink.h"
 #include "region.h"
 #include "bedfile.h"
-
+#include "variantreaderfactory.h"
+#include "kcompressiondevice.h"
 
 namespace cvar {
 
@@ -147,7 +148,7 @@ public:
      * \param filename
      * \return true if success
      */
-    bool importFile(const QString& filename);
+    bool importFile(const QString& filename, VariantReaderFactory::Format format = VariantReaderFactory::Unknown);
 
     /*!
      * \brief importFile
@@ -155,7 +156,7 @@ public:
      * \param filename
      * \return a QFutur to monitor the progression
      */
-    QFuture<bool> asyncImportFile(const QString& filename);
+    QFuture<bool> asyncImportFile(const QString& filename, VariantReaderFactory::Format format = VariantReaderFactory::Unknown);
 
 
     bool importBedfile(const QString& filename);

@@ -59,9 +59,14 @@ LIBS += -L$$OUT_PWD/../qscintilla/Qt4Qt5/ -lqscintilla2
 PRE_TARGETDEPS += $$OUT_PWD/../qscintilla/Qt4Qt5/libqscintilla2.a
 
 # Quazip
-LIBS += -L$$OUT_PWD/../quazip/quazip/ -lquazip
+#LIBS += -L$$OUT_PWD/../quazip/quazip/ -lquazip
 
 target.path  = /usr/bin
 INSTALLS += target
 
 
+# KGZIP
+unix {
+INCLUDEPATH += "/usr/include/KF5/KArchive"
+LIBS +=  -L"/usr/lib"  -lKF5Archive
+}

@@ -15,6 +15,9 @@ Release:DESTDIR = $$PWD/../bin
 INCLUDEPATH += $$PWD/../quazip/quazip
 INCLUDEPATH += $$PWD/../
 
+unix {
+INCLUDEPATH += "/usr/include/KF5/KArchive"
+}
 
 include(reader/reader.pri)
 

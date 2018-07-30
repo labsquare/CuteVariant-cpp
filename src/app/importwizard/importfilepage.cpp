@@ -58,7 +58,7 @@ ImportFilePage::ImportFilePage(QWidget *parent)
 void ImportFilePage::browse()
 {
 
-    QString filename = QFileDialog::getOpenFileName(this, tr("Import File"),QDir::homePath(),tr("Variant file (*.vcf)"));
+    QString filename = QFileDialog::getOpenFileName(this, tr("Import File"),QDir::homePath());
 
     if (!filename.isEmpty()){
         mFileEdit->setText(filename);
@@ -73,9 +73,20 @@ void ImportFilePage::browse()
 void ImportFilePage::detectFormat()
 {
 
-    auto format = cvar::VariantReaderFactory::fileFormat(mFileEdit->text());
+    QFile file(mFileEdit->text());
+    cvar::VariantReaderFactory::Format format;
 
-    qDebug()<<format;
+    if (cvar::VariantReaderFactory::isGzip(&file))
+    {
+        auto * gzip = new KCompressionDevice(&file,false, KCompressionDevice::GZip);
+        format = cvar::VariantReaderFactory::detectFormat(gzip);
+        delete gzip;
+    }
+
+    else
+        format = cvar::VariantReaderFactory::detectFormat(&file);
+
+
 
     mFormatBox->setCurrentIndex(mFormatBox->findData(format));
 

@@ -3,6 +3,7 @@
 #include <QWizardPage>
 #include <QtWidgets>
 #include "variantreaderfactory.h"
+#include "kcompressiondevice.h"
 
 class ImportFilePage : public QWizardPage
 {

@@ -49,7 +49,7 @@ void ImportProgressPage::importFile()
 QString filename = field("filename").toString();
 auto format = cvar::VariantReaderFactory::Format (field("format").toInt());
 
-QFuture<bool> future = cutevariant->sqlite()->asyncImportFile(filename);
+QFuture<bool> future = cutevariant->sqlite()->asyncImportFile(filename, format);
 mWatcher.setFuture(future);
 
 

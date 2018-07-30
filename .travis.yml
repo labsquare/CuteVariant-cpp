@@ -11,6 +11,19 @@ install:
 - sudo apt-get install qt510charts-no-lgpl
 - source /opt/qt510/bin/qt510-env.sh 
 script:
+- git clone git://anongit.kde.org/extra-cmake-modules
+- cd extra-cmake-modules
+- mkdir build && cd build    
+- cmake .. -DCMAKE_INSTALL_PREFIX=/usr/
+- make && sudo make install
+- cd ../..
+- git clone git://anongit.kde.org/karchive.git
+- cd karchive
+- mkdir build && cd build 
+- cmake .. -DCMAKE_INSTALL_PREFIX=/usr/
+- make 
+- sudo make install
+- cd ../..
 - "/opt/qt510/bin/qmake PREFIX=/usr CONFIG+=release"
 - make -j$(nproc)
 - make INSTALL_ROOT=$(pwd)/appdir -j$(nproc) install ; find appdir/

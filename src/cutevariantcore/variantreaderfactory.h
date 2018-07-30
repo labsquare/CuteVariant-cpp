@@ -24,9 +24,9 @@ public :
     Q_ENUM(Format)
 
 
-    static AbstractVariantReader * createVariantReader(const QString& filename);
+    static AbstractVariantReader * createVariantReader(QIODevice * device, Format format = VariantReaderFactory::Unknown);
 
-    static Format fileFormat(const QString& filename);
+    static Format detectFormat(QIODevice * device);
 
 
 
@@ -34,6 +34,7 @@ public :
     static bool isSnpEff(QIODevice * device);
     static bool isVep(QIODevice * device);
     static bool isAnnovar(QIODevice * device);
+    static bool isGzip(QIODevice * device);
 
 
 
