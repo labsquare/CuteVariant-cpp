@@ -610,7 +610,7 @@ extern unzFile unzOpenInternal (voidpf file,
     us.z_filefunc.zseek32_file = NULL;
     us.z_filefunc.ztell32_file = NULL;
     if (pzlib_filefunc64_32_def==NULL)
-        fill_qiodevice64_filefunc(&us.z_filefunc.zfile_func64);
+        fill_QIODevice64_filefunc(&us.z_filefunc.zfile_func64);
     else
         us.z_filefunc = *pzlib_filefunc64_32_def;
     us.is64bitOpenFunction = is64bitOpenFunction;

@@ -85,7 +85,7 @@ struct QIODevice_descriptor {
 };
 /// @endcond
 
-voidpf ZCALLBACK qiodevice_open_file_func (
+voidpf ZCALLBACK QIODevice_open_file_func (
    voidpf opaque,
    voidpf file,
    int mode)
@@ -139,7 +139,7 @@ voidpf ZCALLBACK qiodevice_open_file_func (
 }
 
 
-uLong ZCALLBACK qiodevice_read_file_func (
+uLong ZCALLBACK QIODevice_read_file_func (
    voidpf opaque,
    voidpf stream,
    void* buf,
@@ -157,7 +157,7 @@ uLong ZCALLBACK qiodevice_read_file_func (
 }
 
 
-uLong ZCALLBACK qiodevice_write_file_func (
+uLong ZCALLBACK QIODevice_write_file_func (
    voidpf opaque,
    voidpf stream,
    const void* buf,
@@ -174,7 +174,7 @@ uLong ZCALLBACK qiodevice_write_file_func (
     return ret;
 }
 
-uLong ZCALLBACK qiodevice_tell_file_func (
+uLong ZCALLBACK QIODevice_tell_file_func (
    voidpf opaque,
    voidpf stream)
 {
@@ -191,7 +191,7 @@ uLong ZCALLBACK qiodevice_tell_file_func (
     return ret;
 }
 
-ZPOS64_T ZCALLBACK qiodevice64_tell_file_func (
+ZPOS64_T ZCALLBACK QIODevice64_tell_file_func (
    voidpf opaque,
    voidpf stream)
 {
@@ -206,7 +206,7 @@ ZPOS64_T ZCALLBACK qiodevice64_tell_file_func (
     return static_cast<ZPOS64_T>(ret);
 }
 
-int ZCALLBACK qiodevice_seek_file_func (
+int ZCALLBACK QIODevice_seek_file_func (
    voidpf /*opaque UNUSED*/,
    voidpf stream,
    uLong offset,
@@ -219,31 +219,31 @@ int ZCALLBACK qiodevice_seek_file_func (
             // sequential devices are always at end (needed in mdAppend)
             return 0;
         } else {
-            qWarning("qiodevice_seek_file_func() called for sequential device");
+            qWarning("QIODevice_seek_file_func() called for sequential device");
             return -1;
         }
     }
-    uLong qiodevice_seek_result=0;
+    uLong QIODevice_seek_result=0;
     int ret;
     switch (origin)
     {
     case ZLIB_FILEFUNC_SEEK_CUR :
-        qiodevice_seek_result = ((QIODevice*)stream)->pos() + offset;
+        QIODevice_seek_result = ((QIODevice*)stream)->pos() + offset;
         break;
     case ZLIB_FILEFUNC_SEEK_END :
-        qiodevice_seek_result = ((QIODevice*)stream)->size() - offset;
+        QIODevice_seek_result = ((QIODevice*)stream)->size() - offset;
         break;
     case ZLIB_FILEFUNC_SEEK_SET :
-        qiodevice_seek_result = offset;
+        QIODevice_seek_result = offset;
         break;
     default:
         return -1;
     }
-    ret = !iodevice->seek(qiodevice_seek_result);
+    ret = !iodevice->seek(QIODevice_seek_result);
     return ret;
 }
 
-int ZCALLBACK qiodevice64_seek_file_func (
+int ZCALLBACK QIODevice64_seek_file_func (
    voidpf /*opaque UNUSED*/,
    voidpf stream,
    ZPOS64_T offset,
@@ -256,31 +256,31 @@ int ZCALLBACK qiodevice64_seek_file_func (
             // sequential devices are always at end (needed in mdAppend)
             return 0;
         } else {
-            qWarning("qiodevice_seek_file_func() called for sequential device");
+            qWarning("QIODevice_seek_file_func() called for sequential device");
             return -1;
         }
     }
-    qint64 qiodevice_seek_result=0;
+    qint64 QIODevice_seek_result=0;
     int ret;
     switch (origin)
     {
     case ZLIB_FILEFUNC_SEEK_CUR :
-        qiodevice_seek_result = ((QIODevice*)stream)->pos() + offset;
+        QIODevice_seek_result = ((QIODevice*)stream)->pos() + offset;
         break;
     case ZLIB_FILEFUNC_SEEK_END :
-        qiodevice_seek_result = ((QIODevice*)stream)->size() - offset;
+        QIODevice_seek_result = ((QIODevice*)stream)->size() - offset;
         break;
     case ZLIB_FILEFUNC_SEEK_SET :
-        qiodevice_seek_result = offset;
+        QIODevice_seek_result = offset;
         break;
     default:
         return -1;
     }
-    ret = !iodevice->seek(qiodevice_seek_result);
+    ret = !iodevice->seek(QIODevice_seek_result);
     return ret;
 }
 
-int ZCALLBACK qiodevice_close_file_func (
+int ZCALLBACK QIODevice_close_file_func (
    voidpf opaque,
    voidpf stream)
 {
@@ -300,7 +300,7 @@ int ZCALLBACK qiodevice_close_file_func (
     return 0;
 }
 
-int ZCALLBACK qiodevice_fakeclose_file_func (
+int ZCALLBACK QIODevice_fakeclose_file_func (
    voidpf opaque,
    voidpf /*stream*/)
 {
@@ -309,7 +309,7 @@ int ZCALLBACK qiodevice_fakeclose_file_func (
     return 0;
 }
 
-int ZCALLBACK qiodevice_error_file_func (
+int ZCALLBACK QIODevice_error_file_func (
    voidpf /*opaque UNUSED*/,
    voidpf /*stream UNUSED*/)
 {
@@ -317,32 +317,32 @@ int ZCALLBACK qiodevice_error_file_func (
     return 0;
 }
 
-void fill_qiodevice_filefunc (
+void fill_QIODevice_filefunc (
   zlib_filefunc_def* pzlib_filefunc_def)
 {
-    pzlib_filefunc_def->zopen_file = qiodevice_open_file_func;
-    pzlib_filefunc_def->zread_file = qiodevice_read_file_func;
-    pzlib_filefunc_def->zwrite_file = qiodevice_write_file_func;
-    pzlib_filefunc_def->ztell_file = qiodevice_tell_file_func;
-    pzlib_filefunc_def->zseek_file = qiodevice_seek_file_func;
-    pzlib_filefunc_def->zclose_file = qiodevice_close_file_func;
-    pzlib_filefunc_def->zerror_file = qiodevice_error_file_func;
+    pzlib_filefunc_def->zopen_file = QIODevice_open_file_func;
+    pzlib_filefunc_def->zread_file = QIODevice_read_file_func;
+    pzlib_filefunc_def->zwrite_file = QIODevice_write_file_func;
+    pzlib_filefunc_def->ztell_file = QIODevice_tell_file_func;
+    pzlib_filefunc_def->zseek_file = QIODevice_seek_file_func;
+    pzlib_filefunc_def->zclose_file = QIODevice_close_file_func;
+    pzlib_filefunc_def->zerror_file = QIODevice_error_file_func;
     pzlib_filefunc_def->opaque = new QIODevice_descriptor;
 }
 
-void fill_qiodevice64_filefunc (
+void fill_QIODevice64_filefunc (
   zlib_filefunc64_def* pzlib_filefunc_def)
 {
     // Open functions are the same for Qt.
-    pzlib_filefunc_def->zopen64_file = qiodevice_open_file_func;
-    pzlib_filefunc_def->zread_file = qiodevice_read_file_func;
-    pzlib_filefunc_def->zwrite_file = qiodevice_write_file_func;
-    pzlib_filefunc_def->ztell64_file = qiodevice64_tell_file_func;
-    pzlib_filefunc_def->zseek64_file = qiodevice64_seek_file_func;
-    pzlib_filefunc_def->zclose_file = qiodevice_close_file_func;
-    pzlib_filefunc_def->zerror_file = qiodevice_error_file_func;
+    pzlib_filefunc_def->zopen64_file = QIODevice_open_file_func;
+    pzlib_filefunc_def->zread_file = QIODevice_read_file_func;
+    pzlib_filefunc_def->zwrite_file = QIODevice_write_file_func;
+    pzlib_filefunc_def->ztell64_file = QIODevice64_tell_file_func;
+    pzlib_filefunc_def->zseek64_file = QIODevice64_seek_file_func;
+    pzlib_filefunc_def->zclose_file = QIODevice_close_file_func;
+    pzlib_filefunc_def->zerror_file = QIODevice_error_file_func;
     pzlib_filefunc_def->opaque = new QIODevice_descriptor;
-    pzlib_filefunc_def->zfakeclose_file = qiodevice_fakeclose_file_func;
+    pzlib_filefunc_def->zfakeclose_file = QIODevice_fakeclose_file_func;
 }
 
 void fill_zlib_filefunc64_32_def_from_filefunc32(zlib_filefunc64_32_def* p_filefunc64_32,const zlib_filefunc_def* p_filefunc32)

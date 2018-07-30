@@ -169,8 +169,8 @@ typedef struct zlib_filefunc64_def_s
     close_file_func     zfakeclose_file; // for no-auto-close flag
 } zlib_filefunc64_def;
 
-void fill_qiodevice64_filefunc OF((zlib_filefunc64_def* pzlib_filefunc_def));
-void fill_qiodevice_filefunc OF((zlib_filefunc_def* pzlib_filefunc_def));
+void fill_QIODevice64_filefunc OF((zlib_filefunc64_def* pzlib_filefunc_def));
+void fill_QIODevice_filefunc OF((zlib_filefunc_def* pzlib_filefunc_def));
 
 /* now internal definition, only for zip.c and unzip.h */
 typedef struct zlib_filefunc64_32_def_s
