@@ -3,11 +3,11 @@
 #include <QtCore>
 namespace cvar{
 
-class VariantSet
+class View
 {
 public:
-    VariantSet();
-    VariantSet(const QString& name, const QString& description, int count);
+    View();
+    View(const QString& name, const QString& description, int count);
 
 
     QString name() const;

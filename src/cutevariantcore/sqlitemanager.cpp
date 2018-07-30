@@ -167,13 +167,13 @@ QList<Field> SqliteManager::genotypeFields(const Sample& sample) const
 }
 
 //-------------------------------------------------------------------------------
-QList<VariantSet> SqliteManager::variantSets() const
+QList<View> SqliteManager::variantSets() const
 {
-    QList<VariantSet> list;
+    QList<View> list;
     QSqlQuery query("SELECT * FROM sqlite_master WHERE type = 'view'");
     while (query.next())
     {
-        VariantSet s = VariantSet();
+        View s = View();
         s.setName(query.record().value("tbl_name").toString());
         s.setSql(query.record().value("sql").toString());
         list.append(s);
@@ -181,7 +181,7 @@ QList<VariantSet> SqliteManager::variantSets() const
     }
 
     // count is slow !
-    for (VariantSet &s : list)
+    for (View &s : list)
         s.setCount(-1);
 
     return list;
@@ -191,7 +191,7 @@ QStringList SqliteManager::variantSetNames() const
 {
     QStringList out;
     out += "variants";
-    for (const VariantSet& s : variantSets())
+    for (const View& s : variantSets())
         out.append(s.name());
     return out;
 }

@@ -41,7 +41,7 @@ void LinkListDialog::addLink()
     if (dialog.exec())
     {
         cvar::VariantLink link = dialog.link();
-        if (!cutevariant->saveLink(link))
+        if (!cutevariant->addLink(link))
             QMessageBox::warning(this,"error","Cannot save links");
 
         else
@@ -80,7 +80,7 @@ void LinkListDialog::editLink()
 
         qDebug()<<"MY ID "<<link.id();
 
-        if (!cutevariant->saveLink(link))
+        if (!cutevariant->addLink(link))
             QMessageBox::warning(this,"error","Cannot save links");
 
         else

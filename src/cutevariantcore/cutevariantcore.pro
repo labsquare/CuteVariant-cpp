@@ -33,11 +33,12 @@ SOURCES += \
     fieldsmodel.cpp \
     samplemodel.cpp \
     variantquery.cpp \
-    selection.cpp \
     variantlink.cpp \
     bedfile.cpp \
     vqlparser.cpp \
     variantreaderfactory.cpp \
+    view.cpp \
+    importer.cpp
 
 
 HEADERS += \
@@ -52,11 +53,12 @@ HEADERS += \
     fieldsmodel.h \
     samplemodel.h \
     variantquery.h \
-    selection.h \
     variantlink.h \
     bedfile.h \
     vqlparser.h \
     variantreaderfactory.h \
+    view.h \
+    importer.h
 
 
 

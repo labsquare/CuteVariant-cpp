@@ -8,7 +8,7 @@
 #include "reader/abstractvariantreader.h"
 #include "reader/genericvcfreader.h"
 #include "variantquery.h"
-#include "selection.h"
+#include "view.h"
 #include "variantlink.h"
 #include "region.h"
 #include "bedfile.h"
@@ -79,7 +79,7 @@ public:
      * A variant set is a sql view of variants. You can see it as a sql table of variant
      * \return return all variant sets
      */
-    QList<VariantSet> variantSets() const;
+    QList<View> variantSets() const;
 
     /*!
      * \brief variantSetName

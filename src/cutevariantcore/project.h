@@ -4,7 +4,9 @@
 #include <QtSql>
 #include <QSettings>
 #include "variantlink.h"
+#include "view.h"
 #include "sqlitemanager.h"
+#include "importer.h"
 
 #define cutevariant cvar::Project::i()
 
@@ -31,9 +33,64 @@ public:
     QList<Sample> samples() const;
 
 
+    // fields
+    /*!
+     * \brief fields
+     * \return variant fields from sqlite
+     */
+    QList<Field> fields() const;
+    QList<Field> genotypeFields() const;
 
-    // regions
-    QList<Region> regions(int bedId) const;
+    // views
+    /*!
+     * \brief views
+     * view are variant set store as a view sql
+     * \return views
+     */
+    QList<View> views() const;
+
+    /*!
+       * \brief views
+       * view are variant set store as a view sql
+       * \return views
+       */
+    bool addView(const View& view);
+
+    /*!
+       * \brief removeView
+       * remove views
+       * \return views
+       */
+    bool removeView(const QString& name) const;
+    /*!
+       * \brief viewNames
+       * Useless... ise views instead
+       * \return return names of each view
+       */
+    QStringList viewNames() const;
+
+
+    /*!
+       * \brief variantsCount
+       * \param table
+       * \return how many variant from a specific set
+       */
+    int viewCount(const QString& view = "variants");
+
+
+
+    // Variants
+
+    /*!
+       * \brief variant
+       * \param variantId
+       * \return a Variant from sql ID
+       */
+    Variant variant(int id) const;
+
+
+    // metadatas
+    QHash<QString, QVariant> metadatas() const;
 
 
 
@@ -45,10 +102,28 @@ public:
 
 
 
+
+    Importer *importer();
+
+
+
+    SqliteManager *sqlite();
+
+    // utils
+
+    static QByteArray md5sum(const QString& filename);
+    static QByteArray iconToData(const QIcon& icon);
+
+
+
 private:
     Project();
     QSqlDatabase mSqlDb;
     static Project * mInstance;
+
+    Importer * mImporter;
+
+    SqliteManager * mSqliteManager;
 
 
 

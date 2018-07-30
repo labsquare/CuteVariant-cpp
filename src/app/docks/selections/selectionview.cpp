@@ -57,7 +57,7 @@ void SelectionView::load()
     favorisItem->setTextAlignment(1,Qt::AlignRight);
     addTopLevelItem(favorisItem);
 
-        for (cvar::VariantSet selection : cutevariant->sqlite()->variantSets())
+        for (cvar::View selection : cutevariant->sqlite()->variantSets())
         {
             QTreeWidgetItem * item = new QTreeWidgetItem;
             item->setText(0, selection.name());
