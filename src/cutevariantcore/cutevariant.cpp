@@ -1,34 +1,34 @@
-#include "project.h"
+#include "cutevariant.h"
 
 namespace cvar {
 
-Project * Project::mInstance = nullptr;
+CuteVariant * CuteVariant::mInstance = nullptr;
 
-Project::Project()
+CuteVariant::CuteVariant()
 {
     mSqliteManager = new SqliteManager;
 }
 
-Importer *Project::importer()
+Importer *CuteVariant::importer()
 {
     return mImporter;
 }
 
 
-Project::~Project()
+CuteVariant::~CuteVariant()
 {
     delete mSqliteManager;
 }
 
-Project *Project::i()
+CuteVariant *CuteVariant::i()
 {
     if (!mInstance)
-        mInstance = new Project();
+        mInstance = new CuteVariant();
 
     return mInstance;
 }
 
-void Project::setDatabasePath(const QString &path)
+void CuteVariant::setDatabasePath(const QString &path)
 {
     //TODO Manage multi DB. 1 per project
     mSqlDb = QSqlDatabase::addDatabase("QSQLITE", "project");
@@ -42,7 +42,7 @@ void Project::setDatabasePath(const QString &path)
 
 }
 //=================== SAMPLES  =====================
-QList<Sample> Project::samples() const
+QList<Sample> CuteVariant::samples() const
 {
     QList<Sample> samples;
     QSqlQuery query(QStringLiteral("SELECT * FROM `samples`"));
@@ -59,7 +59,7 @@ QList<Sample> Project::samples() const
 
 //=================== FIELDS  =====================
 
-QList<Field> Project::fields() const
+QList<Field> CuteVariant::fields() const
 {
     QList<Field> fields;
     QSqlQuery query(QStringLiteral("SELECT * FROM `fields`"));
@@ -79,7 +79,7 @@ QList<Field> Project::fields() const
     return fields;
 }
 //----------------------------------------------------
-QList<Field> Project::genotypeFields() const
+QList<Field> CuteVariant::genotypeFields() const
 {
     QList<Field> fields;
     QSqlQuery query(QStringLiteral("SELECT * FROM `genotype_fields`"));
@@ -101,7 +101,7 @@ QList<Field> Project::genotypeFields() const
     return fields;
 }
 //----------------------------------------------------
-QList<View> Project::views() const
+QList<View> CuteVariant::views() const
 {
 
     QList<View> list;
@@ -123,7 +123,7 @@ QList<View> Project::views() const
     return list;
 }
 //----------------------------------------------------
-bool Project::addView(const View &view)
+bool CuteVariant::addView(const View &view)
 {
     QSqlQuery viewQuery;
     viewQuery.exec(QString("DROP VIEW IF EXISTS %1").arg(view.name()));
@@ -141,7 +141,7 @@ bool Project::addView(const View &view)
     return true;
 }
 //----------------------------------------------------
-bool Project::removeView(const QString &name) const
+bool CuteVariant::removeView(const QString &name) const
 {
     QSqlQuery query;
     if (!query.exec(QString("DROP VIEW IF EXISTS %1").arg(name)))
@@ -154,7 +154,7 @@ bool Project::removeView(const QString &name) const
     return true;
 }
 //----------------------------------------------------
-QStringList Project::viewNames() const
+QStringList CuteVariant::viewNames() const
 {
     QStringList out;
     out += "variants";
@@ -163,7 +163,7 @@ QStringList Project::viewNames() const
     return out;
 }
 //----------------------------------------------------
-Variant Project::variant(int id) const
+Variant CuteVariant::variant(int id) const
 {
     QSqlQuery query;
     query.prepare(QStringLiteral("SELECT chr,rs,pos,ref,alt FROM variants WHERE id=:id"));
@@ -191,7 +191,7 @@ Variant Project::variant(int id) const
     return v;
 }
 //----------------------------------------------------
-int Project::viewCount(const QString &view)
+int CuteVariant::viewCount(const QString &view)
 {
     // TODO :: to slow ...
     VariantQuery query;
@@ -201,7 +201,7 @@ int Project::viewCount(const QString &view)
 }
 //=================== METADATAS =========================
 
-QHash<QString, QVariant> Project::metadatas() const
+QHash<QString, QVariant> CuteVariant::metadatas() const
 {
     QHash<QString, QVariant> hash;
 
@@ -213,7 +213,7 @@ QHash<QString, QVariant> Project::metadatas() const
 }
 
 //=================== LINKS =========================
-QList<VariantLink> Project::links() const
+QList<VariantLink> CuteVariant::links() const
 {
     QList<VariantLink> list;
 
@@ -235,7 +235,7 @@ QList<VariantLink> Project::links() const
     return list;
 }
 //----------------------------------------------------
-bool Project::removeLink(const VariantLink &link)
+bool CuteVariant::removeLink(const VariantLink &link)
 {
     QList<VariantLink> list = links();
     list.removeOne(link);
@@ -243,19 +243,19 @@ bool Project::removeLink(const VariantLink &link)
 
 }
 //----------------------------------------------------
-bool Project::addLink(VariantLink &link)
+bool CuteVariant::addLink(VariantLink &link)
 {
     QList<VariantLink> list = links();
     list.append(link);
     return setLinks(list);
 }
 
-SqliteManager *Project::sqlite()
+SqliteManager *CuteVariant::sqlite()
 {
     return mSqliteManager;
 }
 
-bool Project::setLinks(QList<VariantLink> &links)
+bool CuteVariant::setLinks(QList<VariantLink> &links)
 {
     QSettings settings;
     settings.beginWriteArray("links");
@@ -273,7 +273,7 @@ bool Project::setLinks(QList<VariantLink> &links)
 }
 //=================== UTILS =========================
 
-QByteArray Project::md5sum(const QString &filename)
+QByteArray CuteVariant::md5sum(const QString &filename)
 {
     QByteArray out;
     QFile file(filename);
@@ -291,7 +291,7 @@ QByteArray Project::md5sum(const QString &filename)
 }
 //----------------------------------------------------
 
-QByteArray Project::iconToData(const QIcon &icon)
+QByteArray CuteVariant::iconToData(const QIcon &icon)
 {
     QByteArray inByteArray;
     QBuffer inBuffer(&inByteArray);

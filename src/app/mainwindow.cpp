@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "project.h"
+#include "cutevariant.h"
 #include "columndockwidget.h"
 #include "linklistdialog.h"
 #include "filterwidget.h"

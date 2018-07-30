@@ -1,7 +1,7 @@
 #include "fieldsmodel.h"
 
 namespace cvar {
-FieldsModel::FieldsModel(Project * prj, QObject * parent)
+FieldsModel::FieldsModel(CuteVariant * prj, QObject * parent)
     :QAbstractListModel(parent)
 {
 

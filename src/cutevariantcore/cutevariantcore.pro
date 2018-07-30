@@ -28,7 +28,6 @@ SOURCES += \
     region.cpp \
     genotype.cpp \
     variant.cpp \
-    project.cpp \
     sqlitemanager.cpp \
     fieldsmodel.cpp \
     samplemodel.cpp \
@@ -38,7 +37,8 @@ SOURCES += \
     vqlparser.cpp \
     variantreaderfactory.cpp \
     view.cpp \
-    importer.cpp
+    importer.cpp \
+    cutevariant.cpp
 
 
 HEADERS += \
@@ -48,7 +48,6 @@ HEADERS += \
     region.h \
     genotype.h \
     variant.h \
-    project.h \
     sqlitemanager.h \
     fieldsmodel.h \
     samplemodel.h \
@@ -58,7 +57,8 @@ HEADERS += \
     vqlparser.h \
     variantreaderfactory.h \
     view.h \
-    importer.h
+    importer.h \
+    cutevariant.h
 
 
 

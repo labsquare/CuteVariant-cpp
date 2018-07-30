@@ -7,6 +7,7 @@
 #include <Qsci/qsciscintilla.h>
 #include <Qsci/qscilexersql.h>
 #include <Qsci/qsciapis.h>
+#include "cutevariant.h"
 
 class VqlEditor : public QsciScintilla
 {

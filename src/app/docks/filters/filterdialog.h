@@ -1,7 +1,7 @@
 #ifndef FILTERDIALOG_H
 #define FILTERDIALOG_H
 #include <QtWidgets>
-#include "project.h"
+#include "cutevariant.h"
 #include "filterwidget.h"
 #include "filteritem.h"
 

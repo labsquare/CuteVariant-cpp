@@ -2,7 +2,7 @@
 #define IMPORTDIALOG_H
 #include <QtWidgets>
 #include <QFutureWatcher>
-#include "project.h"
+#include "cutevariant.h"
 
 class ImportDialog : public QDialog
 {

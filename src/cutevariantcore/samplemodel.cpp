@@ -1,6 +1,6 @@
 #include "samplemodel.h"
 namespace cvar {
-SampleModel::SampleModel(Project *prj, QObject * parent )
+SampleModel::SampleModel(CuteVariant *prj, QObject * parent )
     :QAbstractListModel(parent)
 {
     mProject = prj;

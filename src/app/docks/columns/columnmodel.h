@@ -3,7 +3,7 @@
 #include <QStandardItemModel>
 #include "field.h"
 #include "sample.h"
-#include "project.h"
+#include "cutevariant.h"
 
 class ColumnModel : public QStandardItemModel
 {

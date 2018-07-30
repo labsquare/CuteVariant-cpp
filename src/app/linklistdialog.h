@@ -1,7 +1,7 @@
 #ifndef LINKDIALOG_H
 #define LINKDIALOG_H
 #include <QtWidgets>
-#include "project.h"
+#include "cutevariant.h"
 #include "editlinkdialog.h"
 #include "variantlink.h"
 

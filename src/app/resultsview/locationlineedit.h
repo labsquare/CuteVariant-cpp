@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QLineEdit>
-#include "project.h"
+#include "cutevariant.h"
 class LocationLineEdit : public QLineEdit
 {
 public:

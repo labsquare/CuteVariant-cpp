@@ -1,7 +1,7 @@
 //#include <QApplication>
 #include <QtCore>
 
-#include "project.h"
+#include "cutevariant.h"
 #include "genotype.h"
 #include "filterdialog.h"
 #include "qfonticon.h"

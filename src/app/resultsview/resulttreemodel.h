@@ -4,7 +4,7 @@
 #include <QtSql>
 #include <QSqlRecord>
 #include <QTextStream>
-#include "project.h"
+#include "cutevariant.h"
 #include "variantquery.h"
 #include "qfonticon.h"
 

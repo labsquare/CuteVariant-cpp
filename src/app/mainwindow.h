@@ -3,7 +3,7 @@
 
 #include <QtWidgets>
 #include <QtCore>
-#include "project.h"
+#include "cutevariant.h"
 
 #include "resultsview.h"
 #include "vqleditor.h"

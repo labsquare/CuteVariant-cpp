@@ -4,7 +4,7 @@
 #include <QtWidgets>
 #include "resulttreemodel.h"
 #include "resultdelegate.h"
-#include "project.h"
+#include "cutevariant.h"
 #include "variantquery.h"
 #include "linklistdialog.h"
 #include "qfonticon.h"

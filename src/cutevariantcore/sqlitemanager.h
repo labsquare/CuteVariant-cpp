@@ -21,7 +21,7 @@ namespace cvar {
  * \brief The SqliteManager class
  * This is the interface between raw SQLITE query and C++ POO
  */
-class Project;
+class CuteVariantiant;
 class VariantQuery;
 class SqliteManager : public QObject
 {

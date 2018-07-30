@@ -2,13 +2,13 @@
 #define FIELDSMODEL_H
 #include <QAbstractListModel>
 #include "field.h"
-#include "project.h"
+#include "cutevariant.h"
 
 namespace cvar {
 class FieldsModel : public QAbstractListModel
 {
 public:
-    FieldsModel(Project * prj , QObject * parent = 0);
+    FieldsModel(CuteVariant * prj , QObject * parent = 0);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
@@ -17,7 +17,7 @@ public:
     void load();
 
 private:
-    Project * mProject;
+    CuteVariant * mProject;
     QList<Field> mDatas;
 };
 

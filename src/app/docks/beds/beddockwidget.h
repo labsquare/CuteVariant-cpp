@@ -2,7 +2,7 @@
 #define BEDDOCKWIDGET_H
 #include <QtWidgets>
 #include "basedockwidget.h"
-#include "project.h"
+#include "cutevariant.h"
 class RegionDockWidget : public BaseDockWidget
 {
     Q_OBJECT

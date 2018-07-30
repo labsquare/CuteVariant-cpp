@@ -1,7 +1,7 @@
 #ifndef VARIANTQUERY_H
 #define VARIANTQUERY_H
 #include <QtCore>
-#include "project.h"
+#include "cutevariant.h"
 #include "region.h"
 
 #include "vqlparser.h"

@@ -6,7 +6,7 @@ using namespace QtCharts;
 
 #include "basedockwidget.h"
 #include "variantquery.h"
-#include "project.h"
+#include "cutevariant.h"
 
 class ChartDockWidget : public BaseDockWidget
 {

@@ -2,7 +2,7 @@
 #define LOGICVIEW_H
 #include <QtWidgets>
 #include "filtermodel.h"
-#include "project.h"
+#include "cutevariant.h"
 #include "filterdelegate.h"
 #include "filterdialog.h"
 

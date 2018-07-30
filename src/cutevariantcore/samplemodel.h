@@ -2,12 +2,12 @@
 #define SAMPLEMODEL_H
 #include <QAbstractListModel>
 #include "sample.h"
-#include "project.h"
+#include "cutevariant.h"
 namespace cvar{
 class SampleModel : public QAbstractListModel
 {
 public:
-    SampleModel(Project * prj, QObject * parent = nullptr);
+    SampleModel(CuteVariant * prj, QObject * parent = nullptr);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
@@ -18,7 +18,7 @@ public:
 
 private:
     QList<Sample> mDatas;
-    Project * mProject;
+    CuteVariant * mProject;
 };
 }
 

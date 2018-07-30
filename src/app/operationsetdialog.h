@@ -2,7 +2,7 @@
 #define OPERATIONSETDIALOG_H
 #include <QtWidgets>
 #include "qfonticon.h"
-#include "project.h"
+#include "cutevariant.h"
 #include "sqlitemanager.h"
 
 class OperationSetDialog : public QDialog

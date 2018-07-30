@@ -8,18 +8,18 @@
 #include "sqlitemanager.h"
 #include "importer.h"
 
-#define cutevariant cvar::Project::i()
+#define cutevariant cvar::CuteVariant::i()
 
 namespace cvar {
 class QueryBuilder;
 class SqliteManager;
-class Project
+class CuteVariant
 {
 public:
-    ~Project();
+    ~CuteVariant();
 
 
-    static Project * i();
+    static CuteVariant * i();
 
     void setDatabasePath(const QString& path);
 
@@ -117,9 +117,9 @@ public:
 
 
 private:
-    Project();
+    CuteVariant();
     QSqlDatabase mSqlDb;
-    static Project * mInstance;
+    static CuteVariant * mInstance;
 
     Importer * mImporter;
 

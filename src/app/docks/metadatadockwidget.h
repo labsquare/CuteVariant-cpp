@@ -2,7 +2,7 @@
 #define METADATADOCKWIDGET_H
 #include "basedockwidget.h"
 #include <QtWidgets>
-#include "project.h"
+#include "cutevariant.h"
 
 class MetadataDockWidget : public BaseDockWidget
 {

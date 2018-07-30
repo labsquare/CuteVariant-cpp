@@ -2,7 +2,7 @@
 #define IMPORTPROGRESSPAGE_H
 #include <QWizardPage>
 #include <QtWidgets>
-#include "project.h"
+#include "cutevariant.h"
 #include "variantreaderfactory.h"
 
 class ImportProgressPage : public QWizardPage

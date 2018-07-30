@@ -3,7 +3,7 @@
 #include <QtWidgets>
 #include <QSortFilterProxyModel>
 #include "columnmodel.h"
-#include "project.h"
+#include "cutevariant.h"
 #include "filterdialog.h"
 #include "filteritem.h"
 

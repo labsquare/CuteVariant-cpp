@@ -3,7 +3,7 @@
 
 #include <QtWidgets>
 #include "qfonticon.h"
-#include "project.h"
+#include "cutevariant.h"
 #include "qfonticon.h"
 class SelectionView : public QTreeWidget
 {
