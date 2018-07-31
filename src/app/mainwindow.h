@@ -74,6 +74,9 @@ protected Q_SLOTS:
     void reset();
 
 
+    void showConsole(bool show=true);
+
+
 protected:
     void addBaseDock(BaseDockWidget * widget);
     void setupActions();

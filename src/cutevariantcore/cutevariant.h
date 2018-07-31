@@ -113,6 +113,11 @@ public:
     int variantsCount(const VariantQuery& query) ;
 
 
+    bool saveVariant(const Variant& variant);
+
+
+
+
 
     // metadatas
     QHash<QString, QVariant> metadatas() const;
@@ -129,6 +134,7 @@ public:
     bool setLinks(QList<VariantLink>& links);
     bool removeLink(const VariantLink& link);
     bool addLink(VariantLink& link);
+
 
 
     // import

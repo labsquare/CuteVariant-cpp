@@ -19,19 +19,31 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     QString colname = index.model()->headerData(index.column(), Qt::Horizontal).toString();
     bool select     = option.state & QStyle::State_Selected ;
 
-    painter->save();
 
 
 
     QItemDelegate::drawBackground(painter,option,index);
 
-    if (index.column() == 0 && index.parent() != QModelIndex())
+    if (index.parent() != QModelIndex())
     {
 
-        painter->drawPixmap(QPoint(option.rect.left() - 20, option.rect.center().y()-10), FIcon(0xf60d).pixmap(20,20));
+
+        //painter->drawPixmap(QPoint(option.rect.left() - 20, option.rect.center().y()-10), FIcon(0xf60d).pixmap(20,20));
+
+        QRect bgRect = option.rect;
+
+        QColor col = Qt::red;
+        col.setAlpha(50);
+        painter->setBrush(col);
+        painter->setPen(Qt::NoPen);
+        painter->drawRect(bgRect);
+
+        if (index.column() == 0)
+            painter->drawPixmap(QPoint(option.rect.left() - 20, option.rect.center().y()-10), FIcon(0xf60d).pixmap(20,20));
 
     }
 
+    painter->save();
 
 
     //    else {
@@ -75,6 +87,17 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 
         painter->restore();
         return;
+    }
+
+
+    if (colname.toLower() == "favoris")
+    {
+
+        bool isFavoris = index.data().toBool();
+        QIcon favIcon  = isFavoris ? FIconColor(0xf4ce, QColor("#ea9f37")) : FIconColor(0xf4d2, Qt::lightGray);
+        painter->drawPixmap(option.rect.left(), option.rect.center().y() - 8 ,favIcon.pixmap(20,20));
+        return;
+
     }
 
 

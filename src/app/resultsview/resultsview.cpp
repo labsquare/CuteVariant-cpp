@@ -226,6 +226,18 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
 
 
         QMenu menu(this);
+
+        // HUGLY TODO !: Put all in model
+        menu.addAction("add to favoris", [&var,this](){
+           var.setFavoris(!var.isFavoris());
+           qDebug()<<var.isFavoris();
+
+           if (cutevariant->saveVariant(var))
+               mModel->load();
+
+
+        });
+
         menu.addAction(QIcon::fromTheme("edit-copy"), var.coordinate(),[&var](){
             qApp->clipboard()->setText(var.coordinate());
         });

@@ -53,6 +53,15 @@ public:
 
     QHash<QString, QVariant> annotations() const;
 
+    const QString& comment() const;
+    void setComment(const QString &comment);
+
+    bool isFavoris() const;
+    void setFavoris(bool isFavoris);
+
+    int score() const;
+    void setScore(int score);
+
 private:
     quint64 mBin = 0;
     QString mChr;
@@ -61,7 +70,10 @@ private:
     QString mAlt;
     QString mRsId;
     QString mFilter;
-    double mQual;
+    double mQual = 0;
+    QString mComment;
+    int mScore = 0;
+    bool mIsFavoris = false;
 
 
     QHash<QString,QVariant> mAnnotations;

@@ -215,7 +215,7 @@ QStringList CuteVariant::viewNames() const
 Variant CuteVariant::variant(int id) const
 {
     QSqlQuery query;
-    query.prepare(QStringLiteral("SELECT chr,rs,pos,ref,alt FROM variants WHERE id=:id"));
+    query.prepare(QStringLiteral("SELECT chr,rs,pos,ref,alt, favoris, comment, score FROM variants WHERE id=:id"));
     query.bindValue(":id", id);
 
     if (!query.exec())
@@ -227,6 +227,12 @@ Variant CuteVariant::variant(int id) const
     query.next();
     QString chr = query.record().value("chr").toString();
     quint64 pos = query.record().value("pos").toInt();
+
+    bool favoris    = query.record().value("favoris").toBool();
+    int score       = query.record().value("score").toInt();
+    QString comment = query.record().value("comment").toString();
+
+
     QString rs = query.record().value("rs").toString();
     QString ref = query.record().value("ref").toString();
     QString alt = query.record().value("alt").toString();
@@ -235,7 +241,11 @@ Variant CuteVariant::variant(int id) const
     qDebug()<<chr<<" "<<pos<<" "<<ref<<" "<<alt;
 
     Variant v =  Variant(chr,pos,ref, alt);
+    v.setId(id);
     v.setRsId(rs);
+    v.setFavoris(favoris);
+    v.setScore(score);
+    v.setComment(comment);
 
     return v;
 }
@@ -259,6 +269,32 @@ int CuteVariant::variantsCount(const VariantQuery &query)
     countQuery.next();
 
     return (countQuery.record().value("count").toInt());
+}
+//----------------------------------------------------
+
+bool CuteVariant::saveVariant(const Variant &variant)
+{
+    if (!variant.exists())
+        return false;
+
+    QSqlQuery query;
+    query.prepare(QStringLiteral("UPDATE variants SET score = :score, favoris = :favoris, comment = :comment WHERE id = :id"));
+    query.bindValue(":score", variant.score());
+    query.bindValue(":favoris", variant.isFavoris());
+    query.bindValue(":comment", variant.comment());
+    query.bindValue(":id", variant.id());
+
+    if (!query.exec())
+    {
+        qDebug()<<query.lastQuery();
+        qDebug()<<query.lastError().text();
+        return false;
+    }
+
+    qDebug()<<query.lastQuery();
+
+  return true;
+
 }
 //----------------------------------------------------
 int CuteVariant::viewCount(const QString &view)

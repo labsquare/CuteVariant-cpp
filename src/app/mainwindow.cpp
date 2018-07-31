@@ -90,6 +90,7 @@ void MainWindow::writeSettings()
     settings.beginGroup("MainWindow");
     settings.setValue("geometry", saveGeometry());
     settings.setValue("state", saveState());
+    settings.setValue("showConsole", mEditor->isVisible());
 
     settings.endGroup();
 }
@@ -101,6 +102,7 @@ void MainWindow::restoreSettings()
     settings.beginGroup("MainWindow");
     restoreGeometry(settings.value("geometry").toByteArray());
     restoreState(settings.value("state").toByteArray());
+    showConsole(settings.value("showConsole").toBool());
 
     settings.endGroup();
 }
@@ -224,6 +226,13 @@ void MainWindow::reset()
 
 }
 //-------------------------------------------------------------------------
+void MainWindow::showConsole(bool show)
+{
+
+    mEditor->setVisible(show);
+
+}
+//-------------------------------------------------------------------------
 
 void MainWindow::addBaseDock(BaseDockWidget *widget)
 {
@@ -262,6 +271,10 @@ void MainWindow::setupActions()
     QMenu * viewMenu = menuBar()->addMenu("&View");
     for (auto & dock : mBaseDocks)
         viewMenu->addAction(dock->toggleViewAction());
+
+    QAction * showConsoleAction = viewMenu->addAction(tr("Vql editor"));
+    showConsoleAction->setCheckable(true);
+    connect(showConsoleAction, &QAction::toggled, mEditor, &VqlEditor::setVisible);
 
 
     QMenu * queryMenu = menuBar()->addMenu("&Query");

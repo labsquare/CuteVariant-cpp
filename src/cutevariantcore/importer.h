@@ -51,6 +51,7 @@ protected:
     void writeGenotype(AbstractVariantReader * reader);
 
 
+
 private:
     quint64 mFileSize;
     QIODevice * mProgressDevice;

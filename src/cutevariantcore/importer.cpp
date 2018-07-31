@@ -150,6 +150,7 @@ void Importer::writeBed()
 
     }
 }
+
 //-----------------------------------------------------------------------
 
 void Importer::writeMetadatas(AbstractVariantReader *reader)
@@ -253,6 +254,13 @@ void Importer::writeFields(AbstractVariantReader *reader)
 
     // import default fields
     qDebug()<<"import default";
+
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('score','score','HGVS score','VARIANTS','INTEGER') "));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('favoris','favoris','Show if the variant is stored in favoris','VARIANTS','INTEGER') "));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('comment','comment','Comment about the variant','VARIANTS','TEXT') "));
+
+
+
     query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('chr','chr','Chromosome name','VARIANTS','TEXT') "));
     query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('pos','pos','Position 1-based','VARIANTS','INTEGER')"));
     query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('ref','ref','Reference allele','VARIANTS','TEXT') "));
@@ -353,6 +361,9 @@ void Importer::writeVariants(AbstractVariantReader *reader)
     query.exec(QStringLiteral("CREATE TABLE variants ("
                               "id INTEGER PRIMARY KEY AUTOINCREMENT ,"
                               "bin INT,"
+                              "score INT,"
+                              "favoris INT,"
+                              "comment TEXT,"
                               "rs TEXT,"
                               "chr TEXT NOT NULL,"
                               "pos INTEGER NOT NULL,"
@@ -390,14 +401,17 @@ void Importer::writeVariants(AbstractVariantReader *reader)
             if (v.isNull())
                 continue;
 
-
-            QString placeHolders = QString(",?").repeated(fields.size() + 8);
+            // +11 constantes colonnes
+            QString placeHolders = QString(",?").repeated(fields.size() + 11);
 
             if (reader->device()->pos() % 100 == 0)
                 emit importProgressChanged(mProgressDevice->pos(),QString());
 
             query.prepare(QStringLiteral("INSERT INTO variants VALUES (NULL%1)").arg(placeHolders));
             query.addBindValue(v.bin());
+            query.addBindValue(v.score());
+            query.addBindValue(v.isFavoris());
+            query.addBindValue(v.comment());
             query.addBindValue(v.rsId());
             query.addBindValue(v.chromosom());
             query.addBindValue(v.position());

@@ -250,6 +250,37 @@ QHash<QString, QVariant> Variant::annotations() const
     return mAnnotations;
 }
 
+const QString& Variant::comment() const
+{
+    return mComment;
+}
+
+void Variant::setComment(const QString &comment)
+{
+    mComment = comment;
+}
+
+bool Variant::isFavoris() const
+{
+    return mIsFavoris;
+}
+
+void Variant::setFavoris(bool isFavoris)
+{
+    mIsFavoris = isFavoris;
+}
+
+int Variant::score() const
+{
+    return mScore;
+}
+
+void Variant::setScore(int score)
+{
+    mScore = score;
+}
+
+
 const QString &Variant::ref() const
 {
     return mRef;

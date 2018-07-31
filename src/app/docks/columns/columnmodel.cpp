@@ -38,20 +38,17 @@ void ColumnModel::load()
     for (QString key : mOrderCategories)
         appendRow(mCategoriesItems[key]);
 
-    // check default variants
-    if (mCategoriesItems.contains("VARIANTS") && mHasCheckbox)
-        mCategoriesItems["VARIANTS"]->setCheckState(Qt::Checked);
-
-
 
     // add Samples
     QStandardItem * sampleCategorie = createCategory("Samples", "All samples avaibles");
+    sampleCategorie->setIcon(FIcon(0xf00e));
 
     if (!cutevariant->samples().isEmpty())
     {
         for (cvar::Sample s : cutevariant->samples())
         {
             QStandardItem * c1 = createCategory(s.name().toUpper());
+            c1->setIcon(FIcon(0xf004));
             sampleCategorie->appendRow(c1);
 
             for (cvar::Field f : cutevariant->genotypeFields())
@@ -63,6 +60,17 @@ void ColumnModel::load()
         }
         appendRow(sampleCategorie);
     }
+
+
+    // check default variants
+
+    for (QModelIndex& i : match(index(0,0), Qt::DisplayRole, "(favoris|pos|chr|pos|alt)",10,Qt::MatchRecursive|Qt::MatchRegExp))
+    {
+          itemFromIndex(i)->setCheckState(Qt::Checked);
+    }
+
+
+
 }
 //---------------------------------------------------------
 QStringList ColumnModel::selectedColumns() const
