@@ -101,6 +101,30 @@ void ResultDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     }
 
 
+    if (colname.toLower() == "score")
+    {
+        painter->setRenderHint(QPainter::Antialiasing, true);
+        QString score = index.data().toString();
+        //painter->setClipRect(option.rect,Qt::IntersectClip);
+        QFont font = painter->font();
+        painter->setFont(font);
+        QFontMetrics metrics(painter->font());
+
+        QRect rect = QRect(0,0, metrics.width(score)+10 , metrics.height() + 5);
+        rect.moveCenter(option.rect.center());
+
+        // TODO : gerer tous les score hgvs
+        painter->setPen(Qt::NoPen);
+        painter->setBrush(QColor("#BF112E"));
+        painter->drawRoundedRect(rect,5,5);
+
+        painter->setPen(Qt::white);
+        painter->drawText(rect, Qt::AlignCenter, score);
+
+        return;
+
+    }
+
     if (colname.toLower() == "ann_impact")
     {
 

@@ -255,11 +255,6 @@ void Importer::writeFields(AbstractVariantReader *reader)
     // import default fields
     qDebug()<<"import default";
 
-    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('score','score','HGVS score','VARIANTS','INTEGER') "));
-    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('favoris','favoris','Show if the variant is stored in favoris','VARIANTS','INTEGER') "));
-    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('comment','comment','Comment about the variant','VARIANTS','TEXT') "));
-
-
 
     query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('chr','chr','Chromosome name','VARIANTS','TEXT') "));
     query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('pos','pos','Position 1-based','VARIANTS','INTEGER')"));
@@ -267,6 +262,11 @@ void Importer::writeFields(AbstractVariantReader *reader)
     query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('alt','alt','Alternative allele','VARIANTS','TEXT')"));
     query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('qual','qual','Quality Phred','VARIANTS','REAL')"));
     query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('filter','filter','Filter','VARIANTS','TEXT')"));
+
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('score','score','HGVS score','VARIANTS','INTEGER') "));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('favoris','favoris','Show if the variant is stored in favoris','VARIANTS','INTEGER') "));
+    query.exec(QStringLiteral("INSERT INTO fields (colname,name,description,category,type) VALUES ('comment','comment','Comment about the variant','VARIANTS','TEXT') "));
+
 
     qDebug()<<query.lastError().text();
 

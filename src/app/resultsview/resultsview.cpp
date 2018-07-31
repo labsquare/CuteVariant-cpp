@@ -59,7 +59,7 @@ ResultsView::ResultsView(const QString &name, QWidget *parent)
 
     mTopToolBar->layout()->setContentsMargins(0,0,0,0);
 
-    mBottomToolBar->addAction(FIcon(0xf12c),"sql",this, SLOT(showSql()));
+    mBottomToolBar->addAction(FIcon(0xf1b8),"sql",this, SLOT(showSql()));
     mBottomToolBar->addWidget(mCountLabel);
 
     QWidget * spacer = new QWidget;
