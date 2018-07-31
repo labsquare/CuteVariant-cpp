@@ -12,7 +12,7 @@ FilterView::FilterView(QWidget * parent)
     setDropIndicatorShown(true);
     setDragDropMode(QAbstractItemView::InternalMove);
     setUniformRowHeights(true);
-    setAlternatingRowColors(true);
+    //setAlternatingRowColors(true);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     //setAnimated(true);
 
@@ -22,11 +22,6 @@ FilterView::FilterView(QWidget * parent)
 
     header()->setSectionResizeMode(0,QHeaderView::ResizeToContents);
     header()->setSectionResizeMode(1,QHeaderView::ResizeToContents);
-
-
-
-
-
 
 
 

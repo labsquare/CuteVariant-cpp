@@ -1,4 +1,4 @@
-#include "filteritem.h"
+#include "conditionitem.h"
 #include "filterview.h"
 
 ConditionItem::ConditionItem(const cvar::Field &field, Operator::Type op, const QVariant &value)
@@ -9,6 +9,12 @@ ConditionItem::ConditionItem(const cvar::Field &field, Operator::Type op, const 
     setValue(value);
 
     setTextAlignment(1, Qt::AlignCenter);
+
+    //used by delegate
+    setData(0,Qt::UserRole, "key");
+    setData(1,Qt::UserRole, "operator");
+    setData(2,Qt::UserRole, "value");
+
 
     updateItem();
 }

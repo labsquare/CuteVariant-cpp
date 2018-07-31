@@ -5,7 +5,7 @@
 #include "columnmodel.h"
 #include "cutevariant.h"
 #include "filterdialog.h"
-#include "filteritem.h"
+#include "conditionitem.h"
 
 class ColumnView : public QTreeView
 {

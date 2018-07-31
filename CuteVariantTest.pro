@@ -1,8 +1,7 @@
 TEMPLATE = subdirs
 QT += testlib
 
-SUBDIRS = src/quazip \
-          src/cutevariantcore \
+SUBDIRS = src/cutevariantcore \
           src/test
 
 CONFIG += ordered

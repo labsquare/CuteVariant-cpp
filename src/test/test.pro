@@ -14,7 +14,10 @@ LIBS += -L$$OUT_PWD/../cutevariantcore/ -lcutevariantcore
 #PRE_TARGETDEPS += $$OUT_PWD/../cutevariantcore/cutevariantcore.lib
 PRE_TARGETDEPS += $$OUT_PWD/../cutevariantcore/libcutevariantcore.a
 
-# Quazip
-LIBS += -L$$OUT_PWD/../quazip/quazip/ -lquazip
 
+# KGZIP
+unix {
+INCLUDEPATH += "/usr/include/KF5/KArchive"
+LIBS +=  -L"/usr/lib"  -lKF5Archive
+}
 

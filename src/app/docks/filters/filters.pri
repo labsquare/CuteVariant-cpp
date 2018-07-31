@@ -16,11 +16,11 @@ HEADERS += \
     $$PWD/filterview.h \
     $$PWD/filterdelegate.h \
     $$PWD/filterdockwidget.h \
-    $$PWD/filteritem.h \
     $$PWD/filterfieldfactory.h \
     $$PWD/filterdialog.h \
     $$PWD/filterwidget.h \
-    $$PWD/allfilterdialog.h
+    $$PWD/allfilterdialog.h \
+    $$PWD/conditionitem.h
 
 SOURCES += \
 #    $$PWD/genotypeconditionpage.cpp \
@@ -37,8 +37,8 @@ SOURCES += \
     $$PWD/filterview.cpp \
     $$PWD/filterdelegate.cpp \
     $$PWD/filterdockwidget.cpp \
-    $$PWD/filteritem.cpp \
     $$PWD/filterfieldfactory.cpp \
     $$PWD/filterdialog.cpp \
     $$PWD/filterwidget.cpp \
-    $$PWD/allfilterdialog.cpp
+    $$PWD/allfilterdialog.cpp \
+    $$PWD/conditionitem.cpp

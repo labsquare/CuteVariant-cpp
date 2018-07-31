@@ -9,14 +9,13 @@ ImportFilePage::ImportFilePage(QWidget *parent)
 
     QFormLayout * mainLayout = new QFormLayout;
 
-    mFileEdit     = new QLineEdit();
-    mBrowseButton = new QPushButton(tr("Browse ..."));
-    mUnlockButton = new QPushButton(tr("unlock"));
-    mFormatBox    = new QComboBox();
+    mFileEdit        = new FileEditWidget();
+    mPedFileEdit     = new FileEditWidget();
+    mUnlockButton    = new QPushButton(tr("unlock"));
+    mFormatBox       = new QComboBox();
 
-    QHBoxLayout * fileLayout = new QHBoxLayout;
-    fileLayout->addWidget(mFileEdit);
-    fileLayout->addWidget(mBrowseButton);
+    mPedFileEdit->edit()->setPlaceholderText(tr("Not required"));
+
 
     QHBoxLayout * formatLayout = new QHBoxLayout;
     formatLayout->addWidget(mFormatBox);
@@ -24,19 +23,20 @@ ImportFilePage::ImportFilePage(QWidget *parent)
 
     mFormatBox->setEnabled(false);
 
-    mainLayout->addRow(tr("Filename"), fileLayout);
+    mainLayout->addRow(tr("Filename"), mFileEdit);
+    //mainLayout->addRow(tr("pedfile"), mPedFileEdit);
+
     mainLayout->addRow(tr("Format detected"), formatLayout);
 
     mFormatBox->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
 
-
-    connect(mBrowseButton,&QPushButton::clicked, this, &ImportFilePage::browse);
     connect(mUnlockButton,&QPushButton::clicked, [this](){mFormatBox->setEnabled(true);});
+    connect(mFileEdit->edit(), &QLineEdit::textChanged, this, &ImportFilePage::checkFile);
 
     setLayout(mainLayout);
 
 
-    registerField("filename", mFileEdit, "text");
+    registerField("filename", mFileEdit->edit(), "text");
     registerField("format", mFormatBox, "currentData");
 
 
@@ -55,10 +55,15 @@ ImportFilePage::ImportFilePage(QWidget *parent)
 
 }
 
-void ImportFilePage::browse()
+bool ImportFilePage::isComplete() const
 {
+    QString filename = mFileEdit->text();
+    return QFile::exists(filename);
+}
 
-    QString filename = QFileDialog::getOpenFileName(this, tr("Import File"),QDir::homePath(),tr("VCF (*.vcf *.vcf.gz)"));
+void ImportFilePage::checkFile()
+{
+    QString filename = mFileEdit->text();
 
     if (!filename.isEmpty()){
 
@@ -87,16 +92,11 @@ void ImportFilePage::browse()
 
 
         }
-
-
-        mFileEdit->setText(filename);
         detectFormat();
-
+        emit completeChanged();
     }
-
-
-
 }
+
 
 void ImportFilePage::detectFormat()
 {

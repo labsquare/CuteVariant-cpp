@@ -11,6 +11,8 @@ include(resultsview/resultsview.pri)
 include(docks/docks.pri)
 include(qfonticon/qfonticon.pri)
 include(importwizard/importwizard.pri)
+include(widgets/widgets.pri)
+
 
 TARGET = cutevariant
 

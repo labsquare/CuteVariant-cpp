@@ -11,6 +11,9 @@ LogicItem::LogicItem(LogicItem::LogicOperator op)
 
     setFlags(flags()|Qt::ItemIsEditable);
 
+    //used by delegate
+    setData(0,Qt::UserRole, "logic");
+
     updateItem();
 }
 

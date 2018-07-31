@@ -3,7 +3,7 @@
 #include <QtWidgets>
 #include "columnmodel.h"
 #include "filterwidget.h"
-#include "filteritem.h"
+#include "conditionitem.h"
 
 class AllFilterDIalog : public QDialog
 {

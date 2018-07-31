@@ -7,7 +7,7 @@
 #include "filterfieldfactory.h"
 #include "rangefieldwidget.h"
 #include "listfieldwidget.h"
-#include "filteritem.h"
+#include "conditionitem.h"
 
 class FilterWidget : public QWidget
 {

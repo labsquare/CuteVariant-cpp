@@ -3,7 +3,7 @@
 #include <QtWidgets>
 #include "cutevariant.h"
 #include "filterwidget.h"
-#include "filteritem.h"
+#include "conditionitem.h"
 
 class FilterDialog : public QDialog
 {

@@ -2,7 +2,7 @@
 #define LOGICMODEL_H
 #include <QStandardItemModel>
 #include <QInputDialog>
-#include "filteritem.h"
+#include "conditionitem.h"
 #include "logicitem.h"
 
 class ConditionItem;
