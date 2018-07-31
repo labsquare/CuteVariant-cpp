@@ -42,7 +42,7 @@ void SelectionDockWidget::compare()
     if (dialog.exec())
     {
 
-        if (!cutevariant->sqlite()->createVariantSetFromExpression(dialog.tableName(), dialog.expression(), dialog.mode()))
+        if (!cutevariant->addViewFromExpression(dialog.tableName(), dialog.expression(), dialog.mode()))
             QMessageBox::warning(this,"error","Cannot run this set expression");
 
         else

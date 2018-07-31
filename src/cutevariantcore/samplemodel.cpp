@@ -40,7 +40,7 @@ void SampleModel::load()
 {
     beginResetModel();
 
-    mDatas = mProject->sqlite()->samples();
+    mDatas = mProject->samples();
 
     endResetModel();
 }

@@ -32,24 +32,24 @@ void ChartDockWidget::setQuery(const cvar::VariantQuery &query)
 
 
 
+// TODO
+//    QHash<QString,int> statsHash = cutevariant->variantsStats(query);
+//    auto i = statsHash.begin();
+//    for (i = statsHash.begin(); i != statsHash.end(); ++i){
+//        series->append(i.key(), i.value());
+//    }
 
-    QHash<QString,int> statsHash = cutevariant->sqlite()->variantsStats(query);
-    auto i = statsHash.begin();
-    for (i = statsHash.begin(); i != statsHash.end(); ++i){
-        series->append(i.key(), i.value());
-    }
 
+//    for (auto &slice : series->slices())
+//    {
+//        slice->setLabelVisible(true);
+//        slice->setLabel(slice->label().split("",QString::SkipEmptyParts).join(">"));
+//    }
 
-    for (auto &slice : series->slices())
-    {
-        slice->setLabelVisible(true);
-        slice->setLabel(slice->label().split("",QString::SkipEmptyParts).join(">"));
-    }
-
-    chart->setAnimationOptions(QChart::SeriesAnimations);
-    chart->addSeries(series);
-    chart->setTitle("Snp count");
-    chart->legend()->hide();
+//    chart->setAnimationOptions(QChart::SeriesAnimations);
+//    chart->addSeries(series);
+//    chart->setTitle("Snp count");
+//    chart->legend()->hide();
 
 
 

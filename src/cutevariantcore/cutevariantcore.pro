@@ -28,7 +28,6 @@ SOURCES += \
     region.cpp \
     genotype.cpp \
     variant.cpp \
-    sqlitemanager.cpp \
     fieldsmodel.cpp \
     samplemodel.cpp \
     variantquery.cpp \
@@ -48,7 +47,6 @@ HEADERS += \
     region.h \
     genotype.h \
     variant.h \
-    sqlitemanager.h \
     fieldsmodel.h \
     samplemodel.h \
     variantquery.h \

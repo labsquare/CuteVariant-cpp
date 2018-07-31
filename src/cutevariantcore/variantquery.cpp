@@ -93,7 +93,6 @@ void VariantQuery::setGroupBy(const QStringList &groupBy)
 
 QString VariantQuery::toSql() const
 {
-    const SqliteManager *sql = cutevariant->sqlite();
 
     // the sql query to return
     QString s_query;
@@ -127,7 +126,7 @@ QString VariantQuery::toSql() const
 
     // get samples Ids
     QHash<QString, int> samplesIds;
-    for (const Sample& s : sql->samples()){
+    for (const Sample& s : cutevariant->samples()){
         samplesIds[s.name()] = s.id();
     }
 

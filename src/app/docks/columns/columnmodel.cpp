@@ -22,7 +22,7 @@ void ColumnModel::load()
     setColumnCount(1);
 
     // Create categories
-    for (cvar::Field f : cutevariant->sqlite()->fields())
+    for (cvar::Field f : cutevariant->fields())
     {
         // create category if not exists
         if (!mCategoriesItems.contains(f.category())){
@@ -47,14 +47,14 @@ void ColumnModel::load()
         // add Samples
         QStandardItem * sampleCategorie = createCategory("Samples", "All samples avaibles");
 
-        if (!cutevariant->sqlite()->samples().isEmpty())
+        if (!cutevariant->samples().isEmpty())
         {
-            for (cvar::Sample s : cutevariant->sqlite()->samples())
+            for (cvar::Sample s : cutevariant->samples())
             {
                 QStandardItem * c1 = createCategory(s.name().toUpper());
                 sampleCategorie->appendRow(c1);
 
-                for (cvar::Field f : cutevariant->sqlite()->genotypeFields(s))
+                for (cvar::Field f : cutevariant->genotypeFields())
                 {
                     // TODO : check how colname are saved ...
                     QStandardItem * g = createField(f);

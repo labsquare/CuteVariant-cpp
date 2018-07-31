@@ -54,15 +54,15 @@ QString OperationSetDialog::tableName() const
     return mNewName->text();
 }
 
-cvar::SqliteManager::CompareMode OperationSetDialog::mode() const
+cvar::CuteVariant::CompareMode OperationSetDialog::mode() const
 {
     if (mModeBox->currentIndex() == 0)
-        return cvar::SqliteManager::SiteMode;
+        return cvar::CuteVariant::SiteMode;
 
     if (mModeBox->currentIndex() == 1)
-        return cvar::SqliteManager::VariantMode;
+        return cvar::CuteVariant::VariantMode;
 
-    return cvar::SqliteManager::SiteMode;
+    return cvar::CuteVariant::SiteMode;
 
 }
 
@@ -81,7 +81,7 @@ void OperationSetDialog::load()
     mOperator->addItem(FIcon(0xf55c),"Subtract","-");
 
 
-    for (const QString& name : cutevariant->sqlite()->variantSetNames())
+    for (const QString& name : cutevariant->viewNames())
     {
         mBoxA->addItem(name);
         mBoxB->addItem(name);

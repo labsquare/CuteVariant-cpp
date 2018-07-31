@@ -32,10 +32,10 @@ setButtonText(QWizard::CustomButton1, "Import");
 
 connect(mStartButton,&QPushButton::clicked,this, &ImportProgressPage::importFile);
 
-connect(cutevariant->sqlite(),SIGNAL(importProgressChanged(int,QString)),
+connect(cutevariant,SIGNAL(importProgressChanged(int,QString)),
         this,SLOT(updateStep(int,QString)));
 
-connect(cutevariant->sqlite(),SIGNAL(importRangeChanged(int,int)),
+connect(cutevariant,SIGNAL(importRangeChanged(int,int)),
         mBar,SLOT(setRange(int,int)));
 
 connect(&mWatcher,SIGNAL(finished()), this,SLOT(importFinished()));
@@ -51,11 +51,7 @@ void ImportProgressPage::importFile()
 QString filename = field("filename").toString();
 auto format = cvar::VariantReaderFactory::Format (field("format").toInt());
 
-
-cutevariant->setDatabasePath(filename+".db");
-
-
-QFuture<bool> future = cutevariant->sqlite()->asyncImportFile(filename, format);
+QFuture<bool> future = cutevariant->importFile(filename, format);
 mWatcher.setFuture(future);
 
 

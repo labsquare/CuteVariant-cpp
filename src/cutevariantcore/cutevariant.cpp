@@ -4,17 +4,19 @@ namespace cvar {
 
 CuteVariant * CuteVariant::mInstance = nullptr;
 
-CuteVariant::CuteVariant()
+CuteVariant::CuteVariant(QObject *parent)
+    :QObject(parent)
 {
     mSqliteManager = new SqliteManager;
+
+    mImporter = new Importer(this);
+
+    // map importer signal to cutevariant
+    connect(mImporter,SIGNAL(importProgressChanged(int,QString)), this,SIGNAL(importProgressChanged(int,QString)));
+    connect(mImporter,SIGNAL(importRangeChanged(int,int)), this,SIGNAL(importRangeChanged(int,int)));
+
+
 }
-
-Importer *CuteVariant::importer()
-{
-    return mImporter;
-}
-
-
 CuteVariant::~CuteVariant()
 {
     delete mSqliteManager;
@@ -28,17 +30,11 @@ CuteVariant *CuteVariant::i()
     return mInstance;
 }
 
-void CuteVariant::setDatabasePath(const QString &path)
+bool CuteVariant::setDatabasePath(const QString &path)
 {
-    //TODO Manage multi DB. 1 per project
-    mSqlDb = QSqlDatabase::addDatabase("QSQLITE", "project");
+    mSqlDb = QSqlDatabase::addDatabase("QSQLITE");
     mSqlDb.setDatabaseName(path);
-    if (!mSqlDb.open())
-        qDebug()<<Q_FUNC_INFO<<"cannot open database";
-
-
-
-
+    return mSqlDb.open();
 
 }
 //=================== SAMPLES  =====================
@@ -141,6 +137,59 @@ bool CuteVariant::addView(const View &view)
     return true;
 }
 //----------------------------------------------------
+bool CuteVariant::addViewFromExpression(const QString &name, const QString &expression, CuteVariant::CompareMode mode)
+{
+    qDebug()<<Q_FUNC_INFO<<" create expression ";
+
+    QRegularExpression exp("[^\\-+&\\(\\)\\s&]+");
+    QRegularExpressionMatchIterator it = exp.globalMatch(expression);
+    QStringList tables = viewNames();
+    tables.append("variants");
+
+    QString raw = expression.simplified();
+    while (it.hasNext())
+    {
+        QRegularExpressionMatch match = it.next();
+        QString table = match.captured();
+
+        if (!tables.contains(table))
+        {
+            qDebug()<<Q_FUNC_INFO<<" wrong expression, unknown table "+table;
+            return false;
+        }
+
+        if (mode == CompareMode::SiteMode)
+            raw = raw.replace(table, QString("SELECT chr, pos FROM `%1`").arg(table));
+
+        if (mode == CompareMode::VariantMode)
+            raw = raw.replace(table, QString("SELECT chr, pos, ref, alt FROM `%1`").arg(table));
+    }
+
+    raw = raw.replace("+", " UNION ");
+    raw = raw.replace("-", " EXCEPT ");
+    raw = raw.replace("&", " INTERSECT ");
+
+    QSqlQuery query;
+    query.exec(QString("DROP VIEW IF EXISTS %1").arg(name));
+
+
+    if (mode == CompareMode::SiteMode)
+        query.prepare(QString("CREATE VIEW %1 AS SELECT variants.* FROM variants, (%2) as t WHERE t.chr=variants.chr AND t.pos = variants.pos").arg(name,raw));
+
+    if (mode == CompareMode::VariantMode)
+        query.prepare(QString("CREATE VIEW %1 AS SELECT variants.* FROM variants, (%2) as t WHERE t.chr=variants.chr AND t.pos = variants.pos AND t.ref = variants.ref AND t.alt = variants.alt").arg(name,raw));
+
+
+    if (!query.exec())
+    {
+        qDebug()<<query.lastError().text();
+        qDebug()<<query.lastQuery();
+    }
+    qDebug()<<query.lastQuery();
+
+    return true;
+}
+//----------------------------------------------------
 bool CuteVariant::removeView(const QString &name) const
 {
     QSqlQuery query;
@@ -191,6 +240,27 @@ Variant CuteVariant::variant(int id) const
     return v;
 }
 //----------------------------------------------------
+int CuteVariant::variantsCount(const VariantQuery &query)
+{
+    VariantQuery q = query;
+    // set no limit ..
+    q.setLimit(0);
+    q.setColumns({"id"});
+
+    QString sql = QString("SELECT COUNT(1) as 'count' FROM (%1)").arg(q.toSql());
+
+    QSqlQuery countQuery;
+    if (!countQuery.exec(sql))
+    {
+        qDebug()<<countQuery.lastQuery();
+        qDebug()<<countQuery.lastError().text();
+    }
+
+    countQuery.next();
+
+    return (countQuery.record().value("count").toInt());
+}
+//----------------------------------------------------
 int CuteVariant::viewCount(const QString &view)
 {
     // TODO :: to slow ...
@@ -210,6 +280,21 @@ QHash<QString, QVariant> CuteVariant::metadatas() const
         hash.insert(query.record().value("key").toString(), query.record().value("value"));
 
     return hash;
+}
+
+QList<BedFile> CuteVariant::bedFiles() const
+{
+    QList<BedFile> files;
+    QSqlQuery query(QStringLiteral("SELECT * FROM `bedfiles`"));
+    while(query.next())
+    {
+        BedFile file;
+        file.setId(query.value("id").toInt());
+        file.setFilename(query.value("filename").toString());
+        file.setCount(query.value("count").toInt());
+        files.append(file);
+    }
+    return files;
 }
 
 //=================== LINKS =========================
@@ -249,11 +334,23 @@ bool CuteVariant::addLink(VariantLink &link)
     list.append(link);
     return setLinks(list);
 }
-
-SqliteManager *CuteVariant::sqlite()
+//----------------------------------------------------
+QFuture<bool> CuteVariant::importFile(const QString &filename, VariantReaderFactory::Format format)
 {
-    return mSqliteManager;
+    QString dbFilename = filename + ".db";
+
+   if (!setDatabasePath(dbFilename)){
+       qDebug()<<Q_FUNC_INFO<<"cannot create database path";
+        return QFuture<bool>();
+   }
+
+   return mImporter->asyncImport(filename, format);
 }
+//----------------------------------------------------
+//SqliteManager *CuteVariant::sqlite()
+//{
+//    return mSqliteManager;
+//}
 
 bool CuteVariant::setLinks(QList<VariantLink> &links)
 {

@@ -44,7 +44,7 @@ void SelectionView::load()
     // mandatory variant table name
     QTreeWidgetItem * variantItem = new QTreeWidgetItem;
     variantItem->setText(0,"variants");
-    variantItem->setText(1, QString::number(cutevariant->sqlite()->variantsCount()));
+    variantItem->setText(1, "todo"); // TODO
     variantItem->setIcon(0,FIcon(0xf24b));
     variantItem->setTextAlignment(1,Qt::AlignRight);
     addTopLevelItem(variantItem);
@@ -52,12 +52,12 @@ void SelectionView::load()
     // mandatory Favoris table name
     QTreeWidgetItem * favorisItem = new QTreeWidgetItem;
     favorisItem->setText(0,"Favoris");
-    //favorisItem->setText(1, QString::number(cutevariant->sqlite()->variantsCount()));
+    //favorisItem->setText(1, QString::number(cutevariant->variantsCount()));
     favorisItem->setIcon(0,FIcon(0xf69c));
     favorisItem->setTextAlignment(1,Qt::AlignRight);
     addTopLevelItem(favorisItem);
 
-        for (cvar::View selection : cutevariant->sqlite()->variantSets())
+        for (cvar::View selection : cutevariant->views())
         {
             QTreeWidgetItem * item = new QTreeWidgetItem;
             item->setText(0, selection.name());
@@ -80,7 +80,7 @@ void SelectionView::removeSelection()
 
     for (QTreeWidgetItem * item : selectedItems())
     {
-        cutevariant->sqlite()->removeVariantSet(item->text(0));
+        cutevariant->removeView(item->text(0));
     }
 
     load();

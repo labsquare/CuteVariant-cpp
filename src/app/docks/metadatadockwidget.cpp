@@ -18,7 +18,7 @@ void MetadataDockWidget::reset()
     mView->setColumnCount(2);
     mView->setHeaderLabels({"key", "value"});
 
-    QHash<QString, QVariant> metadatas = cutevariant->sqlite()->metadatas();
+    QHash<QString, QVariant> metadatas = cutevariant->metadatas();
 
     for (auto it = metadatas.begin(); it != metadatas.end(); ++it)
     {

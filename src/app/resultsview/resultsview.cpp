@@ -88,7 +88,7 @@ void ResultsView::setQuery(const cvar::VariantQuery &query)
     temp.setGroupBy({"chr","pos","ref","alt"});
 
     // 100 page constant for now
-    int totalCount = cutevariant->sqlite()->variantsCount(temp);
+    int totalCount = cutevariant->variantsCount(temp);
     int pageCount  = totalCount / 100;
     mPageValidator->setRange(0, pageCount);
 
@@ -158,11 +158,13 @@ void ResultsView::save()
     if (dialog.exec() == QDialog::Accepted)
     {
 
-        if (!cutevariant->sqlite()->createVariantSet(mModel->currentQuery(), nameEdit->text()))
-            QMessageBox::warning(this,"error", "cannot create table");
+        cvar::View view;
+//TODO
+//        if (!cutevariant->addView(mModel->currentQuery(), nameEdit->text()))
+//            QMessageBox::warning(this,"error", "cannot create table");
 
-        else
-            emit tableSaved();
+//        else
+//            emit tableSaved();
     }
 
 
@@ -220,7 +222,7 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
     {
         quint64 variantID = mModel->record(index).value("id").toInt();
         qDebug()<<variantID;
-        cvar::Variant var = cutevariant->sqlite()->variant(variantID);
+        cvar::Variant var = cutevariant->variant(variantID);
 
 
         QMenu menu(this);

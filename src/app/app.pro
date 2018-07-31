@@ -20,7 +20,6 @@ RESOURCES += icons/icons.qrc
 
 HEADERS += \
     mainwindow.h \
-    importdialog.h \
     basedockwidget.h \
     editlinkdialog.h \
     linklistdialog.h \
@@ -30,7 +29,6 @@ HEADERS += \
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    importdialog.cpp \
     basedockwidget.cpp \
     editlinkdialog.cpp \
     linklistdialog.cpp \

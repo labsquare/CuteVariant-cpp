@@ -29,7 +29,7 @@ void RegionDockWidget::reset()
 {
     mView->clear();
 
-    for (cvar::BedFile file : cutevariant->sqlite()->bedFiles())
+    for (cvar::BedFile file : cutevariant->bedFiles())
     {
         QTreeWidgetItem * item = new QTreeWidgetItem;
         item->setIcon(0,FIcon(0xf214));
@@ -56,7 +56,8 @@ void RegionDockWidget::addBedFile()
     if (filename.isEmpty())
         return ;
 
-    qDebug()<<cutevariant->sqlite()->importBedfile(filename);
+    //TODO
+   // qDebug()<<cutevariant->importBedfile(filename);
 
     reset();
 

@@ -57,7 +57,7 @@ void VqlEditor::registerKeywords()
     api->add("FROM");
 
 
-    for (const cvar::Field& field : cutevariant->sqlite()->fields())
+    for (const cvar::Field& field : cutevariant->fields())
     {
         api->add(field.colname().toLower());
     }

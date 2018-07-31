@@ -12,7 +12,7 @@ public:
     QString expression() const;
     QString tableName() const;
 
-    cvar::SqliteManager::CompareMode mode() const;
+    cvar::CuteVariant::CompareMode mode() const;
 
 protected:
     void load();

@@ -5,23 +5,35 @@
 #include <QSettings>
 #include "variantlink.h"
 #include "view.h"
-#include "sqlitemanager.h"
 #include "importer.h"
+#include "variantquery.h"
+#include "bedfile.h"
 
 #define cutevariant cvar::CuteVariant::i()
 
 namespace cvar {
 class QueryBuilder;
-class SqliteManager;
-class CuteVariant
+class VariantQuery;
+class CuteVariant : public QObject
 {
+    Q_OBJECT
 public:
+    enum CompareMode {
+        SiteMode ,
+        VariantMode
+    };
+
     ~CuteVariant();
 
 
     static CuteVariant * i();
 
-    void setDatabasePath(const QString& path);
+    /*!
+     * \brief setDatabasePath
+     * set sqlite database path
+     * \return
+     */
+    bool setDatabasePath(const QString& path);
 
 
     // samples
@@ -56,6 +68,10 @@ public:
        */
     bool addView(const View& view);
 
+
+
+    bool addViewFromExpression(const QString& name, const QString& expression, CompareMode mode = SiteMode);
+
     /*!
        * \brief removeView
        * remove views
@@ -89,8 +105,22 @@ public:
     Variant variant(int id) const;
 
 
+    /*!
+     * \brief variantsCount
+     * \param query
+     * \return how many variant for a specific VariantQuery
+     */
+    int variantsCount(const VariantQuery& query) ;
+
+
+
     // metadatas
     QHash<QString, QVariant> metadatas() const;
+
+
+    // bedfiles
+    //TODO really useful ?
+        QList<BedFile> bedFiles() const;
 
 
 
@@ -101,13 +131,15 @@ public:
     bool addLink(VariantLink& link);
 
 
+    // import
+
+    QFuture<bool> importFile(const QString& filename, VariantReaderFactory::Format format = VariantReaderFactory::Unknown);
 
 
-    Importer *importer();
 
 
 
-    SqliteManager *sqlite();
+   // SqliteManager *sqlite();
 
     // utils
 
@@ -115,9 +147,14 @@ public:
     static QByteArray iconToData(const QIcon& icon);
 
 
+Q_SIGNALS:
+    void importRangeChanged(int min, int max);
+    void importProgressChanged(int progress, const QString& message = QString());
+
+
 
 private:
-    CuteVariant();
+    CuteVariant(QObject * parent = nullptr);
     QSqlDatabase mSqlDb;
     static CuteVariant * mInstance;
 
