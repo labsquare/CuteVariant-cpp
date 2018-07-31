@@ -160,7 +160,6 @@ private:
 
     Importer * mImporter;
 
-    SqliteManager * mSqliteManager;
 
 
 

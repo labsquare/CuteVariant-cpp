@@ -7,7 +7,6 @@ CuteVariant * CuteVariant::mInstance = nullptr;
 CuteVariant::CuteVariant(QObject *parent)
     :QObject(parent)
 {
-    mSqliteManager = new SqliteManager;
 
     mImporter = new Importer(this);
 
@@ -19,7 +18,8 @@ CuteVariant::CuteVariant(QObject *parent)
 }
 CuteVariant::~CuteVariant()
 {
-    delete mSqliteManager;
+
+        delete mImporter;
 }
 
 CuteVariant *CuteVariant::i()
