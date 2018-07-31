@@ -33,6 +33,7 @@ SOFTWARE.
 #include <QPalette>
 
 #define FIcon(code) QFontIcon::icon(code)
+#define FIconColor(code,color) QFontIcon::icon(code,color)
 
 class QFontIcon;
 class QFontIconEngine;

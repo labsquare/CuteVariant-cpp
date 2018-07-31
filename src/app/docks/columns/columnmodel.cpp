@@ -44,26 +44,26 @@ void ColumnModel::load()
 
 
 
-        // add Samples
-        QStandardItem * sampleCategorie = createCategory("Samples", "All samples avaibles");
+    // add Samples
+    QStandardItem * sampleCategorie = createCategory("Samples", "All samples avaibles");
 
-        if (!cutevariant->samples().isEmpty())
+    if (!cutevariant->samples().isEmpty())
+    {
+        for (cvar::Sample s : cutevariant->samples())
         {
-            for (cvar::Sample s : cutevariant->samples())
-            {
-                QStandardItem * c1 = createCategory(s.name().toUpper());
-                sampleCategorie->appendRow(c1);
+            QStandardItem * c1 = createCategory(s.name().toUpper());
+            sampleCategorie->appendRow(c1);
 
-                for (cvar::Field f : cutevariant->genotypeFields())
-                {
-                    // TODO : check how colname are saved ...
-                    QStandardItem * g = createField(f);
-                    c1->appendRow(g);
-                }
+            for (cvar::Field f : cutevariant->genotypeFields())
+            {
+                // TODO : check how colname are saved ...
+                QStandardItem * g = createField(f);
+                c1->appendRow(g);
             }
-            appendRow(sampleCategorie);
         }
+        appendRow(sampleCategorie);
     }
+}
 //---------------------------------------------------------
 QStringList ColumnModel::selectedColumns() const
 {
@@ -138,6 +138,7 @@ QStandardItem *ColumnModel::createCategory(const QString &name, const QString &d
     item->setToolTip(description);
     item->setCheckable(mHasCheckbox);
     item->setEditable(false);
+    item->setIcon(FIcon(0xf256));
     return item;
 }
 //---------------------------------------------------------
@@ -148,6 +149,20 @@ QStandardItem *ColumnModel::createField(const cvar::Field &field)
     item->setCheckable(mHasCheckbox);
     item->setEditable(false);
     mFieldItems.append(qMakePair(item,field));
+
+    if (field.type() == cvar::Field::INTEGER)
+        item->setIcon(FIconColor(0xf23b,QColor("#EA9F37")));
+
+    if (field.type() == cvar::Field::TEXT)
+        item->setIcon(FIconColor(0xf23b,QColor("#4183B0")));
+
+    if (field.type() == cvar::Field::BOOL)
+        item->setIcon(FIconColor(0xf23b,QColor("#EF2929")));
+
+    if (field.type() == cvar::Field::REAL)
+        item->setIcon(FIconColor(0xf23b,QColor("#A1C97A")));
+
+
     return item;
 }
 //---------------------------------------------------------

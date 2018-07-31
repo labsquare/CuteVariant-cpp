@@ -22,7 +22,11 @@ ColumnView::ColumnView(QWidget *parent)
     //        "QTreeView::indicator:checked {image: url(:/check.png);}"
     //      );
 
-    setAlternatingRowColors(true);
+   //setAlternatingRowColors(true);
+
+
+    setIconSize(QSize(20,20 ));
+
 
     connect(mModel,SIGNAL(itemChanged(QStandardItem*)),this, SIGNAL(itemChanged()));
 

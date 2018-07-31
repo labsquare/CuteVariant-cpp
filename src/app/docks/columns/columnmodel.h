@@ -4,6 +4,7 @@
 #include "field.h"
 #include "sample.h"
 #include "cutevariant.h"
+#include "qfonticon.h"
 
 class ColumnModel : public QStandardItemModel
 {

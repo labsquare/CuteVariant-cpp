@@ -11,7 +11,7 @@ FilterView::FilterView(QWidget * parent)
     setAcceptDrops(true);
     setDropIndicatorShown(true);
     setDragDropMode(QAbstractItemView::InternalMove);
-    setUniformRowHeights(true);
+    //setUniformRowHeights(true);
     //setAlternatingRowColors(true);
     setSelectionBehavior(QAbstractItemView::SelectRows);
     //setAnimated(true);
