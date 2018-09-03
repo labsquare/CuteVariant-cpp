@@ -1,11 +1,11 @@
 #ifndef GENOTYPE_H
 #define GENOTYPE_H
 #include <QtCore>
-#include "resource.h"
+#include "abstractrecord.h"
 #include "variant.h"
 #include "sample.h"
 namespace cvar {
-class Genotype : public Resource
+class Genotype : public AbstractRecord
 {
 public:
     enum Type {
@@ -14,12 +14,11 @@ public:
         Heterozygous = 1,
         Homozygous_alt = 2
     };
-    Genotype();
-    Genotype (const QString& chr,
-              quint64 pos,
-              const QString& ref,
-              const QString& alt,
-              const QString& sampleName);
+    Genotype (const QString& chr = QString(),
+              quint64 pos  = 0,
+              const QString& ref = QString(),
+              const QString& alt = QString(),
+              const QString& sampleName = QString());
 
     /*!
      * \brief set raw genotype
@@ -75,6 +74,19 @@ public:
      * \return genotype in format "0/1"
      */
     QString rawGenotype() const;
+
+
+    // virtual methods
+    virtual bool update() override;
+    virtual bool insert() override;
+    virtual bool remove() override;
+
+    virtual void fromSql(const QSqlRecord& record) override;
+
+    // static methods
+    static void createTable();
+
+
 
 private:
     Variant mVariant;

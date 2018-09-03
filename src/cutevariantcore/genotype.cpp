@@ -1,13 +1,9 @@
 #include "genotype.h"
 namespace cvar {
 
-Genotype::Genotype()
-    :Resource()
-{
-
-}
 
 Genotype::Genotype(const QString &chr, quint64 pos, const QString &ref, const QString &alt, const QString &sampleName)
+    :AbstractRecord("genotypes")
 {
     mVariant.setChr(chr);
     mVariant.setPos(pos);
@@ -125,6 +121,26 @@ const Variant &Genotype::variant() const
 QString Genotype::rawGenotype() const
 {
     return mAnnotations.value("GT", "!/!").toString();
+}
+
+bool Genotype::update()
+{
+
+}
+
+bool Genotype::insert()
+{
+
+}
+
+bool Genotype::remove()
+{
+
+}
+
+void Genotype::fromSql(const QSqlRecord &record)
+{
+
 }
 
 

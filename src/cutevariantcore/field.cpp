@@ -1,12 +1,8 @@
 #include "field.h"
 namespace cvar {
-Field::Field()
-    :Resource()
-{
-}
 
 Field::Field(const QString &name, const QString& category, const QString &description, const Type& type)
-    :Resource()
+    :AbstractRecord("fields")
 {
     setName(name);
     setCategory(category);
@@ -152,6 +148,31 @@ QString Field::expression() const
 void Field::setExpression(const QString &expression)
 {
     mExpression = expression;
+}
+
+bool Field::update()
+{
+
+}
+
+bool Field::insert()
+{
+
+}
+
+bool Field::remove()
+{
+
+}
+
+void Field::fromSql(const QSqlRecord &record)
+{
+
+}
+
+void Field::createTable()
+{
+
 }
 
 

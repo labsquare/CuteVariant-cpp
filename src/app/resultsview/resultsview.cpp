@@ -252,11 +252,11 @@ void ResultsView::contextMenuEvent(QContextMenuEvent *event)
 
         for (cvar::VariantLink link : cutevariant->links())
         {
-            QUrl varurl = link.toUrl(var);
-            menu.addAction(link.icon(), link.name(),[varurl](){
-                QDesktopServices::openUrl(varurl);
+//            QUrl varurl = link.toUrl(var);
+//            menu.addAction(link.icon(), link.name(),[varurl](){
+//                QDesktopServices::openUrl(varurl);
 
-            });
+//            });
         }
 
         menu.addSeparator();

@@ -7,14 +7,8 @@ static QList<int> binOffsetsExtended ={4096+512+64+8+1, 512+64+8+1, 64+8+1, 8+1,
 static QList<int> binOffsets = {512+64+8+1, 64+8+1, 8+1, 1, 0};
 
 namespace cvar {
-Variant::Variant()
-    :Resource()
-{
-
-}
-
-Variant::Variant(const QString &chr, quint64 pos, QString &ref, QString &alt)
-    :Resource(), mChr(chr), mPos(pos), mRef(ref), mAlt(alt)
+Variant::Variant(const QString &chr, quint64 pos, const QString &ref, const QString &alt)
+    :AbstractRecord("variants"), mChr(chr), mPos(pos), mRef(ref), mAlt(alt)
 {
 
 }
@@ -278,6 +272,26 @@ int Variant::score() const
 void Variant::setScore(int score)
 {
     mScore = score;
+}
+
+bool Variant::update()
+{
+
+}
+
+bool Variant::insert()
+{
+
+}
+
+bool Variant::remove()
+{
+
+}
+
+void Variant::fromSql(const QSqlRecord &record)
+{
+
 }
 
 

@@ -1,14 +1,13 @@
 #ifndef BEDFILE_H
 #define BEDFILE_H
-#include "resource.h"
+#include "abstractrecord.h"
 
 namespace cvar {
 
-class BedFile : public Resource
+class BedFile : public AbstractRecord
 {
 public:
-    BedFile();
-    BedFile(const QString& filename, int count);
+    BedFile(const QString& filename = QString(), int count = 0);
 
 
     const QString& filename() const;
@@ -16,6 +15,19 @@ public:
 
     quint64 count() const;
     void setCount(const quint64 &count);
+
+
+    // virtual methods
+    virtual bool update() override;
+    virtual bool insert() override;
+    virtual bool remove() override;
+
+    virtual void fromSql(const QSqlRecord& record) override;
+
+    // static methods
+    static void createTable();
+
+
 
 private:
     QString mFilename;

@@ -2,33 +2,30 @@
 #define VARIANTLINK_H
 #include <QtCore>
 #include <QtGui>
-#include "resource.h"
+#include "abstractrecord.h"
 #include "variant.h"
 
 namespace cvar {
-class VariantLink : public Resource
+class VariantLink : public AbstractRecord
 {
 public:
-    VariantLink();
-    VariantLink(const QString& name, const QString& rawUrl, const QIcon& icon);
+    VariantLink(const QString& name = QString(), const QString& rawUrl = QString(), const QIcon& icon = QIcon());
 
-    QString name() const;
-    void setName(const QString &name);
+//    QString name() const;
+//    void setName(const QString &name);
 
-    QString rawUrl() const;
-    void setRawUrl(const QString &rawUrl);
+//    QString rawUrl() const;
+//    void setRawUrl(const QString &rawUrl);
 
-    QIcon icon() const;
-    void setIcon(const QIcon &icon);
+//    QIcon icon() const;
+//    void setIcon(const QIcon &icon);
 
-    QUrl toUrl(const Variant& variant) const;
+//    QUrl toUrl(const Variant& variant) const;
 
-    bool operator==(const VariantLink &a) const;
+//    bool operator==(const VariantLink &a) const;
 
 private:
-    QString mName;
-    QString mRawUrl;
-    QIcon mIcon;
+
 };
 }
 

@@ -7,10 +7,13 @@ BaseDockWidget::BaseDockWidget(QWidget *parent)
     mToolBar     = new QToolBar;
     mTitleWidget = new QLabel();
 
+   mToolBar->setStyleSheet("QToolBar { background : white; border:1px solid lightgray }");
+
+
     QLabel * grapLabel =  new QLabel;
     grapLabel->setPixmap(FIcon(0xf047).pixmap(16));
 
-    mToolBar->setIconSize(QSize(20,20));
+    mToolBar->setIconSize(QSize(16,16));
     //  mToolBar->layout()->setContentsMargins(0,0,0,0);
 
    // mToolBar->addWidget(grapLabel);
@@ -22,6 +25,11 @@ BaseDockWidget::BaseDockWidget(QWidget *parent)
 //    mToolBar->addWidget(spacer);
 
     layout()->setContentsMargins(0,0,0,0);
+
+    QPalette p = palette();
+    p.setColor(QPalette::AlternateBase,QColor(229,255,214));
+    setPalette(p);
+
     //setTitleBarWidget(mToolBar);
 
    // setFeatures(QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetFloatable);

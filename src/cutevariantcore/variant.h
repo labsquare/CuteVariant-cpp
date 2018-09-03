@@ -1,13 +1,13 @@
 #ifndef VARIANT_H
 #define VARIANT_H
 #include <QtCore>
-#include "resource.h"
+#include "abstractrecord.h"
 namespace cvar{
-class Variant : public Resource
+class Variant;
+class Variant : public AbstractRecord
 {
 public:
-    Variant();
-    Variant(const QString& chr, quint64 pos, QString& ref, QString& alt);
+    Variant(const QString& chr = QString(), quint64 pos = 0, const QString& ref = QString(), const QString& alt = QString());
     void addAnnotation(const QString& colname, const QVariant& value);
     void clearAnnotation();
     void removeAnnotation(const QString& colname);
@@ -61,6 +61,19 @@ public:
 
     int score() const;
     void setScore(int score);
+
+
+    // virtual methods
+    virtual bool update() override;
+    virtual bool insert() override;
+    virtual bool remove() override;
+
+    virtual void fromSql(const QSqlRecord& record) override;
+
+    // static methods
+    static void createTable();
+
+
 
 private:
     quint64 mBin = 0;

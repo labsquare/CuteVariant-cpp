@@ -98,74 +98,76 @@ QHash<QString, quint64> GenericVCFReader::contigs()
 //------------------------------------------------------------------
 Variant GenericVCFReader::readVariant()
 {
-    if (!mVariantBuffer.isEmpty())
-        return mVariantBuffer.takeLast();
+//    if (!mVariantBuffer.isEmpty())
+//        return mVariantBuffer.takeLast();
 
-    Variant variant = parseVariant(device()->readLine());
+//    Variant variant = parseVariant(device()->readLine());
 
-    // create duplicate variant per annotation
-    for (const QString& key : mAnnParser.keys())
-    {
-        // ex : ANN=C|...
-        if (variant.annotations().contains(key))
-            mVariantBuffer.append(mAnnParser[key]->parseVariant(variant));
-    }
+//    // create duplicate variant per annotation
+//    for (const QString& key : mAnnParser.keys())
+//    {
+//        // ex : ANN=C|...
+//        if (variant.annotations().contains(key))
+//            mVariantBuffer.append(mAnnParser[key]->parseVariant(variant));
+//    }
 
-    if (mVariantBuffer.isEmpty())
-        mVariantBuffer.append(variant);
+//    if (mVariantBuffer.isEmpty())
+//        mVariantBuffer.append(variant);
 
-    return mVariantBuffer.takeLast();
+//    return mVariantBuffer.takeLast();
 
 }
 //------------------------------------------------------------------
 
 Variant GenericVCFReader::parseVariant(const QString& line)
 {
-    if (line.isEmpty())
-        return Variant();
+//    if (line.isEmpty())
+//        return Variant();
 
-    QStringList rows = line.split('\t');
-    if ( rows.size() < 8)
-    {
-        qCritical()<<"Wrong fields number in file";
-        return Variant();
-    }
+//    QStringList rows = line.split('\t');
+//    if ( rows.size() < 8)
+//    {
+//        qCritical()<<"Wrong fields number in file";
+//        return Variant();
+//    }
 
-    QString chrom  = rows[0];
-    quint64 pos    = rows[1].toInt();
-    QString rsid   = rows[2];
-    QString ref    = rows[3];
-    QString alt    = rows[4];
-    QString qual   = rows[5];
-    QString filter = rows[6];
-    QString info   = rows[7];
+//    QString chrom  = rows[0];
+//    quint64 pos    = rows[1].toInt();
+//    QString rsid   = rows[2];
+//    QString ref    = rows[3];
+//    QString alt    = rows[4];
+//    QString qual   = rows[5];
+//    QString filter = rows[6];
+//    QString info   = rows[7];
 
-    Variant variant(chrom,pos, ref,alt);
-    variant.setRsId(rsid);
-    variant.setQual(qual.toDouble());
-    variant.setFilter(filter);
-    variant.setBin(Variant::maxUcscBin(pos-1, pos));
+//    Variant variant(chrom,pos, ref,alt);
+//    variant.setRsId(rsid);
+//    variant.setQual(qual.toDouble());
+//    variant.setFilter(filter);
+//    variant.setBin(Variant::maxUcscBin(pos-1, pos));
 
-    // parse annotation info
-    for (QString item : info.split(";"))
-    {
-        if (item.contains("="))
-        {
-            QStringList pair = item.split("=");
-            QString key      = pair.first();
-            QString val      = pair.last();
-            variant[key]     = val;
-        }
-        // Bool TAGS
-        else
-        {
-            // If key is present, means it's true
-            // by default it's false
-            variant[item] = 1;
-        }
-    }
+//    // parse annotation info
+//    for (QString item : info.split(";"))
+//    {
+//        if (item.contains("="))
+//        {
+//            QStringList pair = item.split("=");
+//            QString key      = pair.first();
+//            QString val      = pair.last();
+//            variant[key]     = val;
+//        }
+//        // Bool TAGS
+//        else
+//        {
+//            // If key is present, means it's true
+//            // by default it's false
+//            variant[item] = 1;
+//        }
+//    }
 
-    return variant;
+    //return variant;
+
+    return Variant();
 }
 
 Genotype GenericVCFReader::readGenotype()

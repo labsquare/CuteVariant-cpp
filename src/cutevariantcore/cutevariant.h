@@ -14,6 +14,13 @@
 namespace cvar {
 class QueryBuilder;
 class VariantQuery;
+
+class Variant;
+class Field;
+class Genotype;
+class Region;
+class Sample;
+
 class CuteVariant : public QObject
 {
     Q_OBJECT
@@ -33,7 +40,8 @@ public:
      * set sqlite database path
      * \return
      */
-    bool setDatabasePath(const QString& path);
+    bool openDatabase(const QString& path);
+    void closeDatabase();
 
 
     // samples
@@ -42,7 +50,7 @@ public:
      * \brief samples
      * \return samples list from sqlite
      */
-    QList<Sample> samples() const;
+  //  QList<Sample> samples() const;
 
 
     // fields
@@ -50,8 +58,8 @@ public:
      * \brief fields
      * \return variant fields from sqlite
      */
-    QList<Field> fields() const;
-    QList<Field> genotypeFields() const;
+   // QList<Field> fields() const;
+   // QList<Field> genotypeFields() const;
 
     // views
     /*!
@@ -59,31 +67,31 @@ public:
      * view are variant set store as a view sql
      * \return views
      */
-    QList<View> views() const;
+   // QList<View> views() const;
 
     /*!
        * \brief views
        * view are variant set store as a view sql
        * \return views
        */
-    bool addView(const View& view);
+  //  bool addView(const View& view);
 
 
 
-    bool addViewFromExpression(const QString& name, const QString& expression, CompareMode mode = SiteMode);
+   // bool addViewFromExpression(const QString& name, const QString& expression, CompareMode mode = SiteMode);
 
     /*!
        * \brief removeView
        * remove views
        * \return views
        */
-    bool removeView(const QString& name) const;
+  //  bool removeView(const QString& name) const;
     /*!
        * \brief viewNames
        * Useless... ise views instead
        * \return return names of each view
        */
-    QStringList viewNames() const;
+  //  QStringList viewNames() const;
 
 
     /*!
@@ -91,7 +99,7 @@ public:
        * \param table
        * \return how many variant from a specific set
        */
-    int viewCount(const QString& view = "variants");
+  //  int viewCount(const QString& view = "variants");
 
 
 
@@ -102,7 +110,7 @@ public:
        * \param variantId
        * \return a Variant from sql ID
        */
-    Variant variant(int id) const;
+  //  Variant variant(int id) const;
 
 
     /*!
@@ -110,36 +118,36 @@ public:
      * \param query
      * \return how many variant for a specific VariantQuery
      */
-    int variantsCount(const VariantQuery& query) ;
+    //int variantsCount(const VariantQuery& query) ;
 
 
-    bool saveVariant(const Variant& variant);
+  //  bool saveVariant(const Variant& variant);
 
 
 
 
 
     // metadatas
-    QHash<QString, QVariant> metadatas() const;
+  //  QHash<QString, QVariant> metadatas() const;
 
 
     // bedfiles
     //TODO really useful ?
-        QList<BedFile> bedFiles() const;
+    //    QList<BedFile> bedFiles() const;
 
 
 
     // Links
-    QList<VariantLink> links() const;
-    bool setLinks(QList<VariantLink>& links);
-    bool removeLink(const VariantLink& link);
-    bool addLink(VariantLink& link);
+   // QList<VariantLink> links() const;
+   // bool setLinks(QList<VariantLink>& links);
+   // bool removeLink(const VariantLink& link);
+  //  bool addLink(VariantLink& link);
 
 
 
     // import
 
-    QFuture<bool> importFile(const QString& filename, VariantReaderFactory::Format format = VariantReaderFactory::Unknown);
+   // QFuture<bool> importFile(const QString& filename, VariantReaderFactory::Format format = VariantReaderFactory::Unknown);
 
 
 
@@ -153,6 +161,8 @@ public:
     static QByteArray iconToData(const QIcon& icon);
 
 
+    const QSqlDatabase& database() const;
+
 Q_SIGNALS:
     void importRangeChanged(int min, int max);
     void importProgressChanged(int progress, const QString& message = QString());
@@ -164,7 +174,7 @@ private:
     QSqlDatabase mSqlDb;
     static CuteVariant * mInstance;
 
-    Importer * mImporter;
+   // Importer * mImporter;
 
 
 

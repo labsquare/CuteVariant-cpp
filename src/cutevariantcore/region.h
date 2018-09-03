@@ -1,7 +1,7 @@
 #ifndef REGION_H
 #define REGION_H
 #include <QtCore>
-#include "resource.h"
+#include "abstractrecord.h"
 namespace cvar {
 /*!
  * \brief The Region class
@@ -9,11 +9,10 @@ namespace cvar {
  * start = zero based starting position
  * end   = one based ending position
  */
-class Region : public Resource
+class Region : public AbstractRecord
 {
 public:
-    Region();
-    Region(const QString& chromosom, quint64 start , quint64 end);
+    Region(const QString& chromosom = QString(), quint64 start=0 , quint64 end=0);
 
     const QString &chromosom() const;
     void setChromosom(const QString &chromosom);
@@ -25,6 +24,19 @@ public:
     void setEnd(const quint64 &end);
 
     quint64 size() const;
+
+
+    // virtual methods
+    virtual bool update() override;
+    virtual bool insert() override;
+    virtual bool remove() override;
+
+    virtual void fromSql(const QSqlRecord& record) override;
+
+    // static methods
+    static void createTable();
+
+
 
 private:
     QString mChromosom;

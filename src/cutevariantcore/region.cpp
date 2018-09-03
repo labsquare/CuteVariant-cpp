@@ -1,13 +1,9 @@
 #include "region.h"
 namespace cvar {
-Region::Region()
-    :Resource()
-{
-
-}
 
 Region::Region(const QString &chromosom, quint64 start, quint64 end)
-    :Resource(),mChromosom(chromosom), mStart(start), mEnd(end)
+    :AbstractRecord("regions"),
+      mChromosom(chromosom), mStart(start), mEnd(end)
 {
 
 }
@@ -45,5 +41,25 @@ void Region::setEnd(const quint64 &end)
 quint64 Region::size() const
 {
     return mEnd - mStart;
+}
+
+bool Region::update()
+{
+
+}
+
+bool Region::insert()
+{
+
+}
+
+bool Region::remove()
+{
+
+}
+
+void Region::fromSql(const QSqlRecord &record)
+{
+
 }
 }

@@ -2,13 +2,9 @@
 
 namespace cvar{
 
-View::View()
-{
-
-}
 
 View::View(const QString &name, const QString &description, int count)
-    :mName(name), mDescription(description), mCount(count)
+    :AbstractRecord("view"), mName(name), mDescription(description), mCount(count)
 {
 
 }
@@ -51,6 +47,26 @@ QString View::sql() const
 void View::setSql(const QString &sql)
 {
     mSql = sql;
+}
+
+bool View::update()
+{
+
+}
+
+bool View::insert()
+{
+
+}
+
+bool View::remove()
+{
+
+}
+
+void View::fromSql(const QSqlRecord &record)
+{
+
 }
 
 }

@@ -1,7 +1,7 @@
 #ifndef FIELD_H
 #define FIELD_H
 #include <QtCore>
-#include "resource.h"
+#include "abstractrecord.h"
 #include "sample.h"
 
 namespace cvar {
@@ -10,7 +10,7 @@ namespace cvar {
  * \brief The Field class contains Annotation description
  * @see sql field table
  */
-class Field : public Resource
+class Field : public AbstractRecord
 {
 public:
     enum Type
@@ -21,8 +21,7 @@ public:
         BOOL
     };
 
-    Field();
-    Field(const QString& name,const QString& category, const QString& description = QString(), const Type& type = Field::TEXT);
+    Field(const QString& name = QString() ,const QString& category = QString() , const QString& description = QString(), const Type& type = Field::TEXT);
 
     const QString& colname() const;
     const QString &name() const;
@@ -52,6 +51,17 @@ public:
 
     QString expression() const;
     void setExpression(const QString &expression);
+
+    // virtual methods
+    virtual bool update() override;
+    virtual bool insert() override;
+    virtual bool remove() override;
+
+    virtual void fromSql(const QSqlRecord& record) override;
+
+    // static methods
+    static void createTable();
+
 
 
 

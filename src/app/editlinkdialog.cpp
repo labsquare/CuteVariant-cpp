@@ -32,19 +32,19 @@ EditLinkDialog::EditLinkDialog(QWidget *parent)
 
 void EditLinkDialog::setLink(const cvar::VariantLink &link)
 {
-    mCurrentLink = link;
-    mNameEdit->setText(link.name());
-    mUrlEdit->setText(link.rawUrl());
-    miconButton->setIcon(link.icon());
+//    mCurrentLink = link;
+//    mNameEdit->setText(link.name());
+//    mUrlEdit->setText(link.rawUrl());
+//    miconButton->setIcon(link.icon());
 }
 
 const cvar::VariantLink &EditLinkDialog::link()
 {
-    mCurrentLink.setName(mNameEdit->text());
-    mCurrentLink.setRawUrl(mUrlEdit->text());
-    mCurrentLink.setIcon(miconButton->icon());
+//    mCurrentLink.setName(mNameEdit->text());
+//    mCurrentLink.setRawUrl(mUrlEdit->text());
+//    mCurrentLink.setIcon(miconButton->icon());
 
-    return mCurrentLink;
+//    return mCurrentLink;
 }
 
 

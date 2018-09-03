@@ -94,26 +94,26 @@ void LinkListDialog::editLink()
 void LinkListDialog::load()
 {
 
-    mView->clear();
-    mView->setColumnCount(2);
+//    mView->clear();
+//    mView->setColumnCount(2);
 
-    mLinks = cutevariant->links();
+//    mLinks = cutevariant->links();
 
-    for (cvar::VariantLink link : mLinks)
-    {
-        QTreeWidgetItem * item = new QTreeWidgetItem;
-        item->setIcon(0, link.icon());
-        item->setText(0, link.name());
-        item->setText(1, link.rawUrl());
+//    for (cvar::VariantLink link : mLinks)
+//    {
+//        QTreeWidgetItem * item = new QTreeWidgetItem;
+//        item->setIcon(0, link.icon());
+//        item->setText(0, link.name());
+//        item->setText(1, link.rawUrl());
 
-        mView->addTopLevelItem(item);
+//        mView->addTopLevelItem(item);
 
-    }
+//    }
 
-    mView->header()->setSectionResizeMode(1,QHeaderView::ResizeToContents);
-    mView->setIconSize(QSize(32,32));
+//    mView->header()->setSectionResizeMode(1,QHeaderView::ResizeToContents);
+//    mView->setIconSize(QSize(32,32));
 
-    mView->header()->setStretchLastSection(true);
+//    mView->header()->setStretchLastSection(true);
 
 
 }

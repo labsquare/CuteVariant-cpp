@@ -18,16 +18,16 @@ protected:
 private:
     QList<Field> mAnnFields;
 
-    const QHash<QString, Field> standardField =
-    {
-        {"allele",           {"allele"       ,"ANN"         ,"reference alllee"            , Field::TEXT}},
-        {"consequence",      {"consequence"  ,"ANN"         ,"consequence"                 , Field::TEXT}},
-        {"symbol",           {"gene_name"    ,"ANN"         ,"name of gene"                , Field::TEXT}},
-        {"gene",             {"gene_id"      ,"ANN"         ,"gene iD"                     , Field::TEXT}},
-        {"impact",           {"impact"       ,"ANN"         ,"impact"                      , Field::TEXT}},
-        {"gnomad_af",        {"gnomad_af"    ,"ANN"         ,"gnomAD allele frequency"     , Field::INTEGER}},
+//    const QHash<QString, Field> standardField =
+//    {
+//        {"allele",           {"allele"       ,"ANN"         ,"reference alllee"            , Field::TEXT}},
+//        {"consequence",      {"consequence"  ,"ANN"         ,"consequence"                 , Field::TEXT}},
+//        {"symbol",           {"gene_name"    ,"ANN"         ,"name of gene"                , Field::TEXT}},
+//        {"gene",             {"gene_id"      ,"ANN"         ,"gene iD"                     , Field::TEXT}},
+//        {"impact",           {"impact"       ,"ANN"         ,"impact"                      , Field::TEXT}},
+//        {"gnomad_af",        {"gnomad_af"    ,"ANN"         ,"gnomAD allele frequency"     , Field::INTEGER}},
 
-    };
+//    };
 };
 
 }

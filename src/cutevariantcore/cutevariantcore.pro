@@ -2,7 +2,7 @@ QT -= widgets
 QT += sql
 QT += concurrent
 
-TEMPLATE = lib 
+TEMPLATE = app
 CONFIG += staticlib
 CONFIG -= debug_and_release
 CONFIG += c++14
@@ -19,45 +19,31 @@ unix {
 INCLUDEPATH += "/usr/include/KF5/KArchive"
 }
 
-include(reader/reader.pri)
+# include(reader/reader.pri)
 
-SOURCES += \
-    field.cpp \
-    resource.cpp \
-    sample.cpp \
-    region.cpp \
-    genotype.cpp \
-    variant.cpp \
-    fieldsmodel.cpp \
-    samplemodel.cpp \
-    variantquery.cpp \
-    variantlink.cpp \
-    bedfile.cpp \
-    vqlparser.cpp \
-    variantreaderfactory.cpp \
-    view.cpp \
-    importer.cpp \
-    cutevariant.cpp
-
-
-HEADERS += \
-    field.h \
-    resource.h \
-    sample.h \
-    region.h \
-    genotype.h \
-    variant.h \
-    fieldsmodel.h \
-    samplemodel.h \
-    variantquery.h \
-    variantlink.h \
-    bedfile.h \
-    vqlparser.h \
-    variantreaderfactory.h \
-    view.h \
-    importer.h \
-    cutevariant.h
+ include(datamapper/datamapper.pri)
 
 
 
 TARGET = cutevariantcore
+
+HEADERS += \
+#    bedfile.h \
+#    field.h \
+#    genotype.h \
+#    region.h \
+    sample.h
+#    variant.h \
+#    view.h \
+   # cutevariant.h
+
+SOURCES += \
+#    bedfile.cpp \
+#    field.cpp \
+#    genotype.cpp \
+#    region.cpp \
+    sample.cpp \
+#    variant.cpp \
+#    view.cpp \
+    main.cpp
+  #  cutevariant.cpp

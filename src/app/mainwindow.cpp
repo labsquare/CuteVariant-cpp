@@ -143,7 +143,7 @@ void MainWindow::openFile(const QString &filename)
 
     if (!file.isEmpty())
     {
-        cutevariant->setDatabasePath(file);
+        cutevariant->openDatabase(file);
         reset();
         statusBar()->showMessage(file);
         return;
@@ -293,7 +293,7 @@ void MainWindow::setupActions()
 
 
 
-    mToolBar->setIconSize(QSize(32,32));
+   // mToolBar->setIconSize(QSize(32,32));
 
     // setup toolbar
     mToolBar->addAction(openAction);

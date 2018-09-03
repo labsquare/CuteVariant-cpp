@@ -1,16 +1,16 @@
 #ifndef SAMPLE_H
 #define SAMPLE_H
-#include "resource.h"
+#include <QtCore>
+
 namespace cvar {
-class Sample : public Resource
+class Sample;
+class Sample
 {
 public:
-    Sample();
-    Sample(const QString& name);
+    Sample(const QString& name = QString());
     QVariant phenotype(const QString& key);
 
     const QString& name() const;
-
     void setName(const QString& name);
 
 

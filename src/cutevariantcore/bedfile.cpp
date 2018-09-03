@@ -1,13 +1,8 @@
 #include "bedfile.h"
 namespace cvar {
-BedFile::BedFile()
-    :Resource()
-{
-
-}
 
 BedFile::BedFile(const QString &filename, int count)
-    :Resource(), mFilename(filename), mCount(count)
+    :AbstractRecord("bedfiles"), mFilename(filename), mCount(count)
 {
 
 }
@@ -30,6 +25,26 @@ quint64 BedFile::count() const
 void BedFile::setCount(const quint64 &count)
 {
     mCount = count;
+}
+
+bool BedFile::update()
+{
+
+}
+
+bool BedFile::insert()
+{
+
+}
+
+bool BedFile::remove()
+{
+
+}
+
+void BedFile::fromSql(const QSqlRecord &record)
+{
+
 }
 
 }
