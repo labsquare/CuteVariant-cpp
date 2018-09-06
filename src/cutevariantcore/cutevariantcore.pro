@@ -32,7 +32,8 @@ HEADERS += \
 #    field.h \
 #    genotype.h \
 #    region.h \
-    sample.h
+    sample.h \
+    test.h
 #    variant.h \
 #    view.h \
    # cutevariant.h

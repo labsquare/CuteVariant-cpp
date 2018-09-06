@@ -8,15 +8,17 @@ class Sample
 {
 public:
     Sample(const QString& name = QString());
-    QVariant phenotype(const QString& key);
 
     const QString& name() const;
     void setName(const QString& name);
 
 
+    quint64 id() const;
+    void setId(const quint64 &id);
+
 private:
     QString mName;
-    QHash<QString, QVariant> mPhenotype;
+    quint64 mId;
 };
 }
 #endif // SAMPLE_H

@@ -8,10 +8,6 @@ Sample::Sample(const QString &name)
     setName(name);
 }
 
-QVariant Sample::phenotype(const QString &key)
-{
-    return mPhenotype.value(key);
-}
 
 const QString &Sample::name() const
 {
@@ -21,6 +17,16 @@ const QString &Sample::name() const
 void Sample::setName(const QString &name)
 {
     mName = name;
+}
+
+quint64 Sample::id() const
+{
+    return mId;
+}
+
+void Sample::setId(const quint64 &id)
+{
+    mId = id;
 }
 
 
