@@ -33,7 +33,8 @@ HEADERS += \
 #    genotype.h \
 #    region.h \
     sample.h \
-    test.h
+    test.h \
+    field.h
 #    variant.h \
 #    view.h \
    # cutevariant.h
@@ -46,5 +47,6 @@ SOURCES += \
     sample.cpp \
 #    variant.cpp \
 #    view.cpp \
-    main.cpp
+    main.cpp \
+    field.cpp
   #  cutevariant.cpp

@@ -2,7 +2,7 @@
 namespace cvar {
 
 Field::Field(const QString &name, const QString& category, const QString &description, const Type& type)
-    :AbstractRecord("fields")
+
 {
     setName(name);
     setCategory(category);
@@ -150,30 +150,16 @@ void Field::setExpression(const QString &expression)
     mExpression = expression;
 }
 
-bool Field::update()
+quint64 Field::id() const
 {
-
+    return mId;
 }
 
-bool Field::insert()
+void Field::setId(const quint64 &id)
 {
-
+    mId = id;
 }
 
-bool Field::remove()
-{
-
-}
-
-void Field::fromSql(const QSqlRecord &record)
-{
-
-}
-
-void Field::createTable()
-{
-
-}
 
 
 

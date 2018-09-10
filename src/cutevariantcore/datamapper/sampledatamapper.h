@@ -10,12 +10,15 @@ class SampleDataMapper : public DataMapper<Sample, SampleDataMapper>
 {
 public:
     SampleDataMapper();
-    virtual bool insert(const Sample& record) const override;
-    virtual bool update(const Sample& record) const override;
-    virtual bool remove(const Sample& record) const override;
-    virtual Sample fromSql(const QSqlRecord& record) const override;
+//    virtual bool insert(const QList<Sample>& records) const override;
+//    virtual bool update(const Sample& record) const override;
+//    virtual bool remove(const Sample &record) const override;
+//    virtual bool createTable() const override;
+//    virtual Sample fromSql(const QSqlRecord& record) const override;
 
-    virtual bool createTable()const override;
+
+    virtual QHash<QString, QVariant> bind(const Sample& record) const override ;
+    virtual Sample fromSql(const QSqlRecord& record) const override;
 
 };
 

@@ -18,7 +18,7 @@ public:
 
 private:
     QString mName;
-    quint64 mId;
+    quint64 mId = -1;
 };
 }
 #endif // SAMPLE_H

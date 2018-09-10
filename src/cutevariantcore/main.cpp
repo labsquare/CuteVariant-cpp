@@ -4,7 +4,6 @@
 #include <functional>
 #include <vector>
 #include "sampledatamapper.h"
-
 #include "datamapper.h"
 #include "test.h"
 using namespace std;
@@ -19,13 +18,18 @@ int main(int argc, char **argv)
     if (db.open())
     {
 
-        qDebug()<<cvar::SampleDataMapper::i()->list().count();
+        QList<cvar::Sample> test = {{"sacha"}, {"perrine"}, {"julie"}};
 
-        cvar::Sample s = cvar::SampleDataMapper::i()->list().first();
 
-        cvar::SampleDataMapper::i()->remove(s);
+        cvar::SampleDataMapper::i()->createTable();
+        cvar::SampleDataMapper::i()->insert(test);
 
-        qDebug()<<cvar::SampleDataMapper::i()->list().count();
+        for (auto & s : cvar::SampleDataMapper::i()->list())
+        {
+            qDebug()<<s.name();
+        }
+
+
 
 
     }

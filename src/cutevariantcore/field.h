@@ -1,8 +1,6 @@
 #ifndef FIELD_H
 #define FIELD_H
 #include <QtCore>
-#include "abstractrecord.h"
-#include "sample.h"
 
 namespace cvar {
 
@@ -10,7 +8,7 @@ namespace cvar {
  * \brief The Field class contains Annotation description
  * @see sql field table
  */
-class Field : public AbstractRecord
+class Field
 {
 public:
     enum Type
@@ -52,18 +50,11 @@ public:
     QString expression() const;
     void setExpression(const QString &expression);
 
-    // virtual methods
-    virtual bool update() override;
-    virtual bool insert() override;
-    virtual bool remove() override;
-
-    virtual void fromSql(const QSqlRecord& record) override;
-
-    // static methods
-    static void createTable();
 
 
 
+    quint64 id() const;
+    void setId(const quint64 &id);
 
 private:
     QString mColname;
@@ -72,6 +63,7 @@ private:
     QString mCategory;
     QString mExpression;
     Type mType    = Field::TEXT;
+    quint64 mId;
 
 
 
