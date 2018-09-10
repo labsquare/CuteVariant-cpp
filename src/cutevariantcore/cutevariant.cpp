@@ -439,7 +439,7 @@ QByteArray CuteVariant::iconToData(const QIcon &icon)
     QByteArray inByteArray;
     QBuffer inBuffer(&inByteArray);
     inBuffer.open(QIODevice::WriteOnly);
-    icon.pixmap(32,32).save(&inBuffer,"PNG");
+    //icon.pixmap(32,32).save(&inBuffer,"PNG");
     inBuffer.close();
 
     return inByteArray;

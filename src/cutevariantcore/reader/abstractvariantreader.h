@@ -3,7 +3,6 @@
 #include <QtCore>
 #include "field.h"
 #include "variant.h"
-#include "genotype.h"
 #include "sample.h"
 
 
@@ -33,7 +32,7 @@ public:
      * \brief extract fields
      * \return Field list object
      */
-    virtual QList<Field> genotypeFields() = 0;
+   // virtual QList<Field> genotypeFields() = 0;
 
 
     /*!
@@ -56,7 +55,7 @@ public:
      * \param use it in a while loop : while (readGenotype)...
      * \return true if it reach the end of the line
      */
-    virtual Genotype readGenotype() = 0;
+    //virtual Genotype readGenotype() = 0;
 
 
     virtual QHash<QString, QVariant> metadatas() const {return QHash<QString, QVariant>();}
@@ -65,9 +64,9 @@ public:
 
 
 
-    virtual bool open();
-    virtual void close();
-    bool atEnd();
+    //virtual bool open();
+    //virtual void close();
+   // bool atEnd();
 
     QIODevice * device() const;
 

@@ -4,8 +4,7 @@
 
 namespace cvar {
 class Sample;
-class Sample
-{
+class Sample {
 public:
     Sample(const QString& name = QString());
 
@@ -18,7 +17,7 @@ public:
 
 private:
     QString mName;
-    quint64 mId = -1;
+    quint64 mId = 0;
 };
 }
 #endif // SAMPLE_H

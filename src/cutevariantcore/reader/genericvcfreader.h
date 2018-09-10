@@ -33,7 +33,7 @@ public:
      * \brief extract fields
      * \return Field list object
      */
-    virtual QList<Field> genotypeFields() override;
+  //  virtual QList<Field> genotypeFields() override;
 
 
     /*!
@@ -58,9 +58,9 @@ public:
      * \param use it in a while loop : while (readGenotype)...
      * \return true if it reach the end of the line
      */
-    virtual Genotype readGenotype() override;
+  //  virtual Genotype readGenotype() override;
 
-    virtual bool open() override;
+   // virtual bool open() override;
 
      Format format() const;
 
@@ -84,7 +84,7 @@ public:
     Variant parseVariant(const QString & line);
 
 
-    QList<Genotype> readGenotypeLine(const QString& line);
+ //   QList<Genotype> readGenotypeLine(const QString& line);
 
 
     /*!
@@ -124,7 +124,7 @@ private:
     QList<Sample> mSamples;
     QHash<QString, quint64> mContigs;
 
-    QList<Genotype> mGenotypesOfCurrentLine;
+    // QList<Genotype> mGenotypesOfCurrentLine;
 
     // used to to generate Genotype per sample in genotype read parser
 

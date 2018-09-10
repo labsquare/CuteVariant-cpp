@@ -11,6 +11,7 @@ QList<Field> GenericVCFReader::fields()
 {
     QList<Field> fields;
 
+
     for (const Field& f : parseHeader(QStringLiteral("INFO")))
     {
 
@@ -25,17 +26,17 @@ QList<Field> GenericVCFReader::fields()
 }
 
 //------------------------------------------------------------------
-QList<Field> GenericVCFReader::genotypeFields()
-{
-    return parseHeader(QStringLiteral("FORMAT"));
-}
+//QList<Field> GenericVCFReader::genotypeFields()
+//{
+//    return parseHeader(QStringLiteral("FORMAT"));
+//}
 //------------------------------------------------------------------
 
 QList<Sample> GenericVCFReader::samples()
 {
     QList<Sample> samples;
 
-    if ( device()->open(QIODevice::ReadOnly))
+    if ( device()->reset())
     {
         QTextStream stream(device());
 
@@ -170,84 +171,85 @@ Variant GenericVCFReader::parseVariant(const QString& line)
     return Variant();
 }
 
-Genotype GenericVCFReader::readGenotype()
-{
-    if (mGenotypesOfCurrentLine.isEmpty())
-    {
-        mGenotypesOfCurrentLine = readGenotypeLine(device()->readLine());
-        return mGenotypesOfCurrentLine.takeFirst();
-    }
+//Genotype GenericVCFReader::readGenotype()
+//{
+//    if (mGenotypesOfCurrentLine.isEmpty())
+//    {
+//        mGenotypesOfCurrentLine = readGenotypeLine(device()->readLine());
+//        return mGenotypesOfCurrentLine.takeFirst();
+//    }
 
-    return mGenotypesOfCurrentLine.takeFirst();
-}
+//    return mGenotypesOfCurrentLine.takeFirst();
+//}
 
-QList<Genotype> GenericVCFReader::readGenotypeLine(const QString &line)
-{
-    // return all genotypes find on one line
 
-    QStringList rows = line.split(QChar::Tabulation);
-    if (rows.size() < 10)
-    {
-        qCritical()<<"Cannot read genotype. Wrong fields count";
-        return QList<Genotype>();
-    }
+//QList<Genotype> GenericVCFReader::readGenotypeLine(const QString &line)
+//{
+//    // return all genotypes find on one line
 
-    QString chrom  = rows[0];
-    quint64 pos    = rows[1].toInt();
-    QString ref    = rows[3];
-    QString alt    = rows[4];
+//    QStringList rows = line.split(QChar::Tabulation);
+//    if (rows.size() < 10)
+//    {
+//        qCritical()<<"Cannot read genotype. Wrong fields count";
+//        return QList<Genotype>();
+//    }
 
-    // FORMAT field
-    QStringList cols = rows[8].split(":");
+//    QString chrom  = rows[0];
+//    quint64 pos    = rows[1].toInt();
+//    QString ref    = rows[3];
+//    QString alt    = rows[4];
 
-    // Loop over all sample Genotype FIELDS
-    QList<Genotype> genotypes;
+//    // FORMAT field
+//    QStringList cols = rows[8].split(":");
 
-    for (int i=0; i<mSamples.size(); ++i)
-    {
-        QStringList vals = rows[9+i].split(":");
+//    // Loop over all sample Genotype FIELDS
+//    QList<Genotype> genotypes;
 
-        if (cols.length() != vals.length())
-            qCritical()<<Q_FUNC_INFO<<"genotypes fields and values have different sizes";
+//    for (int i=0; i<mSamples.size(); ++i)
+//    {
+//        QStringList vals = rows[9+i].split(":");
 
-        // save genotype annotation
-        Genotype gen  =  Genotype(chrom,pos,ref,alt,mSamples[i].name());
+//        if (cols.length() != vals.length())
+//            qCritical()<<Q_FUNC_INFO<<"genotypes fields and values have different sizes";
 
-        for (int i=0; i<qMin(cols.length(), vals.length()); ++i)
-            gen.addAnnotation(cols[i], vals[i]);
+//        // save genotype annotation
+//        Genotype gen  =  Genotype(chrom,pos,ref,alt,mSamples[i].name());
 
-        genotypes.append(gen);
-    }
+//        for (int i=0; i<qMin(cols.length(), vals.length()); ++i)
+//            gen.addAnnotation(cols[i], vals[i]);
 
-    return genotypes;
-}
+//        genotypes.append(gen);
+//    }
 
-bool GenericVCFReader::open()
-{
-    // Get samples to process genotype later
-    mSamples = samples();
+//    return genotypes;
+//}
 
-    // get contigs if exists
-    mContigs = contigs();
+//bool GenericVCFReader::open()
+//{
+//    // Get samples to process genotype later
+//    mSamples = samples();
 
-    if (!AbstractVariantReader::open())
-        return false;
+//    // get contigs if exists
+//    mContigs = contigs();
 
-    device()->reset();
+//    if (!AbstractVariantReader::open())
+//        return false;
 
-    // Avoid comment when reading by seeking in the file
-    QString line;
-    int lastPos = 0;
-    do
-    {
-        lastPos = device()->pos();
-        line = device()->readLine();
-    } while (line.startsWith("#"));
+//    device()->reset();
 
-    device()->seek(lastPos);
+//    // Avoid comment when reading by seeking in the file
+//    QString line;
+//    int lastPos = 0;
+//    do
+//    {
+//        lastPos = device()->pos();
+//        line = device()->readLine();
+//    } while (line.startsWith("#"));
 
-    return true;
-}
+//    device()->seek(lastPos);
+
+//    return true;
+//}
 
 GenericVCFReader::Format GenericVCFReader::format() const
 {
@@ -276,7 +278,7 @@ QList<Field> GenericVCFReader::parseHeader(const QString &id)
 
     QList<Field> fields;
 
-    if ( device()->open(QIODevice::ReadOnly))
+    if ( device()->reset())
     {
         QTextStream stream(device());
         QString line;
@@ -284,6 +286,7 @@ QList<Field> GenericVCFReader::parseHeader(const QString &id)
         do
         {
             line = stream.readLine();
+
             // Parse Header line
             if (line.startsWith(QString("##%1").arg(id)))
             {
@@ -295,21 +298,21 @@ QList<Field> GenericVCFReader::parseHeader(const QString &id)
                 QString desc   = match.captured(4);
 
 
-                Field::Type fType = Field::TEXT;
+//                Field::Type fType = Field::TEXT;
 
-                if (type == "String" || type == "Character")
-                    fType = Field::TEXT;
+//                if (type == "String" || type == "Character")
+//                    fType = Field::TEXT;
 
-                if (type == "Integer")
-                    fType = Field::INTEGER;
+//                if (type == "Integer")
+//                    fType = Field::INTEGER;
 
-                if (type == "Float")
-                    fType = Field::REAL;
+//                if (type == "Float")
+//                    fType = Field::REAL;
 
-                if (type == "Flag")
-                    fType = Field::BOOL;
+//                if (type == "Flag")
+//                    fType = Field::BOOL;
 
-                fields.append(Field(name,id,desc, fType));
+//                fields.append(Field(name,id,desc, fType));
 
             }
 

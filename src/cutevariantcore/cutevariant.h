@@ -3,11 +3,7 @@
 #include <QtCore>
 #include <QtSql>
 #include <QSettings>
-#include "variantlink.h"
-#include "view.h"
-#include "importer.h"
-#include "variantquery.h"
-#include "bedfile.h"
+
 
 #define cutevariant cvar::CuteVariant::i()
 
@@ -17,7 +13,6 @@ class VariantQuery;
 
 class Variant;
 class Field;
-class Genotype;
 class Region;
 class Sample;
 

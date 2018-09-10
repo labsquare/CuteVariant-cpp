@@ -4,7 +4,7 @@ namespace cvar{
 
 
 View::View(const QString &name, const QString &description, int count)
-    :AbstractRecord("view"), mName(name), mDescription(description), mCount(count)
+     :mName(name), mDescription(description), mCount(count)
 {
 
 }
@@ -49,24 +49,15 @@ void View::setSql(const QString &sql)
     mSql = sql;
 }
 
-bool View::update()
+quint64 View::id() const
 {
-
+    return mId;
 }
 
-bool View::insert()
+void View::setId(const quint64 &id)
 {
-
+    mId = id;
 }
 
-bool View::remove()
-{
-
-}
-
-void View::fromSql(const QSqlRecord &record)
-{
-
-}
 
 }

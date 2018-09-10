@@ -6,11 +6,11 @@ SampleDataMapper::SampleDataMapper()
     :DataMapper<Sample, SampleDataMapper>("samples")
 {
 
-    addColumn("name", QVariant::String, "NOT NULL");
+    addColumn("name", DataColumn::Text, "NOT NULL");
 
 }
 
-QHash<QString, QVariant> SampleDataMapper::bind(const Sample &record) const
+QHash<QString, QVariant> SampleDataMapper::write(const Sample &record) const
 {
     return
     {
@@ -19,7 +19,7 @@ QHash<QString, QVariant> SampleDataMapper::bind(const Sample &record) const
     };
 }
 
-Sample SampleDataMapper::fromSql(const QSqlRecord &record) const
+Sample SampleDataMapper::read(const QSqlRecord &record) const
 {
     Sample sample;
     sample.setId(record.value("id").toInt());

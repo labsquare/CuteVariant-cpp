@@ -7,20 +7,20 @@ AbstractVariantReader::AbstractVariantReader(QIODevice *device)
 
 }
 
-bool AbstractVariantReader::open()
-{
-    return device()->open(QIODevice::ReadOnly);
-}
+//bool AbstractVariantReader::open()
+//{
+//    return device()->open(QIODevice::ReadOnly);
+//}
 
-void AbstractVariantReader::close()
-{
-    device()->close();
-}
+//void AbstractVariantReader::close()
+//{
+//    device()->close();
+//}
 
-bool AbstractVariantReader::atEnd()
-{
-    return device()->atEnd();
-}
+//bool AbstractVariantReader::atEnd()
+//{
+//    return device()->atEnd();
+//}
 
 QIODevice * AbstractVariantReader::device() const
 {

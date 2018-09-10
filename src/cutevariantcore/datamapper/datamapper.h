@@ -2,46 +2,10 @@
 #define DATAMAPPER_H
 #include <QtCore>
 #include <QtSql>
+#include "datacolumn.h"
 
 namespace cvar {
 class DataColumn;
-class DataColumn {
-
-public:
-    DataColumn(const QString& name = QString("default"), QVariant::Type type = QVariant::String, const QString& option = QString())
-        :mName(name), mType(type), mOption(option)
-    {}
-
-    QString toSql() const {
-        return QString("%1 %2 %3").arg(mName, typeName(mType),mOption);
-    }
-
-    static QString typeName(QVariant::Type type)
-    {
-        switch (type)
-        {
-        case QVariant::Int : return "INTEGER";
-        case QVariant::Double : return "REAL";
-        case QVariant::Bool : return "INTEGER";
-        case QVariant::String : return "TEXT";
-        default: return "TEXT";
-        }
-    }
-
-
-    QString name() const { return mName ;}
-
-    QVariant::Type type() const {return mType;}
-
-    QString option() const {return mOption;}
-
-private:
-
-    QString mName;
-    QVariant::Type mType;
-    QString mOption;
-
-};
 
 
 template <typename T, typename S>
@@ -68,12 +32,12 @@ public:
         return mTableName;
     }
 
-    virtual T fromSql(const QSqlRecord& record) const  = 0;
+    virtual T read(const QSqlRecord& record) const  = 0;
 
-    virtual QHash<QString, QVariant> bind(const T& record) const = 0;
+    virtual QHash<QString, QVariant> write(const T& record) const = 0;
 
     //-----------------------------------------------------------------------------------------------
-    virtual bool insert(QList<T>& records) const
+    virtual bool insert(const QList<T>& records) const
     {
 
 
@@ -92,7 +56,8 @@ public:
 
         for (auto& record : records)
         {
-            auto values = bind(record);
+            auto values = write(record);
+            qDebug()<<values;
 
             for (int i=0; i< columns.size(); ++i)
                 query.bindValue(i, values[columns.at(i)]);
@@ -103,22 +68,28 @@ public:
                 qWarning()<<Q_FUNC_INFO<<query.lastError().text();
             }
 
-            record.setId(query.lastInsertId().toInt());
+           // record.setId(query.lastInsertId().toInt());
         }
 
         QSqlDatabase::database().commit();
 
+        if (query.lastError().isValid())
+            return false;
 
         return true;
     }
+    bool insertOne(const T& record) const
+    {
+        insert({record});
 
+    }
     //-----------------------------------------------------------------------------------------------
 
     virtual bool update(const T& record) const {
 
         QStringList columns = columnNames();
         QStringList set;
-        auto values = bind(record);
+        auto values = write(record);
 
         for (const QString& c : columns)
         {
@@ -150,7 +121,7 @@ public:
     //-----------------------------------------------------------------------------------------------
     virtual bool remove(const T& record) const {
 
-        auto b = bind(record);
+        auto b = write(record);
         if (!b.contains("id")){
             qDebug()<<Q_FUNC_INFO<<"no id avaible for record";
             return false;
@@ -174,8 +145,13 @@ public:
         QSqlQuery query;
         query.exec(QStringLiteral("DROP TABLE IF EXISTS %1").arg(tableName()));
 
+        QStringList columnTypes;
 
-        if (!query.exec(QStringLiteral("CREATE TABLE %1 (%2)").arg(tableName()).arg(columnNames().join(","))))
+        for (auto& col : mColumns)
+            columnTypes.append(QString("%1 %2 %3").arg(col.name()).arg(DataColumn::typeToName(col.type())).arg(col.option()));
+
+
+        if (!query.exec(QStringLiteral("CREATE TABLE %1 (%2)").arg(tableName()).arg(columnTypes.join(","))))
         {
             qDebug()<<Q_FUNC_INFO<<query.executedQuery();
             qDebug()<<Q_FUNC_INFO<<query.lastError().text();
@@ -192,10 +168,15 @@ public:
         QSqlQuery query;
 
         T record;
-        if (query.exec(QString("SELECT rowid, * FROM %1 WHERE rowid = %2").arg(tableName(), id)))
+        if (query.exec(QString("SELECT rowid, * FROM %1 WHERE rowid = %2").arg(tableName()).arg(id)))
         {
             query.next();
-            record = fromSql(query.record());
+            record = read(query.record());
+        }
+
+        else {
+            qDebug()<<Q_FUNC_INFO<<query.executedQuery();
+            qDebug()<<Q_FUNC_INFO<<query.lastError().text();
         }
 
         return record;
@@ -217,7 +198,7 @@ public:
         if (success)
         {
             while (query.next())
-                records.append(fromSql(query.record()));
+                records.append(read(query.record()));
         }
 
         return records;
@@ -227,7 +208,7 @@ public:
 
 protected:
 
-    void addColumn(const QString& name, QVariant::Type type, const QString& option = QString()){
+    void addColumn(const QString& name, DataColumn::Type type, const QString& option = QString()){
 
         mColumns[name] = DataColumn{name, type, option};
 

@@ -4,10 +4,16 @@
 #include <functional>
 #include <vector>
 #include "sampledatamapper.h"
+#include "fielddatamapper.h"
+#include "regiondatamapper.h"
+#include "variantdatamapper.h"
 #include "datamapper.h"
 #include "test.h"
-using namespace std;
 
+#include "genericvcfreader.h"
+
+using namespace std;
+using namespace cvar;
 
 int main(int argc, char **argv)
 {
@@ -18,16 +24,46 @@ int main(int argc, char **argv)
     if (db.open())
     {
 
-        QList<cvar::Sample> test = {{"sacha"}, {"perrine"}, {"julie"}};
+        QList<Field> fields = {
+            {"chr", "variants","chromosom name", QVariant::String},
+            {"pos", "variants","chromosom name", QVariant::DateTime},
+            {"alt", "variants","chromosom name", QVariant::Int}
+        };
 
 
-        cvar::SampleDataMapper::i()->createTable();
-        cvar::SampleDataMapper::i()->insert(test);
+        FieldDataMapper::i()->createTable();
+        FieldDataMapper::i()->insert(fields);
 
-        for (auto & s : cvar::SampleDataMapper::i()->list())
+        VariantDataMapper::i()->setDynamicFields(fields);
+        VariantDataMapper::i()->createTable();
+
+
+
+
+
+        QFile file("/home/sacha/TRIO1.family.vcf");
+        if (file.open(QIODevice::ReadOnly))
         {
-            qDebug()<<s.name();
+            qDebug()<<"open";
+            cvar::GenericVCFReader reader(&file);
+
+//            for (auto& s : reader.samples())
+//            {
+//                qDebug()<<s.name();
+//            }
+
+
+            for (auto& f : reader.fields())
+            {
+                qDebug()<<f.name();
+            }
+
+
         }
+
+
+
+
 
 
 

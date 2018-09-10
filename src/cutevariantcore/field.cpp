@@ -1,7 +1,7 @@
 #include "field.h"
 namespace cvar {
 
-Field::Field(const QString &name, const QString& category, const QString &description, const Type& type)
+Field::Field(const QString &name, const QString& category, const QString &description, QVariant::Type type)
 
 {
     setName(name);
@@ -25,46 +25,16 @@ const QString &Field::description() const
     return mDescription;
 }
 
-Field::Type Field::type() const
+QVariant::Type Field::type() const
 {
     return mType;
 }
 
 QString Field::typeName() const
 {
-    if (type() == Field::TEXT)
-        return "TEXT";
-
-    if (type() == Field::REAL)
-        return "REAL";
-
-    if (type() == Field::INTEGER)
-        return "INTEGER";
-
-    if (type() == Field::BOOL)
-        return "BOOL";
-
-    return "TEXT";
+    return QVariant::typeToName(mType);
 }
 
-QString Field::sqliteType() const
-{
-    if (type() == Field::TEXT)
-        return "TEXT";
-
-    if (type() == Field::REAL)
-        return "REAL";
-
-    if (type() == Field::INTEGER)
-        return "INTEGER";
-
-    // Sqlite doesn't have bool type
-    if (type() == Field::BOOL)
-        return "INTEGER";
-
-    return "TEXT";
-
-}
 
 QString Field::category() const
 {
@@ -102,7 +72,7 @@ void Field::setDescription(const QString &description)
     mDescription = simplified(description);
 }
 
-void Field::setType(Field::Type type)
+void Field::setType(QVariant::Type type)
 {
     mType = type;
 }
@@ -110,19 +80,19 @@ void Field::setType(Field::Type type)
 void Field::setType(const QString &name)
 {
     //By default
-    setType(Field::TEXT);
+    setType(QVariant::nameToType(name.toStdString().data()));
 
-    if (name == "TEXT")
-        setType(Field::TEXT);
+//    if (name == "TEXT")
+//        setType(Field::TEXT);
 
-    if (name == "BOOL")
-        setType(Field::BOOL);
+//    if (name == "BOOL")
+//        setType(Field::BOOL);
 
-    if (name == "INTEGER")
-        setType(Field::INTEGER);
+//    if (name == "INTEGER")
+//        setType(Field::INTEGER);
 
-    if (name == "REAL")
-        setType(Field::REAL);
+//    if (name == "REAL")
+//        setType(Field::REAL);
 }
 
 void Field::setCategory(const QString &category)

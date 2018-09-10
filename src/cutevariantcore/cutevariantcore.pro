@@ -19,8 +19,7 @@ unix {
 INCLUDEPATH += "/usr/include/KF5/KArchive"
 }
 
-# include(reader/reader.pri)
-
+ include(reader/reader.pri)
  include(datamapper/datamapper.pri)
 
 
@@ -29,24 +28,22 @@ TARGET = cutevariantcore
 
 HEADERS += \
 #    bedfile.h \
-#    field.h \
 #    genotype.h \
-#    region.h \
+    region.h \
     sample.h \
     test.h \
-    field.h
-#    variant.h \
-#    view.h \
-   # cutevariant.h
+    field.h \
+    variant.h \
+    view.h \
+    cutevariant.h
 
 SOURCES += \
 #    bedfile.cpp \
-#    field.cpp \
 #    genotype.cpp \
-#    region.cpp \
+    region.cpp \
     sample.cpp \
-#    variant.cpp \
-#    view.cpp \
+    variant.cpp \
+    view.cpp \
     main.cpp \
-    field.cpp
-  #  cutevariant.cpp
+    field.cpp \
+    cutevariant.cpp

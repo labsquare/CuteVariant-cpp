@@ -1,10 +1,9 @@
 #ifndef VARIANT_H
 #define VARIANT_H
 #include <QtCore>
-#include "abstractrecord.h"
 namespace cvar{
 class Variant;
-class Variant : public AbstractRecord
+class Variant
 {
 public:
     Variant(const QString& chr = QString(), quint64 pos = 0, const QString& ref = QString(), const QString& alt = QString());
@@ -63,17 +62,9 @@ public:
     void setScore(int score);
 
 
-    // virtual methods
-    virtual bool update() override;
-    virtual bool insert() override;
-    virtual bool remove() override;
 
-    virtual void fromSql(const QSqlRecord& record) override;
-
-    // static methods
-    static void createTable();
-
-
+    quint64 id() const;
+    void setId(const quint64 &id);
 
 private:
     quint64 mBin = 0;
@@ -87,6 +78,8 @@ private:
     QString mComment;
     int mScore = 0;
     bool mIsFavoris = false;
+    quint64 mId = 0;
+
 
 
     QHash<QString,QVariant> mAnnotations;

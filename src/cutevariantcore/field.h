@@ -1,7 +1,7 @@
 #ifndef FIELD_H
 #define FIELD_H
 #include <QtCore>
-
+#include "datacolumn.h"
 namespace cvar {
 
 /*!
@@ -11,23 +11,18 @@ namespace cvar {
 class Field
 {
 public:
-    enum Type
-    {
-        INTEGER,
-        REAL,
-        TEXT,
-        BOOL
-    };
 
-    Field(const QString& name = QString() ,const QString& category = QString() , const QString& description = QString(), const Type& type = Field::TEXT);
+    Field(const QString& name = QString(),
+          const QString& category = QString(),
+          const QString& description = QString(),
+          QVariant::Type type = QVariant::String);
 
     const QString& colname() const;
     const QString &name() const;
     const QString &description() const;
-    Type type() const;
+    QVariant::Type type() const;
 
     QString typeName() const;
-    QString sqliteType() const;
     QString category() const;
 
     /*!
@@ -40,7 +35,7 @@ public:
     void setColname(const QString& colname);
     void setName(const QString& name);
     void setDescription(const QString& description);
-    void setType(Type type);
+    void setType(QVariant::Type type);
     void setType(const QString& name);
     void setCategory(const QString& category);
 
@@ -62,7 +57,7 @@ private:
     QString mDescription;
     QString mCategory;
     QString mExpression;
-    Type mType    = Field::TEXT;
+    QVariant::Type mType    = QVariant::String;
     quint64 mId;
 
 

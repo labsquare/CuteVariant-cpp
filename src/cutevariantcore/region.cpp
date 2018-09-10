@@ -2,8 +2,7 @@
 namespace cvar {
 
 Region::Region(const QString &chromosom, quint64 start, quint64 end)
-    :AbstractRecord("regions"),
-      mChromosom(chromosom), mStart(start), mEnd(end)
+    :mChromosom(chromosom), mStart(start), mEnd(end)
 {
 
 }
@@ -43,23 +42,14 @@ quint64 Region::size() const
     return mEnd - mStart;
 }
 
-bool Region::update()
+quint64 Region::id() const
 {
-
+    return mId;
 }
 
-bool Region::insert()
+void Region::setId(const quint64 &id)
 {
-
+    mId = id;
 }
 
-bool Region::remove()
-{
-
-}
-
-void Region::fromSql(const QSqlRecord &record)
-{
-
-}
 }
