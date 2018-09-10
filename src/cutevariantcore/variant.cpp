@@ -8,6 +8,7 @@ static QList<int> binOffsets = {512+64+8+1, 64+8+1, 8+1, 1, 0};
 
 namespace cvar {
 Variant::Variant(const QString &chr, quint64 pos, const QString &ref, const QString &alt)
+    :mChr(chr), mPos(pos), mRef(ref), mAlt(alt)
 {
 
 }

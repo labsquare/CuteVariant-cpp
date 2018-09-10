@@ -24,18 +24,18 @@ int main(int argc, char **argv)
     if (db.open())
     {
 
-        QList<Field> fields = {
-            {"chr", "variants","chromosom name", QVariant::String},
-            {"pos", "variants","chromosom name", QVariant::DateTime},
-            {"alt", "variants","chromosom name", QVariant::Int}
-        };
+        //        QList<Field> fields = {
+        //            {"chr", "variants","chromosom name", QVariant::String},
+        //            {"pos", "variants","chromosom name", QVariant::DateTime},
+        //            {"alt", "variants","chromosom name", QVariant::Int}
+        //        };
 
 
-        FieldDataMapper::i()->createTable();
-        FieldDataMapper::i()->insert(fields);
+        //        FieldDataMapper::i()->createTable();
+        //        FieldDataMapper::i()->insert(fields);
 
-        VariantDataMapper::i()->setDynamicFields(fields);
-        VariantDataMapper::i()->createTable();
+        //        VariantDataMapper::i()->setDynamicFields(fields);
+        //        VariantDataMapper::i()->createTable();
 
 
 
@@ -47,16 +47,35 @@ int main(int argc, char **argv)
             qDebug()<<"open";
             cvar::GenericVCFReader reader(&file);
 
-//            for (auto& s : reader.samples())
-//            {
-//                qDebug()<<s.name();
-//            }
+            //            for (auto& s : reader.samples())
+            //            {
+            //                qDebug()<<s.name();
+            //            }
 
 
-            for (auto& f : reader.fields())
+            QList<Field> fields =  reader.fields();
+
+//            FieldDataMapper::i()->createTable();
+//            FieldDataMapper::i()->insert(fields);
+            VariantDataMapper::i()->setDynamicFields(fields);
+//            VariantDataMapper::i()->createTable();
+
+            file.open(QIODevice::ReadOnly);
+            file.reset();
+            file.seek(0);
+
+            VariantDataMapper::i()->beginInsert();
+
+            while (!file.atEnd())
             {
-                qDebug()<<f.name();
+                Variant v = reader.readVariant();
+
+                VariantDataMapper::i()->bulkInsert(v);
+
             }
+
+
+             VariantDataMapper::i()->endInsert();
 
 
         }

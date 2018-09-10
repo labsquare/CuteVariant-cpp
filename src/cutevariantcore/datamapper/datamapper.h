@@ -206,6 +206,48 @@ public:
     }
 //-----------------------------------------------------------------------------------------------
 
+
+    void beginInsert()
+    {
+
+        QStringList columns  = columnNames();
+        QStringList escape_columns;
+
+        for (const QString& c : columns)
+            escape_columns.append(QStringLiteral("`%1`").arg(c));
+
+        QSqlDatabase::database().transaction();
+
+
+        bulkQuery.prepare(QString("INSERT INTO %1 (%2) VALUES (%3)").arg(tableName(),
+                                                                     escape_columns.join(","),
+                                                                     QString("?").repeated(columns.size()).split("", QString::SkipEmptyParts).join(",")));
+
+    }
+
+    void bulkInsert(const T& record){
+
+            auto values = write(record);
+
+            for (int i=0; i< columnNames().size(); ++i)
+                bulkQuery.bindValue(i, values[columnNames().at(i)]);
+
+            if (!bulkQuery.exec())
+            {
+                qWarning()<<Q_FUNC_INFO<<bulkQuery.lastQuery();
+                qWarning()<<Q_FUNC_INFO<<bulkQuery.lastError().text();
+            }
+
+    }
+
+
+    void endInsert()
+    {
+
+        QSqlDatabase::database().commit();
+
+    }
+
 protected:
 
     void addColumn(const QString& name, DataColumn::Type type, const QString& option = QString()){
@@ -213,6 +255,11 @@ protected:
         mColumns[name] = DataColumn{name, type, option};
 
     }
+
+
+
+
+    QSqlQuery bulkQuery;
 
 
     QStringList columnNames() const {

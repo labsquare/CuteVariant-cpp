@@ -111,6 +111,8 @@ public:
     QHash<QString, QVariant> metadatas() const;
 
 
+
+
 private:
     // special INFO field id like ANN, SnpEff..
     // dot not manage them

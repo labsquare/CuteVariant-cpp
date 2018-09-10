@@ -10,10 +10,21 @@ VariantDataMapper::VariantDataMapper()
 Variant VariantDataMapper::read(const QSqlRecord &record) const
 {
 
+
 }
 
 QHash<QString, QVariant> VariantDataMapper::write(const Variant &record) const
 {
+    QHash<QString, QVariant> binding;
+
+    for (const Field& f : mDynamicFields){
+
+        binding[f.colname()] = record.annotation(f.colname());
+
+    }
+
+
+    return binding;
 
 }
 
@@ -36,8 +47,6 @@ void VariantDataMapper::setDynamicFields(const QList<Field> &dynamicFields)
     mDynamicFields = dynamicFields;
 
     for (const Field& f : mDynamicFields){
-
-        qDebug()<<DataColumn::typeFromQt(f.type());
 
         addColumn(f.colname(), DataColumn::typeFromQt(f.type()));
 
