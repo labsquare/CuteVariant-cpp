@@ -12,6 +12,7 @@ class Field
 {
 public:
 
+
     Field(const QString& name = QString(),
           const QString& category = QString(),
           const QString& description = QString(),
@@ -45,11 +46,10 @@ public:
     QString expression() const;
     void setExpression(const QString &expression);
 
-
-
-
     quint64 id() const;
     void setId(const quint64 &id);
+
+    static Field standardField(const QString& name);
 
 private:
     QString mColname;
@@ -59,6 +59,24 @@ private:
     QString mExpression;
     QVariant::Type mType    = QVariant::String;
     quint64 mId;
+
+
+//     QHash<QString, Field> STANDARD_FIELDS =
+//    {
+
+//        {"test", Field()}
+
+//    };
+//        {"allele",                 {"allele"        ,"ANN"         ,"reference alllele"          , QVariant::String}},
+//        {"consequence",            {"consequence"   ,"ANN"         ,"consequence"                , QVariant::String}},
+//        {"impact",                 {"impact"        ,"ANN"         ,"name of gene"               , QVariant::String}},
+//        {"gene_name",              {"gene_name"     ,"ANN"         ,"gene iD"                    , QVariant::String}},
+//        {"gene_id",                {"gene_id"       ,"ANN"         ,"impact"                     , QVariant::String}},
+//        {"feature_type",           {"feature_type"  ,"ANN"         ,"impact"                     , QVariant::String}},
+//        {"feature_id",             {"feature_id"    ,"ANN"         ,"impact"                     , QVariant::String}},
+//        {"biotype",                {"biotype"       ,"ANN"         ,"impact"                     , QVariant::String}},
+//        {"hgvs_p",                 {"hgvs_p"        ,"ANN"         ,"impact"                     , QVariant::String}},
+//        {"hgvs_c",                 {"hgvs_c"        ,"ANN"         ,"impact"                     , QVariant::String}},
 
 
 

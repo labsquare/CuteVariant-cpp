@@ -106,6 +106,8 @@ QHash<QString, quint64> GenericVCFReader::contigs()
 //------------------------------------------------------------------
 Variant GenericVCFReader::readVariant()
 {
+    if (!mVariantBuffer.isEmpty())
+        return mVariantBuffer.takeLast();
 
     QString line;
 
@@ -116,24 +118,22 @@ Variant GenericVCFReader::readVariant()
     } while (line.startsWith("#"));
 
 
-//    if (!mVariantBuffer.isEmpty())
-//        return mVariantBuffer.takeLast();
 
     Variant variant = parseVariant(line);
 
+    // create duplicate variant per annotation
+    for (const QString& key : mAnnParser.keys())
+    {
+        // ex : ANN=C|...
+        if (variant.annotations().contains("INFO_"+key)){
+            auto variants = mAnnParser[key]->parseVariant(variant);
+            mVariantBuffer.append(variants);
+        }
 
-    mVariantBuffer.append(variant);
+    }
 
-    //    // create duplicate variant per annotation
-    //    for (const QString& key : mAnnParser.keys())
-    //    {
-    //        // ex : ANN=C|...
-    //        if (variant.annotations().contains(key))
-    //            mVariantBuffer.append(mAnnParser[key]->parseVariant(variant));
-    //    }
-
-//    if (mVariantBuffer.isEmpty())
-//        mVariantBuffer.append(variant);
+    if (mVariantBuffer.isEmpty())
+        mVariantBuffer.append(variant);
 
     return mVariantBuffer.takeLast();
 
@@ -163,9 +163,9 @@ Variant GenericVCFReader::parseVariant(const QString& line)
     QString info   = rows[7];
 
     Variant variant(chrom,pos, ref,alt);
-//    variant.setRsId(rsid);
-//    variant.setQual(qual.toDouble());
-//    variant.setFilter(filter);
+    //    variant.setRsId(rsid);
+    //    variant.setQual(qual.toDouble());
+    //    variant.setFilter(filter);
     variant.setBin(Variant::maxUcscBin(pos-1, pos));
 
     variant.addAnnotation("VARIANTS_QUAL", qual);

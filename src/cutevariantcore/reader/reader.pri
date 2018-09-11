@@ -7,7 +7,6 @@ HEADERS += \
     $$PWD/snpeffannotationparser.h \
 #    $$PWD/snpeffoldannotationparser.h \
 #    $$PWD/vepannotationparser.h \
-    $$PWD/standardfields.h
 
 SOURCES += \
     $$PWD/abstractannotationparser.cpp \

@@ -1,6 +1,11 @@
 #include "field.h"
 namespace cvar {
 
+
+
+
+
+
 Field::Field(const QString &name, const QString& category, const QString &description, QVariant::Type type)
 
 {
@@ -38,7 +43,7 @@ QString Field::typeName() const
 
 QString Field::category() const
 {
- return mCategory;
+    return mCategory;
 }
 
 QString Field::simplified(const QString &name)
@@ -82,17 +87,17 @@ void Field::setType(const QString &name)
     //By default
     setType(QVariant::nameToType(name.toStdString().data()));
 
-//    if (name == "TEXT")
-//        setType(Field::TEXT);
+    //    if (name == "TEXT")
+    //        setType(Field::TEXT);
 
-//    if (name == "BOOL")
-//        setType(Field::BOOL);
+    //    if (name == "BOOL")
+    //        setType(Field::BOOL);
 
-//    if (name == "INTEGER")
-//        setType(Field::INTEGER);
+    //    if (name == "INTEGER")
+    //        setType(Field::INTEGER);
 
-//    if (name == "REAL")
-//        setType(Field::REAL);
+    //    if (name == "REAL")
+    //        setType(Field::REAL);
 }
 
 void Field::setCategory(const QString &category)
@@ -128,6 +133,11 @@ quint64 Field::id() const
 void Field::setId(const quint64 &id)
 {
     mId = id;
+}
+
+Field Field::standardField(const QString &name)
+{
+
 }
 
 

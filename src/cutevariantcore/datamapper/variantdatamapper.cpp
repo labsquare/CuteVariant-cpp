@@ -5,6 +5,7 @@ VariantDataMapper::VariantDataMapper()
     :DataMapper<Variant, VariantDataMapper>("variants")
 {
 
+    addColumn("bin",DataColumn::Integer, "NOT NULL");
     addColumn("chr",DataColumn::Text, "NOT NULL");
     addColumn("pos",DataColumn::Integer, "NOT NULL");
     addColumn("ref",DataColumn::Text);
@@ -19,8 +20,9 @@ Variant VariantDataMapper::fromSql(const QSqlRecord &record) const
 {
 
     Variant variant;
+    variant.setBin(record.value("bin").toUInt());
     variant.setChr(record.value("chr").toString());
-    variant.setPos(record.value("pos").toInt());
+    variant.setPos(record.value("pos").toUInt());
     variant.setRef(record.value("ref").toString());
     variant.setAlt(record.value("alt").toString());
     variant.setFavoris(record.value("favoris").toBool());
@@ -35,6 +37,7 @@ QHash<QString, QVariant> VariantDataMapper::toSql(const Variant &record) const
 {
     QHash<QString, QVariant> b;
 
+    b["bin"]     = record.bin();
     b["chr"]     = record.chromosom();
     b["pos"]     = record.position();
     b["ref"]     = record.ref();
@@ -43,10 +46,10 @@ QHash<QString, QVariant> VariantDataMapper::toSql(const Variant &record) const
     b["score"]   = record.score();
     b["comment"] = record.comment();
 
+    // add annotation
     for (const Field& f : mDynamicFields){
-//        qDebug()<<"COLNAME"<<f.colname();
-//        qDebug()<<"KEYS"<<record.annotations().keys();
 
+        //qDebug()<<record.annotations().keys();
         b[f.colname()] = record.annotation(f.colname());
 
     }
