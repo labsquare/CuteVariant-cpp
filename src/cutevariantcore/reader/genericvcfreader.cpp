@@ -4,7 +4,7 @@ namespace cvar {
 GenericVCFReader::GenericVCFReader(QIODevice *device)
     :AbstractVariantReader(device)
 {
-
+    mSamples = samples();
 }
 //------------------------------------------------------------------
 QList<Field> GenericVCFReader::fields()
@@ -15,6 +15,18 @@ QList<Field> GenericVCFReader::fields()
     fields.append(Field("FILTER","variants","filter", QVariant::String));
     fields.append(Field("RSID","variants","dbSnp ID ", QVariant::String));
 
+    // add samples as fields
+
+    auto genotypes =  parseHeader(QStringLiteral("FORMAT"));
+
+    for (const Sample& s : mSamples)
+    {
+        for (const Field& f : genotypes)
+            fields.append(Field(s.name()+"_"+f.name(),"samples",f.description(), f.type()));
+
+    }
+
+    // add annotation as fields
 
     for (const Field& f : parseHeader(QStringLiteral("INFO")))
     {
@@ -25,9 +37,6 @@ QList<Field> GenericVCFReader::fields()
         else
             fields.append(f);
     }
-
-
-
 
     return fields;
 }
@@ -43,7 +52,7 @@ QList<Sample> GenericVCFReader::samples()
 {
     QList<Sample> samples;
 
-    if ( device()->reset())
+    if (device()->open(QIODevice::ReadOnly))
     {
         QTextStream stream(device());
 
@@ -171,6 +180,33 @@ Variant GenericVCFReader::parseVariant(const QString& line)
     variant.addAnnotation("VARIANTS_QUAL", qual);
     variant.addAnnotation("VARIANTS_FILTER", filter);
     variant.addAnnotation("VARIANTS_RSID", rsid);
+
+
+
+
+    // parse samples format
+    if (rows.size() > 8)
+    {
+        QStringList formats = rows[8].split(":");
+
+        for (int i=9; i<rows.size(); ++i)
+        {
+            QString sample     = mSamples.at(9-i).name();
+            QStringList values = rows[i].split(":");
+
+            for (int j=0; j<formats.size(); j++)
+            {
+                QString colname = QString("SAMPLES_%1_%2").arg(sample, formats[j]);
+                variant.addAnnotation(colname, values[j]);
+
+            }
+
+
+
+        }
+    }
+
+
 
 
     // parse annotation info
@@ -304,7 +340,7 @@ QList<Field> GenericVCFReader::parseHeader(const QString &id)
 
     QList<Field> fields;
 
-    if ( device()->reset())
+    if (device()->open(QIODevice::ReadOnly))
     {
         QTextStream stream(device());
         QString line;

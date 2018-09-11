@@ -41,42 +41,47 @@ int main(int argc, char **argv)
 
 
 
-        QFile file("/home/sacha/Dev/CuteVariant/exemples/vcf/snpeff.example.vcf");
-        if (file.open(QIODevice::ReadOnly))
+        QFile file("/tmp/test2.vcf");
+
+        qDebug()<<"open";
+        cvar::GenericVCFReader reader(&file);
+
+        //            for (auto& s : reader.samples())
+        //            {
+        //                qDebug()<<s.name();
+        //            }
+
+
+        QList<Field> fields =  reader.fields();
+
+
+        FieldDataMapper::i()->createTable();
+        FieldDataMapper::i()->insert(fields);
+        VariantDataMapper::i()->setDynamicFields(fields);
+        VariantDataMapper::i()->createTable();
+
+        SampleDataMapper::i()->createTable();
+        SampleDataMapper::i()->insert(reader.samples());
+
+
+
+        SampleDataMapper::i()->createTable();
+        SampleDataMapper::i()->insert(reader.samples());
+
+        file.open(QIODevice::ReadOnly);
+
+        VariantDataMapper::i()->beginBulkInsert();
+
+        while (!file.atEnd())
         {
-            qDebug()<<"open";
-            cvar::GenericVCFReader reader(&file);
-
-            //            for (auto& s : reader.samples())
-            //            {
-            //                qDebug()<<s.name();
-            //            }
-
-
-            QList<Field> fields =  reader.fields();
-
-
-            FieldDataMapper::i()->createTable();
-            FieldDataMapper::i()->insert(fields);
-            VariantDataMapper::i()->setDynamicFields(fields);
-            VariantDataMapper::i()->createTable();
-
-            file.open(QIODevice::ReadOnly);
-            file.reset();
-            file.seek(0);
-
-            VariantDataMapper::i()->beginBulkInsert();
-
-            while (!file.atEnd())
-            {
-                VariantDataMapper::i()->bulkInsert(reader.readVariant());
-            }
-
-
-            VariantDataMapper::i()->endBulkInsert();
-
-
+            VariantDataMapper::i()->bulkInsert(reader.readVariant());
         }
+
+
+        VariantDataMapper::i()->endBulkInsert();
+
+
+
 
 
 

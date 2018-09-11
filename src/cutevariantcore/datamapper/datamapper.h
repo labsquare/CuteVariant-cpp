@@ -57,7 +57,6 @@ public:
         for (auto& record : records)
         {
             auto values = toSql(record);
-            qDebug()<<values;
 
             for (int i=0; i< columns.size(); ++i)
                 query.bindValue(i, values[columns.at(i)]);
