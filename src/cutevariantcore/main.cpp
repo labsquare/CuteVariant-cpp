@@ -7,6 +7,7 @@
 #include "fielddatamapper.h"
 #include "regiondatamapper.h"
 #include "variantdatamapper.h"
+#include "viewdatamapper.h"
 #include "datamapper.h"
 #include "test.h"
 
@@ -63,10 +64,15 @@ int main(int argc, char **argv)
         SampleDataMapper::i()->createTable();
         SampleDataMapper::i()->insert(reader.samples());
 
+        ViewDataMapper::i()->createTable();
 
 
         SampleDataMapper::i()->createTable();
         SampleDataMapper::i()->insert(reader.samples());
+
+
+        RegionDataMapper::i()->createTable();
+        RegionDataMapper::i()->insertOne({"chr3", 10, 400});
 
         file.open(QIODevice::ReadOnly);
 
