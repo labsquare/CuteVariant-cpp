@@ -3,10 +3,9 @@ QT += sql
 QT += concurrent
 
 TEMPLATE = app
-CONFIG += staticlib
-CONFIG -= debug_and_release
+#CONFIG += staticlib
+#CONFIG -= debug_and_release
 CONFIG += c++14
-QMAKE_CXXFLAGS += -std=c++14
 
 Debug:DESTDIR = $$PWD/../bin
 Release:DESTDIR = $$PWD/../bin

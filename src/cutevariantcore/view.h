@@ -25,6 +25,15 @@ public:
     quint64 id() const;
     void setId(const quint64 &id);
 
+    View unionWith(const View& other) const;
+    View intersectWith(const View& other) const;
+    View exceptWith(const View& other) const;
+
+    View operator+(const View& other) const;
+    View operator-(const View& other) const;
+    View operator&(const View& other) const;
+
+
 private:
     QString mName;
     QString mDescription;
