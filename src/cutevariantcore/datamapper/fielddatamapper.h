@@ -9,8 +9,8 @@ public:
     FieldDataMapper();
 
 
-    virtual QHash<QString, QVariant> write(const Field& record) const override ;
-    virtual Field read(const QSqlRecord& record) const override;
+    virtual QHash<QString, QVariant> toSql(const Field& record) const override ;
+    virtual Field fromSql(const QSqlRecord& record) const override;
 };
 }
 #endif // FIELDDATAMAPPER_H

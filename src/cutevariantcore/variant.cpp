@@ -63,16 +63,6 @@ void Variant::setAlt(const QString &alt)
     mAlt = alt;
 }
 
-void Variant::setRsId(const QString &rsid)
-{
-    mRsId = rsid;
-}
-
-void Variant::setQual(double qual)
-{
-    mQual = qual;
-}
-
 bool Variant::isNull() const
 {
     return chromosom().isEmpty();
@@ -88,21 +78,6 @@ QString Variant::coordinate() const
     return QString("%1:%2").arg(mChr).arg(mPos);
 }
 
-QString Variant::igvUrl() const
-{
-    return QString(QString("http://localhost:60151/locus?%1:%2").arg(chromosom()).arg(position()));
-}
-
-QString Variant::varsomeUrl() const
-{
-    return QString(QString("https://varsome.com/variant/hg19/%2").arg(name()));
-
-}
-
-void Variant::setFilter(const QString &filter)
-{
-    mFilter = filter;
-}
 
 const QString &Variant::chromosom() const
 {
@@ -114,20 +89,6 @@ quint64 Variant::position() const
     return mPos;
 }
 
-const QString& Variant::rsId() const
-{
-    return mRsId;
-}
-
-const QString& Variant::filter() const
-{
-    return mFilter;
-}
-
-double Variant::qual() const
-{
-    return mQual;
-}
 
 quint64 Variant::bin() const
 {

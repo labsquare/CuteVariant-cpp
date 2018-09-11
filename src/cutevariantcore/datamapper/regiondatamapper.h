@@ -8,8 +8,8 @@ class RegionDataMapper : public DataMapper<Region, RegionDataMapper>
 public:
     RegionDataMapper();
 
-    virtual QHash<QString, QVariant> write(const Region& record) const final;
-    virtual Region read(const QSqlRecord& record) const final;
+    virtual QHash<QString, QVariant> toSql(const Region& record) const final;
+    virtual Region fromSql(const QSqlRecord& record) const final;
 
 };
 

@@ -15,7 +15,7 @@ FieldDataMapper::FieldDataMapper()
 
 }
 
-QHash<QString, QVariant> FieldDataMapper::write(const Field &record) const
+QHash<QString, QVariant> FieldDataMapper::toSql(const Field &record) const
 {
 
     return {
@@ -31,7 +31,7 @@ QHash<QString, QVariant> FieldDataMapper::write(const Field &record) const
 
 }
 
-Field FieldDataMapper::read(const QSqlRecord &record) const
+Field FieldDataMapper::fromSql(const QSqlRecord &record) const
 {
 
     Field field;

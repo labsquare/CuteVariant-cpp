@@ -11,8 +11,8 @@ class SampleDataMapper : public DataMapper<Sample, SampleDataMapper>
 public:
     SampleDataMapper();
 
-    virtual QHash<QString, QVariant> write(const Sample& record) const override ;
-    virtual Sample read(const QSqlRecord& record) const override;
+    virtual QHash<QString, QVariant> toSql(const Sample& record) const override ;
+    virtual Sample fromSql(const QSqlRecord& record) const override;
 
 };
 

@@ -19,16 +19,13 @@ public:
     void setPos(quint64 pos);
     void setRef(const QString& ref);
     void setAlt(const QString& alt);
-    void setRsId(const QString& rsid);
-    void setFilter(const QString& filter);
-    void setQual(double qual);
+
+
 
     bool isNull() const;
 
    QString name() const;
    QString coordinate() const;
-   QString igvUrl() const;
-   QString varsomeUrl() const;
 
 
     const QString& chromosom() const;
@@ -60,7 +57,6 @@ public:
 
     int score() const;
     void setScore(int score);
-
 
 
     quint64 id() const;

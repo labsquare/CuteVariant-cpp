@@ -12,7 +12,7 @@ RegionDataMapper::RegionDataMapper()
 }
 
 
-QHash<QString, QVariant> RegionDataMapper::write(const Region &record) const
+QHash<QString, QVariant> RegionDataMapper::toSql(const Region &record) const
 {
     return {
         {"chr", record.chromosom()},
@@ -21,7 +21,7 @@ QHash<QString, QVariant> RegionDataMapper::write(const Region &record) const
     };
 }
 
-Region RegionDataMapper::read(const QSqlRecord &record) const
+Region RegionDataMapper::fromSql(const QSqlRecord &record) const
 {
     Region region;
 

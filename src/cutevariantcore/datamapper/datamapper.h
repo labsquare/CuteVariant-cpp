@@ -32,9 +32,9 @@ public:
         return mTableName;
     }
 
-    virtual T read(const QSqlRecord& record) const  = 0;
+    virtual T fromSql(const QSqlRecord& record) const  = 0;
 
-    virtual QHash<QString, QVariant> write(const T& record) const = 0;
+    virtual QHash<QString, QVariant> toSql(const T& record) const = 0;
 
     //-----------------------------------------------------------------------------------------------
     virtual bool insert(const QList<T>& records) const
@@ -56,7 +56,7 @@ public:
 
         for (auto& record : records)
         {
-            auto values = write(record);
+            auto values = toSql(record);
             qDebug()<<values;
 
             for (int i=0; i< columns.size(); ++i)
@@ -80,7 +80,7 @@ public:
     }
     bool insertOne(const T& record) const
     {
-        insert({record});
+        return insert({record});
 
     }
     //-----------------------------------------------------------------------------------------------
@@ -89,7 +89,7 @@ public:
 
         QStringList columns = columnNames();
         QStringList set;
-        auto values = write(record);
+        auto values = toSql(record);
 
         for (const QString& c : columns)
         {
@@ -121,7 +121,7 @@ public:
     //-----------------------------------------------------------------------------------------------
     virtual bool remove(const T& record) const {
 
-        auto b = write(record);
+        auto b = toSql(record);
         if (!b.contains("id")){
             qDebug()<<Q_FUNC_INFO<<"no id avaible for record";
             return false;
@@ -148,7 +148,7 @@ public:
         QStringList columnTypes;
 
         for (auto& col : mColumns)
-            columnTypes.append(QString("%1 %2 %3").arg(col.name()).arg(DataColumn::typeToName(col.type())).arg(col.option()));
+            columnTypes.append(QString("%1 %2 %3").arg(col.first).arg(DataColumn::typeToName(col.second.type())).arg(col.second.option()));
 
 
         if (!query.exec(QStringLiteral("CREATE TABLE %1 (%2)").arg(tableName()).arg(columnTypes.join(","))))
@@ -171,7 +171,7 @@ public:
         if (query.exec(QString("SELECT rowid, * FROM %1 WHERE rowid = %2").arg(tableName()).arg(id)))
         {
             query.next();
-            record = read(query.record());
+            record = fromSql(query.record());
         }
 
         else {
@@ -198,7 +198,7 @@ public:
         if (success)
         {
             while (query.next())
-                records.append(read(query.record()));
+                records.append(fromSql(query.record()));
         }
 
         return records;
@@ -207,7 +207,7 @@ public:
 //-----------------------------------------------------------------------------------------------
 
 
-    void beginInsert()
+    void beginBulkInsert()
     {
 
         QStringList columns  = columnNames();
@@ -218,16 +218,15 @@ public:
 
         QSqlDatabase::database().transaction();
 
-
         bulkQuery.prepare(QString("INSERT INTO %1 (%2) VALUES (%3)").arg(tableName(),
                                                                      escape_columns.join(","),
                                                                      QString("?").repeated(columns.size()).split("", QString::SkipEmptyParts).join(",")));
 
     }
 
-    void bulkInsert(const T& record){
+    bool bulkInsert(const T& record){
 
-            auto values = write(record);
+            auto values = toSql(record);
 
             for (int i=0; i< columnNames().size(); ++i)
                 bulkQuery.bindValue(i, values[columnNames().at(i)]);
@@ -236,12 +235,13 @@ public:
             {
                 qWarning()<<Q_FUNC_INFO<<bulkQuery.lastQuery();
                 qWarning()<<Q_FUNC_INFO<<bulkQuery.lastError().text();
+                return false;
             }
-
+            return true;
     }
 
 
-    void endInsert()
+    void endBulkInsert()
     {
 
         QSqlDatabase::database().commit();
@@ -252,7 +252,7 @@ protected:
 
     void addColumn(const QString& name, DataColumn::Type type, const QString& option = QString()){
 
-        mColumns[name] = DataColumn{name, type, option};
+        mColumns.append(qMakePair(name,DataColumn{name, type, option}));
 
     }
 
@@ -266,7 +266,7 @@ protected:
 
         QStringList c ;
         for (const auto& col : mColumns)
-            c.append(col.name());
+            c.append(col.first);
 
         return c;
 
@@ -391,7 +391,7 @@ protected:
 private:
     static S * instance;
     QString mTableName;
-    QHash<QString, DataColumn> mColumns;
+    QList<QPair<QString, DataColumn>> mColumns;
 
 
 

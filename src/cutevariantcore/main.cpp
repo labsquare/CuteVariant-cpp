@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
 
 
-        QFile file("/home/sacha/TRIO1.family.vcf");
+        QFile file("/home/sacha/Dev/CuteVariant/exemples/vcf/snpeff.example.vcf");
         if (file.open(QIODevice::ReadOnly))
         {
             qDebug()<<"open";
@@ -55,27 +55,25 @@ int main(int argc, char **argv)
 
             QList<Field> fields =  reader.fields();
 
-//            FieldDataMapper::i()->createTable();
-//            FieldDataMapper::i()->insert(fields);
+
+            FieldDataMapper::i()->createTable();
+            FieldDataMapper::i()->insert(fields);
             VariantDataMapper::i()->setDynamicFields(fields);
-//            VariantDataMapper::i()->createTable();
+            VariantDataMapper::i()->createTable();
 
             file.open(QIODevice::ReadOnly);
             file.reset();
             file.seek(0);
 
-            VariantDataMapper::i()->beginInsert();
+            VariantDataMapper::i()->beginBulkInsert();
 
             while (!file.atEnd())
             {
-                Variant v = reader.readVariant();
-
-                VariantDataMapper::i()->bulkInsert(v);
-
+                VariantDataMapper::i()->bulkInsert(reader.readVariant());
             }
 
 
-             VariantDataMapper::i()->endInsert();
+            VariantDataMapper::i()->endBulkInsert();
 
 
         }

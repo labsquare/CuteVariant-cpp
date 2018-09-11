@@ -11,14 +11,9 @@ QList<Field> GenericVCFReader::fields()
 {
     QList<Field> fields;
 
-
-    fields.append({"chr","variants","chromosom", QVariant::String});
-    fields.append({"pos","variants","position", QVariant::Int});
-    fields.append({"ref","variants","reference", QVariant::String});
-    fields.append({"alt","variants","alternative", QVariant::String});
-    fields.append({"dbSnp","variants","dbSNP identifer", QVariant::String});
-    fields.append({"qual","variants","quality score", QVariant::Int});
-    fields.append({"filter","variants","filter", QVariant::String});
+    fields.append(Field("QUAL","variants","quality", QVariant::Int));
+    fields.append(Field("FILTER","variants","filter", QVariant::String));
+    fields.append(Field("RSID","variants","dbSnp ID ", QVariant::String));
 
 
     for (const Field& f : parseHeader(QStringLiteral("INFO")))
@@ -126,7 +121,6 @@ Variant GenericVCFReader::readVariant()
 
     Variant variant = parseVariant(line);
 
-    qDebug()<<variant.chromosom();
 
     mVariantBuffer.append(variant);
 
@@ -160,18 +154,24 @@ Variant GenericVCFReader::parseVariant(const QString& line)
 
     QString chrom  = rows[0];
     quint64 pos    = rows[1].toInt();
-    QString rsid   = rows[2];
     QString ref    = rows[3];
     QString alt    = rows[4];
+
+    QString rsid   = rows[2];
     QString qual   = rows[5];
     QString filter = rows[6];
     QString info   = rows[7];
 
     Variant variant(chrom,pos, ref,alt);
-    variant.setRsId(rsid);
-    variant.setQual(qual.toDouble());
-    variant.setFilter(filter);
+//    variant.setRsId(rsid);
+//    variant.setQual(qual.toDouble());
+//    variant.setFilter(filter);
     variant.setBin(Variant::maxUcscBin(pos-1, pos));
+
+    variant.addAnnotation("VARIANTS_QUAL", qual);
+    variant.addAnnotation("VARIANTS_FILTER", filter);
+    variant.addAnnotation("VARIANTS_RSID", rsid);
+
 
     // parse annotation info
     for (QString item : info.split(";"))
@@ -181,7 +181,8 @@ Variant GenericVCFReader::parseVariant(const QString& line)
             QStringList pair = item.split("=");
             QString key      = pair.first();
             QString val      = pair.last();
-            variant[key]     = val;
+            QString colname  = "INFO_" + key.toUpper();
+            variant[colname] = val;
         }
         // Bool TAGS
         else

@@ -10,10 +10,9 @@ class VariantDataMapper: public DataMapper<Variant, VariantDataMapper>
 public:
     VariantDataMapper();
 
-    virtual Variant read(const QSqlRecord& record) const  override;
-    virtual QHash<QString, QVariant> write(const Variant& record) const override;
+    virtual Variant fromSql(const QSqlRecord& record) const  override;
+    virtual QHash<QString, QVariant> toSql(const Variant& record) const override;
 
-    virtual bool createTable() const override;
 
     void setDynamicFields(const QList<Field> &dynamicFields);
 

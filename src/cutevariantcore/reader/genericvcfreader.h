@@ -142,8 +142,8 @@ private:
 
    QHash<QString, AbstractAnnotationParser*> mAnnParser =
    {
-//     {"CSQ" , new VepAnnotationParser("CSQ")},
-//     {"ANN" , new SnpEffAnnotationParser("ANN")},
+    // {"CSQ" , new VepAnnotationParser("CSQ")},
+   //  {"ANN" , new SnpEffAnnotationParser("ANN")}
 //     {"EFF" , new SnpEffOldAnnotationParser("EFF")}
    };
 
