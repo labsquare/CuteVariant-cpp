@@ -6,6 +6,11 @@ GenericVCFReader::GenericVCFReader(QIODevice *device)
 {
     mSamples = samples();
 }
+
+GenericVCFReader::~GenericVCFReader()
+{
+
+}
 //------------------------------------------------------------------
 QList<Field> GenericVCFReader::fields()
 {
@@ -162,7 +167,7 @@ Variant GenericVCFReader::parseVariant(const QString& line)
     }
 
     QString chrom  = rows[0];
-    quint64 pos    = rows[1].toInt();
+    quint64 pos    = quint64(rows[1].toInt());
     QString ref    = rows[3];
     QString alt    = rows[4];
 
@@ -182,8 +187,6 @@ Variant GenericVCFReader::parseVariant(const QString& line)
     variant.addAnnotation("VARIANTS_RSID", rsid);
 
 
-
-
     // parse samples format
     if (rows.size() > 8)
     {
@@ -191,7 +194,8 @@ Variant GenericVCFReader::parseVariant(const QString& line)
 
         for (int i=9; i<rows.size(); ++i)
         {
-            QString sample     = mSamples.at(9-i).name();
+
+            QString sample     = mSamples.at(i-9).name();
             QStringList values = rows[i].split(":");
 
             for (int j=0; j<formats.size(); j++)

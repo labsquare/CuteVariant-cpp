@@ -24,7 +24,7 @@ AbstractVariantReader *VariantReaderFactory::createVariantReader(QIODevice * dev
     if (selectFormat == VariantReaderFactory::SnpEff)
     {
         auto reader = new GenericVCFReader(device);
-        reader->addAnnotationParser(new SnpEffAnnotationParser());
+       // reader->addAnnotationParser(new SnpEffAnnotationParser());
         return reader;
     }
 
@@ -32,7 +32,7 @@ AbstractVariantReader *VariantReaderFactory::createVariantReader(QIODevice * dev
     if (selectFormat == VariantReaderFactory::Vep)
     {
         auto reader = new GenericVCFReader(device);
-        reader->addAnnotationParser(new VepAnnotationParser());
+        //reader->addAnnotationParser(new VepAnnotationParser());
         return reader;
 
     }

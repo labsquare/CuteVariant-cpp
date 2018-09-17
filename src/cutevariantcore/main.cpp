@@ -9,9 +9,12 @@
 #include "variantdatamapper.h"
 #include "viewdatamapper.h"
 #include "datamapper.h"
+#include "importer.h"
+
 #include "test.h"
 
 #include "genericvcfreader.h"
+#include "variantreaderfactory.h"
 
 using namespace std;
 using namespace cvar;
@@ -42,10 +45,15 @@ int main(int argc, char **argv)
 
 
 
-        QFile file("/home/sacha/test2.vcf");
+        QFile file("/home/sacha/test3.vcf.gz");
 
-        qDebug()<<"open";
-        cvar::GenericVCFReader reader(&file);
+
+
+        Importer * imp = new Importer;
+
+
+        imp->import("/home/sacha/test3.vcf");
+
 
         //            for (auto& s : reader.samples())
         //            {
@@ -53,49 +61,41 @@ int main(int argc, char **argv)
         //            }
 
 
-        QList<Field> fields =  reader.fields();
+        //        QList<Field> fields =  reader.fields();
 
 
-        FieldDataMapper::i()->createTable();
-        FieldDataMapper::i()->insert(fields);
-//        VariantDataMapper::i()->setDynamicFields(fields);
-//        VariantDataMapper::i()->createTable();
+        //        FieldDataMapper::i()->createTable();
+        //        FieldDataMapper::i()->insert(fields);
+        //        VariantDataMapper::i()->setDynamicFields(fields);
+        //        VariantDataMapper::i()->createTable();
 
-//        SampleDataMapper::i()->createTable();
-//        SampleDataMapper::i()->insert(reader.samples());
+        //        SampleDataMapper::i()->createTable();
+        //        SampleDataMapper::i()->insert(reader.samples());
 
-//        ViewDataMapper::i()->createTable();
-
-
-//        SampleDataMapper::i()->createTable();
-//        SampleDataMapper::i()->insert(reader.samples());
+        //        ViewDataMapper::i()->createTable();
 
 
-//        RegionDataMapper::i()->createTable();
-//        RegionDataMapper::i()->insertOne({"chr3", 10, 400});
-
-//        file.open(QIODevice::ReadOnly);
+        //        SampleDataMapper::i()->createTable();
+        //        SampleDataMapper::i()->insert(reader.samples());
 
 
-//        VariantDataMapper::i()->beginBulkInsert();
+        //        RegionDataMapper::i()->createTable();
+        //        RegionDataMapper::i()->insertOne({"chr3", 10, 400});
 
-//        while (!file.atEnd())
-//        {
-//            VariantDataMapper::i()->bulkInsert(reader.readVariant());
-//        }
+        //        file.open(QIODevice::ReadOnly);
 
 
-//        VariantDataMapper::i()->endBulkInsert();
+        //        VariantDataMapper::i()->beginBulkInsert();
 
-        View v1("test", "desc", 0);
-        v1.setSql("SELECT * FROM variants WHERE pos > 400");
+        //        while (!file.atEnd())
+        //        {
+        //            VariantDataMapper::i()->bulkInsert(reader.readVariant());
+        //        }
 
-        View v2("test", "desc", 0);
-        v2.setSql("SELECT * FROM variants WHERE pos > 300");
 
-        View v3 = v1 - (v1 & v2);
+        //        VariantDataMapper::i()->endBulkInsert();
 
-        qDebug()<<v3.sql();
+
 
 
 

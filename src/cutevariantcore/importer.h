@@ -8,6 +8,11 @@
 #include "reader/abstractvariantreader.h"
 #include "variantreaderfactory.h"
 
+#include "variantdatamapper.h"
+#include "regiondatamapper.h"
+#include "sampledatamapper.h"
+#include "fielddatamapper.h"
+
 namespace cvar {
 class Importer : public QObject
 {
@@ -46,14 +51,12 @@ protected:
     void writeMetadatas(AbstractVariantReader * reader);
     void writeSamples(AbstractVariantReader * reader);
     void writeFields(AbstractVariantReader * reader);
-    void writeGenotypeFields(AbstractVariantReader * reader);
     void writeVariants(AbstractVariantReader * reader);
-    void writeGenotype(AbstractVariantReader * reader);
 
 
 
 private:
-    quint64 mFileSize;
+    qint64 mFileSize;
     QIODevice * mProgressDevice;
 
     QHash<QString, QVector<int>> mVariantIds;

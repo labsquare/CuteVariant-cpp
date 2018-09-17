@@ -22,6 +22,8 @@ public:
 
     GenericVCFReader(QIODevice *proxyDevice);
 
+    virtual ~GenericVCFReader();
+
 
     /*!
      * \brief extract fields

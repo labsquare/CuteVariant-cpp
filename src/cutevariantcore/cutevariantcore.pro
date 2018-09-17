@@ -35,7 +35,9 @@ HEADERS += \
     variant.h \
     view.h \
     cutevariant.h \
-    vqlparser.h
+    vqlparser.h \
+    importer.h \
+    variantreaderfactory.h
 
 SOURCES += \
 #    bedfile.cpp \
@@ -47,4 +49,6 @@ SOURCES += \
     main.cpp \
     field.cpp \
     cutevariant.cpp \
-    vqlparser.cpp
+    vqlparser.cpp \
+    importer.cpp \
+    variantreaderfactory.cpp
