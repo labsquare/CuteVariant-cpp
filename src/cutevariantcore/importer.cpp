@@ -197,6 +197,7 @@ void Importer::writeSamples(AbstractVariantReader *reader)
 {
     qDebug()<<Q_FUNC_INFO<<"Import Samples";
 
+    emit importProgressChanged(100, "import samples");
     SampleDataMapper::i()->createTable();
     SampleDataMapper::i()->insert(reader->samples());
 
@@ -206,6 +207,7 @@ void Importer::writeSamples(AbstractVariantReader *reader)
 void Importer::writeFields(AbstractVariantReader *reader)
 {
     qDebug()<<Q_FUNC_INFO<<"Import Fields";
+    emit importProgressChanged(100, "import fields");
     FieldDataMapper::i()->createTable();
     FieldDataMapper::i()->insert(reader->fields());
 
@@ -218,12 +220,13 @@ void Importer::writeVariants(AbstractVariantReader *reader)
 
     qDebug()<<Q_FUNC_INFO<<"Import variants";
 
-
     VariantDataMapper::i()->setDynamicFields(reader->fields());
     VariantDataMapper::i()->createTable();
 
     // Not sure it should be here ...
     reader->device()->open(QIODevice::ReadOnly);
+
+    emit importRangeChanged(0, int(mFileSize));
 
     VariantDataMapper::i()->beginBulkInsert();
 
@@ -232,6 +235,7 @@ void Importer::writeVariants(AbstractVariantReader *reader)
         Variant v  = reader->readVariant();
         VariantDataMapper::i()->bulkInsert(v);
         //qDebug()<<v.chromosom()<<" "<<v.position();
+        emit importProgressChanged(int(mProgressDevice->size()));
 
     }
 
