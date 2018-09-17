@@ -37,7 +37,8 @@ HEADERS += \
     cutevariant.h \
     vqlparser.h \
     importer.h \
-    variantreaderfactory.h
+    variantreaderfactory.h \
+    variantquery.h
 
 SOURCES += \
 #    bedfile.cpp \
@@ -51,4 +52,5 @@ SOURCES += \
     cutevariant.cpp \
     vqlparser.cpp \
     importer.cpp \
-    variantreaderfactory.cpp
+    variantreaderfactory.cpp \
+    variantquery.cpp

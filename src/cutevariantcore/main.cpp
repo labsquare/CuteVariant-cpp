@@ -15,6 +15,7 @@
 
 #include "genericvcfreader.h"
 #include "variantreaderfactory.h"
+#include "variantquery.h"
 
 using namespace std;
 using namespace cvar;
@@ -43,16 +44,25 @@ int main(int argc, char **argv)
 
 
 
-
-
-        QFile file("/home/sacha/test3.vcf.gz");
-
-
-
         Importer * imp = new Importer;
-
-
         imp->import("/home/sacha/test3.vcf");
+
+
+//    VariantQuery query;
+
+//    query.setTable("variants");
+//    query.setColumns({"chr","pos","alt","ref"});
+//    query.setCondition("chr = 'chr1'");
+
+//    QSqlQuery q (query.toSql());
+
+//    while (q.next())
+//    {
+//        Variant v = VariantDataMapper::i()->fromSql(q.record());
+//        qDebug()<<v.chromosom();
+//    }
+
+
 
 
         //            for (auto& s : reader.samples())

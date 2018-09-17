@@ -239,10 +239,6 @@ void Importer::writeVariants(AbstractVariantReader *reader)
 
     }
 
-    qDebug()<<"done";
-
-
-
     VariantDataMapper::i()->endBulkInsert();
 
     reader->device()->close();

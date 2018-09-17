@@ -93,13 +93,13 @@ public:
      * \return raw sql statement
      */
     QString toSql() const;
-    QString toVql() const;
+    //QString toVql() const;
     /*!
      * \brief fromVql create a VariantQuery from vql statement
      * \param text
      * \return
      */
-    static VariantQuery fromVql(const QString& text);
+   // static VariantQuery fromVql(const QString& text);
 
 
 
@@ -108,8 +108,7 @@ public:
 
     void setNoLimit();
 
-//protected:
-
+protected:
      const QStringList sqlColumns() const;
      const QString sqlTableName() const;
      const QString sqlCondition() const;
@@ -118,11 +117,6 @@ public:
      const QString sqlLimitOffset() const;
      const QString sqlRegion() const;
 
-
-
-
-    QStringList extractSamples() const;
-    QString replaceSampleFields(const QString& text, bool label = false) const;
 
 private:
     QStringList mColumns;
@@ -134,10 +128,6 @@ private:
     int mOffset = 0;
     int mLimit  = 100;
     Qt::SortOrder mSortOder = Qt::AscendingOrder;
-    QStringList mSamples;
-
-
-
 
 };
 

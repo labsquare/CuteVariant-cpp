@@ -65,6 +65,7 @@ void Field::setColname(const QString &colname)
     // save only the first world for sql syntax..
     QRegularExpression exp("([^\\s]+)");
     mColname = exp.match(simplified(colname)).captured(1).toUpper();
+
 }
 
 void Field::setName(const QString &name)
