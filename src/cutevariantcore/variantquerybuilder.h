@@ -5,19 +5,19 @@
 #include "region.h"
 
 #include "vqlparser.h"
-
+#include "view.h"
 
 namespace cvar {
 
 class SqliteManager;
-class VariantQuery
+class VariantQueryBuilder
 {
 public:
-    VariantQuery();
-    VariantQuery(const QStringList& columns,
+    VariantQueryBuilder();
+    VariantQueryBuilder(const QStringList& columns,
                  const QString& table);
 
-    VariantQuery(const QStringList& columns,
+    VariantQueryBuilder(const QStringList& columns,
                  const QString& table,
                  const QString& conditions);
 
@@ -101,6 +101,7 @@ public:
      */
    // static VariantQuery fromVql(const QString& text);
 
+    View toView(const QString& name, const QString& description = QString());
 
 
     Qt::SortOrder sortOder() const;
@@ -132,7 +133,7 @@ private:
 };
 
 
-QDebug operator<< (QDebug d, const VariantQuery &query);
+QDebug operator<< (QDebug d, const VariantQueryBuilder &query);
 
 }
 #endif // VARIANTQUERY_H

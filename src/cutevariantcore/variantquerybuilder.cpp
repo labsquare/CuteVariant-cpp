@@ -1,24 +1,24 @@
-#include "variantquery.h"
+#include "variantquerybuilder.h"
 
 namespace cvar {
-VariantQuery::VariantQuery()
+VariantQueryBuilder::VariantQueryBuilder()
 {
 
 }
 
-VariantQuery::VariantQuery(const QStringList &columns, const QString &table)
+VariantQueryBuilder::VariantQueryBuilder(const QStringList &columns, const QString &table)
     :mColumns(columns), mTable(table)
 {
 
 }
 
-VariantQuery::VariantQuery(const QStringList &columns, const QString &table, const QString &conditions)
+VariantQueryBuilder::VariantQueryBuilder(const QStringList &columns, const QString &table, const QString &conditions)
     :mColumns(columns), mTable(table), mCondition(conditions)
 {
 
 }
 
-bool VariantQuery::isValid() const
+bool VariantQueryBuilder::isValid() const
 {
     //TODO check valid query
 
@@ -27,12 +27,12 @@ bool VariantQuery::isValid() const
 
 }
 
-const QStringList& VariantQuery::columns() const
+const QStringList& VariantQueryBuilder::columns() const
 {
     return mColumns;
 }
 
-void VariantQuery::setColumns(const QStringList &columns)
+void VariantQueryBuilder::setColumns(const QStringList &columns)
 {
     mColumns.clear();
     for (const QString& col: columns)
@@ -41,57 +41,57 @@ void VariantQuery::setColumns(const QStringList &columns)
     }
 }
 
-const QString& VariantQuery::table() const
+const QString& VariantQueryBuilder::table() const
 {
     return mTable;
 }
 
-void VariantQuery::setTable(const QString &table)
+void VariantQueryBuilder::setTable(const QString &table)
 {
     mTable = table;
 }
 
-const QString &VariantQuery::condition() const
+const QString &VariantQueryBuilder::condition() const
 {
     return mCondition;
 }
 
-void VariantQuery::setCondition(const QString &condition)
+void VariantQueryBuilder::setCondition(const QString &condition)
 {
     mCondition = condition;
 }
 
-int VariantQuery::offset() const
+int VariantQueryBuilder::offset() const
 {
     return mOffset;
 }
 
-void VariantQuery::setOffset(int offset)
+void VariantQueryBuilder::setOffset(int offset)
 {
     mOffset = offset;
 }
 
-int VariantQuery::limit() const
+int VariantQueryBuilder::limit() const
 {
     return mLimit;
 }
 
-void VariantQuery::setLimit(int limit)
+void VariantQueryBuilder::setLimit(int limit)
 {
     mLimit = limit;
 }
 
-QStringList VariantQuery::groupBy() const
+QStringList VariantQueryBuilder::groupBy() const
 {
     return mGroupBy;
 }
 
-void VariantQuery::setGroupBy(const QStringList &groupBy)
+void VariantQueryBuilder::setGroupBy(const QStringList &groupBy)
 {
     mGroupBy = groupBy;
 }
 
-QString VariantQuery::toSql() const
+QString VariantQueryBuilder::toSql() const
 {
 
     //    // the sql query to return
@@ -192,43 +192,54 @@ QString VariantQuery::toSql() const
     return s_query.simplified();
 }
 
-Qt::SortOrder VariantQuery::sortOder() const
+View VariantQueryBuilder::toView(const QString &name, const QString &description)
+{
+    VariantQueryBuilder n = *(this);
+    n.setColumns({"*"});
+    View view(name,description, 0);
+
+
+    return view;
+
+}
+
+Qt::SortOrder VariantQueryBuilder::sortOder() const
 {
     return mSortOder;
 }
 
-void VariantQuery::setSortOrder(Qt::SortOrder sortOder)
+void VariantQueryBuilder::setSortOrder(Qt::SortOrder sortOder)
 {
     mSortOder = sortOder;
 }
 
-void VariantQuery::setNoLimit()
+void VariantQueryBuilder::setNoLimit()
 {
     setLimit(0);
     setOffset(0);
 }
 
-const QString &VariantQuery::region() const
+const QString &VariantQueryBuilder::region() const
 {
     return mRegion;
 }
 
-void VariantQuery::setRegion(const QString &region)
+void VariantQueryBuilder::setRegion(const QString &region)
 {
     mRegion = region;
 }
 
-QStringList VariantQuery::orderBy() const
+QStringList VariantQueryBuilder::orderBy() const
 {
     return mOrderBy;
 }
 
-void VariantQuery::setOrderBy(const QStringList &orderBy)
+void VariantQueryBuilder::setOrderBy(const QStringList &orderBy)
 {
     mOrderBy = orderBy;
 }
 
-const QStringList VariantQuery::sqlColumns() const
+const QStringList VariantQueryBuilder::sqlColumns() const
 {
     QStringList out;
     std::transform(columns().begin(), columns().end(), std::back_inserter(out), [](const auto& i)
@@ -239,7 +250,7 @@ const QStringList VariantQuery::sqlColumns() const
     return out;
 }
 
-const QString VariantQuery::sqlTableName() const
+const QString VariantQueryBuilder::sqlTableName() const
 {
     if (table().isEmpty())
         return "'variants'";
@@ -247,7 +258,7 @@ const QString VariantQuery::sqlTableName() const
         return QString("`%1`").arg(table());
 }
 
-const QString VariantQuery::sqlCondition() const
+const QString VariantQueryBuilder::sqlCondition() const
 {
 
     if (condition().isEmpty())
@@ -255,7 +266,7 @@ const QString VariantQuery::sqlCondition() const
     return condition();
 }
 
-const QString VariantQuery::sqlOrderBy() const
+const QString VariantQueryBuilder::sqlOrderBy() const
 {
     if (orderBy().isEmpty())
         return QString();
@@ -263,7 +274,7 @@ const QString VariantQuery::sqlOrderBy() const
         return QString( " ORDER BY `%1` %2 ").arg(orderBy().join(",")).arg(mSortOder==Qt::AscendingOrder ? "ASC" : "DESC");
 }
 
-const QString VariantQuery::sqlGroupBy() const
+const QString VariantQueryBuilder::sqlGroupBy() const
 {
     if (!groupBy().isEmpty())
         return QString(" GROUP BY `%1` ").arg(groupBy().join(","));
@@ -271,7 +282,7 @@ const QString VariantQuery::sqlGroupBy() const
         return QString();
 }
 
-const QString VariantQuery::sqlLimitOffset() const
+const QString VariantQueryBuilder::sqlLimitOffset() const
 {
     if (limit() == 0)
         return QString();
@@ -280,7 +291,7 @@ const QString VariantQuery::sqlLimitOffset() const
 
 }
 
-const QString VariantQuery::sqlRegion() const
+const QString VariantQueryBuilder::sqlRegion() const
 {
     if (region().isEmpty())
         return QString();
@@ -290,7 +301,7 @@ const QString VariantQuery::sqlRegion() const
 }
 
 
-QDebug operator<< (QDebug d, const VariantQuery &query)
+QDebug operator<< (QDebug d, const VariantQueryBuilder &query)
 {
     d<<"================================================\n";
     d<<"table\t"<<query.table()<<"\n";

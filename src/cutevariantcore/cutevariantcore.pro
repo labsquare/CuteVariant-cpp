@@ -2,13 +2,14 @@ QT -= widgets
 QT += sql
 QT += concurrent
 
-TEMPLATE = app
-#CONFIG += staticlib
-#CONFIG -= debug_and_release
+TEMPLATE = lib
+CONFIG += staticlib
+CONFIG -= debug_and_release
 CONFIG += c++14
+TARGET = cutevariantcore
 
-Debug:DESTDIR = $$PWD/../bin
-Release:DESTDIR = $$PWD/../bin
+DESTDIR = ../bin
+
 
 
 INCLUDEPATH += $$PWD/../quazip/quazip
@@ -23,7 +24,6 @@ INCLUDEPATH += "/usr/include/KF5/KArchive"
 
 
 
-TARGET = cutevariantcore
 
 HEADERS += \
 #    bedfile.h \
@@ -38,7 +38,7 @@ HEADERS += \
     vqlparser.h \
     importer.h \
     variantreaderfactory.h \
-    variantquery.h
+    variantquerybuilder.h
 
 SOURCES += \
 #    bedfile.cpp \
@@ -47,10 +47,10 @@ SOURCES += \
     sample.cpp \
     variant.cpp \
     view.cpp \
-    main.cpp \
+ #   main.cpp \
     field.cpp \
     cutevariant.cpp \
     vqlparser.cpp \
     importer.cpp \
     variantreaderfactory.cpp \
-    variantquery.cpp
+    variantquerybuilder.cpp

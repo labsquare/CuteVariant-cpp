@@ -15,7 +15,7 @@
 
 #include "genericvcfreader.h"
 #include "variantreaderfactory.h"
-#include "variantquery.h"
+#include "variantquerybuilder.h"
 
 using namespace std;
 using namespace cvar;
@@ -48,11 +48,11 @@ int main(int argc, char **argv)
         imp->import("/home/sacha/test3.vcf");
 
 
-//    VariantQuery query;
+    VariantQueryBuilder query;
 
-//    query.setTable("variants");
-//    query.setColumns({"chr","pos","alt","ref"});
-//    query.setCondition("chr = 'chr1'");
+    query.setTable("variants");
+    query.setColumns({"chr","pos","alt","ref"});
+    query.setCondition("chr = 'chr1'");
 
 //    QSqlQuery q (query.toSql());
 

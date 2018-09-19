@@ -4,9 +4,9 @@ TEMPLATE = subdirs
 
 SUBDIRS = src/quazip \
           src/cutevariantcore \
-          src/qscintilla/Qt4Qt5/qscintilla.pro \
-          src/app \
-         # src/test
+          #src/qscintilla/Qt4Qt5/qscintilla.pro \
+         # src/app \
+          src/unitest
 
 CONFIG += ordered
 

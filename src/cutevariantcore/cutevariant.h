@@ -9,7 +9,7 @@
 
 namespace cvar {
 class QueryBuilder;
-class VariantQuery;
+class VariantQueryBuilder;
 
 class Variant;
 class Field;
