@@ -1,35 +1,45 @@
 #include <QtTest>
 #include "cutevariant.h"
-
-
+#include "sampledatamapper.h"
+using namespace cvar;
 class TestSample : public QObject
 {
     Q_OBJECT
 
 public:
-    TestSample();
-    ~TestSample();
+
 
 private slots:
-    void test_case1();
+    void initTestCase();
+    void cleanupTestCase();
+
+    void testCreateSample();
 
 };
 
-TestSample::TestSample()
+
+
+void TestSample::initTestCase()
 {
+    QVERIFY(cutevariant->openDatabase("/tmp/cutevariant.db"));
+    QVERIFY(SampleDataMapper::i()->createTable());
+}
+
+void TestSample::cleanupTestCase()
+{
+    cutevariant->closeDatabase();
+}
+
+void TestSample::testCreateSample()
+{
+
+    QVERIFY(SampleDataMapper::i()->insertOne({"sacha"}));
+    QVERIFY(SampleDataMapper::i()->list().size() > 0);
+    QVERIFY2(SampleDataMapper::i()->list().first().name() == "sacha" , "tess");
 
 }
 
-TestSample::~TestSample()
-{
 
-}
-
-void TestSample::test_case1()
-{
-    qDebug()<<"test sacha";
-    QVERIFY(true);
-}
 
 QTEST_APPLESS_MAIN(TestSample)
 
