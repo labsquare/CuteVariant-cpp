@@ -6,7 +6,8 @@ SUBDIRS = src/quazip \
           src/cutevariantcore \
           #src/qscintilla/Qt4Qt5/qscintilla.pro \
          # src/app \
-          src/unitest
+    src/test
+
 
 CONFIG += ordered
 
