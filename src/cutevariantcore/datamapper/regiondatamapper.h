@@ -11,6 +11,8 @@ public:
     virtual QHash<QString, QVariant> toSql(const Region& record) const final;
     virtual Region fromSql(const QSqlRecord& record) const final;
 
+    void importBed(const QString& filename) const;
+
 };
 
 }

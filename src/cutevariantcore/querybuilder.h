@@ -34,6 +34,12 @@ public:
 
     View createView(const QString& name, const QString & description) const;
 
+    int limit() const;
+    void setLimit(int limit);
+
+    int offset() const;
+    void setOffset(int offset);
+
 protected:
     static QString quote(const QString& word);
     static QStringList quote(const QStringList& words);
@@ -49,6 +55,8 @@ private:
     QString mGroupBy;
 
     int mCountCache = 0;
+    int mLimit  = 0;
+    int mOffset = 0;
 
 };
 

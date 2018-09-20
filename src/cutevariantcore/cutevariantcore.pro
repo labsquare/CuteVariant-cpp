@@ -38,7 +38,6 @@ HEADERS += \
     vqlparser.h \
     importer.h \
     variantreaderfactory.h \
-    variantquerybuilder.h \
     querybuilder.h
 
 SOURCES += \
@@ -54,5 +53,4 @@ SOURCES += \
     vqlparser.cpp \
     importer.cpp \
     variantreaderfactory.cpp \
-    variantquerybuilder.cpp \
     querybuilder.cpp

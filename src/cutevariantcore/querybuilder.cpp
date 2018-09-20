@@ -34,9 +34,16 @@ QString QueryBuilder::toSql() const
                           .arg(i.second == Qt::AscendingOrder ? "ASC": "DESC"));
         }
 
-       q += " ORDER BY " + orders.join(",");
+        q += " ORDER BY " + orders.join(",");
     }
 
+
+    if (limit()){
+        q+=QString(" LIMIT %1 ").arg(limit());
+
+        if (offset())
+            q+=QString(" OFFSET %1 ").arg(offset());
+    }
 
 
     return q;
@@ -121,6 +128,26 @@ QStringList QueryBuilder::quote(const QStringList &words)
 
     return out;
 
+}
+
+int QueryBuilder::offset() const
+{
+    return mOffset;
+}
+
+void QueryBuilder::setOffset(int offset)
+{
+    mOffset = offset;
+}
+
+int QueryBuilder::limit() const
+{
+    return mLimit;
+}
+
+void QueryBuilder::setLimit(int limit)
+{
+    mLimit = limit;
 }
 
 

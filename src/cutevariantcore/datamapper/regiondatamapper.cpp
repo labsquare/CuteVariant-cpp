@@ -33,4 +33,11 @@ Region RegionDataMapper::fromSql(const QSqlRecord &record) const
 
 }
 
+void RegionDataMapper::importBed(const QString &filename) const
+{
+
+
+
+}
+
 }
