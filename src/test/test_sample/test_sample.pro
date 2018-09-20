@@ -6,6 +6,7 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES +=  tst_testsample.cpp
+SOURCES += \ 
+    tst_sample.cpp
 
 include(../common.pri)

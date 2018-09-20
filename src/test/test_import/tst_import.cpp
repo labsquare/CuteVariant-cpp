@@ -27,7 +27,7 @@ void TestImport::initTestCase()
 
 void TestImport::cleanupTestCase()
 {
-
+    cutevariant->closeDatabase();
 }
 
 void TestImport::testImport()
@@ -40,4 +40,4 @@ void TestImport::testImport()
 
 QTEST_APPLESS_MAIN(TestImport)
 
-#include "tst_testimport.moc"
+#include "tst_import.moc"

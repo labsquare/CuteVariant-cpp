@@ -28,4 +28,4 @@ void TestVariant::cleanupTestCase()
 
 QTEST_APPLESS_MAIN(TestVariant)
 
-#include "tst_testvariant.moc"
+#include "tst_variant.moc"

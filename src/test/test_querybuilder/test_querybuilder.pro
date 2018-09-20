@@ -7,6 +7,6 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += \ 
-    tst_variant.cpp
+    tst_querybuilder.cpp
 
 include(../common.pri)
