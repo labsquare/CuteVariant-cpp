@@ -63,21 +63,21 @@ View View::unionWith(const View &other) const
 {
     qDebug()<<other.sql();
     View view(other.name() + "u" + name());
-    view.setSql(QString("SELECT rowid, * FROM variants WHERE rowid IN (SELECT rowid FROM (%1) UNION SELECT rowid FROM (%2))").arg(this->sql()).arg(other.sql()));
+    view.setSql(QString("SELECT rowid, * FROM `variants` WHERE rowid IN (SELECT rowid FROM (%1) UNION SELECT rowid FROM (%2))").arg(this->sql()).arg(other.sql()));
     return view;
 }
 
 View View::intersectWith(const View &other) const
 {
     View view(other.name() + "&" + name());
-    view.setSql(QString("SELECT rowid, * FROM variants WHERE rowid IN (SELECT rowid FROM (%1) INTERSECT SELECT rowid FROM (%2))").arg(sql(), other.sql()));
+    view.setSql(QString("SELECT rowid, * FROM `variants` WHERE rowid IN (SELECT rowid FROM (%1) INTERSECT SELECT rowid FROM (%2))").arg(sql(), other.sql()));
     return view;
 }
 
 View View::exceptWith(const View &other) const
 {
     View view(other.name() + "e" + name());
-    view.setSql(QString("SELECT rowid, * FROM variants WHERE rowid IN (SELECT rowid FROM (%1) EXCEPT SELECT rowid FROM (%2))").arg(sql(), other.sql()));
+    view.setSql(QString("SELECT rowid, * FROM `variants` WHERE rowid IN (SELECT rowid FROM (%1) EXCEPT SELECT rowid FROM (%2))").arg(sql(), other.sql()));
     return view;
 }
 
