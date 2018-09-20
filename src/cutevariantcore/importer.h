@@ -12,6 +12,7 @@
 #include "regiondatamapper.h"
 #include "sampledatamapper.h"
 #include "fielddatamapper.h"
+#include "viewdatamapper.h"
 
 namespace cvar {
 class Importer : public QObject
@@ -52,6 +53,7 @@ protected:
     void writeSamples(AbstractVariantReader * reader);
     void writeFields(AbstractVariantReader * reader);
     void writeVariants(AbstractVariantReader * reader);
+    void writeView();
 
 
 
@@ -61,6 +63,7 @@ private:
 
     QHash<QString, QVector<int>> mVariantIds;
     QHash<QString, int> mSamplesIds;
+    int mTotalVariant = 0; // quint ?
 
 };
 }

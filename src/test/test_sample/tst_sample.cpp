@@ -1,8 +1,8 @@
 #include <QtTest>
 #include "cutevariant.h"
 #include "sampledatamapper.h"
-using namespace cvar;
-class TestSample : public QObject
+
+class Sample : public QObject
 {
     Q_OBJECT
 
@@ -22,27 +22,27 @@ private slots:
 
 
 
-void TestSample::initTestCase()
+void Sample::initTestCase()
 {
     QVERIFY(cutevariant->openDatabase("/tmp/cutevariant.db"));
-    QVERIFY(SampleDataMapper::i()->createTable());
+    QVERIFY(cvar::SampleDataMapper::i()->createTable());
 }
 
-void TestSample::cleanupTestCase()
+void Sample::cleanupTestCase()
 {
     cutevariant->closeDatabase();
 }
 
-void TestSample::testCreateSample()
+void Sample::testCreateSample()
 {
 
-    QVERIFY(SampleDataMapper::i()->insertOne({"sacha"}));
-    QVERIFY(SampleDataMapper::i()->list().size() > 0);
-    QCOMPARE(SampleDataMapper::i()->list().first().name(),"sacha");
+    QVERIFY(cvar::SampleDataMapper::i()->insertOne({"sacha"}));
+    QVERIFY(cvar::SampleDataMapper::i()->list().size() > 0);
+    QCOMPARE(cvar::SampleDataMapper::i()->list().first().name(),"sacha");
 
 }
 
-void TestSample::toUpper_data()
+void Sample::toUpper_data()
 {
       QTest::addColumn<QString>("string");
       QTest::addColumn<QString>("result");
@@ -52,7 +52,7 @@ void TestSample::toUpper_data()
       QTest::newRow("all upper") << "HELLO" << "HELLO";
 }
 
-void TestSample::toUpper()
+void Sample::toUpper()
 {
        QFETCH(QString, string);
        QFETCH(QString, result);
@@ -62,6 +62,6 @@ void TestSample::toUpper()
 
 
 
-QTEST_APPLESS_MAIN(TestSample)
+QTEST_APPLESS_MAIN(Sample)
 
 #include "tst_sample.moc"

@@ -7,7 +7,7 @@ namespace cvar{
 class View
 {
 public:
-    View(const QString& name = QString(), const QString& description = QString(), int count = 0);
+    View(const QString& name = QString(), const QString& description = QString(), int count = 0, const QString& sql = QString());
 
 
     QString name() const;

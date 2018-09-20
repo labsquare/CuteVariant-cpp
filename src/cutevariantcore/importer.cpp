@@ -56,6 +56,7 @@ bool Importer::import(const QString &filename, VariantReaderFactory::Format form
     // writeGenotypeFields(reader.data());
     writeVariants(reader.data());
     // writeGenotypeFields(reader.data());
+    writeView();
 
     qInfo()<< "Import done in " << timer.elapsed() << "milliseconds";
 
@@ -229,20 +230,28 @@ void Importer::writeVariants(AbstractVariantReader *reader)
     emit importRangeChanged(0, int(mFileSize));
 
     VariantDataMapper::i()->beginBulkInsert();
+    mTotalVariant = 0;
 
     while (!reader->device()->atEnd()){
 
         Variant v  = reader->readVariant();
         VariantDataMapper::i()->bulkInsert(v);
         //qDebug()<<v.chromosom()<<" "<<v.position();
-        emit importProgressChanged(int(mProgressDevice->size()));
+        //emit importProgressChanged(int(mProgressDevice->size()));
 
+        ++mTotalVariant;
     }
 
     VariantDataMapper::i()->endBulkInsert();
 
     reader->device()->close();
 
+}
+
+void Importer::writeView()
+{
+    ViewDataMapper::i()->createTable();
+    ViewDataMapper::i()->insertOne(View("variants","root table", mTotalVariant, "SELECT rowid,* FROM variants"));
 }
 //-----------------------------------------------------------------------
 

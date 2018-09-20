@@ -2,7 +2,7 @@
 
 // add necessary includes here
 
-class TestVariant : public QObject
+class Variant : public QObject
 {
     Q_OBJECT
 
@@ -14,18 +14,18 @@ private slots:
 };
 
 
-void TestVariant::initTestCase()
+void Variant::initTestCase()
 {
 
 
 }
 
-void TestVariant::cleanupTestCase()
+void Variant::cleanupTestCase()
 {
 
 }
 
 
-QTEST_APPLESS_MAIN(TestVariant)
+QTEST_APPLESS_MAIN(Variant)
 
 #include "tst_variant.moc"

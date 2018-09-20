@@ -14,6 +14,8 @@ public:
     virtual QHash<QString, QVariant> toSql(const View& record) const override;
 
 
+    bool createView(const View& record) const ;
+
 
 };
 

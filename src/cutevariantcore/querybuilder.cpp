@@ -101,7 +101,7 @@ View QueryBuilder::createView(const QString& name, const QString& description) c
         qv += " WHERE " + condition();
 
     View view(name, description, mCountCache);
-    view.setSql(QString("CREATE VIEW %1 AS %2").arg(name,qv));
+    view.setSql(qv);
 
     return view;
 

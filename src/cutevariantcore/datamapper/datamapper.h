@@ -32,6 +32,8 @@ public:
         return mTableName;
     }
 
+
+
     virtual T fromSql(const QSqlRecord& record) const  = 0;
 
     virtual QHash<QString, QVariant> toSql(const T& record) const = 0;

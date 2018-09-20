@@ -3,7 +3,7 @@
 #include "cutevariant.h"
 #include "importer.h"
 
-class TestImport : public QObject
+class Import : public QObject
 {
     Q_OBJECT
 
@@ -18,19 +18,19 @@ private slots:
 
 
 
-void TestImport::initTestCase()
+void Import::initTestCase()
 {
     QVERIFY(QFile::exists(EXEMPLE_VCF_PATH));
     QVERIFY(cutevariant->openDatabase("/tmp/cutevariant.db"));
 
 }
 
-void TestImport::cleanupTestCase()
+void Import::cleanupTestCase()
 {
     cutevariant->closeDatabase();
 }
 
-void TestImport::testImport()
+void Import::testImport()
 {
     cvar::Importer importer;
     importer.import(EXEMPLE_VCF_PATH);
@@ -38,6 +38,6 @@ void TestImport::testImport()
 
 
 
-QTEST_APPLESS_MAIN(TestImport)
+QTEST_APPLESS_MAIN(Import)
 
 #include "tst_import.moc"

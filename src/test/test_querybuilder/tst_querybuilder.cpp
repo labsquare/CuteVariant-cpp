@@ -4,7 +4,7 @@
 #include "cutevariant.h"
 #include "importer.h"
 
-class TestQueryBuilder : public QObject
+class QueryBuilder : public QObject
 {
     Q_OBJECT
 
@@ -20,7 +20,7 @@ private slots:
 };
 
 
-void TestQueryBuilder::initTestCase()
+void QueryBuilder::initTestCase()
 {
     QVERIFY(cutevariant->openDatabase("/tmp/cutevariant.db"));
     QVERIFY(QSqlDatabase::database().isOpen());
@@ -29,12 +29,12 @@ void TestQueryBuilder::initTestCase()
     QVERIFY(importer.import(EXEMPLE_VCF_PATH));
 }
 
-void TestQueryBuilder::cleanupTestCase()
+void QueryBuilder::cleanupTestCase()
 {
     cutevariant->closeDatabase();
 }
 
-void TestQueryBuilder::test_Query()
+void QueryBuilder::test_Query()
 {
     QSqlQuery q;
     cvar::QueryBuilder builder;
@@ -60,7 +60,7 @@ void TestQueryBuilder::test_Query()
 
 }
 
-void TestQueryBuilder::test_createView()
+void QueryBuilder::test_createView()
 {
     cvar::QueryBuilder builder;
     builder.setColumns({"sacha","boby"});
@@ -71,12 +71,12 @@ void TestQueryBuilder::test_createView()
 
     cvar::View view = builder.createView("sacha", "this is a test");
 
-    QCOMPARE(view.sql(), "CREATE VIEW sacha AS SELECT rowid, * FROM `variants` WHERE age=43 AND sexe=1");
+    QCOMPARE(view.sql(), "SELECT rowid, * FROM `variants` WHERE age=43 AND sexe=1");
 
 
 
 }
 
-QTEST_APPLESS_MAIN(TestQueryBuilder)
+QTEST_APPLESS_MAIN(QueryBuilder)
 
 #include "tst_querybuilder.moc"
