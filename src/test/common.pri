@@ -16,6 +16,11 @@ PRE_TARGETDEPS += $$PWD/../bin/libcutevariantcore.a
 
 DEFINES += EXEMPLE_PATH=\\\"$$PWD/../../exemples/vcf/\\\"
 DEFINES += EXEMPLE_VCF_PATH=\\\"$$PWD/../../exemples/vcf/snpeff.example.vcf\\\"
+DEFINES += EXEMPLE_VCF_GZ_PATH=\\\"$$PWD/../../exemples/vcf/snpeff.example2.vcf.gz\\\"
 
+
+# KGZIP
+unix {
 INCLUDEPATH += "/usr/include/KF5/KArchive"
-
+LIBS +=  -L"/usr/lib"  -lKF5Archive
+}

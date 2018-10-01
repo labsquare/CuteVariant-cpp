@@ -10,14 +10,12 @@ TARGET = cutevariantcore
 
 DESTDIR = $$PWD/../bin
 
-
-
-INCLUDEPATH += $$PWD/../quazip/quazip
 INCLUDEPATH += $$PWD/../
 
-unix {
+
+# KGZIP
 INCLUDEPATH += "/usr/include/KF5/KArchive"
-}
+LIBS += -lKF5Archive
 
  include(reader/reader.pri)
  include(datamapper/datamapper.pri)

@@ -1,4 +1,5 @@
 #include "importer.h"
+
 namespace cvar {
 Importer::Importer(QObject *parent) : QObject(parent)
 {
@@ -19,8 +20,6 @@ bool Importer::import(const QString &filename, VariantReaderFactory::Format form
         return false;
     }
 
-
-
     // Actual file support .. Will change in the future .
     QFileInfo info(filename);
     mFileSize = info.size();
@@ -32,11 +31,14 @@ bool Importer::import(const QString &filename, VariantReaderFactory::Format form
     QScopedPointer<AbstractVariantReader> reader;
 
 
-    //    if (VariantReaderFactory::isGzip(mProgressDevice))
-    //        reader.reset(VariantReaderFactory::createVariantReader(new KCompressionDevice(mProgressDevice,true, KCompressionDevice::GZip)));
+    if (VariantReaderFactory::isGzip(mProgressDevice)){
+        qDebug()<<"It's a gzip";
+        reader.reset(VariantReaderFactory::createVariantReader(new KCompressionDevice(mProgressDevice,true,KCompressionDevice::GZip)));
 
-    //    else
-    reader.reset(VariantReaderFactory::createVariantReader(mProgressDevice));
+    }
+
+    else
+        reader.reset(VariantReaderFactory::createVariantReader(mProgressDevice));
 
 
     if (reader.isNull())
@@ -245,7 +247,7 @@ void Importer::writeVariants(AbstractVariantReader *reader)
         Variant v  = reader->readVariant();
         VariantDataMapper::i()->bulkInsert(v);
         //qDebug()<<v.chromosom()<<" "<<v.position();
-       emit importProgressChanged(int(mProgressDevice->pos()));
+        emit importProgressChanged(int(mProgressDevice->pos()));
 
         ++mTotalVariant;
     }

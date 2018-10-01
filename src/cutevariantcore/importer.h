@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QtSql>
 #include <QtConcurrent>
-#include "kcompressiondevice.h"
 #include "reader/abstractvariantreader.h"
 #include "variantreaderfactory.h"
 
@@ -13,6 +12,9 @@
 #include "sampledatamapper.h"
 #include "fielddatamapper.h"
 #include "viewdatamapper.h"
+
+#include <KF5/KArchive/KCompressionDevice>
+
 
 namespace cvar {
 class Importer : public QObject

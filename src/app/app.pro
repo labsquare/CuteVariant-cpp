@@ -64,11 +64,6 @@ target.path  = /usr/bin
 INSTALLS += target
 
 
-# KGZIP
-unix {
-INCLUDEPATH += "/usr/include/KF5/KArchive"
-LIBS +=  -L"/usr/lib"  -lKF5Archive
-}
 
 
 
@@ -85,7 +80,11 @@ PRE_TARGETDEPS += $$PWD/../bin/libcutevariantcore.a
 
 LIBS += -L$$PWD/../bin/ -lcutevariantcore
 
+
+# KGZIP
+
 INCLUDEPATH += "/usr/include/KF5/KArchive"
+LIBS += -lKF5Archive
 
 
 
@@ -96,3 +95,4 @@ INCLUDEPATH += "/usr/include/KF5/KArchive"
 #DEPENDPATH += $$PWD/../cutevariantcore
 
 #PRE_TARGETDEPS += $$OUT_PWD/../cutevariantcore/libcutevariantcore.a
+

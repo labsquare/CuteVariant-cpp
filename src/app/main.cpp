@@ -5,6 +5,8 @@
 
 #include "variant.h"
 
+#include "kcompressiondevice.h"
+
 
 int main(int argc, char **argv)
 {
@@ -18,6 +20,9 @@ int main(int argc, char **argv)
 
     // https://cdn.materialdesignicons.com/2.3.54/
     QFontIcon::addFont(":/materialIcon");
+
+
+
 
 
 
