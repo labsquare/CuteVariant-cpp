@@ -6,6 +6,11 @@ ResultTreeModel::ResultTreeModel( QObject *parent)
     :QAbstractItemModel(parent)
 {
 }
+
+ResultTreeModel::~ResultTreeModel()
+{
+
+}
 //---------------------------------------------------------------------------
 
 QModelIndex ResultTreeModel::index(int row, int column, const QModelIndex &parent) const
@@ -76,13 +81,13 @@ QVariant ResultTreeModel::data(const QModelIndex &index, int role) const
         }
     }
 
-//    if (role == Qt::DecorationRole)
-//    {
-//            if (index.column() == 0 && index.parent() != QModelIndex())
-//           return FIcon(0xf60d);
+    //    if (role == Qt::DecorationRole)
+    //    {
+    //            if (index.column() == 0 && index.parent() != QModelIndex())
+    //           return FIcon(0xf60d);
 
 
-//    }
+    //    }
 
 
 
@@ -132,36 +137,36 @@ bool ResultTreeModel::canFetchMore(const QModelIndex &parent) const
 void ResultTreeModel::fetchMore(const QModelIndex &parent)
 {
 
-    if (parent == QModelIndex())
-        return ;
+    //    if (parent == QModelIndex())
+    //        return ;
 
-    int count       = mRecords[parent.row()].value("count").toInt();
-    int parentRow   = parent.row();
-    QStringList ids = mRecords[parent.row()].value("childs").toString().split(",");
-
-
-    qDebug()<<ids;
-
-    beginInsertRows(parent,0, count-1);
-    mChilds[parentRow].clear();
-
-    cvar::VariantQuery temp = mCurrentQuery;
-    temp.setCondition(QString("%2.id IN (%1)").arg(ids.join(",")).arg(mCurrentQuery.table()));
-    temp.setGroupBy({});
-    temp.setNoLimit();
-
-    QSqlQuery query = QSqlQuery(temp.toSql());
-
-    while (query.next())
-    {
-        mChilds[parentRow].append(query.record());
-    }
+    //    int count       = mRecords[parent.row()].value("count").toInt();
+    //    int parentRow   = parent.row();
+    //    QStringList ids = mRecords[parent.row()].value("childs").toString().split(",");
 
 
-    qDebug()<<query.lastError().text();
-    qDebug()<<query.lastQuery();
+    //    qDebug()<<ids;
 
-    endInsertRows();
+    //    beginInsertRows(parent,0, count-1);
+    //    mChilds[parentRow].clear();
+
+    //    cvar::VariantQuery temp = mCurrentQuery;
+    //    temp.setCondition(QString("%2.id IN (%1)").arg(ids.join(",")).arg(mCurrentQuery.table()));
+    //    temp.setGroupBy({});
+    //    temp.setNoLimit();
+
+    //    QSqlQuery query = QSqlQuery(temp.toSql());
+
+    //    while (query.next())
+    //    {
+    //        mChilds[parentRow].append(query.record());
+    //    }
+
+
+    //    qDebug()<<query.lastError().text();
+    //    qDebug()<<query.lastQuery();
+
+    //    endInsertRows();
 }
 //---------------------------------------------------------------------------
 void ResultTreeModel::sort(int column, Qt::SortOrder order)
@@ -173,11 +178,10 @@ void ResultTreeModel::sort(int column, Qt::SortOrder order)
         // TODO: hack remove.. It's hugly
         // column + 1 because we hide ID
         // remove "sql 'as name' statement "
-        QString col = mCurrentQuery.sqlColumns().at(column+1);
-        col = col.remove(QRegularExpression(R"(\s+as.+)"));
+        QString col = mCurrentQuery.columns().at(column+1);
 
-        mCurrentQuery.setOrderBy({col});
-        mCurrentQuery.setSortOrder(order);
+        mCurrentQuery.clearSortColumns();
+        mCurrentQuery.addSortColumns(col, order);
         load();
     }
 
@@ -214,47 +218,47 @@ const cvar::VariantQuery &ResultTreeModel::currentQuery() const
 bool ResultTreeModel::exportCsv(const QString &filename) const
 {
 
-    QFile file(filename);
-    if (file.open(QIODevice::WriteOnly))
-    {
-            QTextStream stream(&file);
+    //    QFile file(filename);
+    //    if (file.open(QIODevice::WriteOnly))
+    //    {
+    //            QTextStream stream(&file);
 
-            cvar::VariantQuery vquery = mCurrentQuery;
-            vquery.setNoLimit();
-            QSqlQuery query (vquery.toSql());
-            qDebug()<<query.lastError().text();
-            qDebug()<<query.lastQuery();
+    //            cvar::VariantQuery vquery = mCurrentQuery;
+    //            vquery.setNoLimit();
+    //            QSqlQuery query (vquery.toSql());
+    //            qDebug()<<query.lastError().text();
+    //            qDebug()<<query.lastQuery();
 
-            bool header = false;
+    //            bool header = false;
 
-            // save query ( -2 ) to avoid count and childs
-            while (query.next()){
+    //            // save query ( -2 ) to avoid count and childs
+    //            while (query.next()){
 
-                // save header
-                if (!header)
-                {
-                    stream <<"#";
-                    for (int col = 0; col < query.record().count() - 2; ++col)
-                    {
-                        stream <<query.record().fieldName(col)<<"\t";
-                    }
-                    stream <<"\n";
-                    header = true;
-                }
+    //                // save header
+    //                if (!header)
+    //                {
+    //                    stream <<"#";
+    //                    for (int col = 0; col < query.record().count() - 2; ++col)
+    //                    {
+    //                        stream <<query.record().fieldName(col)<<"\t";
+    //                    }
+    //                    stream <<"\n";
+    //                    header = true;
+    //                }
 
-                // save record
-                for (int col = 0; col < query.record().count() -2 ; ++col)
-                {
-                    stream << query.record().value(col).toString() <<"\t";
-                }
-                stream <<"\n";
+    //                // save record
+    //                for (int col = 0; col < query.record().count() -2 ; ++col)
+    //                {
+    //                    stream << query.record().value(col).toString() <<"\t";
+    //                }
+    //                stream <<"\n";
 
 
-            }
-            qDebug()<<Q_FUNC_INFO<<" export completed";
-            return true;
-    }
-    return false;
+    //            }
+    //            qDebug()<<Q_FUNC_INFO<<" export completed";
+    //            return true;
+    //    }
+    //    return false;
 }
 //---------------------------------------------------------------------------
 bool ResultTreeModel::isEmpty() const
@@ -269,7 +273,6 @@ void ResultTreeModel::load()
     mRecords.clear();
     mChilds.clear();
 
-
     QSqlQuery query(mCurrentQuery.toSql());
     qDebug()<<query.lastError().text();
     qDebug()<<query.lastQuery();
@@ -281,7 +284,7 @@ void ResultTreeModel::load()
 //---------------------------------------------------------------------------
 void ResultTreeModel::load(int offset, int limit)
 {
-    mCurrentQuery.setOffset(offset);
-    mCurrentQuery.setLimit(1000); // TODO: limit);
-    load();
+        mCurrentQuery.setOffset(offset);
+        mCurrentQuery.setLimit(limit);
+        load();
 }

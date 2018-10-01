@@ -70,6 +70,12 @@ void QueryBuilder::setColumns(const QStringList &columns)
     mColumns = columns;
 }
 
+void QueryBuilder::clearSortColumns()
+{
+    mColumnsOrder.clear();
+}
+
+
 QString QueryBuilder::table() const
 {
     return mTable;

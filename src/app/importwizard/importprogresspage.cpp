@@ -1,44 +1,46 @@
 #include "importprogresspage.h"
+#include "sample.h"
+#include "cutevariant.h"
 
 ImportProgressPage::ImportProgressPage(QWidget * parent)
     :QWizardPage(parent)
 {
 
-setTitle("Create sqlite database");
-setSubTitle("Press start to import file. It can takes a while");
+    setTitle("Create sqlite database");
+    setSubTitle("Press start to import file. It can takes a while");
 
 
-mTabWidget   = new QTabWidget;
-mMsgEdit     = new QPlainTextEdit;
-mBar         = new QProgressBar;
-mStartButton = new QPushButton(tr("Import"));
+    mTabWidget   = new QTabWidget;
+    mMsgEdit     = new QPlainTextEdit;
+    mBar         = new QProgressBar;
+    mStartButton = new QPushButton(tr("Import"));
+    mImporter    = new cvar::Importer(this);
 
-mTabWidget->addTab(mMsgEdit, tr("Messages"));
-QVBoxLayout * mainLayout = new QVBoxLayout;
-QHBoxLayout * barLayout = new QHBoxLayout;
-barLayout->addWidget(mBar);
-barLayout->addWidget(mStartButton);
+    mTabWidget->addTab(mMsgEdit, tr("Messages"));
+    QVBoxLayout * mainLayout = new QVBoxLayout;
+    QHBoxLayout * barLayout = new QHBoxLayout;
+    barLayout->addWidget(mBar);
+    barLayout->addWidget(mStartButton);
 
-mainLayout->addLayout(barLayout);
-mainLayout->addWidget(mTabWidget);
+    mainLayout->addLayout(barLayout);
+    mainLayout->addWidget(mTabWidget);
 
-mMsgEdit->setFrameShape(QFrame::NoFrame);
-setLayout(mainLayout);
-setCommitPage(true);
-setButtonText(QWizard::CommitButton, tr("Next"));
+    mMsgEdit->setFrameShape(QFrame::NoFrame);
+    setLayout(mainLayout);
+    setCommitPage(true);
+    setButtonText(QWizard::CommitButton, tr("Next"));
 
 
-setButtonText(QWizard::CustomButton1, "Import");
+    setButtonText(QWizard::CustomButton1, "Import");
 
-connect(mStartButton,&QPushButton::clicked,this, &ImportProgressPage::importFile);
+    connect(mStartButton,&QPushButton::clicked,this, &ImportProgressPage::importFile);
 
-connect(cutevariant,SIGNAL(importProgressChanged(int,QString)),
-        this,SLOT(updateStep(int,QString)));
+    connect(mImporter, &cvar::Importer::importRangeChanged, mBar, &QProgressBar::setRange);
+    connect(mImporter, &cvar::Importer::importProgressChanged, this, &ImportProgressPage::updateStep);
 
-connect(cutevariant,SIGNAL(importRangeChanged(int,int)),
-        mBar,SLOT(setRange(int,int)));
 
-connect(&mWatcher,SIGNAL(finished()), this,SLOT(importFinished()));
+
+    connect(&mWatcher,SIGNAL(finished()), this,SLOT(importFinished()));
 
 
 }
@@ -47,13 +49,16 @@ void ImportProgressPage::importFile()
 {
 
 
+    QString filename = field("filename").toString();
+    //auto format = cvar::VariantReaderFactory::Format (field("format").toInt());
 
-QString filename = field("filename").toString();
-auto format = cvar::VariantReaderFactory::Format (field("format").toInt());
 
-QFuture<bool> future = cutevariant->importFile(filename, format);
-mWatcher.setFuture(future);
+    if (cutevariant->openDatabase(filename+".db"))
+    {
+        QFuture<bool> future = mImporter->asyncImport(filename);
+        mWatcher.setFuture(future);
 
+    }
 
 }
 
@@ -61,7 +66,7 @@ mWatcher.setFuture(future);
 
 void ImportProgressPage::initializePage()
 {
- mMsgEdit->clear();
+    mMsgEdit->clear();
 
 }
 

@@ -1,14 +1,10 @@
 //#include <QApplication>
 #include <QtCore>
-
-#include "cutevariant.h"
-#include "genotype.h"
-#include "filterdialog.h"
 #include "qfonticon.h"
 #include "mainwindow.h"
 
+#include "variant.h"
 
-using namespace cvar;
 
 int main(int argc, char **argv)
 {
@@ -24,14 +20,8 @@ int main(int argc, char **argv)
     QFontIcon::addFont(":/materialIcon");
 
 
-    QObject  * test = new QObject;
 
-
-
-    cutevariant->openDatabase("/tmp/test.db");
-
-    qDebug()<<test->metaObject()->propertyCount();
-
+ //   cutevariant->openDatabase("/tmp/test.db");
 
 
 
@@ -64,8 +54,8 @@ int main(int argc, char **argv)
     //    }
 
 
-    //            MainWindow win;
-    //            win.show();
+                MainWindow win;
+                win.show();
 
     //  win.hide();
 

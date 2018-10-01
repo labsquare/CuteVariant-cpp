@@ -5,6 +5,11 @@ Importer::Importer(QObject *parent) : QObject(parent)
 
 }
 
+Importer::~Importer()
+{
+
+}
+
 bool Importer::import(const QString &filename, VariantReaderFactory::Format format)
 {
     // test if file exists
@@ -232,12 +237,15 @@ void Importer::writeVariants(AbstractVariantReader *reader)
     VariantDataMapper::i()->beginBulkInsert();
     mTotalVariant = 0;
 
+    emit importProgressChanged(0, "import Variants");
+
+
     while (!reader->device()->atEnd()){
 
         Variant v  = reader->readVariant();
         VariantDataMapper::i()->bulkInsert(v);
         //qDebug()<<v.chromosom()<<" "<<v.position();
-        //emit importProgressChanged(int(mProgressDevice->size()));
+       emit importProgressChanged(int(mProgressDevice->pos()));
 
         ++mTotalVariant;
     }

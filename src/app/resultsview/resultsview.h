@@ -3,11 +3,11 @@
 
 #include <QtWidgets>
 #include "resulttreemodel.h"
-#include "resultdelegate.h"
-#include "cutevariant.h"
-#include "variantquery.h"
-#include "linklistdialog.h"
+//#include "resultdelegate.h"
+//#include "cutevariant.h"
+//#include "linklistdialog.h"
 #include "qfonticon.h"
+
 class ResultsView : public QWidget
 {
     Q_OBJECT
@@ -52,7 +52,7 @@ private:
     QString mName = "variants";
     cvar::VariantQuery mQuery;
 
-    ResultDelegate * mNiceDelegate;
+//    ResultDelegate * mNiceDelegate;
     QStyledItemDelegate * mRawDelegate;
 
 };

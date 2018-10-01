@@ -38,7 +38,8 @@ HEADERS += \
     vqlparser.h \
     importer.h \
     variantreaderfactory.h \
-    querybuilder.h
+    querybuilder.h \
+    variantquery.h
 
 SOURCES += \
 #    bedfile.cpp \
@@ -53,4 +54,5 @@ SOURCES += \
     vqlparser.cpp \
     importer.cpp \
     variantreaderfactory.cpp \
-    querybuilder.cpp
+    querybuilder.cpp \
+    variantquery.cpp

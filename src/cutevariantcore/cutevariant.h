@@ -158,19 +158,11 @@ public:
 
     const QSqlDatabase& database() const;
 
-Q_SIGNALS:
-    void importRangeChanged(int min, int max);
-    void importProgressChanged(int progress, const QString& message = QString());
-
-
 
 private:
     CuteVariant(QObject * parent = nullptr);
     QSqlDatabase mSqlDb;
     static CuteVariant * mInstance;
-
-   // Importer * mImporter;
-
 
 
 

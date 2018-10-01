@@ -19,6 +19,7 @@ public:
 
     QStringList columns() const;
     void setColumns(const QStringList &columns);
+    void clearSortColumns();
 
     QString table() const;
     void setTable(const QString &table);

@@ -1,5 +1,5 @@
-#ifndef IMPORTER_H
-#define IMPORTER_H
+#ifndef CVARIMPORTER_H
+#define CVARIMPORTER_H
 
 #include <QObject>
 #include <QtSql>
@@ -20,6 +20,8 @@ class Importer : public QObject
     Q_OBJECT
 public:
     explicit Importer(QObject *parent = nullptr);
+
+    virtual ~Importer();
 
     /*!
      * \brief importFile

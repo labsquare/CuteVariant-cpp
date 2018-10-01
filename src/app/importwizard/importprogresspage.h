@@ -2,8 +2,10 @@
 #define IMPORTPROGRESSPAGE_H
 #include <QWizardPage>
 #include <QtWidgets>
-#include "cutevariant.h"
+#include <QtConcurrent>
 #include "variantreaderfactory.h"
+#include "importer.h"
+
 
 class ImportProgressPage : public QWizardPage
 {
@@ -32,7 +34,11 @@ private:
     QTabWidget * mTabWidget;
     QPushButton * mStartButton;
 
+
+
     bool mDone = false;
+
+    cvar::Importer * mImporter;
 
 
 };

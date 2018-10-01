@@ -46,12 +46,12 @@ ImportFilePage::ImportFilePage(QWidget *parent)
 
 
 
-    QMetaEnum metaEnum = QMetaEnum::fromType<cvar::VariantReaderFactory::Format>();
+//    QMetaEnum metaEnum = QMetaEnum::fromType<cvar::VariantReaderFactory::Format>();
 
-    for (int i=0; i< metaEnum.keyCount();  ++i)
-    {
-        mFormatBox->addItem(metaEnum.valueToKey(i), metaEnum.value(i));
-    }
+//    for (int i=0; i< metaEnum.keyCount();  ++i)
+//    {
+//        mFormatBox->addItem(metaEnum.valueToKey(i), metaEnum.value(i));
+//    }
 
 }
 
@@ -101,22 +101,22 @@ void ImportFilePage::checkFile()
 void ImportFilePage::detectFormat()
 {
 
-    QFile file(mFileEdit->text());
-    cvar::VariantReaderFactory::Format format;
+//    QFile file(mFileEdit->text());
+//    cvar::VariantReaderFactory::Format format;
 
-    if (cvar::VariantReaderFactory::isGzip(&file))
-    {
-        auto * gzip = new KCompressionDevice(&file,false, KCompressionDevice::GZip);
-        format = cvar::VariantReaderFactory::detectFormat(gzip);
-        delete gzip;
-    }
+//    if (cvar::VariantReaderFactory::isGzip(&file))
+//    {
+//        auto * gzip = new KCompressionDevice(&file,false, KCompressionDevice::GZip);
+//        format = cvar::VariantReaderFactory::detectFormat(gzip);
+//        delete gzip;
+//    }
 
-    else
-        format = cvar::VariantReaderFactory::detectFormat(&file);
+//    else
+//        format = cvar::VariantReaderFactory::detectFormat(&file);
 
 
 
-    mFormatBox->setCurrentIndex(mFormatBox->findData(format));
+//    mFormatBox->setCurrentIndex(mFormatBox->findData(format));
 
 
 

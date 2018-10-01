@@ -5,17 +5,18 @@
 #include <QtCore>
 #include "cutevariant.h"
 
-#include "resultsview.h"
-#include "vqleditor.h"
-#include "importdialog.h"
+#include "basedockwidget.h"
 
-#include "columndockwidget.h"
-#include "selectiondockwidget.h"
-#include "filterdockwidget.h"
-#include "metadatadockwidget.h"
-#include "beddockwidget.h"
-#include "chartdockwidget.h"
-#include "qfonticon.h"
+#include "resultsview.h"
+//#include "vqleditor.h"
+
+//#include "columndockwidget.h"
+//#include "selectiondockwidget.h"
+//#include "filterdockwidget.h"
+//#include "metadatadockwidget.h"
+//#include "beddockwidget.h"
+//#include "chartdockwidget.h"
+//#include "qfonticon.h"
 
 #include "importwizard.h"
 
@@ -24,7 +25,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget* parent = 0);
+    MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
     // Overriden methods
@@ -35,7 +36,7 @@ public:
     void restoreSettings();
     void writeSettings();
 
-    ResultsView * currentResultView();
+  //  ResultsView * currentResultView();
 
 
 public Q_SLOTS:
@@ -43,7 +44,7 @@ public Q_SLOTS:
     void importFile();
     void openFile(const QString& filename = QString());
     void saveFile();
-    void addResultView(ResultsView * view);
+   // void addResultView(ResultsView * view);
 
 
 
@@ -82,23 +83,23 @@ protected:
     void setupActions();
 
 private:
-    QString mCurrentFile;
-    QString mCurrentDBFile;
+//    QString mCurrentFile;
+//    QString mCurrentDBFile;
 
-    // central widgets
-    VqlEditor * mEditor;
+//    // central widgets
+//    VqlEditor * mEditor;
     ResultsView * mResultsView;
-    QTabWidget * mResultTab;
+//    QTabWidget * mResultTab;
 
-    // dock widgets
-    SelectionDockWidget * mSelectionDock;
-    ColumnDockWidget * mColumnDock;
-    FilterDockWidget * mFilterDock;
-    RegionDockWidget * mRegionDock;
-    ChartDockWidget * mChartDock;
+//    // dock widgets
+//    SelectionDockWidget * mSelectionDock;
+//    ColumnDockWidget * mColumnDock;
+//    FilterDockWidget * mFilterDock;
+//    RegionDockWidget * mRegionDock;
+//    ChartDockWidget * mChartDock;
     QList<BaseDockWidget*> mBaseDocks;
     QToolBar * mToolBar;
-    QLineEdit * mLocationSearchEdit;
+//    QLineEdit * mLocationSearchEdit;
 
 
 
