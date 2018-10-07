@@ -12,13 +12,25 @@ class Field
 {
 public:
 
+    //http://snpeff.sourceforge.net/VCFannotationformat_v1.0.pdf
+    enum StandardField {
+      Chromosom,
+      Position,
+      Reference,
+      Alternative,
+      Effect,
+      Impact,
+      Gene,
+      Transcript,
+      HgvsCoding,
+      HgvsProtein
+    };
 
     Field(const QString& name = QString(),
           const QString& category = QString(),
           const QString& description = QString(),
           QVariant::Type type = QVariant::String);
 
-    const QString& colname() const;
     const QString &name() const;
     const QString &description() const;
     QVariant::Type type() const;
@@ -33,7 +45,6 @@ public:
       */
     static QString simplified(const QString& name);
 
-    void setColname(const QString& colname);
     void setName(const QString& name);
     void setDescription(const QString& description);
     void setType(QVariant::Type type);
@@ -49,10 +60,10 @@ public:
     quint64 id() const;
     void setId(const quint64 &id);
 
-    static Field standardField(const QString& name);
+    static Field standardField(StandardField type);
+
 
 private:
-    QString mColname;
     QString mName;
     QString mDescription;
     QString mCategory;
@@ -60,24 +71,7 @@ private:
     QVariant::Type mType    = QVariant::String;
     quint64 mId;
 
-
-//     QHash<QString, Field> STANDARD_FIELDS =
-//    {
-
-//        {"test", Field()}
-
-//    };
-//        {"allele",                 {"allele"        ,"ANN"         ,"reference alllele"          , QVariant::String}},
-//        {"consequence",            {"consequence"   ,"ANN"         ,"consequence"                , QVariant::String}},
-//        {"impact",                 {"impact"        ,"ANN"         ,"name of gene"               , QVariant::String}},
-//        {"gene_name",              {"gene_name"     ,"ANN"         ,"gene iD"                    , QVariant::String}},
-//        {"gene_id",                {"gene_id"       ,"ANN"         ,"impact"                     , QVariant::String}},
-//        {"feature_type",           {"feature_type"  ,"ANN"         ,"impact"                     , QVariant::String}},
-//        {"feature_id",             {"feature_id"    ,"ANN"         ,"impact"                     , QVariant::String}},
-//        {"biotype",                {"biotype"       ,"ANN"         ,"impact"                     , QVariant::String}},
-//        {"hgvs_p",                 {"hgvs_p"        ,"ANN"         ,"impact"                     , QVariant::String}},
-//        {"hgvs_c",                 {"hgvs_c"        ,"ANN"         ,"impact"                     , QVariant::String}},
-
+    static const QHash<StandardField, Field> standardFields;
 
 
 };

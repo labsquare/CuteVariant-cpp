@@ -18,6 +18,7 @@ public:
 
 private:
     QList<Field> mDynamicFields;
+    const QStringList mIgnoreField = {"chr","pos","ref","alt"};
 
 
 };

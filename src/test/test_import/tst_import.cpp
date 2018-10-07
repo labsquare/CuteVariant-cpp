@@ -12,6 +12,7 @@ class Import : public QObject
 private slots:
     void import_vcf_gz();
     void import_vcf();
+    void import_vcf2();
 
 };
 
@@ -20,9 +21,20 @@ private slots:
 void Import::import_vcf()
 {
     QVERIFY(QFile::exists(EXEMPLE_VCF_PATH));
+    QFile::remove("/tmp/cutevariant.db");
     QVERIFY(cutevariant->openDatabase("/tmp/cutevariant.db"));
     cvar::Importer importer;
     importer.import(EXEMPLE_VCF_PATH);
+    cutevariant->closeDatabase();
+}
+
+void Import::import_vcf2()
+{
+    QVERIFY(QFile::exists("/home/sacha/cvtest/test.vcf"));
+    QFile::remove("/tmp/cutevariant.db");
+    QVERIFY(cutevariant->openDatabase("/tmp/cutevariant.db"));
+    cvar::Importer importer;
+    importer.import("/home/sacha/cvtest/test.vcf");
     cutevariant->closeDatabase();
 }
 

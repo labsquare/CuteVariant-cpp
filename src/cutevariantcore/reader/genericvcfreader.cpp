@@ -16,6 +16,11 @@ QList<Field> GenericVCFReader::fields()
 {
     QList<Field> fields;
 
+    fields.append(Field::standardField(Field::Chromosom));
+    fields.append(Field::standardField(Field::Position));
+    fields.append(Field::standardField(Field::Reference));
+    fields.append(Field::standardField(Field::Alternative));
+
     fields.append(Field("QUAL","variants","quality", QVariant::Int));
     fields.append(Field("FILTER","variants","filter", QVariant::String));
     fields.append(Field("RSID","variants","dbSnp ID ", QVariant::String));
@@ -33,14 +38,17 @@ QList<Field> GenericVCFReader::fields()
 
     // add annotation as fields
 
-    for (const Field& f : parseHeader(QStringLiteral("INFO")))
+    for (Field& f : parseHeader(QStringLiteral("INFO")))
     {
 
         if (mAnnParser.keys().contains(f.name()))
             fields.append(mAnnParser[f.name()]->parseFields(f));
 
-        else
+        else {
+            f.setName("INFO_"+f.name());
             fields.append(f);
+
+        }
     }
 
     return fields;

@@ -2,6 +2,14 @@
 namespace cvar {
 
 
+const QHash<Field::StandardField, Field> Field::standardFields =
+{
+    {Chromosom, {"chr","variants","variant chromosome", QVariant::String}},
+    {Position, {"pos","variants","variant position", QVariant::String}},
+    {Reference, {"ref","variants","reference allele", QVariant::String}},
+    {Alternative, {"alt","variants","alternative allele", QVariant::String}},
+
+};
 
 
 
@@ -11,15 +19,11 @@ Field::Field(const QString &name, const QString& category, const QString &descri
 {
     setName(name);
     setCategory(category);
-    setColname(this->category()+"_"+this->name());
     setDescription(description);
     setType(type);
 
 }
-const QString &Field::colname() const
-{
-    return mColname;
-}
+
 const QString &Field::name() const
 {
     return mName;
@@ -57,14 +61,6 @@ QString Field::simplified(const QString &name)
     out = out.remove("\"");
 
     return out;
-
-}
-
-void Field::setColname(const QString &colname)
-{
-    // save only the first world for sql syntax..
-    QRegularExpression exp("([^\\s]+)");
-    mColname = exp.match(simplified(colname)).captured(1).toUpper();
 
 }
 
@@ -108,12 +104,12 @@ void Field::setCategory(const QString &category)
 
 bool Field::operator ==(const Field &other)
 {
-    return colname() == other.colname();
+    return name() == other.name();
 }
 
 bool Field::isNull() const
 {
-    return colname().isNull();
+    return name().isNull();
 }
 
 QString Field::expression() const
@@ -136,10 +132,12 @@ void Field::setId(const quint64 &id)
     mId = id;
 }
 
-Field Field::standardField(const QString &name)
+Field Field::standardField(Field::StandardField type)
 {
-
+    return standardFields.value(type,Field());
 }
+
+
 
 
 

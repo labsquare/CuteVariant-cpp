@@ -49,9 +49,11 @@ QHash<QString, QVariant> VariantDataMapper::toSql(const Variant &record) const
     // add annotation
     for (const Field& f : mDynamicFields){
 
-        //qDebug()<<record.annotations().keys();
-        b[f.colname()] = record.annotation(f.colname());
-
+        // do not add chr,pos,ref,alt fields which are already set
+        if (!mIgnoreField.contains(f.name()))
+        {
+            b[f.name()] = record.annotation(f.name());
+        }
     }
 
     return b;
@@ -63,8 +65,11 @@ void VariantDataMapper::setDynamicFields(const QList<Field> &dynamicFields)
 {
     mDynamicFields = dynamicFields;
 
-    for (const Field& f : mDynamicFields)
-        addColumn(f.colname(), DataColumn::typeFromQt(f.type()));
+    for (const Field& f : mDynamicFields){
 
+        if (!mIgnoreField.contains(f.name()))
+            addColumn(f.name(), DataColumn::typeFromQt(f.type()));
+
+    }
 }
 }
