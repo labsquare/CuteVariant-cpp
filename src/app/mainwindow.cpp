@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     //    // Main result view
         mResultsView           = new ResultsView();
         mFieldsView            = new FieldsView();
-
+        mSelectionView         = new SelectionView();
     //    mResultTab             = new QTabWidget();
     //    // dock widget
     //    mColumnDock       = new ColumnDockWidget();
@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
 
         mFieldsView->show();
+        mSelectionView->show();
 
     //    // add defaut view
     //    addResultView(new ResultsView("variants"));
@@ -237,6 +238,7 @@ void MainWindow::reset()
         execute();
 
         mFieldsView->load();
+        mSelectionView->load();
 
 
 }

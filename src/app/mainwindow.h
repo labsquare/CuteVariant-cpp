@@ -9,6 +9,7 @@
 
 #include "fieldsview.h"
 #include "resultsview.h"
+#include "selectionview.h"
 //#include "vqleditor.h"
 
 //#include "columndockwidget.h"
@@ -91,6 +92,7 @@ private:
 //    VqlEditor * mEditor;
     ResultsView * mResultsView;
     FieldsView * mFieldsView;
+    SelectionView * mSelectionView;
 //    QTabWidget * mResultTab;
 
 //    // dock widgets

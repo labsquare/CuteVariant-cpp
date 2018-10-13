@@ -3,9 +3,9 @@
 
 #include <QtWidgets>
 #include "qfonticon.h"
-#include "cutevariant.h"
-#include "qfonticon.h"
-class SelectionView : public QTreeWidget
+#include "selectionmodel.h"
+
+class SelectionView : public QTreeView
 {
     Q_OBJECT
 public:
@@ -13,8 +13,10 @@ public:
     QString tableName() const;
     void load();
 
-public Q_SLOTS:
-    void removeSelection();
+
+private:
+
+SelectionModel * mModel;
 
 
 
