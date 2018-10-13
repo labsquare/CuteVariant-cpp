@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     //    // Main result view
         mResultsView           = new ResultsView();
+        mFieldsView            = new FieldsView();
+
     //    mResultTab             = new QTabWidget();
     //    // dock widget
     //    mColumnDock       = new ColumnDockWidget();
@@ -39,6 +41,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
         setCentralWidget(mResultsView);
 
+
+        mFieldsView->show();
 
     //    // add defaut view
     //    addResultView(new ResultsView("variants"));
@@ -73,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     //    setDockOptions(QMainWindow::VerticalTabs);
 
-    //    openFile("/home/sacha/TRIO1.family.vcf.db");
+       openFile("/home/sacha/cvtest/test.vcf.db");
 
 }
 //-------------------------------------------------------------------------
@@ -148,6 +152,8 @@ void MainWindow::openFile(const QString &filename)
             return;
 
         }
+
+
 }
 //-------------------------------------------------------------------------
 void MainWindow::saveFile()
@@ -229,6 +235,9 @@ void MainWindow::reset()
     //    }
 
         execute();
+
+        mFieldsView->load();
+
 
 }
 //-------------------------------------------------------------------------

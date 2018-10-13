@@ -99,7 +99,7 @@ void Field::setType(const QString &name)
 
 void Field::setCategory(const QString &category)
 {
-    mCategory = category;
+    mCategory = category.toLower();
 }
 
 bool Field::operator ==(const Field &other)

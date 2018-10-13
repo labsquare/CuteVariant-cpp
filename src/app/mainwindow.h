@@ -7,6 +7,7 @@
 
 #include "basedockwidget.h"
 
+#include "fieldsview.h"
 #include "resultsview.h"
 //#include "vqleditor.h"
 
@@ -89,6 +90,7 @@ private:
 //    // central widgets
 //    VqlEditor * mEditor;
     ResultsView * mResultsView;
+    FieldsView * mFieldsView;
 //    QTabWidget * mResultTab;
 
 //    // dock widgets

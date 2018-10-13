@@ -33,12 +33,14 @@ Field FieldDataMapper::fromSql(const QSqlRecord &record) const
     Field field;
     field.setId(quint64(record.value("rowid").toInt()));
     field.setName(record.value("name").toString());
-    field.setName(record.value("category").toString());
+    field.setCategory(record.value("category").toString());
     field.setDescription(record.value("description").toString());
     field.setType(record.value("type").toString());
 
     return field;
 
 }
+
+
 
 }

@@ -8,7 +8,7 @@ QMAKE_CXXFLAGS += -std=c++14
 
 #include(queryeditor/queryeditor.pri)
 include(resultsview/resultsview.pri)
-#include(docks/docks.pri)
+include(docks/docks.pri)
 include(qfonticon/qfonticon.pri)
 include(importwizard/importwizard.pri)
 include(widgets/widgets.pri)
@@ -27,6 +27,8 @@ HEADERS += \
 #    linklistdialog.h \
 #    operationsetdialog.h \
 #    searchitemview.h
+    queryobserver.h \
+    abstractquerywidget.h
 
 SOURCES += \
     main.cpp \
@@ -36,6 +38,8 @@ SOURCES += \
 #    linklistdialog.cpp \
 #    operationsetdialog.cpp \
 #    searchitemview.cpp
+    queryobserver.cpp \
+    abstractquerywidget.cpp
 
 
 INCLUDEPATH += $$PWD/../cutevariantcore

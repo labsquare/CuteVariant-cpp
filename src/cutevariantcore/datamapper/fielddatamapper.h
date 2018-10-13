@@ -11,6 +11,8 @@ public:
 
     virtual QHash<QString, QVariant> toSql(const Field& record) const override ;
     virtual Field fromSql(const QSqlRecord& record) const override;
+
+
 };
 }
 #endif // FIELDDATAMAPPER_H

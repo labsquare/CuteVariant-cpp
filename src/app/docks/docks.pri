@@ -1,16 +1,16 @@
 INCLUDEPATH += $$PWD
 
 #TODO rename dock
-include(filters/filters.pri)
-include(selections/selections.pri)
-include(columns/columns.pri)
-include(beds/beds.pri)
-include(charts/charts.pri)
+#include(filters/filters.pri)
+#include(selections/selections.pri)
+include(fields/fields.pri)
+#include(beds/beds.pri)
+#include(charts/charts.pri)
 
-HEADERS += \
-    $$PWD/metadatadockwidget.h
+#HEADERS += \
+#    $$PWD/metadatadockwidget.h
 
-SOURCES += \
-    $$PWD/metadatadockwidget.cpp
+#SOURCES += \
+#    $$PWD/metadatadockwidget.cpp
 
 
