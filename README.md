@@ -4,4 +4,7 @@
 
 A GUI tool to filter genomic variations. 
 
+The project is in complete rewrite in Python https://github.com/labsquare/CuteVariant-python
+
+
 ![](https://github.com/labsquare/CuteVariant/blob/master/screencast.gif)
